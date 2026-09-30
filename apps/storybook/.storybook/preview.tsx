@@ -5,6 +5,7 @@ import { TooltipProvider } from "@workspace/ui/components/tooltip"
 import "@workspace/ui/globals.css"
 
 const preview: Preview = {
+  tags: ["autodocs"],
   parameters: {
     layout: "centered",
     controls: {

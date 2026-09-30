@@ -11,6 +11,21 @@ import {
 const meta = {
   title: "Components/Avatar",
   component: Avatar,
+  subcomponents: {
+    AvatarBadge,
+    AvatarFallback,
+    AvatarGroup,
+    AvatarGroupCount,
+    AvatarImage,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "An image element with a fallback for representing the user.",
+      },
+    },
+  },
   argTypes: { size: { control: "radio", options: ["sm", "default", "lg"] } },
 } satisfies Meta<typeof Avatar>
 
@@ -62,7 +77,10 @@ export const Group: Story = {
     <AvatarGroup>
       {["shadcn", "maxleiter", "evilrabbit"].map((user) => (
         <Avatar key={user}>
-          <AvatarImage src={`https://github.com/${user}.png`} alt={`@${user}`} />
+          <AvatarImage
+            src={`https://github.com/${user}.png`}
+            alt={`@${user}`}
+          />
           <AvatarFallback>{user.slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
       ))}

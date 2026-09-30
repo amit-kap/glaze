@@ -22,15 +22,25 @@ const messages = Array.from({ length: 30 }, (_, i) => ({
 function MessageScrollerDemo({ autoScroll = true }: { autoScroll?: boolean }) {
   return (
     <div className="h-96 w-md rounded-xl border">
-      <MessageScrollerProvider autoScroll={autoScroll} defaultScrollPosition="end">
+      <MessageScrollerProvider
+        autoScroll={autoScroll}
+        defaultScrollPosition="end"
+      >
         <MessageScroller>
           <MessageScrollerViewport className="p-4">
             <MessageScrollerContent>
               {messages.map((m) => (
-                <MessageScrollerItem key={m.id} messageId={m.id} scrollAnchor={m.mine}>
+                <MessageScrollerItem
+                  key={m.id}
+                  messageId={m.id}
+                  scrollAnchor={m.mine}
+                >
                   <Message align={m.mine ? "end" : "start"}>
                     <MessageContent>
-                      <Bubble variant={m.mine ? "default" : "muted"} align={m.mine ? "end" : "start"}>
+                      <Bubble
+                        variant={m.mine ? "default" : "muted"}
+                        align={m.mine ? "end" : "start"}
+                      >
                         <BubbleContent>{m.text}</BubbleContent>
                       </Bubble>
                     </MessageContent>
@@ -48,8 +58,25 @@ function MessageScrollerDemo({ autoScroll = true }: { autoScroll?: boolean }) {
 
 const meta = {
   title: "Components/Message Scroller",
-  component: MessageScrollerDemo,
-} satisfies Meta<typeof MessageScrollerDemo>
+  component: MessageScrollerProvider,
+  subcomponents: {
+    MessageScroller,
+    MessageScrollerButton,
+    MessageScrollerContent,
+    MessageScrollerItem,
+    MessageScrollerViewport,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A scroll container for chat transcripts that handles auto-scroll, anchoring and a jump-to-latest button.",
+      },
+    },
+  },
+  args: { autoScroll: true, defaultScrollPosition: "end" },
+  render: (args) => <MessageScrollerDemo autoScroll={args.autoScroll} />,
+} satisfies Meta<typeof MessageScrollerProvider>
 
 export default meta
 type Story = StoryObj<typeof meta>

@@ -4,6 +4,13 @@ import { AspectRatio } from "@workspace/ui/components/aspect-ratio"
 const meta = {
   title: "Components/Aspect Ratio",
   component: AspectRatio,
+  parameters: {
+    docs: {
+      description: {
+        component: "Displays content within a desired ratio.",
+      },
+    },
+  },
   args: { ratio: 16 / 9 },
   argTypes: { ratio: { control: { type: "number", step: 0.1 } } },
 } satisfies Meta<typeof AspectRatio>

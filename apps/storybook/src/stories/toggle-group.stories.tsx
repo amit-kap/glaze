@@ -1,10 +1,28 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { ToggleGroup, ToggleGroupItem } from "@workspace/ui/components/toggle-group"
-import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react"
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@workspace/ui/components/toggle-group"
+import {
+  AlignCenterIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+} from "lucide-react"
 
 const meta = {
   title: "Components/Toggle Group",
   component: ToggleGroup,
+  subcomponents: { ToggleGroupItem },
+  parameters: {
+    docs: {
+      description: {
+        component: "A set of two-state buttons that can be toggled on or off.",
+      },
+    },
+  },
   argTypes: {
     variant: { control: "radio", options: ["default", "outline"] },
     size: { control: "radio", options: ["sm", "default", "lg"] },

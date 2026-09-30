@@ -10,6 +10,14 @@ import { ChevronsUpDownIcon } from "lucide-react"
 const meta = {
   title: "Components/Collapsible",
   component: Collapsible,
+  subcomponents: { CollapsibleContent, CollapsibleTrigger },
+  parameters: {
+    docs: {
+      description: {
+        component: "An interactive component which expands/collapses a panel.",
+      },
+    },
+  },
 } satisfies Meta<typeof Collapsible>
 
 export default meta
@@ -19,16 +27,24 @@ export const Default: Story = {
   render: (args) => (
     <Collapsible {...args} className="flex w-80 flex-col gap-2">
       <div className="flex items-center justify-between gap-4 px-4">
-        <h4 className="text-sm font-semibold">@peduarte starred 3 repositories</h4>
+        <h4 className="text-sm font-semibold">
+          @peduarte starred 3 repositories
+        </h4>
         <CollapsibleTrigger render={<Button variant="ghost" size="icon-sm" />}>
           <ChevronsUpDownIcon />
           <span className="sr-only">Toggle</span>
         </CollapsibleTrigger>
       </div>
-      <div className="rounded-md border px-4 py-2 font-mono text-sm">@base-ui/react</div>
+      <div className="rounded-md border px-4 py-2 font-mono text-sm">
+        @base-ui/react
+      </div>
       <CollapsibleContent className="flex flex-col gap-2">
-        <div className="rounded-md border px-4 py-2 font-mono text-sm">@stitches/react</div>
-        <div className="rounded-md border px-4 py-2 font-mono text-sm">tailwindcss</div>
+        <div className="rounded-md border px-4 py-2 font-mono text-sm">
+          @stitches/react
+        </div>
+        <div className="rounded-md border px-4 py-2 font-mono text-sm">
+          tailwindcss
+        </div>
       </CollapsibleContent>
     </Collapsible>
   ),

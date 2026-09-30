@@ -5,6 +5,14 @@ import { Switch } from "@workspace/ui/components/switch"
 const meta = {
   title: "Components/Switch",
   component: Switch,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A control that allows the user to toggle between checked and not checked.",
+      },
+    },
+  },
   argTypes: {
     size: { control: "radio", options: ["default", "sm"] },
     disabled: { control: "boolean" },

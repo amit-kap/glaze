@@ -7,6 +7,15 @@ const tags = Array.from({ length: 50 }, (_, i) => `v1.2.0-beta.${50 - i}`)
 const meta = {
   title: "Components/Scroll Area",
   component: ScrollArea,
+  subcomponents: { ScrollBar },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Augments native scroll functionality for custom, cross-browser styling.",
+      },
+    },
+  },
 } satisfies Meta<typeof ScrollArea>
 
 export default meta
@@ -33,7 +42,10 @@ export const Horizontal: Story = {
     <ScrollArea className="w-96 rounded-md border whitespace-nowrap">
       <div className="flex w-max gap-4 p-4">
         {Array.from({ length: 12 }, (_, i) => (
-          <div key={i} className="flex size-32 shrink-0 items-center justify-center rounded-md bg-muted text-sm">
+          <div
+            key={i}
+            className="flex size-32 shrink-0 items-center justify-center rounded-md bg-muted text-sm"
+          >
             Item {i + 1}
           </div>
         ))}

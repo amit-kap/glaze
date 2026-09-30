@@ -34,17 +34,29 @@ function RangeDemo() {
 
 const meta = {
   title: "Components/Calendar",
-  component: SingleDemo,
-} satisfies Meta<typeof SingleDemo>
+  component: Calendar,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A date field component that allows users to enter and edit dates. Built on React DayPicker.",
+      },
+    },
+  },
+} satisfies Meta<typeof Calendar>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+export const Default: Story = { render: () => <SingleDemo /> }
 export const Range: Story = { render: () => <RangeDemo /> }
 
 export const DropdownCaption: Story = {
   render: () => (
-    <Calendar mode="single" captionLayout="dropdown" className="rounded-lg border" />
+    <Calendar
+      mode="single"
+      captionLayout="dropdown"
+      className="rounded-lg border"
+    />
   ),
 }

@@ -23,8 +23,25 @@ const vegetables = [
 
 const meta = {
   title: "Components/Select",
-  component: Select,
-} satisfies Meta<typeof Select>
+  component: SelectTrigger,
+  subcomponents: {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectSeparator,
+    SelectValue,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Displays a list of options for the user to pick from — triggered by a button. `Select` re-exports the Base UI root unchanged, so its props are documented at https://base-ui.com/react/components/select.",
+      },
+    },
+  },
+} satisfies Meta<typeof SelectTrigger>
 
 export default meta
 type Story = StoryObj<typeof meta>

@@ -5,6 +5,14 @@ import { Label } from "@workspace/ui/components/label"
 const meta = {
   title: "Components/Checkbox",
   component: Checkbox,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A control that allows the user to toggle between checked and not checked.",
+      },
+    },
+  },
   argTypes: {
     disabled: { control: "boolean" },
     defaultChecked: { control: "boolean" },

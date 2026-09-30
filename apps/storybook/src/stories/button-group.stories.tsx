@@ -6,12 +6,29 @@ import {
   ButtonGroupText,
 } from "@workspace/ui/components/button-group"
 import { Input } from "@workspace/ui/components/input"
-import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, MinusIcon, PlusIcon } from "lucide-react"
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ChevronDownIcon,
+  MinusIcon,
+  PlusIcon,
+} from "lucide-react"
 
 const meta = {
   title: "Components/Button Group",
   component: ButtonGroup,
-  argTypes: { orientation: { control: "radio", options: ["horizontal", "vertical"] } },
+  subcomponents: { ButtonGroupSeparator, ButtonGroupText },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A container that groups related buttons together with consistent styling.",
+      },
+    },
+  },
+  argTypes: {
+    orientation: { control: "radio", options: ["horizontal", "vertical"] },
+  },
 } satisfies Meta<typeof ButtonGroup>
 
 export default meta

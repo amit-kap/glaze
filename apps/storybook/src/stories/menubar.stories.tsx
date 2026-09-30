@@ -18,6 +18,28 @@ import {
 const meta = {
   title: "Components/Menubar",
   component: Menubar,
+  subcomponents: {
+    MenubarCheckboxItem,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarRadioGroup,
+    MenubarRadioItem,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarSub,
+    MenubarSubContent,
+    MenubarSubTrigger,
+    MenubarTrigger,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A visually persistent menu common in desktop applications that provides quick access to a consistent set of commands.",
+      },
+    },
+  },
 } satisfies Meta<typeof Menubar>
 
 export default meta
@@ -64,7 +86,9 @@ export const Default: Story = {
         <MenubarTrigger>View</MenubarTrigger>
         <MenubarContent>
           <MenubarCheckboxItem>Always show bookmarks bar</MenubarCheckboxItem>
-          <MenubarCheckboxItem defaultChecked>Always show full URLs</MenubarCheckboxItem>
+          <MenubarCheckboxItem defaultChecked>
+            Always show full URLs
+          </MenubarCheckboxItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>

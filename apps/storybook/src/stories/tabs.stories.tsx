@@ -10,7 +10,12 @@ import {
 } from "@workspace/ui/components/card"
 import { Input } from "@workspace/ui/components/input"
 import { Label } from "@workspace/ui/components/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@workspace/ui/components/tabs"
 
 type Variant = "default" | "line"
 
@@ -20,13 +25,17 @@ function TabsDemo({ variant = "default" }: { variant?: Variant }) {
       <TabsList variant={variant}>
         <TabsTrigger value="account">Account</TabsTrigger>
         <TabsTrigger value="password">Password</TabsTrigger>
-        <TabsTrigger value="billing" disabled>Billing</TabsTrigger>
+        <TabsTrigger value="billing" disabled>
+          Billing
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="account">
         <Card>
           <CardHeader>
             <CardTitle>Account</CardTitle>
-            <CardDescription>Make changes to your account here.</CardDescription>
+            <CardDescription>
+              Make changes to your account here.
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-2">
             <Label htmlFor={`tabs-name-${variant}`}>Name</Label>
@@ -55,9 +64,19 @@ function TabsDemo({ variant = "default" }: { variant?: Variant }) {
 
 const meta = {
   title: "Components/Tabs",
-  component: TabsDemo,
+  component: TabsList,
+  subcomponents: { Tabs, TabsContent, TabsTrigger },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A set of layered sections of content — known as tab panels — that are displayed one at a time.",
+      },
+    },
+  },
   argTypes: { variant: { control: "radio", options: ["default", "line"] } },
-} satisfies Meta<typeof TabsDemo>
+  render: (args) => <TabsDemo variant={args.variant ?? "default"} />,
+} satisfies Meta<typeof TabsList>
 
 export default meta
 type Story = StoryObj<typeof meta>

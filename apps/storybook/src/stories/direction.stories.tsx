@@ -26,9 +26,28 @@ function DirectionDemo({ direction = "rtl" }: { direction?: "ltr" | "rtl" }) {
 
 const meta = {
   title: "Components/Direction",
-  component: DirectionDemo,
-  argTypes: { direction: { control: "radio", options: ["ltr", "rtl"] } },
-} satisfies Meta<typeof DirectionDemo>
+  component: DirectionProvider,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Provides the reading direction (LTR or RTL) to Base UI components below it.",
+      },
+    },
+  },
+  argTypes: {
+    direction: {
+      control: "radio",
+      options: ["ltr", "rtl"],
+      description: "The reading direction of the text.",
+      table: {
+        type: { summary: '"ltr" | "rtl"' },
+        defaultValue: { summary: '"ltr"' },
+      },
+    },
+  },
+  render: (args) => <DirectionDemo direction={args.direction} />,
+} satisfies Meta<typeof DirectionProvider>
 
 export default meta
 type Story = StoryObj<typeof meta>

@@ -12,6 +12,22 @@ import {
 const meta = {
   title: "Components/Breadcrumb",
   component: Breadcrumb,
+  subcomponents: {
+    BreadcrumbEllipsis,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Displays the path to the current resource using a hierarchy of links. Accepts all native `<nav>` attributes.",
+      },
+    },
+  },
 } satisfies Meta<typeof Breadcrumb>
 
 export default meta

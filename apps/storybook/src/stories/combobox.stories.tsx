@@ -18,7 +18,11 @@ const frameworks = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro", "Vite"]
 function ComboboxDemo() {
   return (
     <Combobox items={frameworks}>
-      <ComboboxInput placeholder="Select a framework" className="w-60" showClear />
+      <ComboboxInput
+        placeholder="Select a framework"
+        className="w-60"
+        showClear
+      />
       <ComboboxContent>
         <ComboboxEmpty>No framework found.</ComboboxEmpty>
         <ComboboxList>
@@ -66,11 +70,30 @@ function ComboboxMultipleDemo() {
 
 const meta = {
   title: "Components/Combobox",
-  component: ComboboxDemo,
-} satisfies Meta<typeof ComboboxDemo>
+  component: ComboboxInput,
+  subcomponents: {
+    Combobox,
+    ComboboxChip,
+    ComboboxChips,
+    ComboboxChipsInput,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxItem,
+    ComboboxList,
+    ComboboxValue,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "An input combined with a list of suggestions, with single or multiple (chips) selection. `Combobox` re-exports the Base UI root unchanged, so its props are documented at https://base-ui.com/react/components/combobox.",
+      },
+    },
+  },
+} satisfies Meta<typeof ComboboxInput>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+export const Default: Story = { render: () => <ComboboxDemo /> }
 export const Multiple: Story = { render: () => <ComboboxMultipleDemo /> }

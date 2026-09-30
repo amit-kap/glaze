@@ -8,6 +8,14 @@ import {
 const meta = {
   title: "Components/Native Select",
   component: NativeSelect,
+  subcomponents: { NativeSelectOptGroup, NativeSelectOption },
+  parameters: {
+    docs: {
+      description: {
+        component: "A styled native HTML select element.",
+      },
+    },
+  },
   argTypes: {
     size: { control: "radio", options: ["default", "sm"] },
     disabled: { control: "boolean" },

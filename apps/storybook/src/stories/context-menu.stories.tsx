@@ -19,6 +19,29 @@ import {
 const meta = {
   title: "Components/Context Menu",
   component: ContextMenu,
+  subcomponents: {
+    ContextMenuCheckboxItem,
+    ContextMenuContent,
+    ContextMenuGroup,
+    ContextMenuItem,
+    ContextMenuLabel,
+    ContextMenuRadioGroup,
+    ContextMenuRadioItem,
+    ContextMenuSeparator,
+    ContextMenuShortcut,
+    ContextMenuSub,
+    ContextMenuSubContent,
+    ContextMenuSubTrigger,
+    ContextMenuTrigger,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Displays a menu to the user — such as a set of actions or functions — triggered by a right click.",
+      },
+    },
+  },
 } satisfies Meta<typeof ContextMenu>
 
 export default meta
@@ -51,13 +74,17 @@ export const Default: Story = {
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
-        <ContextMenuCheckboxItem defaultChecked>Show bookmarks</ContextMenuCheckboxItem>
+        <ContextMenuCheckboxItem defaultChecked>
+          Show bookmarks
+        </ContextMenuCheckboxItem>
         <ContextMenuCheckboxItem>Show full URLs</ContextMenuCheckboxItem>
         <ContextMenuSeparator />
         <ContextMenuGroup>
           <ContextMenuLabel>People</ContextMenuLabel>
           <ContextMenuRadioGroup defaultValue="pedro">
-            <ContextMenuRadioItem value="pedro">Pedro Duarte</ContextMenuRadioItem>
+            <ContextMenuRadioItem value="pedro">
+              Pedro Duarte
+            </ContextMenuRadioItem>
             <ContextMenuRadioItem value="colm">Colm Tuite</ContextMenuRadioItem>
           </ContextMenuRadioGroup>
         </ContextMenuGroup>

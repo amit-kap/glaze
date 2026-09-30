@@ -17,5 +17,5 @@
       "@workspace/ui/*": ["../../packages/ui/src/*"]
     }
   },
-  "include": ["src", ".storybook"]
+  "include": ["src", ".storybook", "../../packages/ui/src"]
 }

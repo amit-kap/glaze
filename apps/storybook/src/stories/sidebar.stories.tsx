@@ -51,7 +51,11 @@ type SidebarDemoProps = {
   collapsible?: "offcanvas" | "icon" | "none"
 }
 
-function SidebarDemo({ side = "left", variant = "sidebar", collapsible = "icon" }: SidebarDemoProps) {
+function SidebarDemo({
+  side = "left",
+  variant = "sidebar",
+  collapsible = "icon",
+}: SidebarDemoProps) {
   return (
     <SidebarProvider>
       <Sidebar side={side} variant={variant} collapsible={collapsible}>
@@ -86,7 +90,9 @@ function SidebarDemo({ side = "left", variant = "sidebar", collapsible = "icon" 
                       <item.icon />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+                    {item.badge && (
+                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
+                    )}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -101,7 +107,9 @@ function SidebarDemo({ side = "left", variant = "sidebar", collapsible = "icon" 
                   <SidebarMenuSub>
                     {["Installation", "Project structure"].map((title) => (
                       <SidebarMenuSubItem key={title}>
-                        <SidebarMenuSubButton href="#">{title}</SidebarMenuSubButton>
+                        <SidebarMenuSubButton href="#">
+                          {title}
+                        </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
                   </SidebarMenuSub>
@@ -125,7 +133,10 @@ function SidebarDemo({ side = "left", variant = "sidebar", collapsible = "icon" 
       <SidebarInset>
         <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 data-vertical:h-4" />
+          <Separator
+            orientation="vertical"
+            className="mr-2 data-vertical:h-4"
+          />
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -147,14 +158,50 @@ function SidebarDemo({ side = "left", variant = "sidebar", collapsible = "icon" 
 
 const meta = {
   title: "Components/Sidebar",
-  component: SidebarDemo,
-  parameters: { layout: "fullscreen" },
+  component: Sidebar,
+  subcomponents: {
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarInput,
+    SidebarInset,
+    SidebarMenu,
+    SidebarMenuBadge,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
+    SidebarProvider,
+    SidebarRail,
+    SidebarTrigger,
+  },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "A composable, themeable and customizable sidebar component.",
+      },
+    },
+  },
+  args: { collapsible: "icon" },
   argTypes: {
     side: { control: "radio", options: ["left", "right"] },
     variant: { control: "radio", options: ["sidebar", "floating", "inset"] },
     collapsible: { control: "radio", options: ["offcanvas", "icon", "none"] },
   },
-} satisfies Meta<typeof SidebarDemo>
+  render: (args) => (
+    <SidebarDemo
+      side={args.side}
+      variant={args.variant}
+      collapsible={args.collapsible}
+    />
+  ),
+} satisfies Meta<typeof Sidebar>
 
 export default meta
 type Story = StoryObj<typeof meta>

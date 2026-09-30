@@ -4,6 +4,14 @@ import { Skeleton } from "@workspace/ui/components/skeleton"
 const meta = {
   title: "Components/Skeleton",
   component: Skeleton,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Use to show a placeholder while content is loading. Accepts all native `<div>` attributes.",
+      },
+    },
+  },
 } satisfies Meta<typeof Skeleton>
 
 export default meta

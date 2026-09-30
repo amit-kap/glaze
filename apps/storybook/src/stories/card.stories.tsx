@@ -15,6 +15,21 @@ import { Label } from "@workspace/ui/components/label"
 const meta = {
   title: "Components/Card",
   component: Card,
+  subcomponents: {
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: "Displays a card with header, content, and footer.",
+      },
+    },
+  },
   argTypes: { size: { control: "radio", options: ["default", "sm"] } },
 } satisfies Meta<typeof Card>
 

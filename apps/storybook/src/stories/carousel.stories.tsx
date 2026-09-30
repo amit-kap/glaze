@@ -11,7 +11,22 @@ import {
 const meta = {
   title: "Components/Carousel",
   component: Carousel,
-  argTypes: { orientation: { control: "radio", options: ["horizontal", "vertical"] } },
+  subcomponents: {
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: "A carousel with motion and swipe built using Embla.",
+      },
+    },
+  },
+  argTypes: {
+    orientation: { control: "radio", options: ["horizontal", "vertical"] },
+  },
 } satisfies Meta<typeof Carousel>
 
 export default meta

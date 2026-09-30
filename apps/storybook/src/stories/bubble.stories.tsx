@@ -6,16 +6,39 @@ import {
   BubbleReactions,
 } from "@workspace/ui/components/bubble"
 
-const variants = ["default", "secondary", "muted", "tinted", "outline", "ghost", "destructive"] as const
+const variants = [
+  "default",
+  "secondary",
+  "muted",
+  "tinted",
+  "outline",
+  "ghost",
+  "destructive",
+] as const
 
 const meta = {
   title: "Components/Bubble",
   component: Bubble,
+  subcomponents: { BubbleContent, BubbleGroup, BubbleReactions },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A chat bubble for displaying message content, with variants, alignment and reactions.",
+      },
+    },
+  },
   argTypes: {
     variant: { control: "select", options: variants },
     align: { control: "radio", options: ["start", "end"] },
   },
-  decorators: [(Story) => <div className="w-md"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="w-md">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Bubble>
 
 export default meta
@@ -24,7 +47,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: (args) => (
     <Bubble {...args}>
-      <BubbleContent>Hey! Did you get a chance to review the design?</BubbleContent>
+      <BubbleContent>
+        Hey! Did you get a chance to review the design?
+      </BubbleContent>
     </Bubble>
   ),
 }

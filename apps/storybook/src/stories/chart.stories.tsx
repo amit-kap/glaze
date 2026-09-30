@@ -26,6 +26,20 @@ const config = {
 const meta = {
   title: "Components/Chart",
   component: ChartContainer,
+  subcomponents: {
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Beautiful charts built using Recharts. Colors and labels are configured through a `ChartConfig`.",
+      },
+    },
+  },
 } satisfies Meta<typeof ChartContainer>
 
 export default meta
@@ -57,7 +71,11 @@ export const StackedArea: Story = {
   args: Bars.args,
   render: (args) => (
     <ChartContainer {...args}>
-      <AreaChart accessibilityLayer data={data} margin={{ left: 12, right: 12 }}>
+      <AreaChart
+        accessibilityLayer
+        data={data}
+        margin={{ left: 12, right: 12 }}
+      >
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="month"
@@ -66,7 +84,10 @@ export const StackedArea: Story = {
           tickMargin={8}
           tickFormatter={(value: string) => value.slice(0, 3)}
         />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+        <ChartTooltip
+          cursor={false}
+          content={<ChartTooltipContent indicator="line" />}
+        />
         <Area
           dataKey="mobile"
           type="natural"

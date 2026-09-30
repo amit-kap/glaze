@@ -4,6 +4,15 @@ import { Kbd, KbdGroup } from "@workspace/ui/components/kbd"
 const meta = {
   title: "Components/Kbd",
   component: Kbd,
+  subcomponents: { KbdGroup },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Displays a keyboard key or shortcut. Accepts all native `<kbd>` attributes.",
+      },
+    },
+  },
   args: { children: "K" },
 } satisfies Meta<typeof Kbd>
 

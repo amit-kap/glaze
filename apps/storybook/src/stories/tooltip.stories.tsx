@@ -1,14 +1,27 @@
+import type * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Button } from "@workspace/ui/components/button"
 import { Kbd } from "@workspace/ui/components/kbd"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@workspace/ui/components/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@workspace/ui/components/tooltip"
 
-type Side = "top" | "right" | "bottom" | "left"
+type Side = React.ComponentProps<typeof TooltipContent>["side"]
 
-function TooltipDemo({ side = "top", label = "Add to library" }: { side?: Side; label?: string }) {
+function TooltipDemo({
+  side = "top",
+  label = "Add to library",
+}: {
+  side?: Side
+  label?: string
+}) {
   return (
     <Tooltip>
-      <TooltipTrigger render={<Button variant="outline" className="capitalize" />}>
+      <TooltipTrigger
+        render={<Button variant="outline" className="capitalize" />}
+      >
         {side}
       </TooltipTrigger>
       <TooltipContent side={side}>{label}</TooltipContent>
@@ -18,9 +31,21 @@ function TooltipDemo({ side = "top", label = "Add to library" }: { side?: Side; 
 
 const meta = {
   title: "Components/Tooltip",
-  component: TooltipDemo,
-  argTypes: { side: { control: "radio", options: ["top", "right", "bottom", "left"] } },
-} satisfies Meta<typeof TooltipDemo>
+  component: TooltipContent,
+  subcomponents: { Tooltip, TooltipTrigger },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+      },
+    },
+  },
+  argTypes: {
+    side: { control: "radio", options: ["top", "right", "bottom", "left"] },
+  },
+  render: (args) => <TooltipDemo side={args.side} />,
+} satisfies Meta<typeof TooltipContent>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -40,7 +65,9 @@ export const Sides: Story = {
 export const WithKbd: Story = {
   render: () => (
     <Tooltip>
-      <TooltipTrigger render={<Button variant="outline" />}>Save</TooltipTrigger>
+      <TooltipTrigger render={<Button variant="outline" />}>
+        Save
+      </TooltipTrigger>
       <TooltipContent>
         Save changes <Kbd>⌘S</Kbd>
       </TooltipContent>

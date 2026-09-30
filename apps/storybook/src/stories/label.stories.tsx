@@ -6,6 +6,14 @@ import { Label } from "@workspace/ui/components/label"
 const meta = {
   title: "Components/Label",
   component: Label,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Renders an accessible label associated with controls. Accepts all native `<label>` attributes.",
+      },
+    },
+  },
 } satisfies Meta<typeof Label>
 
 export default meta

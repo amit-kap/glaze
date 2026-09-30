@@ -20,7 +20,32 @@ import { Textarea } from "@workspace/ui/components/textarea"
 const meta = {
   title: "Components/Field",
   component: Field,
-  decorators: [(Story) => <div className="w-md"><Story /></div>],
+  subcomponents: {
+    FieldContent,
+    FieldDescription,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+    FieldLegend,
+    FieldSeparator,
+    FieldSet,
+    FieldTitle,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Composes labels, controls, descriptions and errors into accessible form fields.",
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div className="w-md">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Field>
 
 export default meta
@@ -31,7 +56,9 @@ export const Default: Story = {
     <Field>
       <FieldLabel htmlFor="field-username">Username</FieldLabel>
       <Input id="field-username" placeholder="shadcn" />
-      <FieldDescription>Choose a unique username for your account.</FieldDescription>
+      <FieldDescription>
+        Choose a unique username for your account.
+      </FieldDescription>
     </Field>
   ),
 }
@@ -51,7 +78,9 @@ export const Horizontal: Story = {
     <Field orientation="horizontal">
       <FieldContent>
         <FieldLabel htmlFor="field-marketing">Marketing emails</FieldLabel>
-        <FieldDescription>Receive emails about new products and features.</FieldDescription>
+        <FieldDescription>
+          Receive emails about new products and features.
+        </FieldDescription>
       </FieldContent>
       <Switch id="field-marketing" />
     </Field>
@@ -64,7 +93,9 @@ export const Form: Story = {
       <FieldGroup>
         <FieldSet>
           <FieldLegend>Profile</FieldLegend>
-          <FieldDescription>This information will be displayed publicly.</FieldDescription>
+          <FieldDescription>
+            This information will be displayed publicly.
+          </FieldDescription>
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="form-name">Full name</FieldLabel>
@@ -72,7 +103,10 @@ export const Form: Story = {
             </Field>
             <Field>
               <FieldLabel htmlFor="form-bio">Bio</FieldLabel>
-              <Textarea id="form-bio" placeholder="Tell us a little about yourself" />
+              <Textarea
+                id="form-bio"
+                placeholder="Tell us a little about yourself"
+              />
             </Field>
           </FieldGroup>
         </FieldSet>
@@ -82,17 +116,23 @@ export const Form: Story = {
           <FieldGroup className="gap-3">
             <Field orientation="horizontal">
               <Checkbox id="form-comments" defaultChecked />
-              <FieldLabel htmlFor="form-comments" className="font-normal">Comments</FieldLabel>
+              <FieldLabel htmlFor="form-comments" className="font-normal">
+                Comments
+              </FieldLabel>
             </Field>
             <Field orientation="horizontal">
               <Checkbox id="form-mentions" />
-              <FieldLabel htmlFor="form-mentions" className="font-normal">Mentions</FieldLabel>
+              <FieldLabel htmlFor="form-mentions" className="font-normal">
+                Mentions
+              </FieldLabel>
             </Field>
           </FieldGroup>
         </FieldSet>
         <Field orientation="horizontal">
           <Button type="submit">Save</Button>
-          <Button variant="outline" type="button">Cancel</Button>
+          <Button variant="outline" type="button">
+            Cancel
+          </Button>
         </Field>
       </FieldGroup>
     </form>
@@ -105,7 +145,9 @@ export const ChoiceCard: Story = {
       <Field orientation="horizontal">
         <FieldContent>
           <FieldTitle>Two-factor authentication</FieldTitle>
-          <FieldDescription>Add an extra layer of security to your account.</FieldDescription>
+          <FieldDescription>
+            Add an extra layer of security to your account.
+          </FieldDescription>
         </FieldContent>
         <Switch id="field-2fa" defaultChecked />
       </Field>

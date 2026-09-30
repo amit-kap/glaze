@@ -15,12 +15,35 @@ import { BadgeCheckIcon, ChevronRightIcon, ShieldAlertIcon } from "lucide-react"
 const meta = {
   title: "Components/Item",
   component: Item,
+  subcomponents: {
+    ItemActions,
+    ItemContent,
+    ItemDescription,
+    ItemGroup,
+    ItemMedia,
+    ItemSeparator,
+    ItemTitle,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A versatile row for displaying content with media, title, description and actions.",
+      },
+    },
+  },
   argTypes: {
     variant: { control: "radio", options: ["default", "outline", "muted"] },
     size: { control: "radio", options: ["default", "sm", "xs"] },
   },
   args: { variant: "outline" },
-  decorators: [(Story) => <div className="w-md"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="w-md">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Item>
 
 export default meta
@@ -31,10 +54,14 @@ export const Default: Story = {
     <Item {...args}>
       <ItemContent>
         <ItemTitle>Basic item</ItemTitle>
-        <ItemDescription>A simple item with title and description.</ItemDescription>
+        <ItemDescription>
+          A simple item with title and description.
+        </ItemDescription>
       </ItemContent>
       <ItemActions>
-        <Button variant="outline" size="sm">Action</Button>
+        <Button variant="outline" size="sm">
+          Action
+        </Button>
       </ItemActions>
     </Item>
   ),
@@ -48,10 +75,14 @@ export const WithMedia: Story = {
       </ItemMedia>
       <ItemContent>
         <ItemTitle>Security alert</ItemTitle>
-        <ItemDescription>New login detected from an unknown device.</ItemDescription>
+        <ItemDescription>
+          New login detected from an unknown device.
+        </ItemDescription>
       </ItemContent>
       <ItemActions>
-        <Button size="sm" variant="outline">Review</Button>
+        <Button size="sm" variant="outline">
+          Review
+        </Button>
       </ItemActions>
     </Item>
   ),

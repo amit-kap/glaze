@@ -12,6 +12,22 @@ import {
 const meta = {
   title: "Components/Pagination",
   component: Pagination,
+  subcomponents: {
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Pagination with page navigation, next and previous links. Accepts all native `<nav>` attributes.",
+      },
+    },
+  },
 } satisfies Meta<typeof Pagination>
 
 export default meta

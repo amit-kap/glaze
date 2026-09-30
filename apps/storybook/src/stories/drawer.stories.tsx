@@ -14,8 +14,28 @@ import {
 const meta = {
   title: "Components/Drawer",
   component: Drawer,
+  subcomponents: {
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A panel that slides in from an edge of the screen, with swipe-to-dismiss and optional snap points.",
+      },
+    },
+  },
   argTypes: {
-    swipeDirection: { control: "radio", options: ["down", "up", "left", "right"] },
+    swipeDirection: {
+      control: "radio",
+      options: ["down", "up", "left", "right"],
+    },
     showSwipeHandle: { control: "boolean" },
   },
   args: { showSwipeHandle: true },
@@ -27,7 +47,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: (args) => (
     <Drawer {...args}>
-      <DrawerTrigger render={<Button variant="outline" />}>Open drawer</DrawerTrigger>
+      <DrawerTrigger render={<Button variant="outline" />}>
+        Open drawer
+      </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
@@ -36,11 +58,15 @@ export const Default: Story = {
           </DrawerHeader>
           <div className="p-4 text-center">
             <div className="text-7xl font-bold tracking-tighter">350</div>
-            <div className="text-xs text-muted-foreground uppercase">Calories/day</div>
+            <div className="text-xs text-muted-foreground uppercase">
+              Calories/day
+            </div>
           </div>
           <DrawerFooter>
             <Button>Submit</Button>
-            <DrawerClose render={<Button variant="outline" />}>Cancel</DrawerClose>
+            <DrawerClose render={<Button variant="outline" />}>
+              Cancel
+            </DrawerClose>
           </DrawerFooter>
         </div>
       </DrawerContent>
@@ -48,4 +74,7 @@ export const Default: Story = {
   ),
 }
 
-export const FromRight: Story = { ...Default, args: { swipeDirection: "right" } }
+export const FromRight: Story = {
+  ...Default,
+  args: { swipeDirection: "right" },
+}

@@ -5,6 +5,13 @@ import { BoldIcon, ItalicIcon } from "lucide-react"
 const meta = {
   title: "Components/Toggle",
   component: Toggle,
+  parameters: {
+    docs: {
+      description: {
+        component: "A two-state button that can be either on or off.",
+      },
+    },
+  },
   argTypes: {
     variant: { control: "radio", options: ["default", "outline"] },
     size: { control: "radio", options: ["sm", "default", "lg"] },

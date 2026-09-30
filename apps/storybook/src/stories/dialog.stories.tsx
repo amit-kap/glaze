@@ -16,6 +16,23 @@ import { Label } from "@workspace/ui/components/label"
 const meta = {
   title: "Components/Dialog",
   component: Dialog,
+  subcomponents: {
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.",
+      },
+    },
+  },
 } satisfies Meta<typeof Dialog>
 
 export default meta
@@ -24,7 +41,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: (args) => (
     <Dialog {...args}>
-      <DialogTrigger render={<Button variant="outline" />}>Edit profile</DialogTrigger>
+      <DialogTrigger render={<Button variant="outline" />}>
+        Edit profile
+      </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
@@ -43,7 +62,9 @@ export const Default: Story = {
           </div>
         </div>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+          <DialogClose render={<Button variant="outline" />}>
+            Cancel
+          </DialogClose>
           <Button>Save changes</Button>
         </DialogFooter>
       </DialogContent>

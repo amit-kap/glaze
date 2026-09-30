@@ -7,16 +7,43 @@ import {
 } from "@workspace/ui/components/accordion"
 
 const items = [
-  { value: "shipping", title: "What are your shipping options?", body: "We offer standard (5–7 days), express (2–3 days), and overnight shipping." },
-  { value: "returns", title: "What is your return policy?", body: "Returns are accepted within 30 days of purchase with the original receipt." },
-  { value: "support", title: "How can I contact support?", body: "Reach us by email or live chat, 24/7." },
+  {
+    value: "shipping",
+    title: "What are your shipping options?",
+    body: "We offer standard (5–7 days), express (2–3 days), and overnight shipping.",
+  },
+  {
+    value: "returns",
+    title: "What is your return policy?",
+    body: "Returns are accepted within 30 days of purchase with the original receipt.",
+  },
+  {
+    value: "support",
+    title: "How can I contact support?",
+    body: "Reach us by email or live chat, 24/7.",
+  },
 ]
 
 const meta = {
   title: "Components/Accordion",
   component: Accordion,
+  subcomponents: { AccordionContent, AccordionItem, AccordionTrigger },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A vertically stacked set of interactive headings that each reveal a section of content.",
+      },
+    },
+  },
   args: { defaultValue: ["shipping"] },
-  decorators: [(Story) => <div className="w-md"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="w-md">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Accordion>
 
 export default meta

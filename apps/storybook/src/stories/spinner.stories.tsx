@@ -5,6 +5,14 @@ import { Spinner } from "@workspace/ui/components/spinner"
 const meta = {
   title: "Components/Spinner",
   component: Spinner,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "An indicator that can be used to show a loading state. Accepts all native `<svg>` attributes.",
+      },
+    },
+  },
 } satisfies Meta<typeof Spinner>
 
 export default meta

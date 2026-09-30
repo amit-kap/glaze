@@ -1,10 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Label } from "@workspace/ui/components/label"
-import { RadioGroup, RadioGroupItem } from "@workspace/ui/components/radio-group"
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@workspace/ui/components/radio-group"
 
 const meta = {
   title: "Components/Radio Group",
   component: RadioGroup,
+  subcomponents: { RadioGroupItem },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A set of checkable buttons — known as radio buttons — where no more than one can be checked at a time.",
+      },
+    },
+  },
 } satisfies Meta<typeof RadioGroup>
 
 export default meta

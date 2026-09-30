@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/avatar"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar"
 import { Bubble, BubbleContent } from "@workspace/ui/components/bubble"
 import {
   Message,
@@ -13,8 +17,29 @@ import {
 const meta = {
   title: "Components/Message",
   component: Message,
+  subcomponents: {
+    MessageAvatar,
+    MessageContent,
+    MessageFooter,
+    MessageGroup,
+    MessageHeader,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Lays out a chat message with avatar, header, content and footer.",
+      },
+    },
+  },
   argTypes: { align: { control: "radio", options: ["start", "end"] } },
-  decorators: [(Story) => <div className="w-lg"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="w-lg">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Message>
 
 export default meta
@@ -32,7 +57,9 @@ export const Default: Story = {
       <MessageContent>
         <MessageHeader>shadcn</MessageHeader>
         <Bubble variant="muted">
-          <BubbleContent>The new release is out. Let me know what you think!</BubbleContent>
+          <BubbleContent>
+            The new release is out. Let me know what you think!
+          </BubbleContent>
         </Bubble>
         <MessageFooter>9:41 AM</MessageFooter>
       </MessageContent>
@@ -52,8 +79,8 @@ export const Thread: Story = {
         <MessageContent>
           <Bubble variant="ghost">
             <BubbleContent>
-              Here&apos;s a summary of the three open pull requests and what each one
-              changes.
+              Here&apos;s a summary of the three open pull requests and what
+              each one changes.
             </BubbleContent>
           </Bubble>
         </MessageContent>

@@ -12,7 +12,14 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@workspace/ui/components/command"
-import { CalculatorIcon, CalendarIcon, CreditCardIcon, SettingsIcon, SmileIcon, UserIcon } from "lucide-react"
+import {
+  CalculatorIcon,
+  CalendarIcon,
+  CreditCardIcon,
+  SettingsIcon,
+  SmileIcon,
+  UserIcon,
+} from "lucide-react"
 
 function CommandItems() {
   return (
@@ -88,6 +95,23 @@ function CommandDialogDemo() {
 const meta = {
   title: "Components/Command",
   component: Command,
+  subcomponents: {
+    CommandDialog,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+    CommandSeparator,
+    CommandShortcut,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: "Fast, composable, unstyled command menu. Built on cmdk.",
+      },
+    },
+  },
 } satisfies Meta<typeof Command>
 
 export default meta

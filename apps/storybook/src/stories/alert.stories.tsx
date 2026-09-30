@@ -11,8 +11,24 @@ import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
 const meta = {
   title: "Components/Alert",
   component: Alert,
-  argTypes: { variant: { control: "radio", options: ["default", "destructive"] } },
-  decorators: [(Story) => <div className="w-md"><Story /></div>],
+  subcomponents: { AlertAction, AlertDescription, AlertTitle },
+  parameters: {
+    docs: {
+      description: {
+        component: "Displays a callout for user attention.",
+      },
+    },
+  },
+  argTypes: {
+    variant: { control: "radio", options: ["default", "destructive"] },
+  },
+  decorators: [
+    (Story) => (
+      <div className="w-md">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Alert>
 
 export default meta
@@ -23,7 +39,9 @@ export const Default: Story = {
     <Alert {...args}>
       <CheckCircle2Icon />
       <AlertTitle>Success! Your changes have been saved</AlertTitle>
-      <AlertDescription>This is an alert with icon, title and description.</AlertDescription>
+      <AlertDescription>
+        This is an alert with icon, title and description.
+      </AlertDescription>
     </Alert>
   ),
 }
@@ -47,7 +65,9 @@ export const WithAction: Story = {
       <AlertTitle>A new version is available</AlertTitle>
       <AlertDescription>Reload to get the latest features.</AlertDescription>
       <AlertAction>
-        <Button size="sm" variant="outline">Reload</Button>
+        <Button size="sm" variant="outline">
+          Reload
+        </Button>
       </AlertAction>
     </Alert>
   ),

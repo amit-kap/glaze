@@ -18,7 +18,9 @@ type Side = "top" | "right" | "bottom" | "left"
 function SheetDemo({ side = "right" }: { side?: Side }) {
   return (
     <Sheet>
-      <SheetTrigger render={<Button variant="outline" className="capitalize" />}>
+      <SheetTrigger
+        render={<Button variant="outline" className="capitalize" />}
+      >
         Open {side}
       </SheetTrigger>
       <SheetContent side={side}>
@@ -45,9 +47,29 @@ function SheetDemo({ side = "right" }: { side?: Side }) {
 
 const meta = {
   title: "Components/Sheet",
-  component: SheetDemo,
-  argTypes: { side: { control: "radio", options: ["top", "right", "bottom", "left"] } },
-} satisfies Meta<typeof SheetDemo>
+  component: SheetContent,
+  subcomponents: {
+    Sheet,
+    SheetClose,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Extends the Dialog component to display content that complements the main content of the screen.",
+      },
+    },
+  },
+  argTypes: {
+    side: { control: "radio", options: ["top", "right", "bottom", "left"] },
+  },
+  render: (args) => <SheetDemo side={args.side} />,
+} satisfies Meta<typeof SheetContent>
 
 export default meta
 type Story = StoryObj<typeof meta>

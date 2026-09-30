@@ -16,8 +16,29 @@ import { FileTextIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 const meta = {
   title: "Components/Attachment",
   component: Attachment,
+  subcomponents: {
+    AttachmentAction,
+    AttachmentActions,
+    AttachmentContent,
+    AttachmentDescription,
+    AttachmentGroup,
+    AttachmentMedia,
+    AttachmentTitle,
+    AttachmentTrigger,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Displays a file or media attachment with upload state, preview and actions.",
+      },
+    },
+  },
   argTypes: {
-    state: { control: "select", options: ["idle", "uploading", "processing", "error", "done"] },
+    state: {
+      control: "select",
+      options: ["idle", "uploading", "processing", "error", "done"],
+    },
     size: { control: "radio", options: ["default", "sm", "xs"] },
     orientation: { control: "radio", options: ["horizontal", "vertical"] },
   },

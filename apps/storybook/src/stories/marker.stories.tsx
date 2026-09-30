@@ -1,14 +1,33 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Marker, MarkerContent, MarkerIcon } from "@workspace/ui/components/marker"
+import {
+  Marker,
+  MarkerContent,
+  MarkerIcon,
+} from "@workspace/ui/components/marker"
 import { ClockIcon } from "lucide-react"
 
 const meta = {
   title: "Components/Marker",
   component: Marker,
+  subcomponents: { MarkerContent, MarkerIcon },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "An inline annotation — such as a timestamp or divider — for feeds and conversations.",
+      },
+    },
+  },
   argTypes: {
     variant: { control: "radio", options: ["default", "separator", "border"] },
   },
-  decorators: [(Story) => <div className="w-md"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="w-md">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Marker>
 
 export default meta

@@ -21,6 +21,29 @@ import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react"
 const meta = {
   title: "Components/Dropdown Menu",
   component: DropdownMenu,
+  subcomponents: {
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Displays a menu to the user — such as a set of actions or functions — triggered by a button.",
+      },
+    },
+  },
 } satisfies Meta<typeof DropdownMenu>
 
 export default meta
@@ -29,7 +52,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: (args) => (
     <DropdownMenu {...args}>
-      <DropdownMenuTrigger render={<Button variant="outline" />}>Open</DropdownMenuTrigger>
+      <DropdownMenuTrigger render={<Button variant="outline" />}>
+        Open
+      </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
           <DropdownMenuLabel>My account</DropdownMenuLabel>
@@ -66,11 +91,15 @@ export const Default: Story = {
 export const CheckboxesAndRadios: Story = {
   render: (args) => (
     <DropdownMenu {...args}>
-      <DropdownMenuTrigger render={<Button variant="outline" />}>View</DropdownMenuTrigger>
+      <DropdownMenuTrigger render={<Button variant="outline" />}>
+        View
+      </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
           <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-          <DropdownMenuCheckboxItem defaultChecked>Status bar</DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem defaultChecked>
+            Status bar
+          </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem>Activity bar</DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem disabled>Panel</DropdownMenuCheckboxItem>
         </DropdownMenuGroup>

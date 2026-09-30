@@ -27,8 +27,20 @@ function InputOTPDemo({ disabled = false }: { disabled?: boolean }) {
 
 const meta = {
   title: "Components/Input OTP",
-  component: InputOTPDemo,
-} satisfies Meta<typeof InputOTPDemo>
+  component: InputOTP,
+  subcomponents: { InputOTPGroup, InputOTPSeparator, InputOTPSlot },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Accessible one-time password component with copy-paste functionality.",
+      },
+    },
+  },
+  // Slots are composed in the render function; children is a required prop.
+  args: { maxLength: 6, children: null },
+  render: (args) => <InputOTPDemo disabled={args.disabled} />,
+} satisfies Meta<typeof InputOTP>
 
 export default meta
 type Story = StoryObj<typeof meta>

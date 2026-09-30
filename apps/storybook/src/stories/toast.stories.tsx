@@ -39,7 +39,10 @@ function ToastDemo() {
         onClick={() =>
           toast.add({
             title: "Message archived",
-            actionProps: { children: "Undo", onClick: () => toast.add({ title: "Restored" }) },
+            actionProps: {
+              children: "Undo",
+              onClick: () => toast.add({ title: "Restored" }),
+            },
           })
         }
       >
@@ -57,15 +60,28 @@ function ToastDemo() {
       >
         Promise
       </Button>
-      <Toaster />
     </div>
   )
 }
 
 const meta = {
   title: "Components/Toast",
-  component: ToastDemo,
-} satisfies Meta<typeof ToastDemo>
+  component: Toaster,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A succinct message that is displayed temporarily. Render `<Toaster />` once, then call `toast.add()` from anywhere.",
+      },
+    },
+  },
+  render: (args) => (
+    <>
+      <ToastDemo />
+      <Toaster {...args} />
+    </>
+  ),
+} satisfies Meta<typeof Toaster>
 
 export default meta
 type Story = StoryObj<typeof meta>

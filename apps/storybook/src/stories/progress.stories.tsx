@@ -8,9 +8,24 @@ import {
 const meta = {
   title: "Components/Progress",
   component: Progress,
+  subcomponents: { ProgressLabel, ProgressValue },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Displays an indicator showing the completion progress of a task.",
+      },
+    },
+  },
   args: { value: 60 },
   argTypes: { value: { control: { type: "range", min: 0, max: 100 } } },
-  decorators: [(Story) => <div className="w-80"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="w-80">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Progress>
 
 export default meta

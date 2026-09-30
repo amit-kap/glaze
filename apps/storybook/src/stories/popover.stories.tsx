@@ -14,6 +14,20 @@ import {
 const meta = {
   title: "Components/Popover",
   component: Popover,
+  subcomponents: {
+    PopoverContent,
+    PopoverDescription,
+    PopoverHeader,
+    PopoverTitle,
+    PopoverTrigger,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: "Displays rich content in a portal, triggered by a button.",
+      },
+    },
+  },
 } satisfies Meta<typeof Popover>
 
 export default meta
@@ -22,11 +36,15 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: (args) => (
     <Popover {...args}>
-      <PopoverTrigger render={<Button variant="outline" />}>Open popover</PopoverTrigger>
+      <PopoverTrigger render={<Button variant="outline" />}>
+        Open popover
+      </PopoverTrigger>
       <PopoverContent className="w-80">
         <PopoverHeader>
           <PopoverTitle>Dimensions</PopoverTitle>
-          <PopoverDescription>Set the dimensions for the layer.</PopoverDescription>
+          <PopoverDescription>
+            Set the dimensions for the layer.
+          </PopoverDescription>
         </PopoverHeader>
         <div className="grid gap-2">
           {[
@@ -34,8 +52,14 @@ export const Default: Story = {
             ["height", "25px"],
           ].map(([id, value]) => (
             <div key={id} className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor={`popover-${id}`} className="capitalize">{id}</Label>
-              <Input id={`popover-${id}`} defaultValue={value} className="col-span-2 h-8" />
+              <Label htmlFor={`popover-${id}`} className="capitalize">
+                {id}
+              </Label>
+              <Input
+                id={`popover-${id}`}
+                defaultValue={value}
+                className="col-span-2 h-8"
+              />
             </div>
           ))}
         </div>

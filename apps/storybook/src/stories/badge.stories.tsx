@@ -5,11 +5,25 @@ import { BadgeCheckIcon } from "lucide-react"
 const meta = {
   title: "Components/Badge",
   component: Badge,
+  parameters: {
+    docs: {
+      description: {
+        component: "Displays a badge or a component that looks like a badge.",
+      },
+    },
+  },
   args: { children: "Badge" },
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "secondary", "destructive", "outline", "ghost", "link"],
+      options: [
+        "default",
+        "secondary",
+        "destructive",
+        "outline",
+        "ghost",
+        "link",
+      ],
     },
   },
 } satisfies Meta<typeof Badge>

@@ -4,8 +4,22 @@ import { Textarea } from "@workspace/ui/components/textarea"
 const meta = {
   title: "Components/Textarea",
   component: Textarea,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Displays a form textarea or a component that looks like a textarea. Accepts all native `<textarea>` attributes.",
+      },
+    },
+  },
   args: { placeholder: "Type your message here." },
-  decorators: [(Story) => <div className="w-80"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="w-80">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Textarea>
 
 export default meta
