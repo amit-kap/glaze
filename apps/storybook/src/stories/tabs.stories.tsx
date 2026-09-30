@@ -1,0 +1,66 @@
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import { Button } from "@workspace/ui/components/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card"
+import { Input } from "@workspace/ui/components/input"
+import { Label } from "@workspace/ui/components/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs"
+
+type Variant = "default" | "line"
+
+function TabsDemo({ variant = "default" }: { variant?: Variant }) {
+  return (
+    <Tabs defaultValue="account" className="w-sm">
+      <TabsList variant={variant}>
+        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsTrigger value="billing" disabled>Billing</TabsTrigger>
+      </TabsList>
+      <TabsContent value="account">
+        <Card>
+          <CardHeader>
+            <CardTitle>Account</CardTitle>
+            <CardDescription>Make changes to your account here.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-2">
+            <Label htmlFor={`tabs-name-${variant}`}>Name</Label>
+            <Input id={`tabs-name-${variant}`} defaultValue="Pedro Duarte" />
+          </CardContent>
+          <CardFooter>
+            <Button>Save changes</Button>
+          </CardFooter>
+        </Card>
+      </TabsContent>
+      <TabsContent value="password">
+        <Card>
+          <CardHeader>
+            <CardTitle>Password</CardTitle>
+            <CardDescription>Change your password here.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-2">
+            <Label htmlFor={`tabs-pw-${variant}`}>New password</Label>
+            <Input id={`tabs-pw-${variant}`} type="password" />
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
+  )
+}
+
+const meta = {
+  title: "Components/Tabs",
+  component: TabsDemo,
+  argTypes: { variant: { control: "radio", options: ["default", "line"] } },
+} satisfies Meta<typeof TabsDemo>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = { args: { variant: "default" } }
+export const Line: Story = { args: { variant: "line" } }

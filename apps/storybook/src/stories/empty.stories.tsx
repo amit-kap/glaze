@@ -1,0 +1,41 @@
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import { Button } from "@workspace/ui/components/button"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@workspace/ui/components/empty"
+import { FolderCodeIcon } from "lucide-react"
+
+const meta = {
+  title: "Components/Empty",
+  component: Empty,
+} satisfies Meta<typeof Empty>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  render: () => (
+    <Empty className="w-md border">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <FolderCodeIcon />
+        </EmptyMedia>
+        <EmptyTitle>No projects yet</EmptyTitle>
+        <EmptyDescription>
+          You haven&apos;t created any projects yet. Get started by creating your first project.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <div className="flex gap-2">
+          <Button>Create project</Button>
+          <Button variant="outline">Import project</Button>
+        </div>
+      </EmptyContent>
+    </Empty>
+  ),
+}

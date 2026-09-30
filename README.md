@@ -19,3 +19,14 @@ To use the components in your app, import them from the `ui` package.
 ```tsx
 import { Button } from "@workspace/ui/components/button";
 ```
+
+## Storybook
+
+Every component in `packages/ui` has a story in `apps/storybook/src/stories`.
+
+```bash
+npm run dev -w storybook    # http://localhost:6006
+npm run build -w storybook  # static build in apps/storybook/dist
+```
+
+Use the theme switcher in the toolbar to preview light and dark mode. When you add a component, add a matching `<component>.stories.tsx`.

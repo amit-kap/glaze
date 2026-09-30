@@ -1,0 +1,41 @@
+{
+  "name": "storybook",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "storybook dev -p 6006 --no-open",
+    "build": "storybook build -o dist",
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@workspace/ui": "*",
+    "input-otp": "^1.5.0",
+    "lucide-react": "^1.49.0",
+    "react": "^19.2.8",
+    "react-day-picker": "^10.0.2",
+    "react-dom": "^19.2.8",
+    "recharts": "^3.8.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10",
+    "@storybook/addon-a11y": "^10.6.1",
+    "@storybook/addon-docs": "^10.6.1",
+    "@storybook/addon-themes": "^10.6.1",
+    "@storybook/react-vite": "^10.6.1",
+    "@tailwindcss/vite": "^4",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^10",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-storybook": "^10.6.1",
+    "globals": "^17",
+    "storybook": "^10.6.1",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8",
+    "vite": "^8"
+  }
+}
