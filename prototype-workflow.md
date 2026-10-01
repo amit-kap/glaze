@@ -12,7 +12,7 @@ How an AI agent sketches UI in Paper using the components in `packages/ui`. It a
 
 - Paper file: **shadcn-comp-lib** (`01M2SEXJVQ6AGV316HJQ9W58S4`).
 - The master is never sketched in. It only holds the kit.
-- It has one page, **Components**, containing:
+- It has one kit page, named `<style>-<baseColor>` from `components.json`. Currently **base-nova-neutral**. It contains:
   - a **Tokens** artboard with color and radius swatches from `globals.css`
   - one artboard per component (`Button`, `Input`, `Card`, …)
   - a sync stamp: `synced with <commit>`
@@ -37,8 +37,8 @@ Button · Input · Label · Field · Select · Checkbox · Switch · Card · Bad
 ## Sketching a UI
 
 1. **Copy the master:** create a new Paper file as a copy of `shadcn-comp-lib`. Tokens, kit pieces and node IDs all come with it.
-2. **Add a page per sketch** in that copy. The Components page stays as a reference.
-3. **Find pieces** by layer name on the Components page.
+2. **Add a page per sketch** in that copy. The kit page (`base-nova-neutral`) stays as a reference.
+3. **Find pieces** by layer name on the kit page.
 4. **Place pieces with clones:** `<x-paper-clone node-id="…" />`. Write plain markup only for layout and one-off content.
 5. **Adjust clones in place:** change text, swap icons, set widths.
 6. **Check as you go:** take screenshots, and compare against Storybook where accuracy matters.
