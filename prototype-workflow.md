@@ -66,6 +66,24 @@ Button · Input · Label · Field · Select · Checkbox · Switch · Card · Bad
 1. Build its kit piece in the **master** file from the code.
 2. The sketch file is an older copy, so add the piece there as well (write it once, then clone it within that file).
 
+Do this before using the piece in a sketch, not afterwards. For a missing Lucide icon, run `node scripts/paper-icon-cells.mjs <name> [...]`. It prints icon cells built from the installed `lucide-react`. Paste the output into the icons Grid in the master and in the sketch copy, then add the master IDs to the kit index.
+
+## Review loop
+
+How the designer and the agent iterate on a sketch.
+
+- **Agree on content first.** Before building a new part in high fidelity, the agent lists what it shows in 4–5 lines, e.g. "Row: title · reach · severity · risk type · asset". The designer approves it, then the agent builds. Most rework comes from content, not visuals.
+- **Feedback goes in Paper comments.** Pin each comment on the element it's about (select it, then comment), not on a large container. A comment on a container has no element context, so the agent has to look up its position. If pinning is awkward, name the element in the text.
+- **"Do the comments"** starts a round:
+  1. Take one screenshot of the frame first. The designer may have edited it directly; keep those edits.
+  2. Read all open threads.
+  3. Do clear, mechanical comments right away. Ask once, in one batch, about anything that is a design decision.
+  4. Apply all changes, then take one screenshot to check.
+  5. Record design decisions in the project's decisions file.
+  6. Resolve each thread that was handled. The Paper tools can't delete comments; the designer deletes or hides resolved ones in Paper.
+- **Small fixes are faster by hand.** Text, nudges and color swaps the designer makes in Paper directly.
+- **Before calling a frame done**, run the responsive check again (see [Responsive frames](#responsive-frames)).
+
 ## Paper constraints
 
 - **Clones only work within a file.** Clones across pages work; clones across files produce nothing. That's why sketch files start as copies of the master.
