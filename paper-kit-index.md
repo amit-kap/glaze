@@ -212,6 +212,13 @@ Clone the SVG ID, not its cell. All icons are 16px with stroke 2 and stroke `var
 | settings | `ZX-0` | info | `11S-0` |
 | user | `103-0` | copy | `11Z-0` |
 | house | `109-0` | menu | `125-0` |
+| layers | `12Y-0` | archive | `13W-0` |
+| database | `135-0` | focus | `143-0` |
+| cloud | `13C-0` | arrow-down-wide-narrow | `14C-0` |
+| server | `13H-0` | minus | `14L-0` |
+| square-function | `13P-0` | maximize | `14Q-0` |
+
+The second block (layers onward) was added after some sketch files were copied. In those copies the same icons were added by hand, so they have different IDs. Find them by name on the copy's icons page.
 
 ## Known gaps
 
@@ -223,4 +230,3 @@ These came up while sketching and cost extra calls. Add them to the master when 
 | Segmented control, such as `1 · 2 · All` | `toggle-group.tsx` | Clone `Tabs / default`, then rename, reorder and re-enable tabs |
 | Toolbar of icon buttons, such as zoom | `button-group.tsx` | Clone `Button / outline / icon` and clear each border |
 | Ghost icon buttons (close, row actions) | `button.tsx` (`ghost` + `icon-*`) | Clone an outline icon button and set its border to transparent |
-| Icons: database, layers, external-link, send, minus, maximize | `lucide-react` | Inline the Lucide SVG paths |
