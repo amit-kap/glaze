@@ -17,6 +17,7 @@ Node IDs for every kit piece in the master Paper file **shadcn-comp-lib** (`01M2
 
 The Tokens artboard is `IR-0`, and its sync stamp text is `IU-0`. Use the tokens as CSS variables; don't clone the artboard.
 
+- **Severity:** `--color-severity-critical`, `-high`, `-medium`, `-low` (red to green). Badges use the token at 10% (`color-mix(var(--color-severity-high) 10%, transparent)`) as background and the full token as text.
 - **Color:** `--color-background`, `--color-foreground`, `--color-card(-foreground)`, `--color-popover(-foreground)`, `--color-primary(-foreground)`, `--color-secondary(-foreground)`, `--color-muted(-foreground)`, `--color-accent(-foreground)`, `--color-destructive`, `--color-border`, `--color-input`, `--color-ring`, `--color-chart-1…5` (neutral greys), `--color-sidebar-*`.
 - **Type:** `--font-sans` (Geist), `--font-heading`. Geist Mono is available by name. Sizes: `--font-size-xs` 12, `--font-size-sm` 14, `--font-size-base` 16. Weights: `--font-weight-regular`, `-medium`, `-semibold`.
 - **Radius:** `--radius-sm` 6, `-md` 8, `-lg` 10, `-xl` 14, `-2xl` 18, `-3xl` 22, `-4xl` 26.
@@ -44,6 +45,10 @@ The Tokens artboard is `IR-0`, and its sync stamp text is `IU-0`. Use the tokens
 | Button / default / default / icon-start | `5U-0` |
 | Button / outline / default / icon-end | `5Z-0` |
 | Button / default / default / disabled | `6E-0` |
+| Button / ghost / icon-xs (24) | `15C-0` |
+| Button / ghost / icon-sm (28) | `15G-0` |
+| Button / ghost / icon (32) | `15K-0` |
+| Button / ghost / icon-lg (36) | `15O-0` |
 
 ### Badge · `LF-0`
 
@@ -56,6 +61,10 @@ The Tokens artboard is `IR-0`, and its sync stamp text is `IU-0`. Use the tokens
 | Badge / ghost | `LU-0` |
 | Badge / link | `LW-0` |
 | Badge / secondary / icon-start | `LY-0` |
+| Badge / severity / critical | `150-0` |
+| Badge / severity / high | `152-0` |
+| Badge / severity / medium | `154-0` |
+| Badge / severity / low | `156-0` |
 
 ### Input and Textarea · `M3-0`
 
@@ -69,6 +78,16 @@ All are 240 wide; set `width: 100%` on the clone where the code uses `w-full`.
 | Input / disabled | `MG-0` |
 | Input / invalid | `MI-0` |
 | Textarea / placeholder | `MN-0` |
+
+### Input Group · `15T-0`
+
+The search field. 240 wide; set `width: 100%` on the clone where the code uses `w-full`.
+
+| Piece | ID |
+|---|---|
+| InputGroup / icon-start / placeholder | `162-0` |
+| InputGroup / icon-start / filled | `169-0` |
+| InputGroup / icon-start / clear | `16G-0` |
 
 ### Label · `MQ-0`
 
@@ -145,6 +164,22 @@ Each list has three tabs: active, normal and disabled. To use it as a 2-tab swit
 | Tabs / default | `QI-0` |
 | Tabs / line | `QP-0` |
 
+### Toggle Group · `15U-0`
+
+The first item is on (`Item / on`, muted background). To move the "on" state, swap the background between items. For a segmented control, use `outline / joined`.
+
+| Piece | ID |
+|---|---|
+| ToggleGroup / outline / joined | `16Y-0` |
+| ToggleGroup / default | `178-0` |
+
+### Button Group · `15V-0`
+
+| Piece | ID |
+|---|---|
+| ButtonGroup / outline / icon | `17M-0` |
+| ButtonGroup / outline / text | `183-0` |
+
 ### Alert · `QY-0`
 
 | Piece | ID |
@@ -218,15 +253,8 @@ Clone the SVG ID, not its cell. All icons are 16px with stroke 2 and stroke `var
 | server | `13H-0` | minus | `14L-0` |
 | square-function | `13P-0` | maximize | `14Q-0` |
 
-The second block (layers onward) was added after some sketch files were copied. In those copies the same icons were added by hand, so they have different IDs. Find them by name on the copy's icons page.
+The second block (layers onward), the severity badges, ghost icon buttons, Input Group, Toggle Group and Button Group were added after some sketch files were copied. Where those copies got the pieces by hand, the IDs differ; find them by name in the copy.
 
 ## Known gaps
 
-These came up while sketching and cost extra calls. Add them to the master when a sketch next needs them.
-
-| Need | Component in code | What sketches do today |
-|---|---|---|
-| Search field with a leading icon | `input-group.tsx` | Clone `Input`, insert `Icon / search`, move it first and recolor it (5 calls) |
-| Segmented control, such as `1 · 2 · All` | `toggle-group.tsx` | Clone `Tabs / default`, then rename, reorder and re-enable tabs |
-| Toolbar of icon buttons, such as zoom | `button-group.tsx` | Clone `Button / outline / icon` and clear each border |
-| Ghost icon buttons (close, row actions) | `button.tsx` (`ghost` + `icon-*`) | Clone an outline icon button and set its border to transparent |
+None open. When a sketch needs something the kit doesn't have, list it here (need, component in code, current workaround), then build it in the master.
