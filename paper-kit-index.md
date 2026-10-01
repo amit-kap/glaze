@@ -4,7 +4,7 @@ Node IDs for every kit piece in the master Paper file **shadcn-comp-lib** (`01M2
 
 - A copy of the master keeps the same node IDs, so these IDs also work in any sketch file made from it. Clone with `<x-paper-clone node-id="…" />`.
 - Only the component artboards are listed. Headers and group labels on each artboard are docs, not pieces.
-- Indexed at master sync stamp `fb5cd2b`. When a piece is added or rebuilt in the master, update this file in the same change.
+- Indexed at master sync stamp `9cf22e3`. When a piece is added or rebuilt in the master, update this file in the same change.
 
 ## Pages
 
