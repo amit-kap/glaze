@@ -7,7 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@workspace/ui/components/breadcrumb"
+} from "@amitka/glaze/components/breadcrumb"
 
 const meta = {
   title: "Components/Breadcrumb",

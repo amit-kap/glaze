@@ -7,7 +7,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@workspace/ui/components/pagination"
+} from "@amitka/glaze/components/pagination"
 
 const meta = {
   title: "Components/Pagination",

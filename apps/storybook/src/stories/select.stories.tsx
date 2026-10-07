@@ -8,7 +8,7 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@workspace/ui/components/select"
+} from "@amitka/glaze/components/select"
 
 const fruits = [
   { label: "Apple", value: "apple" },

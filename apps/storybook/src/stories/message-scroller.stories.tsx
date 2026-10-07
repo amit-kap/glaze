@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Bubble, BubbleContent } from "@workspace/ui/components/bubble"
-import { Message, MessageContent } from "@workspace/ui/components/message"
+import { Bubble, BubbleContent } from "@amitka/glaze/components/bubble"
+import { Message, MessageContent } from "@amitka/glaze/components/message"
 import {
   MessageScroller,
   MessageScrollerButton,
@@ -8,7 +8,7 @@ import {
   MessageScrollerItem,
   MessageScrollerProvider,
   MessageScrollerViewport,
-} from "@workspace/ui/components/message-scroller"
+} from "@amitka/glaze/components/message-scroller"
 
 const messages = Array.from({ length: 30 }, (_, i) => ({
   id: `m${i}`,

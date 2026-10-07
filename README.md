@@ -6,13 +6,15 @@ My component library: shadcn/ui on Base UI, themed entirely through tokens. A Vi
 
 ## Using Glaze in a project
 
-> The package will be published as `@amitka/glaze`. Until then it's `@workspace/ui` inside this monorepo; the steps are the same.
-
 ### 1. Install
 
+Glaze is released from the private repo `amit-kap/glaze`; each version is a git tag:
+
 ```bash
-npm install @amitka/glaze
+npm install github:amit-kap/glaze#v0.1.0
 ```
+
+It installs as `@amitka/glaze`. React 19 and Tailwind CSS 4 come from your project.
 
 ### 2. Import the styles and a theme
 
@@ -21,20 +23,48 @@ In the project's main CSS file:
 ```css
 @import "@amitka/glaze/globals.css";
 @import "@amitka/glaze/themes/maia.css";
-@source "../node_modules/@amitka/glaze";
 ```
 
-- `globals.css` holds Tailwind, the tokens and the default theme.
+- `globals.css` holds Tailwind, the tokens and the default theme. Use it in place of your own `@import "tailwindcss"`.
 - Import only the themes you use. Each one brings its own font.
-- `@source` lets Tailwind see the classes used inside the components.
+- Tailwind finds the classes inside Glaze's components on its own; your project's files are detected as usual.
 
 ### 3. Turn the theme on
 
-```html
-<html data-theme="maia">
+In React, wrap the app in `ThemeProvider`:
+
+```tsx
+import { ThemeProvider } from "@amitka/glaze/theme"
+
+<ThemeProvider defaultTheme="maia" defaultMode="system">
+  <App />
+</ThemeProvider>
 ```
 
-No `data-theme` means the default theme.
+`"default"` (or no `defaultTheme`) is Nova. The viewer's choice is remembered in `localStorage` (`storageKey`, default `"glaze"`; `false` to turn it off).
+
+Without React, set the attribute yourself: `<html data-theme="maia">`.
+
+### Switching at runtime
+
+```tsx
+import { useTheme } from "@amitka/glaze/theme"
+
+const { theme, setTheme, mode, setMode, resolvedMode, density, setDensity } = useTheme()
+setTheme("lyra")
+setMode("dark")        // "light" | "dark" | "system"
+setDensity("compact")  // "comfortable" | "compact"
+```
+
+### No flash on load
+
+Add the inline script to `<head>` so the saved theme applies before the page paints. Pass the same options as the provider:
+
+```tsx
+import { themeScript } from "@amitka/glaze/theme"
+
+<script dangerouslySetInnerHTML={{ __html: themeScript({ defaultTheme: "maia" }) }} />
+```
 
 ### Switches
 
@@ -50,14 +80,7 @@ All three go on `<html>` and combine freely:
 <html data-theme="maia" class="dark" data-density="compact">
 ```
 
-Change them at runtime by updating the attribute:
-
-```ts
-document.documentElement.dataset.theme = "lyra"
-document.documentElement.classList.toggle("dark")
-```
-
-The same attributes work on any element to theme just that part of the page:
+`ThemeProvider` sets these for you. The same attributes work on any element to theme just that part of the page:
 
 ```html
 <section data-theme="sera">…</section>
@@ -102,6 +125,15 @@ npm run check:tokens                   # fails on any class the token contract f
 ```
 
 Anything the converter can't map becomes a component token (see the spec's "Converting stock shadcn code").
+
+### Releasing
+
+```bash
+# 1. bump "version" in packages/ui/package.json and commit
+npm run release:glaze -- --push   # builds, commits to the release branch, tags v<version>, pushes
+```
+
+`npm run build:glaze` builds `packages/ui/dist` without releasing. npm installs a git repo's root, so releases live on the `release` branch, which holds only the built package.
 
 ### Storybook
 

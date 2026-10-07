@@ -10,8 +10,8 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@workspace/ui/components/alert-dialog"
-import { Button } from "@workspace/ui/components/button"
+} from "@amitka/glaze/components/alert-dialog"
+import { Button } from "@amitka/glaze/components/button"
 import { Trash2Icon } from "lucide-react"
 
 const meta = {

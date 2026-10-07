@@ -1,4 +1,4 @@
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@amitka/glaze/components/button"
 
 export function App() {
   return (

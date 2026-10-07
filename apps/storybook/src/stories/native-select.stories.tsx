@@ -3,7 +3,7 @@ import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
-} from "@workspace/ui/components/native-select"
+} from "@amitka/glaze/components/native-select"
 
 const meta = {
   title: "Components/Native Select",

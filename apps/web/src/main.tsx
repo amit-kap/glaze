@@ -1,8 +1,8 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
-import "@workspace/ui/globals.css"
-import { TooltipProvider } from "@workspace/ui/components/tooltip"
+import "@amitka/glaze/globals.css"
+import { TooltipProvider } from "@amitka/glaze/components/tooltip"
 import { App } from "./App.tsx"
 import { ThemeProvider } from "@/components/theme-provider.tsx"
 

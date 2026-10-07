@@ -4,8 +4,8 @@ import {
   AlertAction,
   AlertDescription,
   AlertTitle,
-} from "@workspace/ui/components/alert"
-import { Button } from "@workspace/ui/components/button"
+} from "@amitka/glaze/components/alert"
+import { Button } from "@amitka/glaze/components/button"
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
 
 const meta = {

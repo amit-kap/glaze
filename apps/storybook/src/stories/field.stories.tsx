@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@workspace/ui/components/button"
-import { Checkbox } from "@workspace/ui/components/checkbox"
+import { Button } from "@amitka/glaze/components/button"
+import { Checkbox } from "@amitka/glaze/components/checkbox"
 import {
   Field,
   FieldContent,
@@ -12,10 +12,10 @@ import {
   FieldSeparator,
   FieldSet,
   FieldTitle,
-} from "@workspace/ui/components/field"
-import { Input } from "@workspace/ui/components/input"
-import { Switch } from "@workspace/ui/components/switch"
-import { Textarea } from "@workspace/ui/components/textarea"
+} from "@amitka/glaze/components/field"
+import { Input } from "@amitka/glaze/components/input"
+import { Switch } from "@amitka/glaze/components/switch"
+import { Textarea } from "@amitka/glaze/components/textarea"
 
 const meta = {
   title: "Components/Field",

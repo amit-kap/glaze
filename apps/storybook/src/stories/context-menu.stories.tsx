@@ -14,7 +14,7 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "@workspace/ui/components/context-menu"
+} from "@amitka/glaze/components/context-menu"
 
 const meta = {
   title: "Components/Context Menu",

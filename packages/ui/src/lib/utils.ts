@@ -1,8 +1,9 @@
+import type { CnFunction } from "cn"
 import { createCn } from "cn/config"
 
 // Teach class merging the Glaze system utilities, so `text-body` is read as a
 // font size (not a colour) and `rounded-control` conflicts with other radii.
-export const cn = createCn({
+export const cn: CnFunction = createCn({
   extend: {
     theme: {
       text: ["caption", "body", "title", "heading", "display"],

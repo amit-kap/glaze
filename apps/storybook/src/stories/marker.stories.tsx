@@ -3,7 +3,7 @@ import {
   Marker,
   MarkerContent,
   MarkerIcon,
-} from "@workspace/ui/components/marker"
+} from "@amitka/glaze/components/marker"
 import { ClockIcon } from "lucide-react"
 
 const meta = {

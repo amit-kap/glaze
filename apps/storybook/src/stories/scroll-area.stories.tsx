@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { ScrollArea, ScrollBar } from "@workspace/ui/components/scroll-area"
-import { Separator } from "@workspace/ui/components/separator"
+import { ScrollArea, ScrollBar } from "@amitka/glaze/components/scroll-area"
+import { Separator } from "@amitka/glaze/components/separator"
 
 const tags = Array.from({ length: 50 }, (_, i) => `v1.2.0-beta.${50 - i}`)
 

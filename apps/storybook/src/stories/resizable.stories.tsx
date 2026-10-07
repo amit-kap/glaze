@@ -3,7 +3,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@workspace/ui/components/resizable"
+} from "@amitka/glaze/components/resizable"
 
 const meta = {
   title: "Components/Resizable",

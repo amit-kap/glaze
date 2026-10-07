@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Toggle } from "@workspace/ui/components/toggle"
+import { Toggle } from "@amitka/glaze/components/toggle"
 import { BoldIcon, ItalicIcon } from "lucide-react"
 
 const meta = {

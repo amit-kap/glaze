@@ -3,12 +3,12 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@workspace/ui/components/avatar"
+} from "@amitka/glaze/components/avatar"
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@workspace/ui/components/hover-card"
+} from "@amitka/glaze/components/hover-card"
 import { CalendarIcon } from "lucide-react"
 
 const meta = {

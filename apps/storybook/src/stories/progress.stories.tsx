@@ -3,7 +3,7 @@ import {
   Progress,
   ProgressLabel,
   ProgressValue,
-} from "@workspace/ui/components/progress"
+} from "@amitka/glaze/components/progress"
 
 const meta = {
   title: "Components/Progress",

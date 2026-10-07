@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@workspace/ui/components/navigation-menu"
+} from "@amitka/glaze/components/navigation-menu"
 
 const components = [
   {

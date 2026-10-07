@@ -1,7 +1,7 @@
 import type { Decorator, Preview } from "@storybook/react-vite"
-import { TooltipProvider } from "@workspace/ui/components/tooltip"
+import { TooltipProvider } from "@amitka/glaze/components/tooltip"
 
-import "@workspace/ui/globals.css"
+import "@amitka/glaze/globals.css"
 import { themes } from "./themes"
 
 // Applies the three Glaze switches to the preview's <html>, as a project would.

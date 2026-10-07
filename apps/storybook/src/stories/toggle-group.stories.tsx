@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@workspace/ui/components/toggle-group"
+} from "@amitka/glaze/components/toggle-group"
 import {
   AlignCenterIcon,
   AlignLeftIcon,

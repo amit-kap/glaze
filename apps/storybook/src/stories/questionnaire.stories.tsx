@@ -15,7 +15,7 @@ import {
   QuestionnaireSkip,
   QuestionnaireSubmit,
   QuestionnaireTitle,
-} from "@workspace/ui/components/questionnaire"
+} from "@amitka/glaze/components/questionnaire"
 
 function QuestionnaireDemo({
   shortcuts = "letters",

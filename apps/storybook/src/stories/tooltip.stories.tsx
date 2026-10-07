@@ -1,12 +1,12 @@
 import type * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@workspace/ui/components/button"
-import { Kbd } from "@workspace/ui/components/kbd"
+import { Button } from "@amitka/glaze/components/button"
+import { Kbd } from "@amitka/glaze/components/kbd"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@workspace/ui/components/tooltip"
+} from "@amitka/glaze/components/tooltip"
 
 type Side = React.ComponentProps<typeof TooltipContent>["side"]
 

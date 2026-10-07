@@ -2,9 +2,9 @@
 
 import * as React from "react"
 import { Questionnaire as QuestionnairePrimitive } from "@shadcn/react/questionnaire"
-import { cn } from "@workspace/ui/lib/utils"
+import { cn } from "@amitka/glaze/lib/utils"
 
-import { buttonVariants, type Button } from "@workspace/ui/components/button"
+import { buttonVariants, type Button } from "@amitka/glaze/components/button"
 import { CheckIcon } from "lucide-react"
 
 function Questionnaire({

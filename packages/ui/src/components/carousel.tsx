@@ -1,10 +1,10 @@
 import * as React from "react"
-import { cn } from "@workspace/ui/lib/utils"
+import { cn } from "@amitka/glaze/lib/utils"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
 
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@amitka/glaze/components/button"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 type CarouselApi = UseEmblaCarouselType[1]

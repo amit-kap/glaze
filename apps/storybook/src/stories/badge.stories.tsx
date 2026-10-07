@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Badge } from "@workspace/ui/components/badge"
+import { Badge } from "@amitka/glaze/components/badge"
 import { BadgeCheckIcon } from "lucide-react"
 
 const meta = {

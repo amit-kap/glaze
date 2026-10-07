@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@amitka/glaze/components/button"
 import {
   Card,
   CardAction,
@@ -8,9 +8,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
+} from "@amitka/glaze/components/card"
+import { Input } from "@amitka/glaze/components/input"
+import { Label } from "@amitka/glaze/components/label"
 
 const meta = {
   title: "Components/Card",

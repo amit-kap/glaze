@@ -1,12 +1,13 @@
 {
-  "name": "@workspace/ui",
-  "version": "0.0.0",
+  "name": "@amitka/glaze",
+  "version": "0.1.0",
   "type": "module",
   "private": true,
   "scripts": {
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "node ../../scripts/glaze-build.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -50,7 +51,8 @@
   },
   "exports": {
     "./globals.css": "./src/styles/globals.css",
-    "./themes/*": "./src/styles/themes/*.css",
+    "./themes/*": "./src/styles/themes/*",
+    "./theme": "./src/lib/theme.tsx",
     "./lib/*": "./src/lib/*.ts",
     "./components/*": "./src/components/*.tsx",
     "./hooks/*": "./src/hooks/*.ts"

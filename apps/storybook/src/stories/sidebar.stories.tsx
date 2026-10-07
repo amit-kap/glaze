@@ -4,8 +4,8 @@ import {
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
-} from "@workspace/ui/components/breadcrumb"
-import { Separator } from "@workspace/ui/components/separator"
+} from "@amitka/glaze/components/breadcrumb"
+import { Separator } from "@amitka/glaze/components/separator"
 import {
   Sidebar,
   SidebarContent,
@@ -26,7 +26,7 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
-} from "@workspace/ui/components/sidebar"
+} from "@amitka/glaze/components/sidebar"
 import {
   CalendarIcon,
   GalleryVerticalEndIcon,

@@ -6,7 +6,7 @@ import {
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
-} from "@workspace/ui/components/avatar"
+} from "@amitka/glaze/components/avatar"
 
 const meta = {
   title: "Components/Avatar",

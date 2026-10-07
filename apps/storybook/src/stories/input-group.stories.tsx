@@ -6,7 +6,7 @@ import {
   InputGroupInput,
   InputGroupText,
   InputGroupTextarea,
-} from "@workspace/ui/components/input-group"
+} from "@amitka/glaze/components/input-group"
 import { ArrowUpIcon, CopyIcon, SearchIcon } from "lucide-react"
 
 const meta = {
