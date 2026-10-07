@@ -1,11 +1,13 @@
 /*
- * Default theme: shadcn Nova, neutral.
- * Sets every input (required and optional). Named themes inherit the
- * optional ones from here. Zero specificity (:where) so any named theme
- * overrides it regardless of load order.
+ * Nova: shadcn's Nova style, neutral. The default theme: it applies with no
+ * data-theme, and with data-theme="nova" (also on a subtree inside another
+ * theme). Sets every input (required and optional); other themes inherit
+ * the optional ones from here. :where(:root) has zero specificity so any
+ * named theme overrides it regardless of load order.
  */
 
-:where(:root) {
+:where(:root),
+[data-theme="nova"] {
   /* colour */
   --canvas: oklch(1 0 0);
   --surface: oklch(1 0 0);
@@ -64,7 +66,10 @@
   --motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
-:where(.dark) {
+:where(.dark),
+[data-theme="nova"].dark,
+.dark [data-theme="nova"],
+[data-theme="nova"] .dark {
   --canvas: oklch(0.145 0 0);
   --surface: oklch(0.205 0 0);
   --ink: oklch(0.985 0 0);
@@ -80,10 +85,11 @@
 
 /*
  * System overrides: shadcn's neutral values aren't expressible as one
- * derivation across both modes, so the default theme pins them to match
- * shadcn exactly. Scoped to :not([data-theme]) so named themes still derive.
+ * derivation across both modes, so Nova pins them to match shadcn exactly.
+ * Scoped to Nova (no data-theme, or "nova") so other themes still derive.
  */
-:root:not([data-theme]) {
+:root:not([data-theme]),
+[data-theme="nova"] {
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --accent-foreground: oklch(0.205 0 0);
@@ -99,7 +105,10 @@
 }
 
 :root:not([data-theme]).dark,
-:root:not([data-theme]) .dark {
+:root:not([data-theme]) .dark,
+[data-theme="nova"].dark,
+.dark [data-theme="nova"],
+[data-theme="nova"] .dark {
   --secondary: oklch(0.269 0 0);
   --muted: oklch(0.269 0 0);
   --accent: oklch(0.269 0 0);

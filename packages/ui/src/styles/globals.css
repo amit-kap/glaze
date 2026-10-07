@@ -3,7 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 @import "./tokens.css";
-@import "./themes/default.css";
+@import "./themes/nova.css";
 
 @custom-variant dark (&:is(.dark *));
 @source "../../../apps/**/*.{ts,tsx}";
@@ -112,7 +112,7 @@
 /*
  * Bridge: stock shadcn/Tailwind classes → system tokens, so unconverted
  * components follow the theme. Mapped 1:1 where the stock value equals the
- * token in the default theme; other stock steps derive from the same inputs.
+ * token in the default theme (Nova); other stock steps derive from the same inputs.
  */
 @theme inline {
     --radius-sm: calc(var(--radius) * 0.6);
@@ -146,5 +146,11 @@
     }
   body {
     @apply bg-background text-foreground;
+    }
+  /* A themed subtree re-applies its own font and text colour; otherwise it
+     inherits the values computed on <body> by the outer theme. */
+  [data-theme],
+  .dark {
+    @apply font-sans text-foreground;
     }
 }

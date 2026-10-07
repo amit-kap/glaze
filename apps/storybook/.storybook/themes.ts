@@ -10,10 +10,10 @@ const themeFiles = import.meta.glob(
 
 const names = Object.keys(themeFiles)
   .map((path) => path.split("/").pop()!.replace(/\.css$/, ""))
-  .filter((name) => name !== "default")
+  .filter((name) => name !== "nova")
   .sort()
 
-export const themes = ["default", ...names].map((name) => ({
+export const themes = ["nova", ...names].map((name) => ({
   value: name,
   title: name[0].toUpperCase() + name.slice(1),
 }))

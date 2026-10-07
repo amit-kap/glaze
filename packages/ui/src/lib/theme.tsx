@@ -39,8 +39,7 @@ function write(storageKey: string, settings: Settings) {
 }
 
 function apply(root: HTMLElement, settings: Settings, dark: boolean) {
-  if (settings.theme === "default") root.removeAttribute("data-theme")
-  else root.setAttribute("data-theme", settings.theme)
+  root.setAttribute("data-theme", settings.theme)
   root.classList.toggle("dark", dark)
   if (settings.density === "compact") root.setAttribute("data-density", "compact")
   else root.removeAttribute("data-density")
@@ -48,7 +47,7 @@ function apply(root: HTMLElement, settings: Settings, dark: boolean) {
 
 export type ThemeProviderProps = {
   children: React.ReactNode
-  /** Theme name, matching a `themes/<name>.css` you import. "default" is Nova. */
+  /** Theme name: "nova" (built in) or a `themes/<name>.css` you import. */
   defaultTheme?: string
   defaultMode?: Mode
   defaultDensity?: Density
@@ -58,7 +57,7 @@ export type ThemeProviderProps = {
 
 export function ThemeProvider({
   children,
-  defaultTheme = "default",
+  defaultTheme = "nova",
   defaultMode = "system",
   defaultDensity = "comfortable",
   storageKey = "glaze",
@@ -114,12 +113,12 @@ export function useTheme() {
  * Pass the same defaults and storageKey as the ThemeProvider.
  */
 export function themeScript({
-  defaultTheme = "default",
+  defaultTheme = "nova",
   defaultMode = "system",
   defaultDensity = "comfortable",
   storageKey = "glaze",
 }: Omit<ThemeProviderProps, "children"> = {}) {
   const defaults = JSON.stringify({ theme: defaultTheme, mode: defaultMode, density: defaultDensity })
   const key = JSON.stringify(storageKey || "")
-  return `(function(){try{var s=${defaults},k=${key};if(k){var v=JSON.parse(localStorage.getItem(k)||"{}");for(var p in v)s[p]=v[p]}var r=document.documentElement;if(s.theme!=="default")r.setAttribute("data-theme",s.theme);var d=s.mode==="dark"||(s.mode==="system"&&matchMedia("${darkQuery}").matches);r.classList.toggle("dark",d);if(s.density==="compact")r.setAttribute("data-density","compact")}catch(e){}})()`
+  return `(function(){try{var s=${defaults},k=${key};if(k){var v=JSON.parse(localStorage.getItem(k)||"{}");for(var p in v)s[p]=v[p]}var r=document.documentElement;r.setAttribute("data-theme",s.theme);var d=s.mode==="dark"||(s.mode==="system"&&matchMedia("${darkQuery}").matches);r.classList.toggle("dark",d);if(s.density==="compact")r.setAttribute("data-density","compact")}catch(e){}})()`
 }

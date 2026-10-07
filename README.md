@@ -23,7 +23,7 @@ In the project's main CSS file:
 @import "@amit-kap/glaze/themes/maia.css";
 ```
 
-- `globals.css` holds Tailwind, the tokens and the default theme. Use it in place of your own `@import "tailwindcss"`.
+- `globals.css` holds Tailwind, the tokens and the default theme, Nova. Use it in place of your own `@import "tailwindcss"`.
 - Import only the themes you use. Each one brings its own font.
 - Tailwind finds the classes inside Glaze's components on its own; your project's files are detected as usual.
 
@@ -39,7 +39,7 @@ import { ThemeProvider } from "@amit-kap/glaze/theme"
 </ThemeProvider>
 ```
 
-`"default"` (or no `defaultTheme`) is Nova. The viewer's choice is remembered in `localStorage` (`storageKey`, default `"glaze"`; `false` to turn it off).
+`defaultTheme` defaults to `"nova"`. The viewer's choice is remembered in `localStorage` (`storageKey`, default `"glaze"`; `false` to turn it off).
 
 Without React, set the attribute yourself: `<html data-theme="maia">`.
 
@@ -70,7 +70,7 @@ All three go on `<html>` and combine freely:
 
 | Switch | Set with | Values |
 |---|---|---|
-| Theme | `data-theme` | none (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or your own |
+| Theme | `data-theme` | none or `nova` (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or your own |
 | Mode | `class="dark"` | none (light), `dark` |
 | Density | `data-density` | none / `comfortable`, `compact` |
 
@@ -88,7 +88,7 @@ All three go on `<html>` and combine freely:
 
 | Theme | Character |
 |---|---|
-| default (Nova) | Geist, 32px controls, 10px corners |
+| `nova` (default) | Geist, 32px controls, 10px corners |
 | `vega` | Inter, taller controls, tighter corners |
 | `maia` | Figtree, pill controls, round menus, deep shadows |
 | `lyra` | JetBrains Mono, square, small type |

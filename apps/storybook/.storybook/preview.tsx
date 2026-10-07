@@ -9,8 +9,7 @@ const withGlaze: Decorator = (Story, context) => {
   const { theme, mode, density } = context.globals
   const root = document.documentElement
 
-  if (theme && theme !== "default") root.setAttribute("data-theme", theme)
-  else root.removeAttribute("data-theme")
+  root.setAttribute("data-theme", theme || "nova")
 
   root.classList.toggle("dark", mode === "dark")
 
@@ -68,7 +67,7 @@ const preview: Preview = {
     },
   },
   initialGlobals: {
-    theme: "default",
+    theme: "nova",
     mode: "light",
     density: "comfortable",
   },
