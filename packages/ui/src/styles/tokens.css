@@ -1,0 +1,107 @@
+/*
+ * Glaze tokens: tier 1 inputs → tier 2 system tokens.
+ * Spec: /Users/amitka/Personal/SharedContext/workflow/comp-lib-architecture.md
+ *
+ * Themes set inputs only. Everything here is derived from them, so it is
+ * re-declared on every element that can change an input; a var() resolves
+ * where it is declared, not where it is used. Colour, shape and motion
+ * depend on theme and mode; space also depends on density.
+ */
+
+:root {
+  --density: 1;
+  --motion-scale: 1;
+}
+
+[data-density="comfortable"] {
+  --density: 1;
+}
+
+[data-density="compact"] {
+  --density: 0.875;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-scale: 0;
+  }
+}
+
+:root,
+[data-theme],
+.dark {
+  /* colour: surfaces and text */
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --muted: color-mix(in oklab, var(--ink) 4%, var(--canvas));
+  --muted-foreground: var(--ink-muted);
+  --subtle-foreground: color-mix(in oklab, var(--ink-muted) 65%, var(--canvas));
+
+  /* colour: actions */
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-ink);
+  --primary-subtle: color-mix(in oklab, var(--brand) 12%, transparent);
+  --primary-border: color-mix(in oklab, var(--brand) 40%, transparent);
+  --secondary: color-mix(in oklab, var(--ink) 6%, var(--surface));
+  --secondary-foreground: var(--ink);
+  --accent: color-mix(in oklab, var(--ink) 6%, var(--surface));
+  --accent-foreground: var(--ink);
+
+  /* colour: interaction states */
+  --hover: color-mix(in oklab, var(--ink) 5%, transparent);
+  --active: color-mix(in oklab, var(--ink) 9%, transparent);
+  --selected: var(--primary-subtle);
+
+  /* colour: lines */
+  --border: var(--line);
+  --border-strong: color-mix(in oklab, var(--ink) 12%, var(--line));
+  --input: var(--border-strong);
+  --ring: var(--brand);
+
+  /* colour: status */
+  --destructive: var(--danger);
+  --danger-subtle: color-mix(in oklab, var(--danger) 12%, transparent);
+  --success-subtle: color-mix(in oklab, var(--success) 12%, transparent);
+  --warning-subtle: color-mix(in oklab, var(--warning) 12%, transparent);
+  --info-subtle: color-mix(in oklab, var(--info) 12%, transparent);
+  --severity-critical: var(--danger);
+  --severity-high: color-mix(in oklab, var(--danger) 50%, var(--warning));
+  --severity-medium: var(--warning);
+  --severity-low: var(--success);
+
+  /* colour: sidebar */
+  --sidebar: color-mix(in oklab, var(--ink) 3%, var(--canvas));
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-ink);
+  --sidebar-accent: color-mix(in oklab, var(--ink) 6%, var(--sidebar));
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--brand);
+
+  /* shape: optional inputs defaulting to the base radius */
+  --shape-item: calc(var(--radius) * 0.8);
+  --shape-control: var(--radius);
+  --shape-container: calc(var(--radius) * 1.4);
+
+  /* motion */
+  --duration-fast: calc(var(--motion-fast) * var(--motion-scale));
+  --duration-base: calc(var(--motion-base) * var(--motion-scale));
+  --duration-slow: calc(var(--motion-slow) * var(--motion-scale));
+}
+
+:root,
+[data-theme],
+[data-density],
+.dark {
+  /* space and size */
+  --space: calc(var(--space-base) * var(--density));
+  --control-xs: calc(var(--space) * 6);
+  --control-sm: calc(var(--space) * 7);
+  --control-md: calc(var(--space) * 8);
+  --control-lg: calc(var(--space) * 9);
+}
