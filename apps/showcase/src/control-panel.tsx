@@ -1,5 +1,5 @@
 import { useTheme, type Density, type Mode } from "@amit-kap/glaze/theme"
-import { Label } from "@amit-kap/glaze/components/label"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   Select,
   SelectContent,
@@ -7,80 +7,103 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@amit-kap/glaze/components/select"
-import { ToggleGroup, ToggleGroupItem } from "@amit-kap/glaze/components/toggle-group"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@amit-kap/glaze/components/tooltip"
-import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react"
+import { Separator } from "@amit-kap/glaze/components/separator"
 
-export const themes = [
-  { value: "nova", label: "Nova", note: "Geist · the default" },
-  { value: "vega", label: "Vega", note: "Inter · classic" },
-  { value: "maia", label: "Maia", note: "Figtree · soft and round" },
-  { value: "lyra", label: "Lyra", note: "JetBrains Mono · boxy" },
-  { value: "mira", label: "Mira", note: "Inter · dense" },
-  { value: "luma", label: "Luma", note: "Inter · rounded, lifted" },
-  { value: "sera", label: "Sera", note: "Playfair · editorial" },
-  { value: "rhea", label: "Rhea", note: "Inter · friendly" },
+const themes = [
+  { value: "nova", label: "Nova" },
+  { value: "vega", label: "Vega" },
+  { value: "maia", label: "Maia" },
+  { value: "lyra", label: "Lyra" },
+  { value: "mira", label: "Mira" },
+  { value: "luma", label: "Luma" },
+  { value: "sera", label: "Sera" },
+  { value: "rhea", label: "Rhea" },
 ]
 
-const modes: { value: Mode; label: string; icon: typeof SunIcon }[] = [
-  { value: "light", label: "Light", icon: SunIcon },
-  { value: "dark", label: "Dark", icon: MoonIcon },
-  { value: "system", label: "System", icon: MonitorIcon },
+const modes = [
+  { value: "system", label: "System" },
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
 ]
 
-export function ControlPanel() {
-  const { theme, setTheme, mode, setMode, density, setDensity } = useTheme()
+const densities = [
+  { value: "comfortable", label: "Comfortable" },
+  { value: "compact", label: "Compact" },
+]
 
+function Row({
+  id,
+  label,
+  items,
+  value,
+  onChange,
+}: {
+  id: string
+  label: string
+  items: { value: string; label: string }[]
+  value: string
+  onChange: (value: string) => void
+}) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <Label className="sr-only" htmlFor="theme-select">
-        Theme
-      </Label>
-      <Select
-        items={themes}
-        value={theme}
-        onValueChange={(value) => value && setTheme(value as string)}
-      >
-        <SelectTrigger id="theme-select" size="sm" className="w-32">
+    <div className="flex items-center justify-between gap-3">
+      <label htmlFor={id} className="text-body text-muted-foreground">
+        {label}
+      </label>
+      <Select items={items} value={value} onValueChange={(v) => v && onChange(v as string)}>
+        <SelectTrigger id={id} size="sm" className="w-32">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="min-w-64">
-          {themes.map((t) => (
-            <SelectItem key={t.value} value={t.value}>
-              {t.label}
-              <span className="ml-auto pl-3 text-caption text-muted-foreground">{t.note}</span>
+        <SelectContent>
+          {items.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
-
-      <ToggleGroup
-        variant="outline"
-        size="sm"
-        aria-label="Mode"
-        value={[mode]}
-        onValueChange={(value) => value[0] && setMode(value[0] as Mode)}
-      >
-        {modes.map(({ value, label, icon: Icon }) => (
-          <Tooltip key={value}>
-            <TooltipTrigger render={<ToggleGroupItem value={value} aria-label={label} />}>
-              <Icon />
-            </TooltipTrigger>
-            <TooltipContent>{label}</TooltipContent>
-          </Tooltip>
-        ))}
-      </ToggleGroup>
-
-      <ToggleGroup
-        variant="outline"
-        size="sm"
-        aria-label="Density"
-        value={[density]}
-        onValueChange={(value) => value[0] && setDensity(value[0] as Density)}
-      >
-        <ToggleGroupItem value="comfortable">Comfortable</ToggleGroupItem>
-        <ToggleGroupItem value="compact">Compact</ToggleGroupItem>
-      </ToggleGroup>
     </div>
+  )
+}
+
+// Floating settings panel, top right on wide screens, above the column otherwise.
+export function ControlPanel() {
+  const { theme, setTheme, mode, setMode, density, setDensity } = useTheme()
+
+  return (
+    <aside
+      aria-label="Theme settings"
+      className="z-40 flex w-full flex-col gap-3 rounded-container border bg-popover p-4 text-popover-foreground shadow-floating xl:fixed xl:top-4 xl:right-4 xl:w-72"
+    >
+      <div className="flex items-center gap-2 font-heading text-body font-strong">
+        <span className="size-3.5 rounded-item-sm bg-primary" aria-hidden />
+        Glaze
+      </div>
+      <Row id="panel-theme" label="Theme" items={themes} value={theme} onChange={setTheme} />
+      <Row id="panel-mode" label="Mode" items={modes} value={mode} onChange={(v) => setMode(v as Mode)} />
+      <Row
+        id="panel-density"
+        label="Density"
+        items={densities}
+        value={density}
+        onChange={(v) => setDensity(v as Density)}
+      />
+      <Separator />
+      <div className="flex flex-col gap-1 text-caption text-muted-foreground">
+        <code className="truncate font-mono" title="npm i @amit-kap/glaze">npm i @amit-kap/glaze</code>
+        <div className="-ml-2 flex">
+          <Button
+            variant="link"
+            size="xs"
+            nativeButton={false}
+            render={<a href="https://www.npmjs.com/package/@amit-kap/glaze" />}
+          >
+            npm
+          </Button>
+          <Button variant="link" size="xs" nativeButton={false} render={<a href="https://github.com/amit-kap/glaze" />}>
+            GitHub
+          </Button>
+        </div>
+      </div>
+    </aside>
   )
 }

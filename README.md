@@ -135,7 +135,7 @@ npm run release:glaze -- --push --npm   # build, tag v<version> on the release b
 
 ### Showcase
 
-`apps/showcase` is a one-page demo of Glaze: realistic UI built from the components, with the Theme / Mode / Density control panel at the top right.
+`apps/showcase` is a one-page demo of Glaze in the style of fluidfunctionalism.com: a centre column of live components, and a floating settings panel (Theme / Mode / Density) at the top right.
 
 ```bash
 npm run dev -w showcase     # http://localhost:5180

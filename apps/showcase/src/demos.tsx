@@ -7,7 +7,6 @@ import {
   CalendarIcon,
   CreditCardIcon,
   FileTextIcon,
-  FolderPlusIcon,
   ItalicIcon,
   LogOutIcon,
   MoreHorizontalIcon,
@@ -35,26 +34,12 @@ import {
   AttachmentMedia,
   AttachmentTitle,
 } from "@amit-kap/glaze/components/attachment"
-import { Avatar, AvatarFallback } from "@amit-kap/glaze/components/avatar"
+import { Avatar, AvatarFallback, AvatarGroup } from "@amit-kap/glaze/components/avatar"
 import { Badge } from "@amit-kap/glaze/components/badge"
 import { Bubble, BubbleContent } from "@amit-kap/glaze/components/bubble"
 import { Button } from "@amit-kap/glaze/components/button"
 import { Calendar } from "@amit-kap/glaze/components/calendar"
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@amit-kap/glaze/components/card"
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "@amit-kap/glaze/components/chart"
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@amit-kap/glaze/components/chart"
 import { Checkbox } from "@amit-kap/glaze/components/checkbox"
 import {
   Command,
@@ -71,27 +56,11 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@amit-kap/glaze/components/dropdown-menu"
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@amit-kap/glaze/components/empty"
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-} from "@amit-kap/glaze/components/field"
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from "@amit-kap/glaze/components/field"
 import { Input } from "@amit-kap/glaze/components/input"
 import {
   InputGroup,
@@ -100,87 +69,99 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@amit-kap/glaze/components/input-group"
-import { Kbd } from "@amit-kap/glaze/components/kbd"
+import { Kbd, KbdGroup } from "@amit-kap/glaze/components/kbd"
 import { Label } from "@amit-kap/glaze/components/label"
-import {
-  Message,
-  MessageAvatar,
-  MessageContent,
-  MessageFooter,
-  MessageGroup,
-} from "@amit-kap/glaze/components/message"
-import {
-  Popover,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from "@amit-kap/glaze/components/popover"
+import { Message, MessageAvatar, MessageContent, MessageFooter, MessageGroup } from "@amit-kap/glaze/components/message"
+import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger } from "@amit-kap/glaze/components/popover"
 import { Progress, ProgressLabel, ProgressValue } from "@amit-kap/glaze/components/progress"
 import { RadioGroup, RadioGroupItem } from "@amit-kap/glaze/components/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@amit-kap/glaze/components/select"
-import { Separator } from "@amit-kap/glaze/components/separator"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@amit-kap/glaze/components/select"
 import { Slider } from "@amit-kap/glaze/components/slider"
 import { Switch } from "@amit-kap/glaze/components/switch"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@amit-kap/glaze/components/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@amit-kap/glaze/components/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@amit-kap/glaze/components/tabs"
 import { toast } from "@amit-kap/glaze/components/toast"
 import { ToggleGroup, ToggleGroupItem } from "@amit-kap/glaze/components/toggle-group"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@amit-kap/glaze/components/tooltip"
 
+export function ComposerDemo() {
+  return (
+    <InputGroup className="w-full max-w-md">
+      <InputGroupTextarea placeholder="Ask, search or chat…" />
+      <InputGroupAddon align="block-end">
+        <InputGroupButton size="icon-xs" aria-label="Attach">
+          <PaperclipIcon />
+        </InputGroupButton>
+        <InputGroupText className="ml-auto">52% used</InputGroupText>
+        <InputGroupButton variant="default" size="icon-xs" className="rounded-pill" aria-label="Send">
+          <ArrowUpIcon />
+        </InputGroupButton>
+      </InputGroupAddon>
+    </InputGroup>
+  )
+}
+
+export function ButtonsDemo() {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-wrap justify-center gap-2">
+        <Button onClick={() => toast.add({ type: "success", title: "Changes saved" })}>Save</Button>
+        <Button variant="secondary">Preview</Button>
+        <Button variant="outline">Share</Button>
+        <Button variant="ghost">Cancel</Button>
+      </div>
+      <div className="flex flex-wrap justify-center gap-2">
+        <Badge>New</Badge>
+        <Badge variant="secondary">Beta</Badge>
+        <Badge variant="outline">v0.1.1</Badge>
+        <Badge variant="destructive">Deprecated</Badge>
+      </div>
+    </div>
+  )
+}
+
 export function SignInDemo() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Sign in to Glaze</CardTitle>
-        <CardDescription>Welcome back. Enter your details below.</CardDescription>
-        <CardAction>
-          <Button variant="link" size="sm">
-            Sign up
-          </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="signin-email">Email</FieldLabel>
-            <Input id="signin-email" type="email" placeholder="you@example.com" />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="signin-password">Password</FieldLabel>
-            <Input id="signin-password" type="password" placeholder="••••••••" />
-          </Field>
-          <Field orientation="horizontal">
-            <Checkbox id="signin-remember" defaultChecked />
-            <FieldLabel htmlFor="signin-remember" className="font-normal">
-              Keep me signed in
-            </FieldLabel>
-          </Field>
-        </FieldGroup>
-      </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button className="w-full" onClick={() => toast.add({ type: "success", title: "Signed in" })}>
-          Sign in
-        </Button>
-        <Button variant="outline" className="w-full">
-          Continue with Google
-        </Button>
-      </CardFooter>
-    </Card>
+    <FieldGroup className="w-full max-w-xs">
+      <Field>
+        <FieldLabel htmlFor="demo-email">Email</FieldLabel>
+        <Input id="demo-email" type="email" placeholder="you@example.com" />
+      </Field>
+      <Field>
+        <FieldLabel htmlFor="demo-password">Password</FieldLabel>
+        <Input id="demo-password" type="password" placeholder="••••••••" />
+      </Field>
+      <Field orientation="horizontal">
+        <Checkbox id="demo-remember" defaultChecked />
+        <FieldLabel htmlFor="demo-remember" className="font-normal">
+          Keep me signed in
+        </FieldLabel>
+      </Field>
+      <Button className="w-full" onClick={() => toast.add({ type: "success", title: "Signed in" })}>
+        Sign in
+      </Button>
+    </FieldGroup>
+  )
+}
+
+export function SwitchesDemo() {
+  return (
+    <FieldGroup className="w-full max-w-xs">
+      <Field orientation="horizontal">
+        <FieldContent>
+          <FieldLabel htmlFor="demo-notify">Notifications</FieldLabel>
+          <FieldDescription>Mentions and replies.</FieldDescription>
+        </FieldContent>
+        <Switch id="demo-notify" defaultChecked />
+      </Field>
+      <Field orientation="horizontal">
+        <FieldContent>
+          <FieldLabel htmlFor="demo-digest">Weekly digest</FieldLabel>
+          <FieldDescription>Every Monday.</FieldDescription>
+        </FieldContent>
+        <Switch id="demo-digest" />
+      </Field>
+    </FieldGroup>
   )
 }
 
@@ -191,132 +172,107 @@ const languages = [
   { value: "ja", label: "Japanese" },
 ]
 
-export function SettingsDemo() {
+export function ChoicesDemo() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Preferences</CardTitle>
-        <CardDescription>Applied to every workspace you own.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <FieldGroup>
-          <Field orientation="horizontal">
-            <FieldContent>
-              <FieldLabel htmlFor="settings-notify">Notifications</FieldLabel>
-              <FieldDescription>Mentions, replies and reviews.</FieldDescription>
-            </FieldContent>
-            <Switch id="settings-notify" defaultChecked />
-          </Field>
-          <Field orientation="horizontal">
-            <FieldContent>
-              <FieldLabel htmlFor="settings-digest">Weekly digest</FieldLabel>
-              <FieldDescription>A summary every Monday.</FieldDescription>
-            </FieldContent>
-            <Switch id="settings-digest" />
-          </Field>
-          <FieldSeparator />
-          <Field>
-            <FieldLabel htmlFor="settings-language">Language</FieldLabel>
-            <Select items={languages} defaultValue="en">
-              <SelectTrigger id="settings-language" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {languages.map((l) => (
-                  <SelectItem key={l.value} value={l.value}>
-                    {l.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
-          <Field>
-            <FieldLabel>Start of week</FieldLabel>
-            <RadioGroup defaultValue="monday" className="flex gap-4">
-              {["sunday", "monday"].map((day) => (
-                <div key={day} className="flex items-center gap-2">
-                  <RadioGroupItem value={day} id={`week-${day}`} />
-                  <Label htmlFor={`week-${day}`} className="capitalize">
-                    {day}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </Field>
-          <Field>
-            <FieldLabel>Text size</FieldLabel>
-            <Slider defaultValue={[60]} max={100} step={1} />
-          </Field>
-        </FieldGroup>
-      </CardContent>
-    </Card>
+    <div className="flex w-full max-w-xs flex-col gap-5">
+      <Select items={languages} defaultValue="en">
+        <SelectTrigger className="w-full" aria-label="Language">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {languages.map((l) => (
+            <SelectItem key={l.value} value={l.value}>
+              {l.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <RadioGroup defaultValue="monday" className="flex gap-4" aria-label="Start of week">
+        {["sunday", "monday"].map((day) => (
+          <div key={day} className="flex items-center gap-2">
+            <RadioGroupItem value={day} id={`demo-week-${day}`} />
+            <Label htmlFor={`demo-week-${day}`} className="capitalize">
+              {day}
+            </Label>
+          </div>
+        ))}
+      </RadioGroup>
+      <Slider defaultValue={[60]} max={100} step={1} aria-label="Volume" />
+    </div>
   )
 }
 
-export function ChatDemo() {
+export function ToolbarDemo() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Design review</CardTitle>
-        <CardDescription>3 people · updated just now</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <MessageGroup className="gap-4">
-          <Message>
-            <MessageAvatar>
-              <Avatar>
-                <AvatarFallback>NO</AvatarFallback>
-              </Avatar>
-            </MessageAvatar>
-            <MessageContent>
-              <Bubble variant="muted">
-                <BubbleContent>Pushed the new tokens. Every theme picks them up.</BubbleContent>
-              </Bubble>
-              <Attachment size="sm">
-                <AttachmentMedia>
-                  <FileTextIcon />
-                </AttachmentMedia>
-                <AttachmentContent>
-                  <AttachmentTitle>tokens.css</AttachmentTitle>
-                  <AttachmentDescription>CSS · 4.8 KB</AttachmentDescription>
-                </AttachmentContent>
-                <AttachmentActions>
-                  <AttachmentAction aria-label="Remove">
-                    <XIcon />
-                  </AttachmentAction>
-                </AttachmentActions>
-              </Attachment>
-            </MessageContent>
-          </Message>
-          <Message align="end">
-            <MessageContent>
-              <Bubble align="end">
-                <BubbleContent>Switching to Maia now. The pills look great.</BubbleContent>
-              </Bubble>
-              <MessageFooter>Read</MessageFooter>
-            </MessageContent>
-          </Message>
-        </MessageGroup>
-        <InputGroup>
-          <InputGroupTextarea placeholder="Reply to the thread…" />
-          <InputGroupAddon align="block-end">
-            <InputGroupButton size="icon-xs" aria-label="Attach">
-              <PaperclipIcon />
-            </InputGroupButton>
-            <InputGroupText className="ml-auto">⏎ to send</InputGroupText>
-            <InputGroupButton variant="default" size="icon-xs" className="rounded-pill" aria-label="Send">
-              <ArrowUpIcon />
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
-      </CardContent>
-    </Card>
+    <div className="flex flex-wrap items-center justify-center gap-2">
+      <ToggleGroup variant="outline" multiple defaultValue={["bold"]} aria-label="Formatting">
+        {[
+          { value: "bold", icon: BoldIcon, label: "Bold", key: "⌘B" },
+          { value: "italic", icon: ItalicIcon, label: "Italic", key: "⌘I" },
+          { value: "underline", icon: UnderlineIcon, label: "Underline", key: "⌘U" },
+        ].map(({ value, icon: Icon, label, key }) => (
+          <Tooltip key={value}>
+            <TooltipTrigger render={<ToggleGroupItem value={value} aria-label={label} />}>
+              <Icon />
+            </TooltipTrigger>
+            <TooltipContent>
+              {label} <Kbd>{key}</Kbd>
+            </TooltipContent>
+          </Tooltip>
+        ))}
+      </ToggleGroup>
+      <Popover>
+        <PopoverTrigger render={<Button variant="outline" />}>Dimensions</PopoverTrigger>
+        <PopoverContent className="w-72">
+          <PopoverHeader>
+            <PopoverTitle>Dimensions</PopoverTitle>
+            <PopoverDescription>Set the size of the layer.</PopoverDescription>
+          </PopoverHeader>
+          <div className="grid gap-2">
+            {[
+              ["width", "100%"],
+              ["height", "240px"],
+            ].map(([id, value]) => (
+              <div key={id} className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor={`dim-${id}`} className="capitalize">
+                  {id}
+                </Label>
+                <Input id={`dim-${id}`} defaultValue={value} className="col-span-2" />
+              </div>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+      <DropdownMenu>
+        <DropdownMenuTrigger render={<Button variant="ghost" size="icon" aria-label="More" />}>
+          <MoreHorizontalIcon />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <BellIcon />
+              Subscribe
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <SlidersHorizontalIcon />
+              Filters
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive">
+            <LogOutIcon />
+            Leave
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
 
 export function CommandDemo() {
   return (
-    <Command className="rounded-container border shadow-raised">
+    <Command className="w-full max-w-md rounded-container border shadow-raised">
       <CommandInput placeholder="Type a command or search…" />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -353,6 +309,47 @@ export function CommandDemo() {
   )
 }
 
+export function ChatDemo() {
+  return (
+    <MessageGroup className="w-full max-w-md gap-4">
+      <Message>
+        <MessageAvatar>
+          <Avatar>
+            <AvatarFallback>NO</AvatarFallback>
+          </Avatar>
+        </MessageAvatar>
+        <MessageContent>
+          <Bubble variant="muted">
+            <BubbleContent>Pushed the new tokens. Every theme picks them up.</BubbleContent>
+          </Bubble>
+          <Attachment size="sm">
+            <AttachmentMedia>
+              <FileTextIcon />
+            </AttachmentMedia>
+            <AttachmentContent>
+              <AttachmentTitle>tokens.css</AttachmentTitle>
+              <AttachmentDescription>CSS · 4.8 KB</AttachmentDescription>
+            </AttachmentContent>
+            <AttachmentActions>
+              <AttachmentAction aria-label="Remove">
+                <XIcon />
+              </AttachmentAction>
+            </AttachmentActions>
+          </Attachment>
+        </MessageContent>
+      </Message>
+      <Message align="end">
+        <MessageContent>
+          <Bubble align="end">
+            <BubbleContent>Switching themes now. Looks great.</BubbleContent>
+          </Bubble>
+          <MessageFooter>Read</MessageFooter>
+        </MessageContent>
+      </Message>
+    </MessageGroup>
+  )
+}
+
 const issues = [
   { id: "GLZ-142", title: "Focus ring clipped in dialogs", severity: "critical", owner: "NO" },
   { id: "GLZ-139", title: "Sidebar badge misaligned", severity: "high", owner: "VE" },
@@ -367,150 +364,41 @@ const severityClass = {
   low: "bg-severity-low/10 text-severity-low dark:bg-severity-low/20",
 }
 
-export function IssuesDemo() {
+export function TableDemo() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Open issues</CardTitle>
-        <CardDescription>4 need attention this sprint.</CardDescription>
-        <CardAction>
-          <IssueMenu />
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Issue</TableHead>
-              <TableHead>Severity</TableHead>
-              <TableHead className="text-right">Owner</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {issues.map((issue) => (
-              <TableRow key={issue.id}>
-                <TableCell>
-                  <div className="font-medium">{issue.title}</div>
-                  <div className="text-caption text-muted-foreground">{issue.id}</div>
-                </TableCell>
-                <TableCell>
-                  <Badge className={`capitalize ${severityClass[issue.severity]}`}>{issue.severity}</Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  <Avatar size="sm" className="ml-auto">
-                    <AvatarFallback>{issue.owner}</AvatarFallback>
-                  </Avatar>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  )
-}
-
-function IssueMenu() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" aria-label="More" />}>
-        <MoreHorizontalIcon />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>Issues</DropdownMenuLabel>
-          <DropdownMenuItem>
-            <BellIcon />
-            Subscribe
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <SlidersHorizontalIcon />
-            Filters
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive">
-          <LogOutIcon />
-          Leave project
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
-
-export function ToolbarDemo() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Editor toolbar</CardTitle>
-        <CardDescription>Toggles, tooltips, a popover and shortcuts.</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-wrap items-center gap-2">
-        <ToggleGroup variant="outline" multiple defaultValue={["bold"]} aria-label="Formatting">
-          {[
-            { value: "bold", icon: BoldIcon, label: "Bold", key: "⌘B" },
-            { value: "italic", icon: ItalicIcon, label: "Italic", key: "⌘I" },
-            { value: "underline", icon: UnderlineIcon, label: "Underline", key: "⌘U" },
-          ].map(({ value, icon: Icon, label, key }) => (
-            <Tooltip key={value}>
-              <TooltipTrigger render={<ToggleGroupItem value={value} aria-label={label} />}>
-                <Icon />
-              </TooltipTrigger>
-              <TooltipContent>
-                {label} <Kbd>{key}</Kbd>
-              </TooltipContent>
-            </Tooltip>
-          ))}
-        </ToggleGroup>
-        <Separator orientation="vertical" className="h-6" />
-        <Popover>
-          <PopoverTrigger render={<Button variant="outline" />}>Dimensions</PopoverTrigger>
-          <PopoverContent className="w-72">
-            <PopoverHeader>
-              <PopoverTitle>Dimensions</PopoverTitle>
-              <PopoverDescription>Set the size of the layer.</PopoverDescription>
-            </PopoverHeader>
-            <div className="grid gap-2">
-              {[
-                ["width", "100%"],
-                ["height", "240px"],
-              ].map(([id, value]) => (
-                <div key={id} className="grid grid-cols-3 items-center gap-4">
-                  <Label htmlFor={`dim-${id}`} className="capitalize">
-                    {id}
-                  </Label>
-                  <Input id={`dim-${id}`} defaultValue={value} className="col-span-2" />
-                </div>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
-        <Button
-          variant="secondary"
-          onClick={() =>
-            toast.add({
-              title: "Draft saved",
-              actionProps: { children: "Undo", onClick: () => toast.add({ title: "Restored" }) },
-            })
-          }
-        >
-          Save
-        </Button>
-      </CardContent>
-    </Card>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Issue</TableHead>
+          <TableHead>Severity</TableHead>
+          <TableHead className="text-right">Owner</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {issues.map((issue) => (
+          <TableRow key={issue.id}>
+            <TableCell>
+              <div className="font-medium">{issue.title}</div>
+              <div className="text-caption text-muted-foreground">{issue.id}</div>
+            </TableCell>
+            <TableCell>
+              <Badge className={`capitalize ${severityClass[issue.severity]}`}>{issue.severity}</Badge>
+            </TableCell>
+            <TableCell className="text-right">
+              <Avatar size="sm" className="ml-auto">
+                <AvatarFallback>{issue.owner}</AvatarFallback>
+              </Avatar>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   )
 }
 
 export function CalendarDemo() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
-  return (
-    <Card className="items-center">
-      <CardContent>
-        <Calendar mode="single" selected={date} onSelect={setDate} />
-      </CardContent>
-    </Card>
-  )
+  return <Calendar mode="single" selected={date} onSelect={setDate} className="rounded-container border" />
 }
 
 const traffic = [
@@ -529,92 +417,69 @@ const chartConfig = {
 
 export function ChartDemo() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Traffic</CardTitle>
-        <CardDescription>Visitors and sign-ups, first half of the year.</CardDescription>
-        <CardAction>
-          <Badge variant="secondary">+24%</Badge>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="h-48 w-full">
-          <AreaChart accessibilityLayer data={traffic} margin={{ left: 4, right: 4 }}>
-            <CartesianGrid vertical={false} />
-            <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-            <Area dataKey="signups" type="natural" fill="var(--color-signups)" fillOpacity={0.3} stroke="var(--color-signups)" stackId="a" />
-            <Area dataKey="visitors" type="natural" fill="var(--color-visitors)" fillOpacity={0.3} stroke="var(--color-visitors)" stackId="a" />
-          </AreaChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <ChartContainer config={chartConfig} className="h-48 w-full">
+      <AreaChart accessibilityLayer data={traffic} margin={{ left: 4, right: 4 }}>
+        <CartesianGrid vertical={false} />
+        <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+        <Area dataKey="signups" type="natural" fill="var(--color-signups)" fillOpacity={0.3} stroke="var(--color-signups)" stackId="a" />
+        <Area dataKey="visitors" type="natural" fill="var(--color-visitors)" fillOpacity={0.3} stroke="var(--color-visitors)" stackId="a" />
+      </AreaChart>
+    </ChartContainer>
   )
 }
 
 export function TabsDemo() {
   return (
-    <Card>
-      <CardContent>
-        <Tabs defaultValue="upload">
-          <TabsList>
-            <TabsTrigger value="upload">Upload</TabsTrigger>
-            <TabsTrigger value="faq">FAQ</TabsTrigger>
-          </TabsList>
-          <TabsContent value="upload" className="flex flex-col gap-4 pt-2">
-            <Progress value={68}>
-              <ProgressLabel>Uploading assets</ProgressLabel>
-              <ProgressValue />
-            </Progress>
-            <div className="flex gap-2">
-              <Button size="sm" onClick={() => toast.add({ type: "success", title: "Upload complete" })}>
-                Finish
-              </Button>
-              <Button size="sm" variant="outline" onClick={() => toast.add({ type: "error", title: "Upload cancelled" })}>
-                Cancel
-              </Button>
-            </div>
-          </TabsContent>
-          <TabsContent value="faq">
-            <Accordion>
-              <AccordionItem value="themes">
-                <AccordionTrigger>Can I make my own theme?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. Set about seventeen inputs for light and dark; everything else is derived.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="primitives">
-                <AccordionTrigger>What is it built on?</AccordionTrigger>
-                <AccordionContent>shadcn/ui components on Base UI primitives, styled with Tailwind.</AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+    <Tabs defaultValue="upload" className="w-full max-w-xs">
+      <TabsList>
+        <TabsTrigger value="upload">Upload</TabsTrigger>
+        <TabsTrigger value="faq">FAQ</TabsTrigger>
+      </TabsList>
+      <TabsContent value="upload" className="flex flex-col gap-4 pt-2">
+        <Progress value={68}>
+          <ProgressLabel>Uploading assets</ProgressLabel>
+          <ProgressValue />
+        </Progress>
+        <div className="flex gap-2">
+          <Button size="sm" onClick={() => toast.add({ type: "success", title: "Upload complete" })}>
+            Finish
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => toast.add({ type: "error", title: "Upload cancelled" })}>
+            Cancel
+          </Button>
+        </div>
+      </TabsContent>
+      <TabsContent value="faq">
+        <Accordion>
+          <AccordionItem value="themes">
+            <AccordionTrigger>Can I make my own theme?</AccordionTrigger>
+            <AccordionContent>Yes. Set the inputs for light and dark; everything else is derived.</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="primitives">
+            <AccordionTrigger>What is it built on?</AccordionTrigger>
+            <AccordionContent>shadcn/ui components on Base UI primitives.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </TabsContent>
+    </Tabs>
   )
 }
 
-export function EmptyDemo() {
+export function PeopleDemo() {
   return (
-    <Card>
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <FolderPlusIcon />
-          </EmptyMedia>
-          <EmptyTitle>No projects yet</EmptyTitle>
-          <EmptyDescription>Create a project to start theming your app.</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <div className="flex gap-2">
-            <Button size="sm">Create project</Button>
-            <Button size="sm" variant="outline">
-              Import
-            </Button>
-          </div>
-        </EmptyContent>
-      </Empty>
-    </Card>
+    <div className="flex flex-col items-center gap-4">
+      <AvatarGroup>
+        {["NO", "VE", "MA", "LY"].map((initials) => (
+          <Avatar key={initials}>
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
+        ))}
+      </AvatarGroup>
+      <KbdGroup>
+        <Kbd>⌘</Kbd>
+        <Kbd>K</Kbd>
+      </KbdGroup>
+    </div>
   )
 }
