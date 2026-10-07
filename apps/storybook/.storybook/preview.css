@@ -1,0 +1,11 @@
+/*
+ * Docs pages draw each story in a preview box with Storybook's own white
+ * background, so dark-mode components would sit on white. Give the box the
+ * theme's background instead, so stories look the same as on their own page
+ * and in an app.
+ */
+.sbdocs .sbdocs-preview,
+.sbdocs .docs-story {
+  background: var(--background);
+  color: var(--foreground);
+}
