@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@amit-kap/glaze/theme": ["../../packages/ui/src/lib/theme.tsx"],
+      "@/*": ["./src/*"],
+      "@amit-kap/glaze/*": ["../../packages/ui/src/*"]
+    }
+  }
+}

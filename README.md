@@ -133,6 +133,14 @@ npm run release:glaze -- --push --npm   # build, tag v<version> on the release b
 
 `--npm` asks for your npm 2FA code. The published package gets its own README (`packages/ui/PACKAGE_README.md`) and `THIRD_PARTY_NOTICES.md`; keep the package README in step with this one. `npm run build:glaze` builds `packages/ui/dist` without releasing. npm installs a git repo's root, so releases live on the `release` branch, which holds only the built package.
 
+### Showcase
+
+`apps/showcase` is a one-page demo of Glaze: realistic UI built from the components, with the Theme / Mode / Density control panel at the top right.
+
+```bash
+npm run dev -w showcase     # http://localhost:5180
+```
+
 ### Storybook
 
 Every component in `packages/ui` has a story in `apps/storybook/src/stories`.
