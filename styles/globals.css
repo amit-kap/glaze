@@ -1,0 +1,149 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import "./tokens.css";
+@import "./themes/default.css";
+
+@custom-variant dark (&:is(.dark *));
+@source "../components";
+@source "../lib";
+
+/* System tokens → Tailwind utilities. */
+@theme inline {
+    /* colour */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-subtle-foreground: var(--subtle-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary-subtle: var(--primary-subtle);
+    --color-primary-border: var(--primary-border);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-hover: var(--hover);
+    --color-active: var(--active);
+    --color-selected: var(--selected);
+    --color-border: var(--border);
+    --color-border-strong: var(--border-strong);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-destructive: var(--destructive);
+    --color-danger: var(--danger);
+    --color-danger-subtle: var(--danger-subtle);
+    --color-success: var(--success);
+    --color-success-subtle: var(--success-subtle);
+    --color-warning: var(--warning);
+    --color-warning-subtle: var(--warning-subtle);
+    --color-info: var(--info);
+    --color-info-subtle: var(--info-subtle);
+    --color-severity-critical: var(--severity-critical);
+    --color-severity-high: var(--severity-high);
+    --color-severity-medium: var(--severity-medium);
+    --color-severity-low: var(--severity-low);
+    --color-overlay: var(--overlay);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    /* shape */
+    --radius-item-sm: calc(var(--shape-item) * 0.75);
+    --radius-item: var(--shape-item);
+    --radius-control: var(--shape-control);
+    --radius-floating: var(--shape-floating);
+    --radius-container: var(--shape-container);
+    --radius-pill: calc(infinity * 1px);
+
+    /* space and size */
+    --spacing: var(--space);
+    --spacing-control-xs: var(--control-xs);
+    --spacing-control-sm: var(--control-sm);
+    --spacing-control-md: var(--control-md);
+    --spacing-control-lg: var(--control-lg);
+
+    /* type */
+    --font-sans: var(--typeface-sans);
+    --font-heading: var(--typeface-heading);
+    --font-mono: var(--typeface-mono);
+    --text-caption: var(--type-caption);
+    --text-caption--line-height: var(--type-caption-leading);
+    --text-body: var(--type-body);
+    --text-body--line-height: var(--type-body-leading);
+    --text-title: var(--type-title);
+    --text-title--line-height: var(--type-title-leading);
+    --text-heading: var(--type-heading);
+    --text-heading--line-height: var(--type-heading-leading);
+    --text-display: var(--type-display);
+    --text-display--line-height: var(--type-display-leading);
+    --font-weight-normal: var(--weight-normal);
+    --font-weight-medium: var(--weight-medium);
+    --font-weight-strong: var(--weight-strong);
+
+    /* elevation */
+    --shadow-raised: var(--elevation-raised);
+    --shadow-floating: var(--elevation-floating);
+    --shadow-modal: var(--elevation-modal);
+
+    /* motion */
+    --ease-standard: var(--motion-ease-standard);
+    --ease-emphasized: var(--motion-ease-emphasized);
+    --ease-exit: var(--motion-ease-exit);
+}
+
+/*
+ * Bridge: stock shadcn/Tailwind classes → system tokens, so unconverted
+ * components follow the theme. Mapped 1:1 where the stock value equals the
+ * token in the default theme; other stock steps derive from the same inputs.
+ */
+@theme inline {
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: var(--shape-item);
+    --radius-lg: var(--shape-control);
+    --radius-xl: var(--shape-container);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+
+    --text-xs: var(--type-caption);
+    --text-xs--line-height: var(--type-caption-leading);
+    --text-sm: var(--type-body);
+    --text-sm--line-height: var(--type-body-leading);
+    --text-base: var(--type-title);
+    --text-base--line-height: var(--type-title-leading);
+
+    --shadow-sm: var(--elevation-raised);
+    --shadow-md: var(--elevation-floating);
+    --shadow-lg: var(--elevation-modal);
+
+    --ease-in: var(--motion-ease-exit);
+    --ease-in-out: var(--motion-ease-standard);
+    --default-transition-duration: var(--duration-base);
+    --default-transition-timing-function: var(--motion-ease-standard);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+}
