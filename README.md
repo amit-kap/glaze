@@ -1,6 +1,6 @@
-# shadcn/ui monorepo template
+# Glaze
 
-This is a Vite monorepo template with shadcn/ui.
+My component library: shadcn/ui on Base UI, themed entirely through tokens. A Vite monorepo with the library, a web app and Storybook.
 
 **Architecture:** layers, token contract, theming and component rules are specified in `/Users/amitka/Personal/SharedContext/workflow/comp-lib-architecture.md`. Read it before changing components, tokens or themes.
 
