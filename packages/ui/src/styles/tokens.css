@@ -87,6 +87,7 @@
   /* shape: optional inputs defaulting to the base radius */
   --shape-item: calc(var(--radius) * 0.8);
   --shape-control: var(--radius);
+  --shape-floating: var(--radius);
   --shape-container: calc(var(--radius) * 1.4);
 
   /* motion */

@@ -68,6 +68,7 @@
     /* shape */
     --radius-item: var(--shape-item);
     --radius-control: var(--shape-control);
+    --radius-floating: var(--shape-floating);
     --radius-container: var(--shape-container);
     --radius-pill: 9999px;
 

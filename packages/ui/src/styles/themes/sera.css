@@ -1,0 +1,94 @@
+@import "@fontsource-variable/noto-sans";
+@import "@fontsource-variable/playfair-display";
+
+/*
+ * Sera: shadcn's Sera style expressed as Glaze tokens.
+ * Editorial: taupe palette, Noto Sans with Playfair Display headings, square and tall.
+ * Palette pins match shadcn's taupe base colour exactly.
+ */
+
+[data-theme="sera"] {
+  /* colour */
+  --canvas: oklch(1 0 0);
+  --surface: oklch(1 0 0);
+  --ink: oklch(0.147 0.004 49.3);
+  --ink-muted: oklch(0.547 0.021 43.1);
+  --line: oklch(0.922 0.005 34.3);
+  --brand: oklch(0.214 0.009 43.1);
+  --brand-ink: oklch(0.986 0.002 67.8);
+  --danger: oklch(0.577 0.245 27.325);
+  --warning: oklch(0.554 0.135 66.442);
+  --success: oklch(0.527 0.154 150.069);
+  --info: oklch(0.546 0.245 262.881);
+  --chart-1: oklch(0.868 0.007 39.5);
+  --chart-2: oklch(0.547 0.021 43.1);
+  --chart-3: oklch(0.438 0.017 39.3);
+  --chart-4: oklch(0.367 0.016 35.7);
+  --chart-5: oklch(0.268 0.011 36.5);
+
+  /* shape */
+  --radius: 0;
+
+  /* space */
+  --space-base: 0.3125rem;
+
+  /* type */
+  --typeface-sans: "Noto Sans Variable", sans-serif;
+  --typeface-heading: "Playfair Display Variable", serif;
+  --weight-medium: 600;
+
+  /* elevation */
+  --elevation-raised: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --elevation-floating: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --elevation-modal: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  /* system pins: match shadcn exactly */
+  --secondary: oklch(0.96 0.002 17.2);
+  --secondary-foreground: oklch(0.214 0.009 43.1);
+  --muted: oklch(0.96 0.002 17.2);
+  --accent: oklch(0.96 0.002 17.2);
+  --accent-foreground: oklch(0.214 0.009 43.1);
+  --input: oklch(0.922 0.005 34.3);
+  --ring: oklch(0.714 0.014 41.2);
+  --severity-high: oklch(0.553 0.195 38.402);
+  --sidebar: oklch(0.986 0.002 67.8);
+  --sidebar-accent: oklch(0.96 0.002 17.2);
+  --sidebar-accent-foreground: oklch(0.214 0.009 43.1);
+  --sidebar-ring: oklch(0.714 0.014 41.2);
+}
+
+[data-theme="sera"].dark,
+.dark [data-theme="sera"],
+[data-theme="sera"] .dark {
+  --canvas: oklch(0.147 0.004 49.3);
+  --surface: oklch(0.214 0.009 43.1);
+  --ink: oklch(0.986 0.002 67.8);
+  --ink-muted: oklch(0.714 0.014 41.2);
+  --line: oklch(1 0 0 / 10%);
+  --brand: oklch(0.922 0.005 34.3);
+  --brand-ink: oklch(0.214 0.009 43.1);
+  --danger: oklch(0.704 0.191 22.216);
+  --warning: oklch(0.852 0.199 91.936);
+  --success: oklch(0.792 0.209 151.711);
+  --info: oklch(0.707 0.165 254.624);
+  --chart-1: oklch(0.868 0.007 39.5);
+  --chart-2: oklch(0.547 0.021 43.1);
+  --chart-3: oklch(0.438 0.017 39.3);
+  --chart-4: oklch(0.367 0.016 35.7);
+  --chart-5: oklch(0.268 0.011 36.5);
+
+  --secondary: oklch(0.268 0.011 36.5);
+  --secondary-foreground: oklch(0.986 0.002 67.8);
+  --muted: oklch(0.268 0.011 36.5);
+  --accent: oklch(0.268 0.011 36.5);
+  --accent-foreground: oklch(0.986 0.002 67.8);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.547 0.021 43.1);
+  --severity-high: oklch(0.75 0.183 55.934);
+  --sidebar: oklch(0.214 0.009 43.1);
+  --sidebar-accent: oklch(0.268 0.011 36.5);
+  --sidebar-accent-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-ring: oklch(0.547 0.021 43.1);
+}
