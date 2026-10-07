@@ -94,7 +94,14 @@ import { Button } from "@amitka/glaze/components/button"
 npx shadcn@latest add button -c apps/web
 ```
 
-This places the component in `packages/ui/src/components`. New stock components then go through the spec's "Converting stock shadcn code" steps.
+This places the component in `packages/ui/src/components` with stock shadcn classes. Convert it to Glaze tokens and check:
+
+```bash
+npm run convert:tokens -- button.tsx   # stock classes → system utilities
+npm run check:tokens                   # fails on any class the token contract forbids
+```
+
+Anything the converter can't map becomes a component token (see the spec's "Converting stock shadcn code").
 
 ### Storybook
 

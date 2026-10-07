@@ -50,6 +50,9 @@
   --elevation-floating: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --elevation-modal: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
+  /* component tokens: details of the shadcn style */
+  --input-fill: color-mix(in oklab, var(--input) 20%, transparent);
+
   /* system pins: match shadcn exactly */
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);

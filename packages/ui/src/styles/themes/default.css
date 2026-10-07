@@ -23,7 +23,7 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --overlay: rgb(0 0 0 / 0.4);
+  --overlay: rgb(0 0 0 / 0.1);
 
   /* shape */
   --radius: 0.625rem;
@@ -57,6 +57,7 @@
   /* motion */
   --motion-fast: 100ms;
   --motion-base: 150ms;
+  --motion-moderate: 200ms;
   --motion-slow: 300ms;
   --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-ease-emphasized: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -75,7 +76,6 @@
   --warning: oklch(0.852 0.199 91.936);
   --success: oklch(0.792 0.209 151.711);
   --info: oklch(0.707 0.165 254.624);
-  --overlay: rgb(0 0 0 / 0.6);
 }
 
 /*

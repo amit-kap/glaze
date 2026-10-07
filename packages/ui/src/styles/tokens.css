@@ -93,7 +93,30 @@
   /* motion */
   --duration-fast: calc(var(--motion-fast) * var(--motion-scale));
   --duration-base: calc(var(--motion-base) * var(--motion-scale));
+  --duration-moderate: calc(var(--motion-moderate) * var(--motion-scale));
   --duration-slow: calc(var(--motion-slow) * var(--motion-scale));
+
+  /*
+   * tier 3: component tokens. Each defaults to the Nova value, derived from
+   * the theme's inputs; a theme sets one only to diverge from its family.
+   */
+  --button-radius-xs: min(var(--shape-item), 10px);
+  --button-radius-sm: min(var(--shape-item), 12px);
+  --badge-radius: calc(var(--radius) * 2.6);
+  --checkbox-radius: calc(var(--shape-item) * 0.5);
+  --textarea-radius: min(var(--shape-control), var(--shape-container));
+  --toast-radius: calc(var(--radius) * 1.8);
+  --tooltip-arrow-radius: calc(var(--shape-item) * 0.25);
+  --chart-indicator-radius: calc(var(--shape-item) * 0.25);
+  --input-group-button-radius: max(0px, calc(var(--shape-control) - 3px));
+  --input-group-kbd-radius: max(0px, calc(var(--shape-control) - 5px));
+  --input-fill: transparent;
+  --card-shadow: 0 0 #0000;
+  --chart-tooltip-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --slider-thumb-fill: #fff;
+  --toast-duration: calc(250ms * var(--motion-scale));
+  --message-scroller-duration: calc(400ms * var(--motion-scale));
+  --drawer-duration: calc(450ms * var(--motion-scale));
 }
 
 :where(:root, [data-theme], [data-density], .dark) {

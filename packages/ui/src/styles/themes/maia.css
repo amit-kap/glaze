@@ -44,6 +44,13 @@
   --elevation-floating: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --elevation-modal: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
+  /* component tokens: details of the shadcn style */
+  --button-radius-xs: 9999px;
+  --button-radius-sm: 9999px;
+  --checkbox-radius: 6px;
+  --textarea-radius: 0.875rem;
+  --input-fill: color-mix(in oklab, var(--input) 30%, transparent);
+
   /* system pins: match shadcn exactly */
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);

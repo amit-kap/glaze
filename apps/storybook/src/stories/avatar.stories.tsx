@@ -67,7 +67,7 @@ export const WithBadge: Story = {
     <Avatar {...args}>
       <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
       <AvatarFallback>CN</AvatarFallback>
-      <AvatarBadge className="bg-green-600" />
+      <AvatarBadge className="bg-success" />
     </Avatar>
   ),
 }

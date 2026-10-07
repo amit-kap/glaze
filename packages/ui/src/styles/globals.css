@@ -66,11 +66,12 @@
     --color-sidebar-ring: var(--sidebar-ring);
 
     /* shape */
+    --radius-item-sm: calc(var(--shape-item) * 0.75);
     --radius-item: var(--shape-item);
     --radius-control: var(--shape-control);
     --radius-floating: var(--shape-floating);
     --radius-container: var(--shape-container);
-    --radius-pill: 9999px;
+    --radius-pill: calc(infinity * 1px);
 
     /* space and size */
     --spacing: var(--space);
