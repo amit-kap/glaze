@@ -93,7 +93,7 @@ export function ComposerDemo() {
           <PaperclipIcon />
         </InputGroupButton>
         <InputGroupText className="ml-auto">52% used</InputGroupText>
-        <InputGroupButton variant="default" size="icon-xs" className="rounded-pill" aria-label="Send">
+        <InputGroupButton variant="default" size="icon-xs" aria-label="Send">
           <ArrowUpIcon />
         </InputGroupButton>
       </InputGroupAddon>
@@ -133,7 +133,7 @@ export function SignInDemo() {
       </Field>
       <Field orientation="horizontal">
         <Checkbox id="demo-remember" defaultChecked />
-        <FieldLabel htmlFor="demo-remember" className="font-normal">
+        <FieldLabel htmlFor="demo-remember">
           Keep me signed in
         </FieldLabel>
       </Field>
@@ -167,7 +167,7 @@ export function SwitchesDemo() {
 
 export function CheckboxDemo() {
   return (
-    <FieldGroup className="w-full max-w-xs gap-4">
+    <FieldGroup className="w-full max-w-xs">
       {[
         { id: "mentions", label: "Mentions", description: "When someone @mentions you.", checked: true },
         { id: "replies", label: "Replies", description: "Replies to your comments.", checked: true },
@@ -188,7 +188,7 @@ export function CheckboxDemo() {
 
 export function RadioDemo() {
   return (
-    <RadioGroup defaultValue="pro" className="w-full max-w-xs gap-4" aria-label="Plan">
+    <RadioGroup defaultValue="pro" className="w-full max-w-xs" aria-label="Plan">
       {[
         { value: "starter", label: "Starter", description: "One project, community support." },
         { value: "pro", label: "Pro", description: "Unlimited projects and themes." },
@@ -261,13 +261,11 @@ export function ToolbarDemo() {
           </PopoverHeader>
           <div className="grid gap-2">
             {[
-              ["width", "100%"],
-              ["height", "240px"],
-            ].map(([id, value]) => (
+              ["width", "Width", "100%"],
+              ["height", "Height", "240px"],
+            ].map(([id, label, value]) => (
               <div key={id} className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor={`dim-${id}`} className="capitalize">
-                  {id}
-                </Label>
+                <Label htmlFor={`dim-${id}`}>{label}</Label>
                 <Input id={`dim-${id}`} defaultValue={value} className="col-span-2" />
               </div>
             ))}
@@ -303,7 +301,7 @@ export function ToolbarDemo() {
 
 export function CommandDemo() {
   return (
-    <Command className="w-full max-w-md rounded-container border shadow-raised">
+    <Command className="w-full max-w-md">
       <CommandInput placeholder="Type a command or search…" />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -342,7 +340,7 @@ export function CommandDemo() {
 
 export function ChatDemo() {
   return (
-    <MessageGroup className="w-full max-w-md gap-4">
+    <MessageGroup className="w-full max-w-md">
       <Message>
         <MessageAvatar>
           <Avatar>
@@ -382,18 +380,12 @@ export function ChatDemo() {
 }
 
 const issues = [
-  { id: "GLZ-142", title: "Focus ring clipped in dialogs", severity: "critical", owner: "NO" },
-  { id: "GLZ-139", title: "Sidebar badge misaligned", severity: "high", owner: "VE" },
-  { id: "GLZ-131", title: "Chart tooltip lacks contrast", severity: "medium", owner: "MA" },
-  { id: "GLZ-128", title: "Calendar week starts Sunday", severity: "low", owner: "LY" },
+  { id: "GLZ-142", title: "Focus ring clipped in dialogs", severity: "critical", label: "Critical", owner: "NO" },
+  { id: "GLZ-139", title: "Sidebar badge misaligned", severity: "high", label: "High", owner: "VE" },
+  { id: "GLZ-131", title: "Chart tooltip lacks contrast", severity: "medium", label: "Medium", owner: "MA" },
+  { id: "GLZ-128", title: "Calendar week starts Sunday", severity: "low", label: "Low", owner: "LY" },
 ] as const
 
-const severityClass = {
-  critical: "bg-severity-critical/10 text-severity-critical dark:bg-severity-critical/20",
-  high: "bg-severity-high/10 text-severity-high dark:bg-severity-high/20",
-  medium: "bg-severity-medium/10 text-severity-medium dark:bg-severity-medium/20",
-  low: "bg-severity-low/10 text-severity-low dark:bg-severity-low/20",
-}
 
 export function TableDemo() {
   return (
@@ -413,7 +405,7 @@ export function TableDemo() {
               <div className="text-caption text-muted-foreground">{issue.id}</div>
             </TableCell>
             <TableCell>
-              <Badge className={`capitalize ${severityClass[issue.severity]}`}>{issue.severity}</Badge>
+              <Badge variant={issue.severity}>{issue.label}</Badge>
             </TableCell>
             <TableCell className="text-right">
               <Avatar size="sm" className="ml-auto">
@@ -429,7 +421,7 @@ export function TableDemo() {
 
 export function CalendarDemo() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
-  return <Calendar mode="single" selected={date} onSelect={setDate} className="rounded-container border" />
+  return <Calendar mode="single" selected={date} onSelect={setDate} />
 }
 
 const traffic = [
@@ -467,7 +459,7 @@ export function TabsDemo() {
         <TabsTrigger value="upload">Upload</TabsTrigger>
         <TabsTrigger value="faq">FAQ</TabsTrigger>
       </TabsList>
-      <TabsContent value="upload" className="flex flex-col gap-4 pt-2">
+      <TabsContent value="upload" className="flex flex-col gap-4">
         <Progress value={68}>
           <ProgressLabel>Uploading assets</ProgressLabel>
           <ProgressValue />

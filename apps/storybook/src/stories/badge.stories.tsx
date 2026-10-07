@@ -23,6 +23,10 @@ const meta = {
         "outline",
         "ghost",
         "link",
+        "critical",
+        "high",
+        "medium",
+        "low",
       ],
     },
   },
@@ -60,22 +64,22 @@ export const Severity: Story = {
     docs: {
       description: {
         story:
-          "Severity scale from red to green, using the severity tokens: `bg-severity-*/10 text-severity-*`.",
+          "Severity scale from red to green: `variant=\"critical\" | \"high\" | \"medium\" | \"low\"`, using the severity tokens.",
       },
     },
   },
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
-      <Badge className="bg-severity-critical/10 text-severity-critical dark:bg-severity-critical/20">
+      <Badge variant="critical">
         Critical
       </Badge>
-      <Badge className="bg-severity-high/10 text-severity-high dark:bg-severity-high/20">
+      <Badge variant="high">
         High
       </Badge>
-      <Badge className="bg-severity-medium/10 text-severity-medium dark:bg-severity-medium/20">
+      <Badge variant="medium">
         Medium
       </Badge>
-      <Badge className="bg-severity-low/10 text-severity-low dark:bg-severity-low/20">
+      <Badge variant="low">
         Low
       </Badge>
     </div>
