@@ -14,8 +14,8 @@
     "components": "@/components",
     "hooks": "@/hooks",
     "lib": "@/lib",
-    "utils": "@amitka/glaze/lib/utils",
-    "ui": "@amitka/glaze/components"
+    "utils": "@amit-kap/glaze/lib/utils",
+    "ui": "@amit-kap/glaze/components"
   },
   "rtl": false,
   "menuColor": "default",

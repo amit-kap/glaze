@@ -7,7 +7,7 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
-      "@amitka/glaze/*": ["../../packages/ui/src/*"]
+      "@amit-kap/glaze/*": ["../../packages/ui/src/*"]
     }
   }
 }

@@ -2,9 +2,9 @@
 
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import { XIcon } from "lucide-react"
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {

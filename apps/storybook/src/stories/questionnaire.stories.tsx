@@ -15,7 +15,7 @@ import {
   QuestionnaireSkip,
   QuestionnaireSubmit,
   QuestionnaireTitle,
-} from "@amitka/glaze/components/questionnaire"
+} from "@amit-kap/glaze/components/questionnaire"
 
 function QuestionnaireDemo({
   shortcuts = "letters",

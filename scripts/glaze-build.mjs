@@ -16,7 +16,7 @@ rmSync(dist, { recursive: true, force: true })
 // 1. Compile TSX → JS + .d.ts ("use client" directives are kept).
 execFileSync("npx", ["tsc", "-p", join(root, "tsconfig.build.json")], { stdio: "inherit" })
 
-// 2. Self-imports (@amitka/glaze/components/button) → relative paths with
+// 2. Self-imports (@amit-kap/glaze/components/button) → relative paths with
 //    extensions, so the output never depends on resolving its own name.
 const walk = (dir) =>
   readdirSync(dir).flatMap((f) => (statSync(join(dir, f)).isDirectory() ? walk(join(dir, f)) : [join(dir, f)]))

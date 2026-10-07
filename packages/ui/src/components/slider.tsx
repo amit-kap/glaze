@@ -1,5 +1,5 @@
 import { Slider as SliderPrimitive } from "@base-ui/react/slider"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
 function Slider({
   className,

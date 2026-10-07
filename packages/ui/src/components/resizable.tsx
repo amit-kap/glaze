@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 import * as ResizablePrimitive from "react-resizable-panels"
 
 function ResizablePanelGroup({

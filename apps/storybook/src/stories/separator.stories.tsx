@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Separator } from "@amitka/glaze/components/separator"
+import { Separator } from "@amit-kap/glaze/components/separator"
 
 const meta = {
   title: "Components/Separator",

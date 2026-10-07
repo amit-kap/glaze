@@ -1,7 +1,7 @@
 "use client"
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
 function Switch({
   className,

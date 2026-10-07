@@ -7,7 +7,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@amitka/glaze/components/pagination"
+} from "@amit-kap/glaze/components/pagination"
 
 const meta = {
   title: "Components/Pagination",

@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@amitka/glaze/components/table"
+} from "@amit-kap/glaze/components/table"
 
 const invoices = [
   {

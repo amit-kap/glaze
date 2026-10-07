@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   Empty,
   EmptyContent,
@@ -7,7 +7,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@amitka/glaze/components/empty"
+} from "@amit-kap/glaze/components/empty"
 import { FolderCodeIcon } from "lucide-react"
 
 const meta = {

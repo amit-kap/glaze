@@ -36,7 +36,7 @@ for (const file of readdirSync(dir).filter((f) => f.endsWith(".tsx")).sort()) {
     // cn must come from lib/utils, which knows the Glaze utilities; the bare
     // package merges text-body away as if it were a colour.
     if (/from "cn"/.test(line)) {
-      console.log(`${file}:${i + 1}  import from "cn"  → import { cn } from "@amitka/glaze/lib/utils"`)
+      console.log(`${file}:${i + 1}  import from "cn"  → import { cn } from "@amit-kap/glaze/lib/utils"`)
       problems++
     }
     for (const [re, hint] of forbidden) {

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Input } from "@amitka/glaze/components/input"
+import { Input } from "@amit-kap/glaze/components/input"
 
 const meta = {
   title: "Components/Input",

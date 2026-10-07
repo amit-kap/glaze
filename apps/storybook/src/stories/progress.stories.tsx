@@ -3,7 +3,7 @@ import {
   Progress,
   ProgressLabel,
   ProgressValue,
-} from "@amitka/glaze/components/progress"
+} from "@amit-kap/glaze/components/progress"
 
 const meta = {
   title: "Components/Progress",

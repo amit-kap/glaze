@@ -5,9 +5,9 @@ import {
   useMessageScrollerScrollable,
   useMessageScrollerVisibility,
 } from "@shadcn/react/message-scroller"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import { ArrowDownIcon } from "lucide-react"
 
 function MessageScrollerProvider(

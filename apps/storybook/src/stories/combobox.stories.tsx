@@ -11,7 +11,7 @@ import {
   ComboboxList,
   ComboboxValue,
   useComboboxAnchor,
-} from "@amitka/glaze/components/combobox"
+} from "@amit-kap/glaze/components/combobox"
 
 const frameworks = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro", "Vite"]
 

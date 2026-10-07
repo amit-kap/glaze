@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
-import { Spinner } from "@amitka/glaze/components/spinner"
+import { Button } from "@amit-kap/glaze/components/button"
+import { Spinner } from "@amit-kap/glaze/components/spinner"
 
 const meta = {
   title: "Components/Spinner",

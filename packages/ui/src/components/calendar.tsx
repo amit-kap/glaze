@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 import {
   DayPicker,
   getDefaultClassNames,
@@ -9,7 +9,7 @@ import {
   type Locale,
 } from "react-day-picker"
 
-import { Button, buttonVariants } from "@amitka/glaze/components/button"
+import { Button, buttonVariants } from "@amit-kap/glaze/components/button"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
 
 function Calendar({

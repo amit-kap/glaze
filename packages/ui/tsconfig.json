@@ -9,7 +9,7 @@
     "strict": true,
     "noEmit": true,
     "paths": {
-      "@amitka/glaze/*": ["./src/*"]
+      "@amit-kap/glaze/*": ["./src/*"]
     }
   },
   "include": ["."],

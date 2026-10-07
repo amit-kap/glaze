@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
-import { Toaster, toast } from "@amitka/glaze/components/toast"
+import { Button } from "@amit-kap/glaze/components/button"
+import { Toaster, toast } from "@amit-kap/glaze/components/toast"
 
 function ToastDemo() {
   return (

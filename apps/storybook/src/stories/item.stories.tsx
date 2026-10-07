@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   Item,
   ItemActions,
@@ -9,7 +9,7 @@ import {
   ItemMedia,
   ItemSeparator,
   ItemTitle,
-} from "@amitka/glaze/components/item"
+} from "@amit-kap/glaze/components/item"
 import { BadgeCheckIcon, ChevronRightIcon, ShieldAlertIcon } from "lucide-react"
 
 const meta = {

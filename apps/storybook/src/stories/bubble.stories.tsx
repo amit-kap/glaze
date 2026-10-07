@@ -4,7 +4,7 @@ import {
   BubbleContent,
   BubbleGroup,
   BubbleReactions,
-} from "@amitka/glaze/components/bubble"
+} from "@amit-kap/glaze/components/bubble"
 
 const variants = [
   "default",

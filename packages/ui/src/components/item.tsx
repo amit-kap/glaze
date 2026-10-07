@@ -2,9 +2,9 @@ import * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
-import { Separator } from "@amitka/glaze/components/separator"
+import { Separator } from "@amit-kap/glaze/components/separator"
 
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

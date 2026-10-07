@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
 import {
   Dialog,
@@ -10,11 +10,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@amitka/glaze/components/dialog"
+} from "@amit-kap/glaze/components/dialog"
 import {
   InputGroup,
   InputGroupAddon,
-} from "@amitka/glaze/components/input-group"
+} from "@amit-kap/glaze/components/input-group"
 import { SearchIcon, CheckIcon } from "lucide-react"
 
 function Command({

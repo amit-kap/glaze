@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   Command,
   CommandDialog,
@@ -11,7 +11,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "@amitka/glaze/components/command"
+} from "@amit-kap/glaze/components/command"
 import {
   CalculatorIcon,
   CalendarIcon,

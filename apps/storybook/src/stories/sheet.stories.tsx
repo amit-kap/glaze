@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
-import { Input } from "@amitka/glaze/components/input"
-import { Label } from "@amitka/glaze/components/label"
+import { Button } from "@amit-kap/glaze/components/button"
+import { Input } from "@amit-kap/glaze/components/input"
+import { Label } from "@amit-kap/glaze/components/label"
 import {
   Sheet,
   SheetClose,
@@ -11,7 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@amitka/glaze/components/sheet"
+} from "@amit-kap/glaze/components/sheet"
 
 type Side = "top" | "right" | "bottom" | "left"
 

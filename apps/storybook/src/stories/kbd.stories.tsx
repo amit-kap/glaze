@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Kbd, KbdGroup } from "@amitka/glaze/components/kbd"
+import { Kbd, KbdGroup } from "@amit-kap/glaze/components/kbd"
 
 const meta = {
   title: "Components/Kbd",

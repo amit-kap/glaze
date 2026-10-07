@@ -6,7 +6,7 @@ import {
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
-} from "@amitka/glaze/components/avatar"
+} from "@amit-kap/glaze/components/avatar"
 
 const meta = {
   title: "Components/Avatar",

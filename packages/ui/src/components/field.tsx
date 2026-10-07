@@ -1,9 +1,9 @@
 import { useMemo } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
-import { Label } from "@amitka/glaze/components/label"
-import { Separator } from "@amitka/glaze/components/separator"
+import { Label } from "@amit-kap/glaze/components/label"
+import { Separator } from "@amit-kap/glaze/components/separator"
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (

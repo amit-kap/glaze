@@ -4,7 +4,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@amitka/glaze/components/accordion"
+} from "@amit-kap/glaze/components/accordion"
 
 const items = [
   {

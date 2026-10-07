@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   ButtonGroup,
   ButtonGroupSeparator,
   ButtonGroupText,
-} from "@amitka/glaze/components/button-group"
-import { Input } from "@amitka/glaze/components/input"
+} from "@amit-kap/glaze/components/button-group"
+import { Input } from "@amit-kap/glaze/components/input"
 import {
   ArrowLeftIcon,
   ArrowRightIcon,

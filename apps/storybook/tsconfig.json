@@ -14,7 +14,7 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@amitka/glaze/*": ["../../packages/ui/src/*"]
+      "@amit-kap/glaze/*": ["../../packages/ui/src/*"]
     }
   },
   "include": ["src", ".storybook", "../../packages/ui/src"]

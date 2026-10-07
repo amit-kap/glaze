@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@amitka/glaze/components/collapsible"
+} from "@amit-kap/glaze/components/collapsible"
 import { ChevronsUpDownIcon } from "lucide-react"
 
 const meta = {

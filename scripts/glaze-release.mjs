@@ -53,5 +53,5 @@ if (process.argv.includes("--push")) {
 }
 if (process.argv.includes("--npm")) {
   execFileSync("npm", ["publish", join(repo, "packages/ui/dist")], { stdio: "inherit" })
-  console.log(`Published. Install with: npm install @amitka/glaze@${version}`)
+  console.log(`Published. Install with: npm install @amit-kap/glaze@${version}`)
 }

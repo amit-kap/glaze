@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Calendar } from "@amitka/glaze/components/calendar"
+import { Calendar } from "@amit-kap/glaze/components/calendar"
 import type { DateRange } from "react-day-picker"
 
 function SingleDemo() {

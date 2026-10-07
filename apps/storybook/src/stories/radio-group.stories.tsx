@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Label } from "@amitka/glaze/components/label"
+import { Label } from "@amit-kap/glaze/components/label"
 import {
   RadioGroup,
   RadioGroupItem,
-} from "@amitka/glaze/components/radio-group"
+} from "@amit-kap/glaze/components/radio-group"
 
 const meta = {
   title: "Components/Radio Group",

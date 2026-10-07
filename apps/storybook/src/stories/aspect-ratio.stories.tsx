@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { AspectRatio } from "@amitka/glaze/components/aspect-ratio"
+import { AspectRatio } from "@amit-kap/glaze/components/aspect-ratio"
 
 const meta = {
   title: "Components/Aspect Ratio",

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Checkbox } from "@amitka/glaze/components/checkbox"
-import { Input } from "@amitka/glaze/components/input"
-import { Label } from "@amitka/glaze/components/label"
+import { Checkbox } from "@amit-kap/glaze/components/checkbox"
+import { Input } from "@amit-kap/glaze/components/input"
+import { Label } from "@amit-kap/glaze/components/label"
 
 const meta = {
   title: "Components/Label",

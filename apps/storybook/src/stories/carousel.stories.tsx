@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Card, CardContent } from "@amitka/glaze/components/card"
+import { Card, CardContent } from "@amit-kap/glaze/components/card"
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@amitka/glaze/components/carousel"
+} from "@amit-kap/glaze/components/carousel"
 
 const meta = {
   title: "Components/Carousel",

@@ -7,7 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@amitka/glaze/components/breadcrumb"
+} from "@amit-kap/glaze/components/breadcrumb"
 
 const meta = {
   title: "Components/Breadcrumb",

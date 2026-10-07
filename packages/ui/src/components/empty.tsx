@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
 function Empty({ className, ...props }: React.ComponentProps<"div">) {
   return (

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   Dialog,
   DialogClose,
@@ -9,9 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@amitka/glaze/components/dialog"
-import { Input } from "@amitka/glaze/components/input"
-import { Label } from "@amitka/glaze/components/label"
+} from "@amit-kap/glaze/components/dialog"
+import { Input } from "@amit-kap/glaze/components/input"
+import { Label } from "@amit-kap/glaze/components/label"
 
 const meta = {
   title: "Components/Dialog",

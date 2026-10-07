@@ -9,7 +9,7 @@ My component library: shadcn/ui on Base UI, themed entirely through tokens. A Vi
 ### 1. Install
 
 ```bash
-npm install @amitka/glaze
+npm install @amit-kap/glaze
 ```
 
 React 19 and Tailwind CSS 4 come from your project. Each release is also tagged in this repo, so `npm install github:amit-kap/glaze#v<version>` works too.
@@ -19,8 +19,8 @@ React 19 and Tailwind CSS 4 come from your project. Each release is also tagged 
 In the project's main CSS file:
 
 ```css
-@import "@amitka/glaze/globals.css";
-@import "@amitka/glaze/themes/maia.css";
+@import "@amit-kap/glaze/globals.css";
+@import "@amit-kap/glaze/themes/maia.css";
 ```
 
 - `globals.css` holds Tailwind, the tokens and the default theme. Use it in place of your own `@import "tailwindcss"`.
@@ -32,7 +32,7 @@ In the project's main CSS file:
 In React, wrap the app in `ThemeProvider`:
 
 ```tsx
-import { ThemeProvider } from "@amitka/glaze/theme"
+import { ThemeProvider } from "@amit-kap/glaze/theme"
 
 <ThemeProvider defaultTheme="maia" defaultMode="system">
   <App />
@@ -46,7 +46,7 @@ Without React, set the attribute yourself: `<html data-theme="maia">`.
 ### Switching at runtime
 
 ```tsx
-import { useTheme } from "@amitka/glaze/theme"
+import { useTheme } from "@amit-kap/glaze/theme"
 
 const { theme, setTheme, mode, setMode, resolvedMode, density, setDensity } = useTheme()
 setTheme("lyra")
@@ -59,7 +59,7 @@ setDensity("compact")  // "comfortable" | "compact"
 Add the inline script to `<head>` so the saved theme applies before the page paints. Pass the same options as the provider:
 
 ```tsx
-import { themeScript } from "@amitka/glaze/theme"
+import { themeScript } from "@amit-kap/glaze/theme"
 
 <script dangerouslySetInnerHTML={{ __html: themeScript({ defaultTheme: "maia" }) }} />
 ```
@@ -104,7 +104,7 @@ Create `<name>.css` (in the library's `packages/ui/src/styles/themes/`, or in th
 ### Components
 
 ```tsx
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 ```
 
 ## Developing Glaze

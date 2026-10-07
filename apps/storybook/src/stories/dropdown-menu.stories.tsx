@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -15,7 +15,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@amitka/glaze/components/dropdown-menu"
+} from "@amit-kap/glaze/components/dropdown-menu"
 import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react"
 
 const meta = {

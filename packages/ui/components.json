@@ -11,11 +11,11 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@amitka/glaze/components",
-    "utils": "@amitka/glaze/lib/utils",
-    "hooks": "@amitka/glaze/hooks",
-    "lib": "@amitka/glaze/lib",
-    "ui": "@amitka/glaze/components"
+    "components": "@amit-kap/glaze/components",
+    "utils": "@amit-kap/glaze/lib/utils",
+    "hooks": "@amit-kap/glaze/hooks",
+    "lib": "@amit-kap/glaze/lib",
+    "ui": "@amit-kap/glaze/components"
   },
   "rtl": false,
   "menuColor": "default",

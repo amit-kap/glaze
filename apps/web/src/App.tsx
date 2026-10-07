@@ -1,4 +1,4 @@
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 
 export function App() {
   return (

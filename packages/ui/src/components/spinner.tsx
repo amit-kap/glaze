@@ -1,4 +1,4 @@
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 import { Loader2Icon } from "lucide-react"
 
 function Spinner({ className, ...props }: React.ComponentProps<"svg">) {

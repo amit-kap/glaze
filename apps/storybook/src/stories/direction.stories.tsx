@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
-import { DirectionProvider } from "@amitka/glaze/components/direction"
-import { Input } from "@amitka/glaze/components/input"
-import { Label } from "@amitka/glaze/components/label"
-import { Slider } from "@amitka/glaze/components/slider"
+import { Button } from "@amit-kap/glaze/components/button"
+import { DirectionProvider } from "@amit-kap/glaze/components/direction"
+import { Input } from "@amit-kap/glaze/components/input"
+import { Label } from "@amit-kap/glaze/components/label"
+import { Slider } from "@amit-kap/glaze/components/slider"
 import { ArrowRightIcon } from "lucide-react"
 
 function DirectionDemo({ direction = "rtl" }: { direction?: "ltr" | "rtl" }) {

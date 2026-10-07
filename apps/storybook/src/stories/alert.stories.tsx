@@ -4,8 +4,8 @@ import {
   AlertAction,
   AlertDescription,
   AlertTitle,
-} from "@amitka/glaze/components/alert"
-import { Button } from "@amitka/glaze/components/button"
+} from "@amit-kap/glaze/components/alert"
+import { Button } from "@amit-kap/glaze/components/button"
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
 
 const meta = {

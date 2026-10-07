@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Skeleton } from "@amitka/glaze/components/skeleton"
+import { Skeleton } from "@amit-kap/glaze/components/skeleton"
 
 const meta = {
   title: "Components/Skeleton",

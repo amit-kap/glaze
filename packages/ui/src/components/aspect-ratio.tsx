@@ -1,4 +1,4 @@
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
 function AspectRatio({
   ratio,

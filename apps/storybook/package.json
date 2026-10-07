@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@amitka/glaze": "*",
+    "@amit-kap/glaze": "*",
     "input-otp": "^1.5.0",
     "lucide-react": "^1.49.0",
     "react": "^19.2.8",

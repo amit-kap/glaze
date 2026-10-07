@@ -6,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@amitka/glaze/components/chart"
+} from "@amit-kap/glaze/components/chart"
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
 const data = [

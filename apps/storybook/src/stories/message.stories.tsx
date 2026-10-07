@@ -3,8 +3,8 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@amitka/glaze/components/avatar"
-import { Bubble, BubbleContent } from "@amitka/glaze/components/bubble"
+} from "@amit-kap/glaze/components/avatar"
+import { Bubble, BubbleContent } from "@amit-kap/glaze/components/bubble"
 import {
   Message,
   MessageAvatar,
@@ -12,7 +12,7 @@ import {
   MessageFooter,
   MessageGroup,
   MessageHeader,
-} from "@amitka/glaze/components/message"
+} from "@amit-kap/glaze/components/message"
 
 const meta = {
   title: "Components/Message",

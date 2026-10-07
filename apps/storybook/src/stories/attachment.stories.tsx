@@ -9,8 +9,8 @@ import {
   AttachmentMedia,
   AttachmentTitle,
   AttachmentTrigger,
-} from "@amitka/glaze/components/attachment"
-import { Spinner } from "@amitka/glaze/components/spinner"
+} from "@amit-kap/glaze/components/attachment"
+import { Spinner } from "@amit-kap/glaze/components/spinner"
 import { FileTextIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 
 const meta = {

@@ -4,7 +4,7 @@ import {
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@amitka/glaze/components/input-otp"
+} from "@amit-kap/glaze/components/input-otp"
 import { REGEXP_ONLY_DIGITS } from "input-otp"
 
 function InputOTPDemo({ disabled = false }: { disabled?: boolean }) {

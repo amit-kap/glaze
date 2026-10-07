@@ -13,7 +13,7 @@ import {
   MenubarSubContent,
   MenubarSubTrigger,
   MenubarTrigger,
-} from "@amitka/glaze/components/menubar"
+} from "@amit-kap/glaze/components/menubar"
 
 const meta = {
   title: "Components/Menubar",

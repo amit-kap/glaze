@@ -4,25 +4,25 @@ import * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@amitka/glaze/lib/utils"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
-import { useIsMobile } from "@amitka/glaze/hooks/use-mobile"
-import { Button } from "@amitka/glaze/components/button"
-import { Input } from "@amitka/glaze/components/input"
-import { Separator } from "@amitka/glaze/components/separator"
+import { useIsMobile } from "@amit-kap/glaze/hooks/use-mobile"
+import { Button } from "@amit-kap/glaze/components/button"
+import { Input } from "@amit-kap/glaze/components/input"
+import { Separator } from "@amit-kap/glaze/components/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@amitka/glaze/components/sheet"
-import { Skeleton } from "@amitka/glaze/components/skeleton"
+} from "@amit-kap/glaze/components/sheet"
+import { Skeleton } from "@amit-kap/glaze/components/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@amitka/glaze/components/tooltip"
+} from "@amit-kap/glaze/components/tooltip"
 import { PanelLeftIcon } from "lucide-react"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"

@@ -5,7 +5,7 @@ React components built on [shadcn/ui](https://ui.shadcn.com) and [Base UI](https
 ## Install
 
 ```bash
-npm install @amitka/glaze
+npm install @amit-kap/glaze
 ```
 
 Requires React 19 and Tailwind CSS 4 in your project.
@@ -17,8 +17,8 @@ Requires React 19 and Tailwind CSS 4 in your project.
 In your main CSS file:
 
 ```css
-@import "@amitka/glaze/globals.css";
-@import "@amitka/glaze/themes/maia.css";
+@import "@amit-kap/glaze/globals.css";
+@import "@amit-kap/glaze/themes/maia.css";
 ```
 
 - `globals.css` includes Tailwind, the tokens and the default theme. Use it in place of your own `@import "tailwindcss"`.
@@ -28,7 +28,7 @@ In your main CSS file:
 ### 2. Wrap the app
 
 ```tsx
-import { ThemeProvider } from "@amitka/glaze/theme"
+import { ThemeProvider } from "@amit-kap/glaze/theme"
 
 <ThemeProvider defaultTheme="maia" defaultMode="system">
   <App />
@@ -40,14 +40,14 @@ The viewer's choice is remembered in `localStorage` (`storageKey`, default `"gla
 ### 3. Use components
 
 ```tsx
-import { Button } from "@amitka/glaze/components/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@amitka/glaze/components/card"
+import { Button } from "@amit-kap/glaze/components/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@amit-kap/glaze/components/card"
 ```
 
 ## Switching at runtime
 
 ```tsx
-import { useTheme } from "@amitka/glaze/theme"
+import { useTheme } from "@amit-kap/glaze/theme"
 
 const { theme, setTheme, mode, setMode, resolvedMode, density, setDensity } = useTheme()
 setTheme("lyra")
@@ -60,7 +60,7 @@ setDensity("compact")  // "comfortable" | "compact"
 Add the inline script to `<head>` so the saved theme applies before the page paints. Pass the same options as the provider:
 
 ```tsx
-import { themeScript } from "@amitka/glaze/theme"
+import { themeScript } from "@amit-kap/glaze/theme"
 
 <script dangerouslySetInnerHTML={{ __html: themeScript({ defaultTheme: "maia" }) }} />
 ```
@@ -133,7 +133,7 @@ A theme is a CSS file that sets the required inputs for light and dark. Everythi
 }
 ```
 
-Optional inputs change the feel beyond colour: `--shape-item`, `--shape-control`, `--shape-floating`, `--shape-container` (corners per component family), `--space-base` (spacing and control height), `--typeface-sans`, `--typeface-heading`, `--type-body` (type), `--elevation-raised`, `--elevation-floating`, `--elevation-modal` (shadows) and `--motion-base`, `--motion-ease-standard` (motion). The theme files in `@amitka/glaze/themes/` are complete examples.
+Optional inputs change the feel beyond colour: `--shape-item`, `--shape-control`, `--shape-floating`, `--shape-container` (corners per component family), `--space-base` (spacing and control height), `--typeface-sans`, `--typeface-heading`, `--type-body` (type), `--elevation-raised`, `--elevation-floating`, `--elevation-modal` (shadows) and `--motion-base`, `--motion-ease-standard` (motion). The theme files in `@amit-kap/glaze/themes/` are complete examples.
 
 Import it after `globals.css` and use `data-theme="my-theme"`.
 

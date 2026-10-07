@@ -3,7 +3,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@amitka/glaze/components/resizable"
+} from "@amit-kap/glaze/components/resizable"
 
 const meta = {
   title: "Components/Resizable",

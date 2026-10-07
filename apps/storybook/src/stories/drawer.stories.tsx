@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Button } from "@amitka/glaze/components/button"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   Drawer,
   DrawerClose,
@@ -9,7 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@amitka/glaze/components/drawer"
+} from "@amit-kap/glaze/components/drawer"
 
 const meta = {
   title: "Components/Drawer",
