@@ -1,9 +1,10 @@
-// Releases the built package to the `release` branch, tagged v<version>, so
-// projects can install it from git: npm install github:amit-kap/glaze#v0.1.0
-// (npm installs a git repo's root, and Glaze's root is the monorepo, so the
-// built package gets a branch of its own.)
+// Releases the built package: commits it to the `release` branch tagged
+// v<version> (npm installs a git repo's root, and Glaze's root is the
+// monorepo, so the built package gets a branch of its own), then optionally
+// pushes it to GitHub and publishes it to npm.
 // Usage: bump "version" in packages/ui/package.json, commit, then
-//        node scripts/glaze-release.mjs [--push]
+//        node scripts/glaze-release.mjs [--push] [--npm]
+// --npm runs `npm publish`, which asks for your 2FA code.
 
 import { execFileSync } from "node:child_process"
 import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs"
@@ -49,4 +50,8 @@ if (process.argv.includes("--push")) {
   console.log(`Pushed. Install with: npm install github:amit-kap/glaze#${tag}`)
 } else {
   console.log(`Push with: git push origin release ${tag}`)
+}
+if (process.argv.includes("--npm")) {
+  execFileSync("npm", ["publish", join(repo, "packages/ui/dist")], { stdio: "inherit" })
+  console.log(`Published. Install with: npm install @amitka/glaze@${version}`)
 }

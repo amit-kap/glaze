@@ -8,13 +8,11 @@ My component library: shadcn/ui on Base UI, themed entirely through tokens. A Vi
 
 ### 1. Install
 
-Glaze is released from the private repo `amit-kap/glaze`; each version is a git tag:
-
 ```bash
-npm install github:amit-kap/glaze#v0.1.0
+npm install @amitka/glaze
 ```
 
-It installs as `@amitka/glaze`. React 19 and Tailwind CSS 4 come from your project.
+React 19 and Tailwind CSS 4 come from your project. Each release is also tagged in this repo, so `npm install github:amit-kap/glaze#v<version>` works too.
 
 ### 2. Import the styles and a theme
 
@@ -130,10 +128,10 @@ Anything the converter can't map becomes a component token (see the spec's "Conv
 
 ```bash
 # 1. bump "version" in packages/ui/package.json and commit
-npm run release:glaze -- --push   # builds, commits to the release branch, tags v<version>, pushes
+npm run release:glaze -- --push --npm   # build, tag v<version> on the release branch, push, publish to npm
 ```
 
-`npm run build:glaze` builds `packages/ui/dist` without releasing. npm installs a git repo's root, so releases live on the `release` branch, which holds only the built package.
+`--npm` asks for your npm 2FA code. The published package gets its own README (`packages/ui/PACKAGE_README.md`) and `THIRD_PARTY_NOTICES.md`; keep the package README in step with this one. `npm run build:glaze` builds `packages/ui/dist` without releasing. npm installs a git repo's root, so releases live on the `release` branch, which holds only the built package.
 
 ### Storybook
 

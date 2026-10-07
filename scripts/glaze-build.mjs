@@ -3,7 +3,7 @@
 // package.json for consumers. Usage: node scripts/glaze-build.mjs
 
 import { execFileSync } from "node:child_process"
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
+import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { dirname, join, relative } from "node:path"
 
 const root = new URL("../packages/ui/", import.meta.url).pathname
@@ -34,7 +34,11 @@ for (const file of walk(dist).filter((f) => /\.(js|d\.ts)$/.test(f))) {
 // 3. CSS. globals.css drops the monorepo's app sources and scans the built
 //    components instead, so consumers need no @source for Glaze.
 mkdirSync(join(dist, "styles"), { recursive: true })
-cpSync(join(src, "styles/tokens.css"), join(dist, "styles/tokens.css"))
+// The source comment points at the local spec; drop it from the published copy.
+writeFileSync(
+  join(dist, "styles/tokens.css"),
+  readFileSync(join(src, "styles/tokens.css"), "utf8").replace(/^ \* Spec: .*\n/m, "")
+)
 cpSync(join(src, "styles/themes"), join(dist, "styles/themes"), { recursive: true })
 const globals = readFileSync(join(src, "styles/globals.css"), "utf8")
   .split("\n")
@@ -50,6 +54,7 @@ const out = {
   name: pkg.name,
   version: pkg.version,
   description: "Glaze: shadcn/ui on Base UI, themed entirely through tokens.",
+  license: "MIT",
   type: "module",
   sideEffects: ["**/*.css"],
   exports: {
@@ -63,9 +68,14 @@ const out = {
   },
   dependencies,
   peerDependencies: { react: "^19", "react-dom": "^19", tailwindcss: "^4" },
+  keywords: ["react", "components", "shadcn", "base-ui", "tailwindcss", "design-tokens", "theming"],
+  publishConfig: { access: "public" },
 }
 writeFileSync(join(dist, "package.json"), JSON.stringify(out, null, 2) + "\n")
-const readme = join(root, "../../README.md")
-if (existsSync(readme)) cpSync(readme, join(dist, "README.md"))
+// The package ships its own usage-only README (the monorepo README has dev
+// notes and local paths) and the third-party licence notices.
+cpSync(join(root, "PACKAGE_README.md"), join(dist, "README.md"))
+cpSync(join(root, "THIRD_PARTY_NOTICES.md"), join(dist, "THIRD_PARTY_NOTICES.md"))
+cpSync(join(root, "LICENSE"), join(dist, "LICENSE"))
 
 console.log(`Built ${pkg.name}@${pkg.version} → packages/ui/dist`)
