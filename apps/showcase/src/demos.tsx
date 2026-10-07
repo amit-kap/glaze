@@ -38,7 +38,7 @@ import {
   AttachmentMedia,
   AttachmentTitle,
 } from "@amit-kap/glaze/components/attachment"
-import { Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@amit-kap/glaze/components/avatar"
+import { Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarImage } from "@amit-kap/glaze/components/avatar"
 import { Badge } from "@amit-kap/glaze/components/badge"
 import { Bubble, BubbleContent } from "@amit-kap/glaze/components/bubble"
 import { Button } from "@amit-kap/glaze/components/button"
@@ -80,8 +80,34 @@ import { Label } from "@amit-kap/glaze/components/label"
 import { Message, MessageAvatar, MessageContent, MessageFooter, MessageGroup } from "@amit-kap/glaze/components/message"
 import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger } from "@amit-kap/glaze/components/popover"
 import { Progress, ProgressLabel, ProgressValue } from "@amit-kap/glaze/components/progress"
+import {
+  Questionnaire,
+  QuestionnaireActions,
+  QuestionnaireChoice,
+  QuestionnaireChoiceDescription,
+  QuestionnaireChoices,
+  QuestionnaireDescription,
+  QuestionnaireError,
+  QuestionnaireInput,
+  QuestionnaireItem,
+  QuestionnaireNext,
+  QuestionnairePrevious,
+  QuestionnaireProgress,
+  QuestionnaireSkip,
+  QuestionnaireSubmit,
+  QuestionnaireTitle,
+} from "@amit-kap/glaze/components/questionnaire"
 import { RadioGroup, RadioGroupItem } from "@amit-kap/glaze/components/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@amit-kap/glaze/components/select"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "@amit-kap/glaze/components/select"
 import { Skeleton } from "@amit-kap/glaze/components/skeleton"
 import { Slider } from "@amit-kap/glaze/components/slider"
 import { Spinner } from "@amit-kap/glaze/components/spinner"
@@ -94,8 +120,8 @@ import { Toggle } from "@amit-kap/glaze/components/toggle"
 import { ToggleGroup, ToggleGroupItem } from "@amit-kap/glaze/components/toggle-group"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@amit-kap/glaze/components/tooltip"
 
-const Stack = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex w-full max-w-xs flex-col gap-3">{children}</div>
+const Stack = ({ children, loose }: { children: React.ReactNode; loose?: boolean }) => (
+  <div className={`flex w-full max-w-xs flex-col ${loose ? "gap-8" : "gap-3"}`}>{children}</div>
 )
 const Row = ({ children }: { children: React.ReactNode }) => (
   <div className="flex flex-wrap items-center justify-center gap-2">{children}</div>
@@ -294,37 +320,64 @@ export function SwitchDemo() {
   )
 }
 
-const languages = [
-  { value: "en", label: "English" },
-  { value: "he", label: "Hebrew" },
-  { value: "fr", label: "French" },
-  { value: "ja", label: "Japanese" },
+// Same content as the Select stories in Storybook (Default and Small).
+const fruits = [
+  { label: "Apple", value: "apple" },
+  { label: "Banana", value: "banana" },
+  { label: "Blueberry", value: "blueberry" },
+  { label: "Grapes", value: "grapes" },
+]
+const vegetables = [
+  { label: "Carrot", value: "carrot" },
+  { label: "Leek", value: "leek" },
 ]
 
 export function SelectDemo() {
   return (
-    <Stack>
-      {(["default", "sm"] as const).map((size) => (
-        <Select key={size} items={languages} defaultValue="en">
-          <SelectTrigger size={size} className="w-full" aria-label={`Language (${size})`}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {languages.map((l) => (
-              <SelectItem key={l.value} value={l.value}>
-                {l.label}
+    <div className="flex flex-col items-center gap-3">
+      <Select items={[...fruits, ...vegetables]} defaultValue="banana">
+        <SelectTrigger className="w-48" aria-label="Produce">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Fruits</SelectLabel>
+            {fruits.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
               </SelectItem>
             ))}
-          </SelectContent>
-        </Select>
-      ))}
-    </Stack>
+          </SelectGroup>
+          <SelectSeparator />
+          <SelectGroup>
+            <SelectLabel>Vegetables</SelectLabel>
+            {vegetables.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <Select items={fruits} defaultValue="apple">
+        <SelectTrigger size="sm" className="w-40" aria-label="Fruit (small)">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {fruits.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
 
 export function SliderDemo() {
   return (
-    <Stack>
+    <Stack loose>
       <Slider defaultValue={[60]} max={100} aria-label="Volume" />
       <Slider defaultValue={[25, 75]} max={100} aria-label="Price range" />
       <Slider defaultValue={[40]} max={100} disabled aria-label="Disabled" />
@@ -523,7 +576,7 @@ export function AlertDemo() {
 
 export function ProgressDemo() {
   return (
-    <Stack>
+    <Stack loose>
       <Progress value={68}>
         <ProgressLabel>Uploading assets</ProgressLabel>
         <ProgressValue />
@@ -577,7 +630,8 @@ export function MessageDemo() {
       <Message>
         <MessageAvatar>
           <Avatar>
-            <AvatarFallback>NO</AvatarFallback>
+            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </MessageAvatar>
         <MessageContent>
@@ -755,5 +809,52 @@ export function ChartDemo() {
         <Area dataKey="visitors" type="natural" fill="var(--color-visitors)" fillOpacity={0.3} stroke="var(--color-visitors)" stackId="a" />
       </AreaChart>
     </ChartContainer>
+  )
+}
+
+/* ---------- forms ---------- */
+
+export function QuestionnaireDemo() {
+  return (
+    <Questionnaire className="w-full max-w-md" onSubmit={(event) => event.preventDefault()}>
+      <QuestionnaireProgress />
+      <QuestionnaireItem name="role" required>
+        <QuestionnaireTitle>What best describes your role?</QuestionnaireTitle>
+        <QuestionnaireChoices>
+          <QuestionnaireChoice value="design">Design</QuestionnaireChoice>
+          <QuestionnaireChoice value="engineering">Engineering</QuestionnaireChoice>
+          <QuestionnaireChoice value="product">Product</QuestionnaireChoice>
+        </QuestionnaireChoices>
+        <QuestionnaireError>Pick one to continue.</QuestionnaireError>
+      </QuestionnaireItem>
+      <QuestionnaireItem name="tools" multiple>
+        <QuestionnaireTitle>Which tools do you use daily?</QuestionnaireTitle>
+        <QuestionnaireDescription>Select all that apply.</QuestionnaireDescription>
+        <QuestionnaireChoices>
+          <QuestionnaireChoice value="figma">
+            Figma
+            <QuestionnaireChoiceDescription>Design and prototyping</QuestionnaireChoiceDescription>
+          </QuestionnaireChoice>
+          <QuestionnaireChoice value="vscode">
+            VS Code
+            <QuestionnaireChoiceDescription>Code editing</QuestionnaireChoiceDescription>
+          </QuestionnaireChoice>
+          <QuestionnaireChoice value="linear">
+            Linear
+            <QuestionnaireChoiceDescription>Issue tracking</QuestionnaireChoiceDescription>
+          </QuestionnaireChoice>
+        </QuestionnaireChoices>
+      </QuestionnaireItem>
+      <QuestionnaireItem name="email">
+        <QuestionnaireTitle>Where should we send the results?</QuestionnaireTitle>
+        <QuestionnaireInput type="email" placeholder="you@example.com" />
+      </QuestionnaireItem>
+      <QuestionnaireActions>
+        <QuestionnairePrevious />
+        <QuestionnaireSkip />
+        <QuestionnaireNext />
+        <QuestionnaireSubmit />
+      </QuestionnaireActions>
+    </Questionnaire>
   )
 }

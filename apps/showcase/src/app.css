@@ -9,8 +9,8 @@
 
 /*
  * Showcase tiles, after fluidfunctionalism.com's bento cards: a hairline
- * border with a very soft shadow that firms up on hover and when a control
- * inside has focus. Colours come from the theme's tokens.
+ * border with a very soft shadow that firms up on hover. Colours come from
+ * the theme's tokens.
  */
 @layer components {
   .tile {
@@ -24,10 +24,6 @@
     border-color: color-mix(in oklab, var(--foreground) 20%, transparent);
     box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
   }
-  .tile:focus-within {
-    border-color: color-mix(in oklab, var(--foreground) 65%, transparent);
-    box-shadow: 0 1px 3px rgb(0 0 0 / 0.16);
-  }
 
   .dark .tile {
     border-color: color-mix(in oklab, var(--border), transparent 40%);
@@ -36,9 +32,5 @@
   .dark .tile:hover {
     border-color: var(--border);
     box-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
-  }
-  .dark .tile:focus-within {
-    border-color: color-mix(in oklab, var(--foreground) 70%, transparent);
-    box-shadow: 0 1px 3px rgb(0 0 0 / 0.7);
   }
 }
