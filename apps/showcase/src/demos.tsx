@@ -165,6 +165,47 @@ export function SwitchesDemo() {
   )
 }
 
+export function CheckboxDemo() {
+  return (
+    <FieldGroup className="w-full max-w-xs gap-4">
+      {[
+        { id: "mentions", label: "Mentions", description: "When someone @mentions you.", checked: true },
+        { id: "replies", label: "Replies", description: "Replies to your comments.", checked: true },
+        { id: "updates", label: "Product updates", description: "New features and releases.", checked: false },
+        { id: "billing", label: "Billing", description: "Managed by your workspace admin.", checked: true, disabled: true },
+      ].map((item) => (
+        <Field key={item.id} orientation="horizontal" data-disabled={item.disabled || undefined}>
+          <Checkbox id={`demo-check-${item.id}`} defaultChecked={item.checked} disabled={item.disabled} />
+          <FieldContent>
+            <FieldLabel htmlFor={`demo-check-${item.id}`}>{item.label}</FieldLabel>
+            <FieldDescription>{item.description}</FieldDescription>
+          </FieldContent>
+        </Field>
+      ))}
+    </FieldGroup>
+  )
+}
+
+export function RadioDemo() {
+  return (
+    <RadioGroup defaultValue="pro" className="w-full max-w-xs gap-4" aria-label="Plan">
+      {[
+        { value: "starter", label: "Starter", description: "One project, community support." },
+        { value: "pro", label: "Pro", description: "Unlimited projects and themes." },
+        { value: "team", label: "Team", description: "Shared themes and roles." },
+      ].map((plan) => (
+        <Field key={plan.value} orientation="horizontal">
+          <RadioGroupItem value={plan.value} id={`demo-plan-${plan.value}`} />
+          <FieldContent>
+            <FieldLabel htmlFor={`demo-plan-${plan.value}`}>{plan.label}</FieldLabel>
+            <FieldDescription>{plan.description}</FieldDescription>
+          </FieldContent>
+        </Field>
+      ))}
+    </RadioGroup>
+  )
+}
+
 const languages = [
   { value: "en", label: "English" },
   { value: "he", label: "Hebrew" },

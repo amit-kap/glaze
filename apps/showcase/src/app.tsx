@@ -4,6 +4,8 @@ import { ControlPanel } from "./control-panel"
 import {
   ButtonsDemo,
   CalendarDemo,
+  CheckboxDemo,
+  RadioDemo,
   ChartDemo,
   ChatDemo,
   ChoicesDemo,
@@ -25,6 +27,8 @@ const tiles: { demo: () => React.ReactNode; wide?: boolean }[] = [
   { demo: CommandDemo, wide: true },
   { demo: SignInDemo },
   { demo: SwitchesDemo },
+  { demo: CheckboxDemo },
+  { demo: RadioDemo },
   { demo: ChatDemo, wide: true },
   { demo: ChoicesDemo },
   { demo: TabsDemo },
@@ -43,7 +47,7 @@ export function App() {
           {tiles.map(({ demo: Demo, wide }, i) => (
             <section
               key={i}
-              className={`flex min-h-56 items-center justify-center rounded-container border p-6 sm:p-8 ${wide ? "sm:col-span-2" : ""}`}
+              className={`flex min-h-56 items-center justify-center tile rounded-container p-6 sm:p-8 ${wide ? "sm:col-span-2" : ""}`}
             >
               <Demo />
             </section>
