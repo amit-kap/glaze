@@ -6,9 +6,12 @@
  * re-declared on every element that can change an input; a var() resolves
  * where it is declared, not where it is used. Colour, shape and motion
  * depend on theme and mode; space also depends on density.
+ *
+ * Zero specificity (:where) throughout, so a theme's own values always win
+ * regardless of the order stylesheets load in.
  */
 
-:root {
+:where(:root) {
   --density: 1;
   --motion-scale: 1;
 }
@@ -27,9 +30,7 @@
   }
 }
 
-:root,
-[data-theme],
-.dark {
+:where(:root, [data-theme], .dark) {
   /* colour: surfaces and text */
   --background: var(--canvas);
   --foreground: var(--ink);
@@ -94,10 +95,7 @@
   --duration-slow: calc(var(--motion-slow) * var(--motion-scale));
 }
 
-:root,
-[data-theme],
-[data-density],
-.dark {
+:where(:root, [data-theme], [data-density], .dark) {
   /* space and size */
   --space: calc(var(--space-base) * var(--density));
   --control-xs: calc(var(--space) * 6);

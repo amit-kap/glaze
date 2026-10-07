@@ -1,8 +1,24 @@
-import { withThemeByClassName } from "@storybook/addon-themes"
-import type { Preview } from "@storybook/react-vite"
+import type { Decorator, Preview } from "@storybook/react-vite"
 import { TooltipProvider } from "@workspace/ui/components/tooltip"
 
 import "@workspace/ui/globals.css"
+import { themes } from "./themes"
+
+// Applies the three Glaze switches to the preview's <html>, as a project would.
+const withGlaze: Decorator = (Story, context) => {
+  const { theme, mode, density } = context.globals
+  const root = document.documentElement
+
+  if (theme && theme !== "default") root.setAttribute("data-theme", theme)
+  else root.removeAttribute("data-theme")
+
+  root.classList.toggle("dark", mode === "dark")
+
+  if (density === "compact") root.setAttribute("data-density", "compact")
+  else root.removeAttribute("data-density")
+
+  return <Story />
+}
 
 const preview: Preview = {
   tags: ["autodocs"],
@@ -16,16 +32,53 @@ const preview: Preview = {
     },
     a11y: { test: "todo" },
   },
+  globalTypes: {
+    theme: {
+      description: "Glaze theme",
+      toolbar: {
+        title: "Theme",
+        icon: "paintbrush",
+        items: themes,
+        dynamicTitle: true,
+      },
+    },
+    mode: {
+      description: "Light or dark mode",
+      toolbar: {
+        title: "Mode",
+        icon: "sun",
+        items: [
+          { value: "light", title: "Light", icon: "sun" },
+          { value: "dark", title: "Dark", icon: "moon" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    density: {
+      description: "Spacing and control size",
+      toolbar: {
+        title: "Density",
+        icon: "component",
+        items: [
+          { value: "comfortable", title: "Comfortable" },
+          { value: "compact", title: "Compact" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    theme: "default",
+    mode: "light",
+    density: "comfortable",
+  },
   decorators: [
     (Story) => (
       <TooltipProvider>
         <Story />
       </TooltipProvider>
     ),
-    withThemeByClassName({
-      themes: { light: "", dark: "dark" },
-      defaultTheme: "light",
-    }),
+    withGlaze,
   ],
 }
 

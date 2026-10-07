@@ -23,7 +23,6 @@
     "@eslint/js": "^10",
     "@storybook/addon-a11y": "^10.6.1",
     "@storybook/addon-docs": "^10.6.1",
-    "@storybook/addon-themes": "^10.6.1",
     "@storybook/react-vite": "^10.6.1",
     "@tailwindcss/vite": "^4",
     "@types/node": "^24",

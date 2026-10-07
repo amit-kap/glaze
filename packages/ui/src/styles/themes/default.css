@@ -1,10 +1,11 @@
 /*
  * Default theme: shadcn Nova, neutral.
  * Sets every input (required and optional). Named themes inherit the
- * optional ones from here.
+ * optional ones from here. Zero specificity (:where) so any named theme
+ * overrides it regardless of load order.
  */
 
-:root {
+:where(:root) {
   /* colour */
   --canvas: oklch(1 0 0);
   --surface: oklch(1 0 0);
@@ -62,7 +63,7 @@
   --motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
-.dark {
+:where(.dark) {
   --canvas: oklch(0.145 0 0);
   --surface: oklch(0.205 0 0);
   --ink: oklch(0.985 0 0);
