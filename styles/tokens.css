@@ -1,6 +1,5 @@
 /*
  * Glaze tokens: tier 1 inputs → tier 2 system tokens.
- * Spec: /Users/amitka/Personal/SharedContext/workflow/comp-lib-architecture.md
  *
  * Themes set inputs only. Everything here is derived from them, so it is
  * re-declared on every element that can change an input; a var() resolves

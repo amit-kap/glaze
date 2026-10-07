@@ -1,7 +1,8 @@
 {
-  "name": "@amitka/glaze",
-  "version": "0.1.0",
+  "name": "@amit-kap/glaze",
+  "version": "0.1.1",
   "description": "Glaze: shadcn/ui on Base UI, themed entirely through tokens.",
+  "license": "MIT",
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -54,5 +55,17 @@
     "react": "^19",
     "react-dom": "^19",
     "tailwindcss": "^4"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "shadcn",
+    "base-ui",
+    "tailwindcss",
+    "design-tokens",
+    "theming"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }

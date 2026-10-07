@@ -1,54 +1,53 @@
 # Glaze
 
-My component library: shadcn/ui on Base UI, themed entirely through tokens. A Vite monorepo with the library, a web app and Storybook.
+React components built on [shadcn/ui](https://ui.shadcn.com) and [Base UI](https://base-ui.com), themed entirely through CSS tokens. Swap the theme, mode or density with one attribute; the components never change.
 
-**Architecture:** layers, token contract, theming and component rules are specified in `/Users/amitka/Personal/SharedContext/workflow/comp-lib-architecture.md`. Read it before changing components, tokens or themes.
-
-## Using Glaze in a project
-
-### 1. Install
-
-Glaze is released from the private repo `amit-kap/glaze`; each version is a git tag:
+## Install
 
 ```bash
-npm install github:amit-kap/glaze#v0.1.0
+npm install @amit-kap/glaze
 ```
 
-It installs as `@amitka/glaze`. React 19 and Tailwind CSS 4 come from your project.
+Requires React 19 and Tailwind CSS 4 in your project.
 
-### 2. Import the styles and a theme
+## Set up
 
-In the project's main CSS file:
+### 1. Import the styles and a theme
+
+In your main CSS file:
 
 ```css
-@import "@amitka/glaze/globals.css";
-@import "@amitka/glaze/themes/maia.css";
+@import "@amit-kap/glaze/globals.css";
+@import "@amit-kap/glaze/themes/maia.css";
 ```
 
-- `globals.css` holds Tailwind, the tokens and the default theme. Use it in place of your own `@import "tailwindcss"`.
+- `globals.css` includes Tailwind, the tokens and the default theme, Nova. Use it in place of your own `@import "tailwindcss"`.
 - Import only the themes you use. Each one brings its own font.
-- Tailwind finds the classes inside Glaze's components on its own; your project's files are detected as usual.
+- Tailwind finds the classes inside Glaze's components on its own.
 
-### 3. Turn the theme on
-
-In React, wrap the app in `ThemeProvider`:
+### 2. Wrap the app
 
 ```tsx
-import { ThemeProvider } from "@amitka/glaze/theme"
+import { ThemeProvider } from "@amit-kap/glaze/theme"
 
 <ThemeProvider defaultTheme="maia" defaultMode="system">
   <App />
 </ThemeProvider>
 ```
 
-`"default"` (or no `defaultTheme`) is Nova. The viewer's choice is remembered in `localStorage` (`storageKey`, default `"glaze"`; `false` to turn it off).
+The viewer's choice is remembered in `localStorage` (`storageKey`, default `"glaze"`; `false` to turn it off). Without React, set the attributes on `<html>` yourself (see [Switches](#switches)).
 
-Without React, set the attribute yourself: `<html data-theme="maia">`.
-
-### Switching at runtime
+### 3. Use components
 
 ```tsx
-import { useTheme } from "@amitka/glaze/theme"
+import { Button } from "@amit-kap/glaze/components/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@amit-kap/glaze/components/card"
+```
+
+## Switching at runtime
+
+```tsx
+import { useTheme } from "@amit-kap/glaze/theme"
 
 const { theme, setTheme, mode, setMode, resolvedMode, density, setDensity } = useTheme()
 setTheme("lyra")
@@ -56,23 +55,23 @@ setMode("dark")        // "light" | "dark" | "system"
 setDensity("compact")  // "comfortable" | "compact"
 ```
 
-### No flash on load
+## No flash on load
 
 Add the inline script to `<head>` so the saved theme applies before the page paints. Pass the same options as the provider:
 
 ```tsx
-import { themeScript } from "@amitka/glaze/theme"
+import { themeScript } from "@amit-kap/glaze/theme"
 
 <script dangerouslySetInnerHTML={{ __html: themeScript({ defaultTheme: "maia" }) }} />
 ```
 
-### Switches
+## Switches
 
-All three go on `<html>` and combine freely:
+Three attributes on `<html>`, freely combined:
 
 | Switch | Set with | Values |
 |---|---|---|
-| Theme | `data-theme` | none (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or your own |
+| Theme | `data-theme` | none or `nova` (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or your own |
 | Mode | `class="dark"` | none (light), `dark` |
 | Density | `data-density` | none / `comfortable`, `compact` |
 
@@ -80,17 +79,19 @@ All three go on `<html>` and combine freely:
 <html data-theme="maia" class="dark" data-density="compact">
 ```
 
-`ThemeProvider` sets these for you. The same attributes work on any element to theme just that part of the page:
+They also work on any element, to theme just part of a page:
 
 ```html
 <section data-theme="sera">…</section>
 ```
 
-### Themes
+## Themes
+
+Each theme expresses one of shadcn's styles as tokens.
 
 | Theme | Character |
 |---|---|
-| default (Nova) | Geist, 32px controls, 10px corners |
+| `nova` (default) | Geist, 32px controls, 10px corners |
 | `vega` | Inter, taller controls, tighter corners |
 | `maia` | Figtree, pill controls, round menus, deep shadows |
 | `lyra` | JetBrains Mono, square, small type |
@@ -99,51 +100,43 @@ All three go on `<html>` and combine freely:
 | `sera` | Taupe, Noto Sans + Playfair Display headings, square, tall controls |
 | `rhea` | Inter, soft rounded controls and cards |
 
-### Your own theme
+## Your own theme
 
-Create `<name>.css` (in the library's `packages/ui/src/styles/themes/`, or in the project), set the required inputs (`--canvas`, `--surface`, `--ink`, `--brand`, `--radius`, …) for light and dark under `[data-theme="<name>"]`, import it, and use `data-theme="<name>"`. The input list and a template are in the spec's "Writing a theme" section.
+A theme is a CSS file that sets the required inputs for light and dark. Everything else (hover states, borders, sidebar colours, focus rings) is derived from them.
 
-### Components
+```css
+/* my-theme.css */
+[data-theme="my-theme"] {
+  --canvas: …;      /* app background */
+  --surface: …;     /* cards, popovers, inputs */
+  --ink: …;         /* primary text */
+  --ink-muted: …;   /* secondary text */
+  --line: …;        /* borders */
+  --brand: …;       /* primary actions, focus */
+  --brand-ink: …;   /* text on brand */
+  --danger: …;
+  --warning: …;
+  --success: …;
+  --info: …;
+  --chart-1: …;
+  --chart-2: …;
+  --chart-3: …;
+  --chart-4: …;
+  --chart-5: …;
+  --radius: …;      /* base corner radius */
+}
 
-```tsx
-import { Button } from "@amitka/glaze/components/button"
+[data-theme="my-theme"].dark,
+.dark [data-theme="my-theme"],
+[data-theme="my-theme"] .dark {
+  /* the same colour inputs, dark values */
+}
 ```
 
-## Developing Glaze
+Optional inputs change the feel beyond colour: `--shape-item`, `--shape-control`, `--shape-floating`, `--shape-container` (corners per component family), `--space-base` (spacing and control height), `--typeface-sans`, `--typeface-heading`, `--type-body` (type), `--elevation-raised`, `--elevation-floating`, `--elevation-modal` (shadows) and `--motion-base`, `--motion-ease-standard` (motion). The theme files in `@amit-kap/glaze/themes/` are complete examples.
 
-### Adding components
+Import it after `globals.css` and use `data-theme="my-theme"`.
 
-```bash
-npx shadcn@latest add button -c apps/web
-```
+## Licence
 
-This places the component in `packages/ui/src/components` with stock shadcn classes. Convert it to Glaze tokens and check:
-
-```bash
-npm run convert:tokens -- button.tsx   # stock classes → system utilities
-npm run check:tokens                   # fails on any class the token contract forbids
-```
-
-Anything the converter can't map becomes a component token (see the spec's "Converting stock shadcn code").
-
-### Releasing
-
-```bash
-# 1. bump "version" in packages/ui/package.json and commit
-npm run release:glaze -- --push   # builds, commits to the release branch, tags v<version>, pushes
-```
-
-`npm run build:glaze` builds `packages/ui/dist` without releasing. npm installs a git repo's root, so releases live on the `release` branch, which holds only the built package.
-
-### Storybook
-
-Every component in `packages/ui` has a story in `apps/storybook/src/stories`.
-
-```bash
-npm run dev -w storybook    # http://localhost:6006
-npm run build -w storybook  # static build in apps/storybook/dist
-```
-
-The toolbar has the three switches: **Theme**, **Mode** and **Density**. Link to a state with `&globals=theme:maia;mode:dark;density:compact`. Test themes that shouldn't ship (like **Probe**, which changes every token) live in `apps/storybook/src/themes`.
-
-When you add a component, add a matching `<component>.stories.tsx`.
+MIT. Glaze includes code adapted from shadcn/ui (MIT); see `THIRD_PARTY_NOTICES.md`.

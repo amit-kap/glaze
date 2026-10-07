@@ -15,7 +15,7 @@ type ThemeContextValue = Settings & {
 };
 export type ThemeProviderProps = {
     children: React.ReactNode;
-    /** Theme name, matching a `themes/<name>.css` you import. "default" is Nova. */
+    /** Theme name: "nova" (built in) or a `themes/<name>.css` you import. */
     defaultTheme?: string;
     defaultMode?: Mode;
     defaultDensity?: Density;
