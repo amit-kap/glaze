@@ -2,7 +2,7 @@
 // Usage: node scripts/paper-icon-cells.mjs layers database cloud
 // Paste the output into write_html (insert-children) on the icons Grid, in the master and in any sketch copy.
 
-import { existsSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 
 const names = process.argv.slice(2)
@@ -20,7 +20,11 @@ for (const name of names) {
     console.error(`Unknown lucide icon: ${name}`)
     process.exit(1)
   }
-  const { __iconData } = await import(file)
+  // Renamed icons are alias files that re-export another icon; follow them to the real module.
+  let source = file
+  const alias = readFileSync(fileURLToPath(file), "utf8").match(/export \{ default \} from '\.\/(.+)\.mjs'/)
+  if (alias) source = new URL(`${alias[1]}.mjs`, iconsDir)
+  const { __iconData } = await import(source)
   const shapes = __iconData.node
     .map(([tag, attrs]) => {
       const list = Object.entries(attrs)
