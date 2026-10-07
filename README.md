@@ -2,6 +2,8 @@
 
 This is a Vite monorepo template with shadcn/ui.
 
+**Architecture:** layers, token contract, theming and component rules are specified in `/Users/amitka/Personal/SharedContext/workflow/comp-lib-architecture.md`. Read it before changing components, tokens or themes.
+
 ## Adding components
 
 To add components to your app, run the following command at the root of your `web` app:
