@@ -15,18 +15,18 @@
 @layer components {
   .tile {
     border: 1px solid var(--border);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
     transition:
       border-color var(--duration-fast) var(--ease-standard),
       box-shadow var(--duration-fast) var(--ease-standard);
   }
   .tile:hover {
     border-color: color-mix(in oklab, var(--foreground) 20%, transparent);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
   }
   .tile:focus-within {
     border-color: color-mix(in oklab, var(--foreground) 65%, transparent);
-    box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.16);
   }
 
   .dark .tile {

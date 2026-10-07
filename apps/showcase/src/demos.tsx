@@ -228,16 +228,6 @@ export function ChoicesDemo() {
           ))}
         </SelectContent>
       </Select>
-      <RadioGroup defaultValue="monday" className="flex gap-4" aria-label="Start of week">
-        {["sunday", "monday"].map((day) => (
-          <div key={day} className="flex items-center gap-2">
-            <RadioGroupItem value={day} id={`demo-week-${day}`} />
-            <Label htmlFor={`demo-week-${day}`} className="capitalize">
-              {day}
-            </Label>
-          </div>
-        ))}
-      </RadioGroup>
       <Slider defaultValue={[60]} max={100} step={1} aria-label="Volume" />
     </div>
   )
