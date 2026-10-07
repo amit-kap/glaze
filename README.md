@@ -142,6 +142,6 @@ npm run dev -w storybook    # http://localhost:6006
 npm run build -w storybook  # static build in apps/storybook/dist
 ```
 
-The toolbar has the three switches: **Theme**, **Mode** and **Density**. Link to a state with `&globals=theme:maia;mode:dark;density:compact`. Test themes that shouldn't ship (like **Probe**, which changes every token) live in `apps/storybook/src/themes`.
+The toolbar has the three switches: **Theme**, **Mode** and **Density**. Link to a state with `&globals=theme:maia;mode:dark;density:compact`. Test themes that shouldn't ship go in `apps/storybook/src/themes`; they appear in the Theme switch but aren't part of the package.
 
 When you add a component, add a matching `<component>.stories.tsx`.
