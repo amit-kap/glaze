@@ -49,19 +49,30 @@ type Story = StoryObj<typeof meta>
 
 // --- Basic ----------------------------------------------------------------
 
+// Upstream passes `defaultValue`, but input-otp already controls its <input>,
+// so React warns about both props; seed state instead.
 export const Default: Story = {
-  render: (args) => (
-    <InputOTP maxLength={6} defaultValue="123456" disabled={args.disabled}>
-      <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-        <InputOTPSlot index={2} />
-        <InputOTPSlot index={3} />
-        <InputOTPSlot index={4} />
-        <InputOTPSlot index={5} />
-      </InputOTPGroup>
-    </InputOTP>
-  ),
+  render: function Render(args) {
+    const [value, setValue] = React.useState("123456")
+
+    return (
+      <InputOTP
+        maxLength={6}
+        value={value}
+        onChange={setValue}
+        disabled={args.disabled}
+      >
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+          <InputOTPSlot index={1} />
+          <InputOTPSlot index={2} />
+          <InputOTPSlot index={3} />
+          <InputOTPSlot index={4} />
+          <InputOTPSlot index={5} />
+        </InputOTPGroup>
+      </InputOTP>
+    )
+  },
 }
 
 // --- States ---------------------------------------------------------------
