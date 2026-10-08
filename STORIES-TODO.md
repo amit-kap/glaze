@@ -23,10 +23,10 @@ Strike out an item with the date when its commit lands.
 15. ~~Combobox~~ — 2026-10-08
 16. ~~Toggle~~ — 2026-10-08
 17. ~~Toggle Group~~ — 2026-10-08
+18. ~~Button Group~~ — 2026-10-08
 
 ## Form controls
 
-18. Button Group
 19. Calendar
 
 ## Overlays
