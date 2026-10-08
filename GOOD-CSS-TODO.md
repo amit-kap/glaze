@@ -21,7 +21,7 @@ Source: https://good-css.com/ (reviewed 2026-10-08). Strike out an item (`~~…~
 
 ## Token and theme architecture
 
-12. Theme `.dark` blocks override tier-2 tokens with fixed values; derive them from inputs instead (later, consider `light-dark()` + `color-scheme`).
+12. ~~Theme `.dark` blocks override tier-2 tokens with fixed values; derive them from inputs instead (later, consider `light-dark()` + `color-scheme`).~~ Done 2026-10-08: per-mode mix inputs (`--mix-fill/-muted/-sidebar/-strong/-ring`, dark values in `tokens.css`) plus `--sidebar-brand(-ink)` and `--caution` inputs replace the 14 dark pins in all 8 themes; light pins now apply only outside dark mode. Light is unchanged; dark is within ΔE 0.01 of shadcn (Sera's ring 0.02). `light-dark()` not adopted: modes are class-driven, and nested themed subtrees need per-element tokens.
 13. ~~Fluid `clamp()` for `--type-display` / `--type-heading` (showcase and web app only).~~ Not applicable 2026-10-08: neither app (nor any component) uses `text-display` or `text-heading`, so a fluid clamp would change nothing. Revisit when a page uses them.
 
 ## Process and docs
