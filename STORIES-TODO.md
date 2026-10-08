@@ -19,10 +19,10 @@ Strike out an item with the date when its commit lands.
 11. ~~Native Select~~ — 2026-10-08
 12. ~~Radio Group~~ — 2026-10-08
 13. ~~Switch~~ — 2026-10-08
+14. ~~Slider~~ — 2026-10-08
 
 ## Form controls
 
-14. Slider
 15. Combobox
 16. Toggle
 17. Toggle Group
