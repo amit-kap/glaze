@@ -1,6 +1,7 @@
 import { cn } from "@amit-kap/glaze/lib/utils"
+import { trimText } from "@amit-kap/glaze/lib/label"
 
-function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {
+function Kbd({ className, children, ...props }: React.ComponentProps<"kbd">) {
   return (
     <kbd
       data-slot="kbd"
@@ -9,7 +10,9 @@ function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {
         className
       )}
       {...props}
-    />
+    >
+      {trimText(children)}
+    </kbd>
   )
 }
 
