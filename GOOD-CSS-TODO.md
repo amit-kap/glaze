@@ -22,7 +22,7 @@ Source: https://good-css.com/ (reviewed 2026-10-08). Strike out an item (`~~…~
 ## Token and theme architecture
 
 12. Theme `.dark` blocks override tier-2 tokens with fixed values; derive them from inputs instead (later, consider `light-dark()` + `color-scheme`).
-13. Fluid `clamp()` for `--type-display` / `--type-heading` (showcase and web app only).
+13. ~~Fluid `clamp()` for `--type-display` / `--type-heading` (showcase and web app only).~~ Not applicable 2026-10-08: neither app (nor any component) uses `text-display` or `text-heading`, so a fluid clamp would change nothing. Revisit when a page uses them.
 
 ## Process and docs
 
