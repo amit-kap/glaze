@@ -102,6 +102,8 @@
   --duration-base: calc(var(--motion-base) * var(--motion-scale));
   --duration-moderate: calc(var(--motion-moderate) * var(--motion-scale));
   --duration-slow: calc(var(--motion-slow) * var(--motion-scale));
+  /* press feedback scale; 1 (none) under reduced motion */
+  --press-scale: calc(1 - (1 - var(--motion-press)) * var(--motion-scale));
 
   /*
    * tier 3: component tokens. Each defaults to the Nova value, derived from
