@@ -8,7 +8,7 @@ Source: https://good-css.com/ (reviewed 2026-10-08). Strike out an item (`~~…~
 2. ~~Logical properties: swap ~45 physical utilities (`pl-`/`pr-`/`left-`/`right-`) in menus, select, native-select, input-group, dialog, alert for `ps-`/`pe-`/`start-`/`end-`; add a `check:tokens` rule.~~ Done 2026-10-08 (155 classes across 38 components; positions use Tailwind 4.3's `inset-s-`/`inset-e-` since `start-`/`end-` are deprecated; side-tied and centring classes stay physical as listed exceptions).
 3. ~~`tabular-nums` on table, calendar, input-otp, pagination, slider.~~ Done 2026-10-08 (slider skipped: it renders no text, and its children are fixed).
 4. ~~`overflow-clip` over `overflow-hidden` on clipping-only wrappers (card, badge, item, attachment, bubble).~~ Done 2026-10-08 (also the slider track; bubble gains `flow-root` to keep the formatting context `overflow-hidden` gave it).
-5. Safe-area insets (`env(safe-area-inset-*)`) on toast, bottom sheet, drawer, sidebar.
+5. ~~Safe-area insets (`env(safe-area-inset-*)`) on toast, bottom sheet, drawer, sidebar.~~ Done 2026-10-08 (`--safe-top/-bottom/-left/-right/-inline` tokens; apps must opt in with `viewport-fit=cover`, which showcase and web do not set yet).
 
 ## Medium: improvements to how components behave
 
