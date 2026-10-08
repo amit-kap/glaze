@@ -62,8 +62,8 @@ const meta = {
     },
   },
   decorators: [
-    (Story) => (
-      <div className="w-md">
+    (Story, { parameters }) => (
+      <div className={parameters.wrapperClassName ?? "w-md"}>
         <Story />
       </div>
     ),
@@ -230,14 +230,14 @@ export const Disabled: Story = {
   ),
 }
 
-// Upstream "Validation and Errors": set `data-invalid` on Field, `aria-invalid`
-// on the control, and render the message with FieldError.
 export const Invalid: Story = {
   render: () => (
     <Field data-invalid>
-      <FieldLabel htmlFor="field-email">Email</FieldLabel>
-      <Input id="field-email" type="email" aria-invalid />
-      <FieldError>Enter a valid email address.</FieldError>
+      <FieldLabel htmlFor="field-invalid">Invalid Input</FieldLabel>
+      <Input id="field-invalid" placeholder="Error" aria-invalid />
+      <FieldDescription>
+        This field contains validation errors.
+      </FieldDescription>
     </Field>
   ),
 }
@@ -557,32 +557,37 @@ export const Group: Story = {
   ),
 }
 
-// `orientation="responsive"` stacks on narrow FieldGroups and switches to a
-// row once the group's container query (@md) matches.
+// `orientation="responsive"` follows the width of the parent FieldGroup (a
+// container query at @md / 28rem), not the viewport. Drag the corner of the
+// dashed box to resize it: below 28rem each field stacks, above it the label
+// and control sit side by side.
 export const Responsive: Story = {
+  parameters: { wrapperClassName: "w-full max-w-3xl" },
   render: () => (
-    <form>
-      <FieldSet>
-        <FieldLegend>Profile</FieldLegend>
-        <FieldDescription>Fill in your profile information.</FieldDescription>
-        <FieldGroup>
-          <Field orientation="responsive">
-            <FieldContent>
-              <FieldLabel htmlFor="name">Name</FieldLabel>
-              <FieldDescription>
-                Provide your full name for identification
-              </FieldDescription>
-            </FieldContent>
-            <Input id="name" placeholder="Evil Rabbit" required />
-          </Field>
-          <Field orientation="responsive">
-            <Button type="submit">Submit</Button>
-            <Button type="button" variant="outline">
-              Cancel
-            </Button>
-          </Field>
-        </FieldGroup>
-      </FieldSet>
-    </form>
+    <div className="mx-auto w-xl max-w-full min-w-64 resize-x overflow-auto rounded-lg border border-dashed p-6">
+      <form>
+        <FieldSet>
+          <FieldLegend>Profile</FieldLegend>
+          <FieldDescription>Fill in your profile information.</FieldDescription>
+          <FieldGroup>
+            <Field orientation="responsive">
+              <FieldContent>
+                <FieldLabel htmlFor="name">Name</FieldLabel>
+                <FieldDescription>
+                  Provide your full name for identification
+                </FieldDescription>
+              </FieldContent>
+              <Input id="name" placeholder="Evil Rabbit" required />
+            </Field>
+            <Field orientation="responsive">
+              <Button type="submit">Submit</Button>
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
+            </Field>
+          </FieldGroup>
+        </FieldSet>
+      </form>
+    </div>
   ),
 }
