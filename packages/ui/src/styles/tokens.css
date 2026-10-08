@@ -117,6 +117,11 @@
   --toast-duration: calc(250ms * var(--motion-scale));
   --message-scroller-duration: calc(400ms * var(--motion-scale));
   --drawer-duration: calc(450ms * var(--motion-scale));
+  --drawer-release-duration: calc(400ms * var(--motion-scale));
+  --drawer-overlay-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --drawer-content-ease: cubic-bezier(0.45, 1.005, 0, 1.005);
+  --message-scroller-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  --navigation-menu-duration: calc(350ms * var(--motion-scale));
 }
 
 :where(:root, [data-theme], [data-density], .dark) {

@@ -107,6 +107,7 @@
     --ease-standard: var(--motion-ease-standard);
     --ease-emphasized: var(--motion-ease-emphasized);
     --ease-exit: var(--motion-ease-exit);
+    --ease-enter: var(--motion-ease-enter);
 }
 
 /*

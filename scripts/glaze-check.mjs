@@ -19,7 +19,8 @@ const forbidden = [
   [`font-(?:semibold|bold|extrabold|black)`, "use font-strong"],
   [`shadow-(?:2xs|xs|sm|md|lg|xl|2xl)`, "use shadow-raised / -floating / -modal"],
   [`duration-(?!0\\b)\\d+`, "use duration-(--duration-*) or a component token"],
-  [`ease-(?:in|out|in-out)`, "use ease-standard / -emphasized / -exit"],
+  [`ease-(?:in|out|in-out)`, "use ease-standard / -emphasized / -exit / -enter"],
+  [`(?:duration|delay|ease)-\\[[^\\]]*(?:\\d(?:ms|s)\\b|cubic-bezier)[^\\]]*\\]`, "literal timing: use a motion token or a component token"],
   [`(?:bg|text|border|ring|fill|stroke|outline|from|to|via)-(?:white|black|(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\\d+)`, "use colour system tokens"],
 ].map(([re, hint]) => [new RegExp(`${B}${re}${E}`, "g"), hint])
 
