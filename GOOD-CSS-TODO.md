@@ -28,4 +28,4 @@ Source: https://good-css.com/ (reviewed 2026-10-08). Strike out an item (`~~…~
 
 14. Install the good-css agent skill (`npx skills@latest add vojtaholik/good-css`) and reference it in `AGENTS.md`.
 15. Specimen format for stories: a "Use it when…" line and a "Try: …" instruction in each story's docs description.
-16. Agent readability: `llms.txt` and per-component markdown for the showcase or the Storybook build.
+16. ~~Agent readability: `llms.txt` and per-component markdown for the showcase or the Storybook build.~~ Done 2026-10-08: `scripts/glaze-llms.mjs` (TypeScript AST) writes `/llms.txt` and `/llms/<component>.md` (description, import, cva variants and defaults, data-slot parts, story links) for the Storybook dev server and build.
