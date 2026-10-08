@@ -23,7 +23,7 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  "group/tabs-list inline-flex w-fit items-center justify-center-safe rounded-control p-[3px] text-muted-foreground group-data-horizontal/tabs:h-control-md group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none",
+  "group/tabs-list scroll-fade-x inline-flex w-fit items-center justify-center-safe rounded-control p-[3px] text-muted-foreground group-data-horizontal/tabs:h-control-md group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col group-data-vertical/tabs:scroll-fade-y data-[variant=line]:rounded-none",
   {
     variants: {
       variant: {

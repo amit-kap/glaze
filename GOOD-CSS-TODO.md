@@ -13,7 +13,7 @@ Source: https://good-css.com/ (reviewed 2026-10-08). Strike out an item (`~~…~
 ## Medium: improvements to how components behave
 
 6. ~~Safe alignment: `justify-center-safe` on tabs list, toggle-group, button-group.~~ Done 2026-10-08 (tabs list and trigger, button, toggle, badge; toggle-group and button-group start-align, so they had nothing to change).
-7. Fade overflowing edges with `scroll-state` container queries (tabs list, scroll-area, carousel).
+7. ~~Fade overflowing edges with `scroll-state` container queries (tabs list, scroll-area, carousel).~~ Done 2026-10-08 with shadcn's `scroll-fade` / `-x` / `-y` (scroll-driven, on the scroller itself, which a `scroll-state` query cannot style) on the scroll-area viewport and tabs list; scroll-area's focus ring moved to the root so the mask cannot clip it. Carousel skipped: Embla moves slides with transforms, not scrolling.
 8. Press feedback via a shared `--press-scale` token (toggle, tab triggers, menu items, switch).
 9. `text-box: trim-both cap alphabetic` on Button, Badge, Kbd, Toggle labels.
 10. Icons sized from the text (`1cap`/`1lh`) instead of `size-4`.
