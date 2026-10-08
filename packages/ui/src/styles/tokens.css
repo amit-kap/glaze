@@ -21,6 +21,10 @@
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-inline: max(var(--safe-left), var(--safe-right));
+
+  /* icon beside text: 1lh - 4px is 16px on a 20px line, 12px on 16px;
+     rounded to whole pixels so strokes stay crisp */
+  --icon-size: round(1lh - 0.25rem, 1px);
 }
 
 [data-density="comfortable"] {
