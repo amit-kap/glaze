@@ -14,10 +14,10 @@ Strike out an item with the date when its commit lands.
 6. ~~Checkbox~~ — 2026-10-08
 7. ~~Field~~ — 2026-10-08
 8. ~~Label~~ — 2026-10-08
+9. ~~Input Group~~ — 2026-10-08
 
 ## Form controls
 
-9. Input Group
 10. Input OTP
 11. Native Select
 12. Radio Group
