@@ -17,7 +17,7 @@ Source: https://good-css.com/ (reviewed 2026-10-08). Strike out an item (`~~…~
 8. ~~Press feedback via a shared `--press-scale` token (toggle, tab triggers, menu items, switch).~~ Done 2026-10-08 (input `--motion-press: 0.97`; toggle, tab triggers, switch. Menu items skipped: scaling a full-width row shifts its edges and reads as jitter. Button keeps shadcn's `translate-y-px`).
 9. ~~`text-box: trim-both cap alphabetic` on Button, Badge, Kbd, Toggle labels.~~ Done 2026-10-08 via `trimText()` in `lib/label.ts`, which wraps bare text children in a trimmed `data-slot="label"` span (the trim cannot reach a flex container's anonymous text). Measurable in Maia (Figtree, caps were ~0.9px high); Geist, Inter and Noto were already within 0.1px.
 10. ~~Icons sized from the text (`1cap`/`1lh`) instead of `size-4`.~~ Done 2026-10-08: `--icon-size: round(1lh - 0.25rem, 1px)` on icons that sit in a line of text (30 rules in 17 components). Nova is pixel-identical (all 67 story/slot groups re-measured); Lyra icons go to 14px. Box-contained icons (avatar, checkbox, empty, attachment/item media, sidebar actions) and the explicit xs/sm button sizes keep fixed sizes.
-11. `user-invalid:` styling on Input/Textarea as a fallback beside `aria-invalid`.
+11. ~~`user-invalid:` styling on Input/Textarea as a fallback beside `aria-invalid`.~~ Done 2026-10-08 (also native-select and input-group).
 
 ## Token and theme architecture
 
