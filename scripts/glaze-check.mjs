@@ -20,7 +20,7 @@ const forbidden = [
   [`shadow-(?:2xs|xs|sm|md|lg|xl|2xl)`, "use shadow-raised / -floating / -modal"],
   [`duration-(?!0\\b)\\d+`, "use duration-(--duration-*) or a component token"],
   [`ease-(?:in|out|in-out)`, "use ease-standard / -emphasized / -exit / -enter"],
-  [`(?:duration|delay|ease)-\\[[^\\]]*(?:\\d(?:ms|s)\\b|cubic-bezier)[^\\]]*\\]`, "literal timing: use a motion token or a component token"],
+  [`(?:(?:duration|delay|ease|transition|animate)-\\[|\\[(?:transition|animation)(?:-[a-z-]+)?:)[^\\]]*(?:\\d(?:ms|s)\\b|cubic-bezier)[^\\]]*\\]`, "literal timing: use a motion token or a component token"],
   [`(?:-?(?:p[lr]|m[lr]|scroll-[mp][lr]|left|right)-[^\\s"'!]+|border-[lr](?:-[^\\s"'!]+)?|rounded-(?:[lr]|[tb][lr])(?:-[^\\s"'!]+)?|text-(?:left|right)|float-(?:left|right))`, "physical direction: use ps/pe, ms/me, inset-s/-e, border-s/-e, rounded-s/-e, text-start/-end"],
   [`-?(?:start|end)-[^\\s"'!]+`, "deprecated in Tailwind 4.3: use inset-s / inset-e"],
   [`(?:bg|text|border|ring|fill|stroke|outline|from|to|via)-(?:white|black|(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\\d+)`, "use colour system tokens"],

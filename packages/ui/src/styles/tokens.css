@@ -115,6 +115,7 @@
   --chart-tooltip-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --slider-thumb-fill: #fff;
   --toast-duration: calc(250ms * var(--motion-scale));
+  --toast-stack-duration: calc(500ms * var(--motion-scale));
   --message-scroller-duration: calc(400ms * var(--motion-scale));
   --drawer-duration: calc(450ms * var(--motion-scale));
   --drawer-release-duration: calc(400ms * var(--motion-scale));
