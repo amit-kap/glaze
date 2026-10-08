@@ -12,7 +12,7 @@ Source: https://good-css.com/ (reviewed 2026-10-08). Strike out an item (`~~…~
 
 ## Medium: improvements to how components behave
 
-6. Safe alignment: `justify-center-safe` on tabs list, toggle-group, button-group.
+6. ~~Safe alignment: `justify-center-safe` on tabs list, toggle-group, button-group.~~ Done 2026-10-08 (tabs list and trigger, button, toggle, badge; toggle-group and button-group start-align, so they had nothing to change).
 7. Fade overflowing edges with `scroll-state` container queries (tabs list, scroll-area, carousel).
 8. Press feedback via a shared `--press-scale` token (toggle, tab triggers, menu items, switch).
 9. `text-box: trim-both cap alphabetic` on Button, Badge, Kbd, Toggle labels.
