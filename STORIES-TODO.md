@@ -12,10 +12,10 @@ Strike out an item with the date when its commit lands.
 4. ~~Badge~~ — 2026-10-08
 5. ~~Select~~ — 2026-10-08
 6. ~~Checkbox~~ — 2026-10-08
+7. ~~Field~~ — 2026-10-08
 
 ## Form controls
 
-7. Field
 8. Label
 9. Input Group
 10. Input OTP
