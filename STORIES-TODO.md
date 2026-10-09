@@ -74,9 +74,9 @@ Strike out an item with the date when its commit lands.
 54. ~~Carousel~~ — 2026-10-09
 55. ~~Chart~~ — 2026-10-09
 
-## Glaze-only (no upstream examples — review structure only)
+## Chat & AI
 
-56. Attachment
+56. ~~Attachment~~ — 2026-10-09
 57. Bubble
 58. Marker
 59. Message
