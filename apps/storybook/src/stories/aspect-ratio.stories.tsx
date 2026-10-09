@@ -46,11 +46,27 @@ export const Default: Story = {
 
 // --- Variants -------------------------------------------------------------
 
-export const Square: Story = {
+const RATIOS = [
+  { label: "1:1", ratio: 1 / 1 },
+  { label: "4:3", ratio: 4 / 3 },
+  { label: "16:9", ratio: 16 / 9 },
+]
+
+// Upstream's square example, alongside 4:3 and 16:9.
+export const Ratios: Story = {
   render: () => (
-    <AspectRatio ratio={1 / 1} className="w-[12rem] rounded-lg bg-muted">
-      <Photo />
-    </AspectRatio>
+    <div className="flex items-start gap-4">
+      {RATIOS.map(({ label, ratio }) => (
+        <figure key={label} className="flex w-[12rem] flex-col gap-2">
+          <AspectRatio ratio={ratio} className="rounded-lg bg-muted">
+            <Photo />
+          </AspectRatio>
+          <figcaption className="text-caption text-muted-foreground">
+            {label}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
   ),
 }
 
