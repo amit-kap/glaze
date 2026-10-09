@@ -28,7 +28,7 @@ const tags = Array.from({ length: 50 }).map(
 
 // --- Basic ----------------------------------------------------------------
 
-export const Default: Story = {
+export const Vertical: Story = {
   render: (args) => (
     <ScrollArea className="h-72 w-48 rounded-md border" {...args}>
       <div className="p-4">
@@ -43,8 +43,6 @@ export const Default: Story = {
     </ScrollArea>
   ),
 }
-
-// --- Variants -------------------------------------------------------------
 
 const works = [
   {
