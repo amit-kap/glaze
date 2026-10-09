@@ -1,4 +1,7 @@
-# Glaze
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/glaze-banner-dark.png">
+  <img alt="Glaze — a glossy finish for every component" src=".github/assets/glaze-banner-light.png">
+</picture>
 
 My component library: shadcn/ui on Base UI, themed entirely through tokens. A Vite monorepo with the library, a web app and Storybook.
 
