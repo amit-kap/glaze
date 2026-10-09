@@ -123,26 +123,6 @@ export const CloseButton: Story = {
   ),
 }
 
-// Pass `showCloseButton={false}` to hide the corner close button.
-export const NoCloseButton: Story = {
-  render: () => (
-    <Dialog>
-      <DialogTrigger render={<Button variant="outline" />}>
-        No Close Button
-      </DialogTrigger>
-      <DialogContent showCloseButton={false}>
-        <DialogHeader>
-          <DialogTitle>No Close Button</DialogTitle>
-          <DialogDescription>
-            This dialog doesn&apos;t have a close button in the top-right
-            corner.
-          </DialogDescription>
-        </DialogHeader>
-      </DialogContent>
-    </Dialog>
-  ),
-}
-
 // --- Compositions ---------------------------------------------------------
 
 const paragraphs = Array.from({ length: 10 }).map((_, index) => (
