@@ -66,7 +66,7 @@ Strike out an item with the date when its commit lands.
 46. ~~Avatar~~ — 2026-10-09
 47. ~~Item~~ — 2026-10-09
 48. ~~Empty~~ — 2026-10-09
-49. Kbd
+49. ~~Kbd~~ — 2026-10-09
 50. Table
 51. Skeleton
 52. Spinner
