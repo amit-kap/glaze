@@ -73,7 +73,9 @@ export const Default: Story = {}
 
 // --- States ---------------------------------------------------------------
 
+// Hidden from the Docs page: an open modal would cover it.
 export const Open: Story = {
+  tags: ["!autodocs"],
   args: { defaultOpen: true },
 }
 
