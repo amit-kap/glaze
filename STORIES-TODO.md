@@ -52,7 +52,7 @@ Strike out an item with the date when its commit lands.
 35. ~~Breadcrumb~~ — 2026-10-09
 36. ~~Navigation Menu~~ — 2026-10-09
 37. ~~Pagination~~ — 2026-10-09
-38. Sidebar
+38. ~~Sidebar~~ — 2026-10-09
 39. Resizable
 40. Scroll Area
 41. Separator
