@@ -64,6 +64,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@amit-kap/glaze/components/sidebar"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
 // Stories follow the upstream shadcn/ui (base-nova) Sidebar demo:
 // https://ui.shadcn.com/docs/components/base/sidebar
@@ -408,8 +409,9 @@ const meta = {
       options: ["offcanvas", "icon", "none"],
     },
   },
-  render: (args) => (
-    <SidebarProvider>
+  render: function Render(args) {
+    const isRight = args.side === "right"
+    const sidebar = (
       <Sidebar {...args}>
         <SidebarHeader>
           <TeamSwitcher teams={data.teams} />
@@ -423,15 +425,30 @@ const meta = {
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-          </div>
-        </header>
-      </SidebarInset>
-    </SidebarProvider>
-  ),
+    )
+
+    // A right sidebar comes after the inset, and the trigger moves with it.
+    return (
+      <SidebarProvider>
+        {!isRight && sidebar}
+        <SidebarInset>
+          <header
+            className={cn(
+              "flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12",
+              isRight && "justify-end"
+            )}
+          >
+            <div className="flex items-center gap-2 px-4">
+              <SidebarTrigger
+                className={isRight ? "-mr-1 rotate-180" : "-ml-1"}
+              />
+            </div>
+          </header>
+        </SidebarInset>
+        {isRight && sidebar}
+      </SidebarProvider>
+    )
+  },
 } satisfies Meta<typeof Sidebar>
 
 export default meta
