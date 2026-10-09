@@ -47,7 +47,7 @@ Strike out an item with the date when its commit lands.
 ## Navigation & layout
 
 32. ~~Tabs~~ — 2026-10-09
-33. Accordion
+33. ~~Accordion~~ — 2026-10-09
 34. Collapsible
 35. Breadcrumb
 36. Navigation Menu
