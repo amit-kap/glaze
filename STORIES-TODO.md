@@ -54,7 +54,7 @@ Strike out an item with the date when its commit lands.
 37. ~~Pagination~~ — 2026-10-09
 38. ~~Sidebar~~ — 2026-10-09
 39. ~~Resizable~~ — 2026-10-09
-40. Scroll Area
+40. ~~Scroll Area~~ — 2026-10-09
 41. Separator
 42. Aspect Ratio
 43. Direction
