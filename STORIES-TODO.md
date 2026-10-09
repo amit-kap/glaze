@@ -38,7 +38,7 @@ Strike out an item with the date when its commit lands.
 24. ~~Popover~~ — 2026-10-09
 25. ~~Hover Card~~ — 2026-10-09
 26. ~~Tooltip~~ — 2026-10-09
-27. Dropdown Menu
+27. ~~Dropdown Menu~~ — 2026-10-09
 28. Context Menu
 29. Menubar
 30. Command
