@@ -33,7 +33,7 @@ Strike out an item with the date when its commit lands.
 
 20. ~~Dialog~~ — 2026-10-09
 21. ~~Alert Dialog~~ — 2026-10-09
-22. Sheet
+22. ~~Sheet~~ — 2026-10-09
 23. Drawer
 24. Popover
 25. Hover Card
