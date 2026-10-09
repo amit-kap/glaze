@@ -4,7 +4,7 @@ Align each Glaze story with the upstream shadcn/ui base-nova examples, one compo
 Standard: mirror `apps/storybook/src/stories/input.stories.tsx` (see AGENTS.md / story standard).
 Strike out an item with the date when its commit lands.
 
-## Done
+## Basics
 
 1. ~~Input~~ — 2026-10-07
 2. ~~Textarea~~ — 2026-10-07
@@ -12,6 +12,9 @@ Strike out an item with the date when its commit lands.
 4. ~~Badge~~ — 2026-10-08
 5. ~~Select~~ — 2026-10-08
 6. ~~Checkbox~~ — 2026-10-08
+
+## Form controls
+
 7. ~~Field~~ — 2026-10-08
 8. ~~Label~~ — 2026-10-08
 9. ~~Input Group~~ — 2026-10-08
@@ -25,10 +28,10 @@ Strike out an item with the date when its commit lands.
 17. ~~Toggle Group~~ — 2026-10-08
 18. ~~Button Group~~ — 2026-10-08
 19. ~~Calendar~~ — 2026-10-08
-20. ~~Dialog~~ — 2026-10-09
 
 ## Overlays
 
+20. ~~Dialog~~ — 2026-10-09
 21. Alert Dialog
 22. Sheet
 23. Drawer
