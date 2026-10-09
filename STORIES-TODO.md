@@ -41,7 +41,7 @@ Strike out an item with the date when its commit lands.
 27. ~~Dropdown Menu~~ — 2026-10-09
 28. ~~Context Menu~~ — 2026-10-09
 29. ~~Menubar~~ — 2026-10-09
-30. Command
+30. ~~Command~~ — 2026-10-09
 31. Toast (upstream: Sonner)
 
 ## Navigation & layout
