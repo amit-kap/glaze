@@ -35,7 +35,7 @@ Strike out an item with the date when its commit lands.
 21. ~~Alert Dialog~~ — 2026-10-09
 22. ~~Sheet~~ — 2026-10-09
 23. ~~Drawer~~ — 2026-10-09
-24. Popover
+24. ~~Popover~~ — 2026-10-09
 25. Hover Card
 26. Tooltip
 27. Dropdown Menu
