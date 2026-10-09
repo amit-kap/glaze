@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Bubble, BubbleContent } from "@amit-kap/glaze/components/bubble"
-import { Message, MessageContent } from "@amit-kap/glaze/components/message"
 import {
   MessageScroller,
   MessageScrollerButton,
@@ -9,76 +7,97 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@amit-kap/glaze/components/message-scroller"
+import { MessageScrollerAnchoring } from "./examples/message-scroller/message-scroller-anchoring"
+import { MessageScrollerAnimation } from "./examples/message-scroller/message-scroller-animation"
+import { MessageScrollerCommands } from "./examples/message-scroller/message-scroller-commands"
+import { MessageScrollerDemo } from "./examples/message-scroller/message-scroller-demo"
+import { MessageScrollerGroupChat } from "./examples/message-scroller/message-scroller-group-chat"
+import { MessageScrollerLoadHistory } from "./examples/message-scroller/message-scroller-load-history"
+import { MessageScrollerOpeningPosition } from "./examples/message-scroller/message-scroller-opening-position"
+import { MessageScrollerPreviousContext } from "./examples/message-scroller/message-scroller-previous-context"
+import { MessageScrollerScrollable } from "./examples/message-scroller/message-scroller-scrollable"
+import { MessageScrollerStreaming } from "./examples/message-scroller/message-scroller-streaming"
+import { MessageScrollerVisibility } from "./examples/message-scroller/message-scroller-visibility"
+import { ExampleToaster } from "./examples/toast"
 
-const messages = Array.from({ length: 30 }, (_, i) => ({
-  id: `m${i}`,
-  mine: i % 3 === 0,
-  text:
-    i % 3 === 0
-      ? `Question ${i / 3 + 1}: how does this part work?`
-      : `Reply ${i}: here's some detail about how it works, with enough text to wrap onto another line.`,
-}))
-
-function MessageScrollerDemo({ autoScroll = true }: { autoScroll?: boolean }) {
-  return (
-    <div className="h-96 w-md rounded-xl border">
-      <MessageScrollerProvider
-        autoScroll={autoScroll}
-        defaultScrollPosition="end"
-      >
-        <MessageScroller>
-          <MessageScrollerViewport className="p-4">
-            <MessageScrollerContent>
-              {messages.map((m) => (
-                <MessageScrollerItem
-                  key={m.id}
-                  messageId={m.id}
-                  scrollAnchor={m.mine}
-                >
-                  <Message align={m.mine ? "end" : "start"}>
-                    <MessageContent>
-                      <Bubble
-                        variant={m.mine ? "default" : "muted"}
-                        align={m.mine ? "end" : "start"}
-                      >
-                        <BubbleContent>{m.text}</BubbleContent>
-                      </Bubble>
-                    </MessageContent>
-                  </Message>
-                </MessageScrollerItem>
-              ))}
-            </MessageScrollerContent>
-          </MessageScrollerViewport>
-          <MessageScrollerButton />
-        </MessageScroller>
-      </MessageScrollerProvider>
-    </div>
-  )
-}
-
+// Stories follow the upstream shadcn/ui Message Scroller examples:
+// https://ui.shadcn.com/docs/components/base/message-scroller
+// The examples live in ./examples/message-scroller as copies of upstream with
+// Glaze imports. They stream from a fake chat built on the AI SDK
+// (`ai`, `@ai-sdk/react`, `@shadcn/helpers`), as upstream does.
 const meta = {
   title: "Components/Message Scroller",
-  component: MessageScrollerProvider,
+  component: MessageScroller,
   subcomponents: {
-    MessageScroller,
     MessageScrollerButton,
     MessageScrollerContent,
     MessageScrollerItem,
+    MessageScrollerProvider,
     MessageScrollerViewport,
   },
   parameters: {
     docs: {
       description: {
         component:
-          "A scroll container for chat transcripts that handles auto-scroll, anchoring and a jump-to-latest button.",
+          "A scroll container for chat threads: anchors new turns, follows streaming output, keeps context visible when history loads, and exposes scroll and visibility state.",
       },
     },
   },
-  args: { autoScroll: true, defaultScrollPosition: "end" },
-  render: (args) => <MessageScrollerDemo autoScroll={args.autoScroll} />,
-} satisfies Meta<typeof MessageScrollerProvider>
+  decorators: [
+    (Story) => (
+      <div className="w-lg">
+        <Story />
+        <ExampleToaster />
+      </div>
+    ),
+  ],
+} satisfies Meta<typeof MessageScroller>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+// --- Basic ----------------------------------------------------------------
+
+export const Default: Story = { render: () => <MessageScrollerDemo /> }
+
+// --- Variants -------------------------------------------------------------
+
+export const AnchoringTurns: Story = {
+  render: () => <MessageScrollerAnchoring />,
+}
+
+export const GroupChat: Story = { render: () => <MessageScrollerGroupChat /> }
+
+export const KeepingContextVisible: Story = {
+  render: () => <MessageScrollerPreviousContext />,
+}
+
+export const FollowingTheLiveEdge: Story = {
+  render: () => <MessageScrollerStreaming />,
+}
+
+export const OpeningSavedThreads: Story = {
+  render: () => <MessageScrollerOpeningPosition />,
+}
+
+// --- Compositions ---------------------------------------------------------
+
+export const LoadingEarlierMessages: Story = {
+  render: () => <MessageScrollerLoadHistory />,
+}
+
+export const AnimatingNewMessages: Story = {
+  render: () => <MessageScrollerAnimation />,
+}
+
+export const JumpingToMessages: Story = {
+  render: () => <MessageScrollerCommands />,
+}
+
+export const TrackingReaderPosition: Story = {
+  render: () => <MessageScrollerVisibility />,
+}
+
+export const ReadingScrollState: Story = {
+  render: () => <MessageScrollerScrollable />,
+}
