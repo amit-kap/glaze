@@ -69,7 +69,7 @@ Strike out an item with the date when its commit lands.
 49. ~~Kbd~~ — 2026-10-09
 50. ~~Table~~ — 2026-10-09
 51. ~~Skeleton~~ — 2026-10-09
-52. Spinner
+52. ~~Spinner~~ — 2026-10-09
 53. Progress
 54. Carousel
 55. Chart
