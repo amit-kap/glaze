@@ -32,7 +32,7 @@ Strike out an item with the date when its commit lands.
 ## Overlays
 
 20. ~~Dialog~~ — 2026-10-09
-21. Alert Dialog
+21. ~~Alert Dialog~~ — 2026-10-09
 22. Sheet
 23. Drawer
 24. Popover
