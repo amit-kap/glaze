@@ -57,7 +57,7 @@ Strike out an item with the date when its commit lands.
 40. ~~Scroll Area~~ — 2026-10-09
 41. ~~Separator~~ — 2026-10-09
 42. ~~Aspect Ratio~~ — 2026-10-09
-43. Direction
+43. ~~Direction~~ — 2026-10-09
 
 ## Display
 
