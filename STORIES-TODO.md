@@ -56,7 +56,7 @@ Strike out an item with the date when its commit lands.
 39. ~~Resizable~~ — 2026-10-09
 40. ~~Scroll Area~~ — 2026-10-09
 41. ~~Separator~~ — 2026-10-09
-42. Aspect Ratio
+42. ~~Aspect Ratio~~ — 2026-10-09
 43. Direction
 
 ## Display
