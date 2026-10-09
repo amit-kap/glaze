@@ -50,7 +50,7 @@ Strike out an item with the date when its commit lands.
 33. ~~Accordion~~ — 2026-10-09
 34. ~~Collapsible~~ — 2026-10-09
 35. ~~Breadcrumb~~ — 2026-10-09
-36. Navigation Menu
+36. ~~Navigation Menu~~ — 2026-10-09
 37. Pagination
 38. Sidebar
 39. Resizable
