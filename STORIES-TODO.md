@@ -62,7 +62,7 @@ Strike out an item with the date when its commit lands.
 ## Display
 
 44. ~~Card~~ — 2026-10-09
-45. Alert
+45. ~~Alert~~ — 2026-10-09
 46. Avatar
 47. Item
 48. Empty
