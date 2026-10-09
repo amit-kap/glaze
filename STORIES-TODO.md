@@ -39,7 +39,7 @@ Strike out an item with the date when its commit lands.
 25. ~~Hover Card~~ — 2026-10-09
 26. ~~Tooltip~~ — 2026-10-09
 27. ~~Dropdown Menu~~ — 2026-10-09
-28. Context Menu
+28. ~~Context Menu~~ — 2026-10-09
 29. Menubar
 30. Command
 31. Toast (upstream: Sonner)
