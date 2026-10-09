@@ -71,7 +71,7 @@ Strike out an item with the date when its commit lands.
 51. ~~Skeleton~~ — 2026-10-09
 52. ~~Spinner~~ — 2026-10-09
 53. ~~Progress~~ — 2026-10-09
-54. Carousel
+54. ~~Carousel~~ — 2026-10-09
 55. Chart
 
 ## Glaze-only (no upstream examples — review structure only)
