@@ -80,5 +80,5 @@ Strike out an item with the date when its commit lands.
 57. ~~Bubble~~ — 2026-10-09
 58. ~~Marker~~ — 2026-10-09
 59. ~~Message~~ — 2026-10-09
-60. Message Scroller
+60. ~~Message Scroller~~ — 2026-10-09
 61. ~~Questionnaire~~ — 2026-10-09
