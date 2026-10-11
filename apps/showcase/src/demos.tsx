@@ -25,8 +25,17 @@ import {
   XIcon,
 } from "lucide-react"
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@amit-kap/glaze/components/accordion"
-import { Alert, AlertDescription, AlertTitle } from "@amit-kap/glaze/components/alert"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@amit-kap/glaze/components/accordion"
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@amit-kap/glaze/components/alert"
 import {
   Attachment,
   AttachmentAction,
@@ -37,14 +46,38 @@ import {
   AttachmentMedia,
   AttachmentTitle,
 } from "@amit-kap/glaze/components/attachment"
-import { Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarImage } from "@amit-kap/glaze/components/avatar"
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "@amit-kap/glaze/components/avatar"
 import { Badge } from "@amit-kap/glaze/components/badge"
-import { Bubble, BubbleContent, BubbleGroup, BubbleReactions } from "@amit-kap/glaze/components/bubble"
+import {
+  Bubble,
+  BubbleContent,
+  BubbleGroup,
+  BubbleReactions,
+} from "@amit-kap/glaze/components/bubble"
 import { Button } from "@amit-kap/glaze/components/button"
 import { Calendar } from "@amit-kap/glaze/components/calendar"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@amit-kap/glaze/components/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@amit-kap/glaze/components/chart"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@amit-kap/glaze/components/card"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@amit-kap/glaze/components/chart"
 import { Checkbox } from "@amit-kap/glaze/components/checkbox"
+import { ColorPicker } from "@amit-kap/glaze/components/color-picker"
 import {
   Command,
   CommandEmpty,
@@ -86,11 +119,21 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@amit-kap/glaze/components/input-group"
-import { Item, ItemContent, ItemMedia, ItemTitle } from "@amit-kap/glaze/components/item"
+import {
+  Item,
+  ItemContent,
+  ItemMedia,
+  ItemTitle,
+} from "@amit-kap/glaze/components/item"
 import { Kbd, KbdGroup } from "@amit-kap/glaze/components/kbd"
 import { Label } from "@amit-kap/glaze/components/label"
 import { Marker, MarkerContent } from "@amit-kap/glaze/components/marker"
-import { Message, MessageAvatar, MessageContent, MessageFooter } from "@amit-kap/glaze/components/message"
+import {
+  Message,
+  MessageAvatar,
+  MessageContent,
+  MessageFooter,
+} from "@amit-kap/glaze/components/message"
 import {
   Popover,
   PopoverContent,
@@ -99,7 +142,11 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@amit-kap/glaze/components/popover"
-import { Progress, ProgressLabel, ProgressValue } from "@amit-kap/glaze/components/progress"
+import {
+  Progress,
+  ProgressLabel,
+  ProgressValue,
+} from "@amit-kap/glaze/components/progress"
 import {
   Questionnaire,
   QuestionnaireActions,
@@ -116,7 +163,10 @@ import {
   QuestionnaireSubmit,
   QuestionnaireTitle,
 } from "@amit-kap/glaze/components/questionnaire"
-import { RadioGroup, RadioGroupItem } from "@amit-kap/glaze/components/radio-group"
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@amit-kap/glaze/components/radio-group"
 import {
   Select,
   SelectContent,
@@ -141,18 +191,40 @@ import {
   TableHeader,
   TableRow,
 } from "@amit-kap/glaze/components/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@amit-kap/glaze/components/tabs"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@amit-kap/glaze/components/tabs"
 import { Textarea } from "@amit-kap/glaze/components/textarea"
 import { toast } from "@amit-kap/glaze/components/toast"
 import { Toggle } from "@amit-kap/glaze/components/toggle"
-import { ToggleGroup, ToggleGroupItem } from "@amit-kap/glaze/components/toggle-group"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@amit-kap/glaze/components/tooltip"
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@amit-kap/glaze/components/toggle-group"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@amit-kap/glaze/components/tooltip"
 
-const Stack = ({ children, loose }: { children: React.ReactNode; loose?: boolean }) => (
-  <div className={`flex w-full max-w-sm flex-col ${loose ? "gap-8" : "gap-4"}`}>{children}</div>
+const Stack = ({
+  children,
+  loose,
+}: {
+  children: React.ReactNode
+  loose?: boolean
+}) => (
+  <div className={`flex w-full max-w-sm flex-col ${loose ? "gap-8" : "gap-4"}`}>
+    {children}
+  </div>
 )
 const Row = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex flex-wrap items-center justify-center gap-2">{children}</div>
+  <div className="flex flex-wrap items-center justify-center gap-2">
+    {children}
+  </div>
 )
 
 /* ---------- actions ---------- */
@@ -162,7 +234,9 @@ export function ButtonDemo() {
   return (
     <div className="flex flex-col items-center gap-6">
       <Row>
-        <Button onClick={() => toast.add({ type: "success", title: "Saved" })}>Button</Button>
+        <Button onClick={() => toast.add({ type: "success", title: "Saved" })}>
+          Button
+        </Button>
         <Button variant="outline">Outline</Button>
         <Button variant="secondary">Secondary</Button>
         <Button variant="ghost">Ghost</Button>
@@ -267,7 +341,10 @@ export function ToggleGroupDemo() {
         <ToggleGroupItem value="italic" aria-label="Toggle italic">
           <ItalicIcon />
         </ToggleGroupItem>
-        <ToggleGroupItem value="strikethrough" aria-label="Toggle strikethrough">
+        <ToggleGroupItem
+          value="strikethrough"
+          aria-label="Toggle strikethrough"
+        >
           <UnderlineIcon />
         </ToggleGroupItem>
       </ToggleGroup>
@@ -298,7 +375,9 @@ export function InputDemo() {
       <Field data-invalid>
         <FieldLabel htmlFor="input-invalid">Invalid Input</FieldLabel>
         <Input id="input-invalid" placeholder="Error" aria-invalid />
-        <FieldDescription>This field contains validation errors.</FieldDescription>
+        <FieldDescription>
+          This field contains validation errors.
+        </FieldDescription>
       </Field>
     </Stack>
   )
@@ -337,15 +416,24 @@ export function InputGroupDemo() {
         <InputGroupAddon>
           <InputGroupText>https://</InputGroupText>
         </InputGroupAddon>
-        <InputGroupInput placeholder="example.com" className="ps-0.5!" aria-label="Website" />
+        <InputGroupInput
+          placeholder="example.com"
+          className="ps-0.5!"
+          aria-label="Website"
+        />
         <InputGroupAddon align="inline-end">
           <InputGroupText>.com</InputGroupText>
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupTextarea placeholder="Enter your message" aria-label="Message" />
+        <InputGroupTextarea
+          placeholder="Enter your message"
+          aria-label="Message"
+        />
         <InputGroupAddon align="block-end">
-          <InputGroupText className="text-muted-foreground">120 characters left</InputGroupText>
+          <InputGroupText className="text-muted-foreground">
+            120 characters left
+          </InputGroupText>
         </InputGroupAddon>
       </InputGroup>
     </Stack>
@@ -356,17 +444,29 @@ export function InputGroupDemo() {
 export function CheckboxDemo() {
   return (
     <FieldSet className="w-full max-w-sm">
-      <FieldLegend variant="label">Show these items on the desktop:</FieldLegend>
-      <FieldDescription>Select the items you want to show on the desktop.</FieldDescription>
+      <FieldLegend variant="label">
+        Show these items on the desktop:
+      </FieldLegend>
+      <FieldDescription>
+        Select the items you want to show on the desktop.
+      </FieldDescription>
       <FieldGroup className="gap-3">
         {[
           { id: "hard-disks", label: "Hard disks", checked: true },
           { id: "external-disks", label: "External disks", checked: true },
           { id: "cds-dvds", label: "CDs, DVDs, and iPods", checked: false },
-          { id: "connected-servers", label: "Connected servers", checked: false },
+          {
+            id: "connected-servers",
+            label: "Connected servers",
+            checked: false,
+          },
         ].map((item) => (
           <Field key={item.id} orientation="horizontal">
-            <Checkbox id={item.id} name={item.id} defaultChecked={item.checked} />
+            <Checkbox
+              id={item.id}
+              name={item.id}
+              defaultChecked={item.checked}
+            />
             <FieldLabel htmlFor={item.id} className="font-normal">
               {item.label}
             </FieldLabel>
@@ -382,14 +482,28 @@ export function RadioGroupDemo() {
   return (
     <RadioGroup defaultValue="comfortable" className="w-fit">
       {[
-        { value: "default", label: "Default", description: "Standard spacing for most use cases." },
-        { value: "comfortable", label: "Comfortable", description: "More space between elements." },
-        { value: "compact", label: "Compact", description: "Minimal spacing for dense layouts." },
+        {
+          value: "default",
+          label: "Default",
+          description: "Standard spacing for most use cases.",
+        },
+        {
+          value: "comfortable",
+          label: "Comfortable",
+          description: "More space between elements.",
+        },
+        {
+          value: "compact",
+          label: "Compact",
+          description: "Minimal spacing for dense layouts.",
+        },
       ].map((option) => (
         <Field key={option.value} orientation="horizontal">
           <RadioGroupItem value={option.value} id={`desc-${option.value}`} />
           <FieldContent>
-            <FieldLabel htmlFor={`desc-${option.value}`}>{option.label}</FieldLabel>
+            <FieldLabel htmlFor={`desc-${option.value}`}>
+              {option.label}
+            </FieldLabel>
             <FieldDescription>{option.description}</FieldDescription>
           </FieldContent>
         </Field>
@@ -481,8 +595,32 @@ export function SliderDemo() {
     <Stack loose>
       <Slider defaultValue={[75]} max={100} step={1} aria-label="Volume" />
       <Slider defaultValue={[25, 50]} max={100} step={5} aria-label="Range" />
-      <Slider defaultValue={[50]} max={100} step={1} disabled aria-label="Volume" />
+      <Slider
+        defaultValue={[50]}
+        max={100}
+        step={1}
+        disabled
+        aria-label="Volume"
+      />
     </Stack>
+  )
+}
+
+// Stories: Default, Swatches.
+export function ColorPickerDemo() {
+  return (
+    <ColorPicker
+      className="max-w-72"
+      defaultValue="#6B97FF"
+      swatches={[
+        "#171717",
+        "#E7000B",
+        "#A65F00",
+        "#008236",
+        "#155DFC",
+        "#6B97FF",
+      ]}
+    />
   )
 }
 
@@ -493,12 +631,16 @@ export function FieldDemo() {
       <Field>
         <FieldLabel htmlFor="field-username">Username</FieldLabel>
         <Input id="field-username" type="text" placeholder="Max Leiter" />
-        <FieldDescription>Choose a unique username for your account.</FieldDescription>
+        <FieldDescription>
+          Choose a unique username for your account.
+        </FieldDescription>
       </Field>
       <Field data-invalid>
         <FieldLabel htmlFor="field-invalid">Invalid Input</FieldLabel>
         <Input id="field-invalid" placeholder="Error" aria-invalid />
-        <FieldDescription>This field contains validation errors.</FieldDescription>
+        <FieldDescription>
+          This field contains validation errors.
+        </FieldDescription>
       </Field>
     </FieldGroup>
   )
@@ -510,25 +652,29 @@ const panels = [
   {
     value: "overview",
     title: "Overview",
-    description: "View your key metrics and recent project activity. Track progress across all your active projects.",
+    description:
+      "View your key metrics and recent project activity. Track progress across all your active projects.",
     content: "You have 12 active projects and 3 pending tasks.",
   },
   {
     value: "analytics",
     title: "Analytics",
-    description: "Track performance and user engagement metrics. Monitor trends and identify growth opportunities.",
+    description:
+      "Track performance and user engagement metrics. Monitor trends and identify growth opportunities.",
     content: "Page views are up 25% compared to last month.",
   },
   {
     value: "reports",
     title: "Reports",
-    description: "Generate and download your detailed reports. Export data in multiple formats for analysis.",
+    description:
+      "Generate and download your detailed reports. Export data in multiple formats for analysis.",
     content: "You have 5 reports ready and available to export.",
   },
   {
     value: "settings",
     title: "Settings",
-    description: "Manage your account preferences and options. Customize your experience to fit your needs.",
+    description:
+      "Manage your account preferences and options. Customize your experience to fit your needs.",
     content: "Configure notifications, security, and themes.",
   },
 ]
@@ -552,7 +698,9 @@ export function TabsDemo() {
                 <CardTitle>{panel.title}</CardTitle>
                 <CardDescription>{panel.description}</CardDescription>
               </CardHeader>
-              <CardContent className="text-body text-muted-foreground">{panel.content}</CardContent>
+              <CardContent className="text-body text-muted-foreground">
+                {panel.content}
+              </CardContent>
             </Card>
           </TabsContent>
         ))}
@@ -575,18 +723,23 @@ export function AccordionDemo() {
       <AccordionItem value="shipping">
         <AccordionTrigger>What are your shipping options?</AccordionTrigger>
         <AccordionContent>
-          We offer standard (5-7 days), express (2-3 days), and overnight shipping. Free shipping on international orders.
+          We offer standard (5-7 days), express (2-3 days), and overnight
+          shipping. Free shipping on international orders.
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="returns">
         <AccordionTrigger>What is your return policy?</AccordionTrigger>
         <AccordionContent>
-          Returns accepted within 30 days. Items must be unused and in original packaging. Refunds processed within 5-7 business days.
+          Returns accepted within 30 days. Items must be unused and in original
+          packaging. Refunds processed within 5-7 business days.
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="support">
         <AccordionTrigger>How can I contact customer support?</AccordionTrigger>
-        <AccordionContent>Reach us via email, live chat, or phone. We respond within 24 hours during business days.</AccordionContent>
+        <AccordionContent>
+          Reach us via email, live chat, or phone. We respond within 24 hours
+          during business days.
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   )
@@ -645,7 +798,11 @@ export function TooltipDemo() {
       <Row>
         {(["left", "top", "bottom", "right"] as const).map((side) => (
           <Tooltip key={side}>
-            <TooltipTrigger render={<Button variant="outline" className="w-fit capitalize" />}>{side}</TooltipTrigger>
+            <TooltipTrigger
+              render={<Button variant="outline" className="w-fit capitalize" />}
+            >
+              {side}
+            </TooltipTrigger>
             <TooltipContent side={side}>
               <p>Add to library</p>
             </TooltipContent>
@@ -653,7 +810,15 @@ export function TooltipDemo() {
         ))}
       </Row>
       <Tooltip>
-        <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Save changes" />}>
+        <TooltipTrigger
+          render={
+            <Button
+              variant="outline"
+              size="icon-sm"
+              aria-label="Save changes"
+            />
+          }
+        >
           <SaveIcon />
         </TooltipTrigger>
         <TooltipContent>
@@ -668,7 +833,9 @@ export function TooltipDemo() {
 export function PopoverDemo() {
   return (
     <Popover>
-      <PopoverTrigger render={<Button variant="outline" />}>Open popover</PopoverTrigger>
+      <PopoverTrigger render={<Button variant="outline" />}>
+        Open popover
+      </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <PopoverHeader>
@@ -686,7 +853,11 @@ export function PopoverDemo() {
             ].map(([id, label, value]) => (
               <div key={id} className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor={`demo-${id}`}>{label}</Label>
-                <Input id={`demo-${id}`} defaultValue={value} className="col-span-2" />
+                <Input
+                  id={`demo-${id}`}
+                  defaultValue={value}
+                  className="col-span-2"
+                />
               </div>
             ))}
           </div>
@@ -700,7 +871,9 @@ export function PopoverDemo() {
 export function DropdownMenuDemo() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="outline" />}>Open</DropdownMenuTrigger>
+      <DropdownMenuTrigger render={<Button variant="outline" />}>
+        Open
+      </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start">
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -763,17 +936,26 @@ export function AlertDemo() {
       <Alert>
         <CheckCircle2Icon />
         <AlertTitle>Payment successful</AlertTitle>
-        <AlertDescription>Your payment of $29.99 has been processed. A receipt has been sent to your email address.</AlertDescription>
+        <AlertDescription>
+          Your payment of $29.99 has been processed. A receipt has been sent to
+          your email address.
+        </AlertDescription>
       </Alert>
       <Alert>
         <InfoIcon />
         <AlertTitle>New feature available</AlertTitle>
-        <AlertDescription>We&apos;ve added dark mode support. You can enable it in your account settings.</AlertDescription>
+        <AlertDescription>
+          We&apos;ve added dark mode support. You can enable it in your account
+          settings.
+        </AlertDescription>
       </Alert>
       <Alert variant="destructive">
         <AlertCircleIcon />
         <AlertTitle>Payment failed</AlertTitle>
-        <AlertDescription>Your payment could not be processed. Please check your payment method and try again.</AlertDescription>
+        <AlertDescription>
+          Your payment could not be processed. Please check your payment method
+          and try again.
+        </AlertDescription>
       </Alert>
     </div>
   )
@@ -856,7 +1038,7 @@ export function TypographyDemo() {
       <h2 className="font-heading text-display font-strong text-balance">
         Designing for the quiet hours
       </h2>
-      <p className="text-muted-foreground text-pretty">
+      <p className="text-pretty text-muted-foreground">
         Most of a team's work happens between meetings, in the long stretches
         where nobody is watching the dashboard. A good tool stays out of the way
         then and speaks up only when something needs a decision.
@@ -865,17 +1047,16 @@ export function TypographyDemo() {
         Start with the defaults
       </h3>
       <p className="text-pretty">
-        People rarely change settings, so the defaults are the product. Pick
-        the calmest option that still works for a busy Monday, and make the
-        louder ones easy to find when they're needed.
+        People rarely change settings, so the defaults are the product. Pick the
+        calmest option that still works for a busy Monday, and make the louder
+        ones easy to find when they're needed.
       </p>
       <h4 className="mt-2 font-heading text-title font-medium">
         Let the content lead
       </h4>
       <p className="text-pretty">
         Chrome should frame the work, not compete with it. Keep borders light,
-        reserve colour for state, and let a clear type scale do the
-        organising.
+        reserve colour for state, and let a clear type scale do the organising.
       </p>
       <p className="mt-2 text-caption text-muted-foreground">
         Written by the design team. Last updated October 11.
@@ -897,13 +1078,18 @@ export function BubbleDemo() {
         <BubbleContent>This is the secondary variant.</BubbleContent>
       </Bubble>
       <Bubble variant="muted">
-        <BubbleContent>This one is muted. It uses a lower emphasis color for the chat bubble.</BubbleContent>
+        <BubbleContent>
+          This one is muted. It uses a lower emphasis color for the chat bubble.
+        </BubbleContent>
         <BubbleReactions role="img" aria-label="Reaction: thumbs up">
           <span>👍</span>
         </BubbleReactions>
       </Bubble>
       <Bubble variant="tinted" align="end">
-        <BubbleContent>This one is tinted. The tint is a softer color derived from the primary color.</BubbleContent>
+        <BubbleContent>
+          This one is tinted. The tint is a softer color derived from the
+          primary color.
+        </BubbleContent>
       </Bubble>
       <Bubble variant="outline">
         <BubbleContent>We can also use an outlined variant.</BubbleContent>
@@ -917,11 +1103,13 @@ export function BubbleDemo() {
       <Bubble variant="ghost">
         <BubbleContent className="space-y-3">
           <p>
-            Ghost bubbles work for assistant text, <strong>markdown</strong>, and other content that should not be framed.
+            Ghost bubbles work for assistant text, <strong>markdown</strong>,
+            and other content that should not be framed.
           </p>
           <p>
-            This is perfect for assistant messages that should not have a frame and can take the full width of the container. You can
-            also render <code>code</code> in it.
+            This is perfect for assistant messages that should not have a frame
+            and can take the full width of the container. You can also render{" "}
+            <code>code</code> in it.
           </p>
         </BubbleContent>
       </Bubble>
@@ -930,7 +1118,11 @@ export function BubbleDemo() {
 }
 
 const me = { src: "https://github.com/shadcn.png", alt: "@me", fallback: "ME" }
-const rabbit = { src: "https://github.com/evilrabbit.png", alt: "@rabbit", fallback: "R" }
+const rabbit = {
+  src: "https://github.com/evilrabbit.png",
+  alt: "@rabbit",
+  fallback: "R",
+}
 
 function Person({ src, alt, fallback }: typeof me) {
   return (
@@ -977,7 +1169,9 @@ export function MessageDemo() {
         <MessageContent>
           <BubbleGroup>
             <Bubble variant="muted">
-              <BubbleContent>It&apos;s always a one-line change 😭.</BubbleContent>
+              <BubbleContent>
+                It&apos;s always a one-line change 😭.
+              </BubbleContent>
             </Bubble>
             <Bubble variant="muted">
               <BubbleContent>Alright, let me take a look.</BubbleContent>
@@ -1081,18 +1275,28 @@ export function AvatarDemo() {
     <div className="flex flex-col items-center gap-6">
       <div className="flex flex-row flex-wrap items-center justify-center gap-6 md:gap-12">
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" className="grayscale" />
+          <AvatarImage
+            src="https://github.com/shadcn.png"
+            alt="@shadcn"
+            className="grayscale"
+          />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <Avatar>
-          <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
+          <AvatarImage
+            src="https://github.com/evilrabbit.png"
+            alt="@evilrabbit"
+          />
           <AvatarFallback>ER</AvatarFallback>
-          <AvatarBadge className="bg-success " />
+          <AvatarBadge className="bg-success" />
         </Avatar>
         <AvatarGroup className="grayscale">
           {people.map((person) => (
             <Avatar key={person.handle}>
-              <AvatarImage src={`https://github.com/${person.handle}.png`} alt={`@${person.handle}`} />
+              <AvatarImage
+                src={`https://github.com/${person.handle}.png`}
+                alt={`@${person.handle}`}
+              />
               <AvatarFallback>{person.initials}</AvatarFallback>
             </Avatar>
           ))}
@@ -1186,7 +1390,15 @@ export function TableDemo() {
 // Story: Default.
 export function CalendarDemo() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
-  return <Calendar captionLayout="dropdown" mode="single" selected={date} onSelect={setDate} className="rounded-container border" />
+  return (
+    <Calendar
+      captionLayout="dropdown"
+      mode="single"
+      selected={date}
+      onSelect={setDate}
+      className="rounded-container border"
+    />
+  )
 }
 
 const visitors = [
@@ -1230,7 +1442,11 @@ const visitorsConfig = {
 
 type Device = "desktop" | "mobile"
 
-const formatDay = (value: string) => new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+const formatDay = (value: string) =>
+  new Date(value).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  })
 
 // Story: Default (interactive bar chart).
 export function ChartDemo() {
@@ -1247,7 +1463,9 @@ export function ChartDemo() {
       <CardHeader className="flex flex-col items-stretch border-b p-0! sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:py-0!">
           <CardTitle>Bar Chart - Interactive</CardTitle>
-          <CardDescription>Showing total visitors for the last 3 months</CardDescription>
+          <CardDescription>
+            Showing total visitors for the last 3 months
+          </CardDescription>
         </div>
         <ToggleGroup
           aria-label="Chart device"
@@ -1259,7 +1477,7 @@ export function ChartDemo() {
             <ToggleGroupItem
               key={chart}
               value={chart}
-              className="relative z-30 flex h-auto flex-1 flex-col justify-center gap-1 rounded-none border-t px-6 py-4 text-start data-[pressed]:bg-muted/50 sm:border-t-0 sm:border-s sm:px-8 sm:py-6"
+              className="relative z-30 flex h-auto flex-1 flex-col justify-center gap-1 rounded-none border-t px-6 py-4 text-start data-[pressed]:bg-muted/50 sm:border-s sm:border-t-0 sm:px-8 sm:py-6"
             >
               <span className="text-caption text-muted-foreground">
                 {visitorsConfig[chart].label}
@@ -1272,10 +1490,24 @@ export function ChartDemo() {
         </ToggleGroup>
       </CardHeader>
       <CardContent className="px-2 sm:p-6">
-        <ChartContainer config={visitorsConfig} className="aspect-auto h-[250px] w-full">
-          <BarChart accessibilityLayer data={visitors} margin={{ left: 12, right: 12 }}>
+        <ChartContainer
+          config={visitorsConfig}
+          className="aspect-auto h-[250px] w-full"
+        >
+          <BarChart
+            accessibilityLayer
+            data={visitors}
+            margin={{ left: 12, right: 12 }}
+          >
             <CartesianGrid vertical={false} />
-            <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} minTickGap={32} tickFormatter={formatDay} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={formatDay}
+            />
             <ChartTooltip
               content={
                 <ChartTooltipContent
@@ -1284,7 +1516,11 @@ export function ChartDemo() {
                   labelFormatter={(value) =>
                     typeof value !== "string" && typeof value !== "number"
                       ? value
-                      : new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                      : new Date(value).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
                   }
                 />
               }
@@ -1302,12 +1538,27 @@ export function ChartDemo() {
 const questionnaireItems = [
   {
     choices: [
-      { description: "Show what the agent ran and what came back.", label: "Tool call timeline", value: "tool-calls" },
-      { description: "Ask before sensitive or destructive actions.", label: "Approval checkpoints", value: "approvals" },
-      { description: "Make delegated work and results easier to follow.", label: "Sub-agent handoffs", value: "handoffs" },
+      {
+        description: "Show what the agent ran and what came back.",
+        label: "Tool call timeline",
+        value: "tool-calls",
+      },
+      {
+        description: "Ask before sensitive or destructive actions.",
+        label: "Approval checkpoints",
+        value: "approvals",
+      },
+      {
+        description: "Make delegated work and results easier to follow.",
+        label: "Sub-agent handoffs",
+        value: "handoffs",
+      },
     ],
     description: "Choose a direction or describe another task.",
-    input: { label: "Another agent feature", placeholder: "Describe another feature…" },
+    input: {
+      label: "Another agent feature",
+      placeholder: "Describe another feature…",
+    },
     name: "direction",
     required: true,
     title: "What should the agent build next?",
@@ -1360,17 +1611,33 @@ export function QuestionnaireDemo() {
     >
       <QuestionnaireProgress />
       {questionnaireItems.map((question) => (
-        <QuestionnaireItem key={question.name} multiple={"multiple" in question && question.multiple} name={question.name} required={question.required}>
+        <QuestionnaireItem
+          key={question.name}
+          multiple={"multiple" in question && question.multiple}
+          name={question.name}
+          required={question.required}
+        >
           <QuestionnaireTitle>{question.title}</QuestionnaireTitle>
-          <QuestionnaireDescription>{question.description}</QuestionnaireDescription>
+          <QuestionnaireDescription>
+            {question.description}
+          </QuestionnaireDescription>
           <QuestionnaireChoices>
             {question.choices.map((choice) => (
               <QuestionnaireChoice key={choice.value} value={choice.value}>
                 <span className="font-medium">{choice.label}</span>
-                {"description" in choice ? <span className="text-muted-foreground">{choice.description}</span> : null}
+                {"description" in choice ? (
+                  <span className="text-muted-foreground">
+                    {choice.description}
+                  </span>
+                ) : null}
               </QuestionnaireChoice>
             ))}
-            {"input" in question ? <QuestionnaireInput aria-label={question.input.label} placeholder={question.input.placeholder} /> : null}
+            {"input" in question ? (
+              <QuestionnaireInput
+                aria-label={question.input.label}
+                placeholder={question.input.placeholder}
+              />
+            ) : null}
           </QuestionnaireChoices>
           <QuestionnaireError />
         </QuestionnaireItem>

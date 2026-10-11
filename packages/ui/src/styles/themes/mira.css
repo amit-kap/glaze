@@ -61,7 +61,7 @@
   --surface: oklch(0.205 0 0);
   --ink: oklch(0.985 0 0);
   --ink-muted: oklch(0.708 0 0);
-  --line: oklch(1 0 0 / 10%);
+  --line: oklch(0.269 0 0);
   --brand: oklch(0.922 0 0);
   --brand-ink: oklch(0.205 0 0);
   --danger: oklch(0.704 0.191 22.216);

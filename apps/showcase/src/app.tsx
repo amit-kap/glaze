@@ -1,4 +1,4 @@
-import type * as React from "react"
+import * as React from "react"
 
 import { Card } from "@amit-kap/glaze/components/card"
 import { ControlPanel } from "./control-panel"
@@ -13,6 +13,7 @@ import {
   CalendarDemo,
   ChartDemo,
   CheckboxDemo,
+  ColorPickerDemo,
   CommandDemo,
   DropdownMenuDemo,
   FieldDemo,
@@ -54,6 +55,7 @@ const tiles: { name: string; demo: () => React.ReactNode; wide?: boolean }[] = [
   { name: "Switch", demo: SwitchDemo },
   { name: "Select", demo: SelectDemo },
   { name: "Slider", demo: SliderDemo },
+  { name: "ColorPicker", demo: ColorPickerDemo },
   { name: "Field", demo: FieldDemo },
   { name: "Questionnaire", demo: QuestionnaireDemo, wide: true },
   { name: "Tabs", demo: TabsDemo },
@@ -77,10 +79,13 @@ const tiles: { name: string; demo: () => React.ReactNode; wide?: boolean }[] = [
 ]
 
 export function App() {
+  const [customizing, setCustomizing] = React.useState(false)
   return (
     <div className="min-h-svh bg-background text-foreground">
       {/* Tiles fill the width, with room at the bottom for the settings bar. */}
-      <div className="px-3 pt-3 pb-32 sm:px-6 sm:pt-6">
+      <div
+        className={`px-3 pt-3 pb-32 transition-[padding] duration-(--duration-moderate) ease-standard motion-reduce:transition-none sm:px-6 sm:pt-6 ${customizing ? "lg:pe-[calc(--spacing(80)+--spacing(6))]" : ""}`}
+      >
         <main className="grid grid-flow-dense grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {tiles.map(({ name, demo: Demo, wide }) => (
             <Card
@@ -99,7 +104,7 @@ export function App() {
           ))}
         </main>
       </div>
-      <ControlPanel />
+      <ControlPanel open={customizing} onOpenChange={setCustomizing} />
     </div>
   )
 }
