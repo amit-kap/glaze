@@ -55,6 +55,9 @@ const out = {
   version: pkg.version,
   description: "Glaze: shadcn/ui on Base UI, themed entirely through tokens.",
   license: "MIT",
+  // npm checks provenance against this: it must name the repository that builds it.
+  repository: { type: "git", url: "git+https://github.com/amit-kap/glaze.git", directory: "packages/ui" },
+  homepage: "https://github.com/amit-kap/glaze",
   type: "module",
   sideEffects: ["**/*.css"],
   bin: { glaze: "./bin/glaze.js" },

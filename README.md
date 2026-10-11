@@ -222,14 +222,14 @@ The toolbar provides the **Theme**, **Mode** and **Density** switches. Link to a
 
 ### Releasing
 
-1. Bump `version` in `packages/ui/package.json` and commit.
-2. Build, tag and publish:
+Releases run in GitHub Actions (`.github/workflows/release.yml`):
 
-   ```bash
-   npm run release:glaze -- --push --npm
-   ```
+1. Bump `version` in `packages/ui/package.json` and merge it to `main`.
+2. The Release workflow sees that `v<version>` doesn't exist yet. It checks, builds, publishes to npm with [trusted publishing](https://docs.npmjs.com/trusted-publishers) (no token or 2FA code; the package gets provenance), then commits the build to the `release` branch and tags it `v<version>`.
 
-   This builds the package, tags `v<version>` on the `release` branch, pushes it and publishes to npm. `--npm` prompts for your npm two-factor code.
+It can also be started by hand from the Actions tab; a version that's already tagged is skipped. One-time setup: on npmjs.com, add a trusted publisher to `@amit-kap/glaze` for this repository and the workflow file `release.yml`.
+
+To release from your machine instead: `npm run release:glaze -- --npm --push` (prompts for your npm two-factor code).
 
 `npm run build:glaze` builds `packages/ui/dist` without releasing.
 
