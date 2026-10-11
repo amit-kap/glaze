@@ -37,6 +37,18 @@ Both are peer dependencies supplied by your project.
 
 ## Installation
 
+In your project's folder, run:
+
+```bash
+npx @amit-kap/glaze init --theme maia
+```
+
+This installs the package, imports Glaze's styles and the theme into your main CSS file (the one with `@import "tailwindcss"`), and wraps your app in `ThemeProvider`. Leave out `--theme` to choose from a list. Other options: `--mode light|dark|system`, `--density comfortable|compact`, `--config glaze.config.json` (your own theme, see below), and `--css` / `--entry` to point at the files yourself. Running it again switches the theme.
+
+If your entry file isn't the usual `createRoot(…).render(<App />)` shape, it prints the lines to add instead.
+
+To set it up by hand instead, install the package and follow [Getting started](#getting-started):
+
 ```bash
 npm install @amit-kap/glaze
 ```
@@ -142,6 +154,16 @@ import { themeScript } from "@amit-kap/glaze/theme"
 ```
 
 ### Custom themes
+
+The quickest way is a config (`glaze.config.json`): a built-in theme to start from plus the inputs to change. Build one in the showcase's Customize panel, or see `packages/ui/glaze.config.example.json`. Then:
+
+```bash
+npx @amit-kap/glaze init --config glaze.config.json
+```
+
+It generates `<name>.css` and wires it in; `npx glaze theme glaze.config.json` regenerates just the CSS. In this repository, `npm run theme -- <config.json>` does the same.
+
+To write a theme by hand:
 
 1. Create `<name>.css`, either in `packages/ui/src/styles/themes/` or in your project.
 2. Under `[data-theme="<name>"]`, set the required inputs (`--canvas`, `--surface`, `--ink`, `--brand`, `--radius`, …) for both light and dark mode.
