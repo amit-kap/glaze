@@ -6,7 +6,7 @@ Glaze includes components adapted from the following projects.
 
 https://github.com/shadcn-ui/ui
 
-The components in `components/` start from shadcn/ui's Base UI (Nova) components, converted to Glaze tokens.
+The components in `components/` start from shadcn/ui's Base UI (Nova) components, converted to Glaze tokens. `styles/shadcn.css` is a copy of the `shadcn` package's `tailwind.css` (animations and variants).
 
 ```
 MIT License
