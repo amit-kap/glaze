@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "acme",
+  "extends": "maia",
+  "defaults": { "mode": "system", "density": "compact" },
+  "fonts": ["@fontsource-variable/inter"],
+  "color": {
+    "light": {
+      "brand": "oklch(0.51 0.23 277)",
+      "brand-ink": "oklch(0.98 0 0)"
+    },
+    "dark": { "brand": "oklch(0.68 0.16 277)", "brand-ink": "oklch(0.15 0 0)" }
+  },
+  "shape": { "radius": "0.5rem" },
+  "type": { "typeface-sans": "\"Inter Variable\", sans-serif" },
+  "components": { "button-radius-sm": "9999px" }
+}

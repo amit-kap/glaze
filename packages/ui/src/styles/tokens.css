@@ -199,8 +199,10 @@
 :where(:root, [data-theme], [data-density], .dark) {
   /* space and size */
   --space: calc(var(--space-base) * var(--density));
-  --control-xs: calc(var(--space) * 6);
-  --control-sm: calc(var(--space) * 7);
-  --control-md: calc(var(--space) * 8);
-  --control-lg: calc(var(--space) * 9);
+  /* control heights: --control-height (optional input) is the default size,
+     8 spacing steps unless a theme sets it; the others are a step apart */
+  --control-md: calc(var(--control-height, calc(var(--space-base) * 8)) * var(--density));
+  --control-xs: calc(var(--control-md) - var(--space) * 2);
+  --control-sm: calc(var(--control-md) - var(--space));
+  --control-lg: calc(var(--control-md) + var(--space));
 }

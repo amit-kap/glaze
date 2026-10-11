@@ -34,12 +34,14 @@ import {
   ToggleDemo,
   ToggleGroupDemo,
   TooltipDemo,
+  TypographyDemo,
 } from "./demos"
 
 // One tile per component, showing its variants, with the component's name in
 // the footer strip. `wide` tiles span both columns.
 const tiles: { name: string; demo: () => React.ReactNode; wide?: boolean }[] = [
   { name: "Button", demo: ButtonDemo, wide: true },
+  { name: "Typography", demo: TypographyDemo, wide: true },
   { name: "Badge", demo: BadgeDemo },
   { name: "Toggle", demo: ToggleDemo },
   { name: "ToggleGroup", demo: ToggleGroupDemo },

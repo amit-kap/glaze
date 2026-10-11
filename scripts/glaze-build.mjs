@@ -40,6 +40,7 @@ writeFileSync(
   readFileSync(join(src, "styles/tokens.css"), "utf8").replace(/^ \* Spec: .*\n/m, "")
 )
 cpSync(join(src, "styles/themes"), join(dist, "styles/themes"), { recursive: true })
+cpSync(join(src, "styles/shadcn.css"), join(dist, "styles/shadcn.css"))
 const globals = readFileSync(join(src, "styles/globals.css"), "utf8")
   .split("\n")
   .filter((line) => !/^@source /.test(line))
@@ -55,8 +56,12 @@ const out = {
   version: pkg.version,
   description: "Glaze: shadcn/ui on Base UI, themed entirely through tokens.",
   license: "MIT",
+  // npm checks provenance against this: it must name the repository that builds it.
+  repository: { type: "git", url: "git+https://github.com/amit-kap/glaze.git", directory: "packages/ui" },
+  homepage: "https://github.com/amit-kap/glaze",
   type: "module",
   sideEffects: ["**/*.css"],
+  bin: { glaze: "./bin/glaze.js" },
   exports: {
     "./globals.css": "./styles/globals.css",
     "./tokens.css": "./styles/tokens.css",

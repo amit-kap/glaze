@@ -1,0 +1,22 @@
+# Weekly dependency updates, grouped so they arrive as a few PRs rather than
+# dozens. CI runs on each one; merge when it passes.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Minor and patch updates of everything, in one PR.
+      minor-and-patch:
+        update-types: [minor, patch]
+    # Major versions come as one PR per package, since they can break.
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]

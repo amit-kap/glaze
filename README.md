@@ -10,6 +10,8 @@ Glaze is a React component library built on [shadcn/ui](https://ui.shadcn.com) a
 
 This repository is a Vite monorepo containing the library, a web app, a showcase and Storybook.
 
+**Live:** [showcase and theme builder](https://amit-kap.github.io/glaze/) · [Storybook](https://amit-kap.github.io/glaze/storybook/)
+
 ## Contents
 
 - [Features](#features)
@@ -36,6 +38,18 @@ This repository is a Vite monorepo containing the library, a web app, a showcase
 Both are peer dependencies supplied by your project.
 
 ## Installation
+
+In your project's folder, run:
+
+```bash
+npx @amit-kap/glaze init --theme maia
+```
+
+This installs the package, imports Glaze's styles and the theme into your main CSS file (the one with `@import "tailwindcss"`), and wraps your app in `ThemeProvider`. Leave out `--theme` to choose from a list. Other options: `--mode light|dark|system`, `--density comfortable|compact`, `--config glaze.config.json` (your own theme, see below), and `--css` / `--entry` to point at the files yourself. Running it again switches the theme.
+
+If your entry file isn't the usual `createRoot(…).render(<App />)` shape, it prints the lines to add instead.
+
+To set it up by hand instead, install the package and follow [Getting started](#getting-started):
 
 ```bash
 npm install @amit-kap/glaze
@@ -92,7 +106,7 @@ Theme, mode and density are controlled by attributes on `<html>` and can be comb
 
 | Setting | Attribute | Values |
 |---|---|---|
-| Theme | `data-theme` | none or `nova` (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or a custom theme |
+| Theme | `data-theme` | none or `nova` (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, `gr8r`, or a custom theme |
 | Mode | `class="dark"` | none (light), `dark` |
 | Density | `data-density` | none or `comfortable`, `compact` |
 
@@ -118,6 +132,7 @@ Theme, mode and density are controlled by attributes on `<html>` and can be comb
 | `luma` | Inter, pill controls, very round cards, lifted shadows |
 | `sera` | Taupe, Noto Sans with Playfair Display headings, square corners, tall controls |
 | `rhea` | Inter, soft rounded controls and cards |
+| `gr8r` | Geist, warm neutrals, indigo brand, small type, 6px controls |
 
 ### Switching at runtime
 
@@ -142,6 +157,16 @@ import { themeScript } from "@amit-kap/glaze/theme"
 ```
 
 ### Custom themes
+
+The quickest way is a config (`glaze.config.json`): a built-in theme to start from plus the inputs to change. Build one in the showcase's Customize panel, or see `packages/ui/glaze.config.example.json`. Then:
+
+```bash
+npx @amit-kap/glaze init --config glaze.config.json
+```
+
+It generates `<name>.css` and wires it in; `npx glaze theme glaze.config.json` regenerates just the CSS. In this repository, `npm run theme -- <config.json>` does the same.
+
+To write a theme by hand:
 
 1. Create `<name>.css`, either in `packages/ui/src/styles/themes/` or in your project.
 2. Under `[data-theme="<name>"]`, set the required inputs (`--canvas`, `--surface`, `--ink`, `--brand`, `--radius`, …) for both light and dark mode.
@@ -203,7 +228,7 @@ Rules:
 
 ### Showcase
 
-`apps/showcase` presents the library in the style of fluidfunctionalism.com: a centre column of live components and a floating settings panel (Theme, Mode, Density) in the top right.
+`apps/showcase` presents the library in the style of fluidfunctionalism.com: a centre column of live components and a floating settings panel in the top right (Theme, Mode, and a Customize section that builds and exports your own theme). It's published at [https://amit-kap.github.io/glaze/](https://amit-kap.github.io/glaze/).
 
 ```bash
 npm run dev -w showcase     # http://localhost:5180
@@ -211,7 +236,7 @@ npm run dev -w showcase     # http://localhost:5180
 
 ### Storybook
 
-Every component in `packages/ui` has a story in `apps/storybook/src/stories`.
+Every component in `packages/ui` has a story in `apps/storybook/src/stories`. It's published at [https://amit-kap.github.io/glaze/storybook/](https://amit-kap.github.io/glaze/storybook/).
 
 ```bash
 npm run dev -w storybook    # http://localhost:6006
@@ -220,16 +245,22 @@ npm run build -w storybook  # static build in apps/storybook/dist
 
 The toolbar provides the **Theme**, **Mode** and **Density** switches. Link to a specific state with `&globals=theme:maia;mode:dark;density:compact`. Test themes that should not ship belong in `apps/storybook/src/themes`; they appear in the Theme switch but are not part of the package.
 
+Both are deployed to GitHub Pages on every push to `main` (`.github/workflows/pages.yml`).
+
+### Dependencies
+
+Dependabot (`.github/dependabot.yml`) opens weekly PRs: one for all minor and patch updates, one per major update, and one for GitHub Actions. CI runs on each; merge when it passes.
+
 ### Releasing
 
-1. Bump `version` in `packages/ui/package.json` and commit.
-2. Build, tag and publish:
+Releases run in GitHub Actions (`.github/workflows/release.yml`):
 
-   ```bash
-   npm run release:glaze -- --push --npm
-   ```
+1. Bump `version` in `packages/ui/package.json` and merge it to `main`.
+2. The Release workflow sees that `v<version>` doesn't exist yet. It checks, builds, publishes to npm with [trusted publishing](https://docs.npmjs.com/trusted-publishers) (no token or 2FA code; the package gets provenance), then commits the build to the `release` branch and tags it `v<version>`.
 
-   This builds the package, tags `v<version>` on the `release` branch, pushes it and publishes to npm. `--npm` prompts for your npm two-factor code.
+It can also be started by hand from the Actions tab; a version that's already tagged is skipped. One-time setup: on npmjs.com, add a trusted publisher to `@amit-kap/glaze` for this repository and the workflow file `release.yml`.
+
+To release from your machine instead: `npm run release:glaze -- --npm --push` (prompts for your npm two-factor code).
 
 `npm run build:glaze` builds `packages/ui/dist` without releasing.
 

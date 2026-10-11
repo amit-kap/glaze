@@ -11,7 +11,8 @@
       "name": "showcase",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "-w", "showcase"],
-      "port": 5180
+      "port": 5180,
+      "autoPort": true
     }
   ]
 }
