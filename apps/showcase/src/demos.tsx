@@ -1186,7 +1186,7 @@ export function TableDemo() {
 // Story: Default.
 export function CalendarDemo() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
-  return <Calendar captionLayout="dropdown" mode="single" selected={date} onSelect={setDate} className="rounded-control border" />
+  return <Calendar captionLayout="dropdown" mode="single" selected={date} onSelect={setDate} className="rounded-container border" />
 }
 
 const visitors = [
