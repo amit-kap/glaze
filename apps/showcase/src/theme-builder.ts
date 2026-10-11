@@ -13,6 +13,7 @@ import mira from "@amit-kap/glaze/themes/mira.css?raw"
 import luma from "@amit-kap/glaze/themes/luma.css?raw"
 import sera from "@amit-kap/glaze/themes/sera.css?raw"
 import rhea from "@amit-kap/glaze/themes/rhea.css?raw"
+import gr8r from "@amit-kap/glaze/themes/gr8r.css?raw"
 
 // The panel's custom-theme state → a Glaze config → the generated stylesheet.
 
@@ -29,6 +30,7 @@ const baseCss: Record<BaseTheme, string> = {
   luma,
   sera,
   rhea,
+  gr8r,
 }
 
 // Fonts the showcase already loads (through the built-in themes).
@@ -76,6 +78,8 @@ export type Values = {
   brandDark: string
   /** Base corner radius in px. */
   radius: number
+  /** Default control height in px, before density. */
+  height: number
   controls: string
   font: string
 }
@@ -86,7 +90,7 @@ export type Custom = { name: string } & Partial<Values>
 export const emptyCustom: Custom = { name: "my-theme" }
 
 export const isCustomized = (c: Custom) =>
-  (["brandLight", "brandDark", "radius", "controls", "font"] as const).some(
+  (["brandLight", "brandDark", "radius", "height", "controls", "font"] as const).some(
     (k) => c[k] !== undefined
   )
 
@@ -99,10 +103,15 @@ export function themeDefaults(base: BaseTheme): Values {
     t[mode].get(key) ?? n[mode].get(key) ?? ""
   const rem = get("light", "--radius").match(/([\d.]+)rem/)
   const family = get("light", "--typeface-sans")
+  // Theme's control height, or 8 spacing steps when it doesn't set one.
+  const px = (v: string) => Number(v.match(/([\d.]+)rem/)?.[1] ?? 0) * 16
+  const height =
+    px(get("light", "--control-height")) || px(get("light", "--space-base")) * 8
   return {
     brandLight: oklchToHex(get("light", "--brand")),
     brandDark: oklchToHex(get("dark", "--brand")),
     radius: rem ? Math.round(Number(rem[1]) * 16) : 0,
+    height: Math.round(height),
     controls: get("light", "--shape-control") === "9999px" ? "pill" : "radius",
     font: fonts.find((f) => f.family === family)?.value ?? "geist",
   }
@@ -175,6 +184,9 @@ export function toConfig(
   if (c.controls === "radius") shape["shape-control"] = "var(--radius)"
   if (c.controls === "pill") shape["shape-control"] = "9999px"
   if (Object.keys(shape).length) config.shape = shape
+
+  if (c.height !== undefined)
+    config.space = { "control-height": `${c.height / 16}rem` }
 
   const font = fonts.find((f) => f.value === c.font)
   if (font) {

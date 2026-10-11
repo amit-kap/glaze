@@ -69,6 +69,7 @@ const themes = [
   { value: "luma", label: "Luma" },
   { value: "sera", label: "Sera" },
   { value: "rhea", label: "Rhea" },
+  { value: "gr8r", label: "Gr8r" },
 ]
 
 const modes = [
@@ -373,6 +374,25 @@ export function ControlPanel() {
                   value={[values.radius]}
                   onValueChange={(v) =>
                     change("radius", Array.isArray(v) ? v[0] : v)
+                  }
+                />
+              </Field>
+              <Field>
+                <div className="flex items-center justify-between">
+                  <FieldLabel htmlFor="panel-height">Control height</FieldLabel>
+                  <span className="text-caption text-muted-foreground">
+                    {values.height}px
+                  </span>
+                </div>
+                <Slider
+                  id="panel-height"
+                  aria-label="Control height"
+                  min={24}
+                  max={48}
+                  step={1}
+                  value={[values.height]}
+                  onValueChange={(v) =>
+                    change("height", Array.isArray(v) ? v[0] : v)
                   }
                 />
               </Field>

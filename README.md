@@ -106,7 +106,7 @@ Theme, mode and density are controlled by attributes on `<html>` and can be comb
 
 | Setting | Attribute | Values |
 |---|---|---|
-| Theme | `data-theme` | none or `nova` (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or a custom theme |
+| Theme | `data-theme` | none or `nova` (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, `gr8r`, or a custom theme |
 | Mode | `class="dark"` | none (light), `dark` |
 | Density | `data-density` | none or `comfortable`, `compact` |
 
@@ -132,6 +132,7 @@ Theme, mode and density are controlled by attributes on `<html>` and can be comb
 | `luma` | Inter, pill controls, very round cards, lifted shadows |
 | `sera` | Taupe, Noto Sans with Playfair Display headings, square corners, tall controls |
 | `rhea` | Inter, soft rounded controls and cards |
+| `gr8r` | Geist, warm neutrals, indigo brand, small type, 6px controls |
 
 ### Switching at runtime
 

@@ -14,6 +14,7 @@ export const builtInThemes = [
   "luma",
   "sera",
   "rhea",
+  "gr8r",
 ] as const
 
 // Inputs that take a value per mode.
@@ -49,7 +50,8 @@ const shapeInputs = [
   "shape-floating",
   "shape-container",
 ] as const
-const spaceInputs = ["space-base"] as const
+// control-height is optional, with a fallback in tokens.css
+const spaceInputs = ["space-base", "control-height"] as const
 const typeInputs = [
   "typeface-sans",
   "typeface-heading",
