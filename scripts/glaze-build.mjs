@@ -40,6 +40,7 @@ writeFileSync(
   readFileSync(join(src, "styles/tokens.css"), "utf8").replace(/^ \* Spec: .*\n/m, "")
 )
 cpSync(join(src, "styles/themes"), join(dist, "styles/themes"), { recursive: true })
+cpSync(join(src, "styles/shadcn.css"), join(dist, "styles/shadcn.css"))
 const globals = readFileSync(join(src, "styles/globals.css"), "utf8")
   .split("\n")
   .filter((line) => !/^@source /.test(line))
