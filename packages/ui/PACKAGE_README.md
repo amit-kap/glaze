@@ -112,7 +112,7 @@ Each theme expresses one of shadcn's styles as tokens.
 
 ## Your own theme
 
-The quickest way is a config: start from a built-in theme and change only what you need. Make one in the [showcase](https://github.com/amit-kap/glaze)'s Customize panel (Config button), or write it:
+The quickest way is a config: start from a built-in theme and change only what you need. Make one in the [showcase](https://amit-kap.github.io/glaze/)'s Customize panel (Config button), or write it:
 
 ```json
 {
