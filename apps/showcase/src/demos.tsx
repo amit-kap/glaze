@@ -91,7 +91,14 @@ import { Kbd, KbdGroup } from "@amit-kap/glaze/components/kbd"
 import { Label } from "@amit-kap/glaze/components/label"
 import { Marker, MarkerContent } from "@amit-kap/glaze/components/marker"
 import { Message, MessageAvatar, MessageContent, MessageFooter } from "@amit-kap/glaze/components/message"
-import { Popover, PopoverContent, PopoverTrigger } from "@amit-kap/glaze/components/popover"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@amit-kap/glaze/components/popover"
 import { Progress, ProgressLabel, ProgressValue } from "@amit-kap/glaze/components/progress"
 import {
   Questionnaire,
@@ -664,10 +671,12 @@ export function PopoverDemo() {
       <PopoverTrigger render={<Button variant="outline" />}>Open popover</PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="leading-none font-medium">Dimensions</h4>
-            <p className="text-body text-muted-foreground">Set the dimensions for the layer.</p>
-          </div>
+          <PopoverHeader>
+            <PopoverTitle>Dimensions</PopoverTitle>
+            <PopoverDescription>
+              Set the dimensions for the layer.
+            </PopoverDescription>
+          </PopoverHeader>
           <div className="grid gap-2">
             {[
               ["width", "Width", "100%"],
@@ -677,7 +686,7 @@ export function PopoverDemo() {
             ].map(([id, label, value]) => (
               <div key={id} className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor={`demo-${id}`}>{label}</Label>
-                <Input id={`demo-${id}`} defaultValue={value} className="col-span-2 h-8" />
+                <Input id={`demo-${id}`} defaultValue={value} className="col-span-2" />
               </div>
             ))}
           </div>
@@ -1240,19 +1249,27 @@ export function ChartDemo() {
           <CardTitle>Bar Chart - Interactive</CardTitle>
           <CardDescription>Showing total visitors for the last 3 months</CardDescription>
         </div>
-        <div className="flex">
+        <ToggleGroup
+          aria-label="Chart device"
+          value={[activeChart]}
+          onValueChange={([chart]) => chart && setActiveChart(chart as Device)}
+          className="flex rounded-none"
+        >
           {(["desktop", "mobile"] as const).map((chart) => (
-            <button
+            <ToggleGroupItem
               key={chart}
-              data-active={activeChart === chart}
-              className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-start even:border-s data-[active=true]:bg-muted/50 sm:border-t-0 sm:border-s sm:px-8 sm:py-6"
-              onClick={() => setActiveChart(chart)}
+              value={chart}
+              className="relative z-30 flex h-auto flex-1 flex-col justify-center gap-1 rounded-none border-t px-6 py-4 text-start data-[pressed]:bg-muted/50 sm:border-t-0 sm:border-s sm:px-8 sm:py-6"
             >
-              <span className="text-caption text-muted-foreground">{visitorsConfig[chart].label}</span>
-              <span className="text-title leading-none font-strong sm:text-heading">{total[chart].toLocaleString()}</span>
-            </button>
+              <span className="text-caption text-muted-foreground">
+                {visitorsConfig[chart].label}
+              </span>
+              <span className="text-title leading-none font-strong sm:text-heading">
+                {total[chart].toLocaleString()}
+              </span>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
       </CardHeader>
       <CardContent className="px-2 sm:p-6">
         <ChartContainer config={visitorsConfig} className="aspect-auto h-[250px] w-full">

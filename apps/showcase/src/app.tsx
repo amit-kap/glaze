@@ -1,5 +1,6 @@
 import type * as React from "react"
 
+import { Card } from "@amit-kap/glaze/components/card"
 import { ControlPanel } from "./control-panel"
 import {
   AccordionDemo,
@@ -82,10 +83,11 @@ export function App() {
       <div className="px-3 pt-3 pb-32 sm:px-6 sm:pt-6">
         <main className="grid grid-flow-dense grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {tiles.map(({ name, demo: Demo, wide }) => (
-            <section
+            <Card
               key={name}
+              role="region"
               aria-label={name}
-              className={`tile flex flex-col overflow-hidden rounded-container ${wide ? "sm:col-span-2" : ""}`}
+              className={`min-w-0 gap-0 overflow-hidden py-0 ${wide ? "sm:col-span-2" : ""}`}
             >
               <div className="flex min-h-56 flex-1 items-center justify-center px-6 py-10">
                 <Demo />
@@ -93,7 +95,7 @@ export function App() {
               <div className="shrink-0 border-t border-border/40 px-4 py-3 text-body text-muted-foreground">
                 {name}
               </div>
-            </section>
+            </Card>
           ))}
         </main>
       </div>

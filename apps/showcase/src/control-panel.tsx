@@ -174,12 +174,12 @@ function BarSelect({
 }) {
   return (
     <div className={`flex min-w-0 items-center gap-2 ${className}`}>
-      <label
+      <FieldLabel
         htmlFor={id}
         className="text-body text-muted-foreground max-sm:sr-only"
       >
         {label}
-      </label>
+      </FieldLabel>
       <Select
         items={items}
         value={value}
@@ -215,7 +215,7 @@ function ColorRow({
     <Field orientation="horizontal">
       <FieldLabel htmlFor={id}>{label}</FieldLabel>
       <div className="flex w-36 items-center gap-2">
-        <input
+        <Input
           id={id}
           type="color"
           value={value}
@@ -228,10 +228,10 @@ function ColorRow({
   )
 }
 
-// Settings bar, built only from Glaze components, floating at the bottom of
-// the page. Picking a theme and mode previews the built-in themes; the
-// Customize popover shows the chosen theme's values, and changing any of them
-// builds a theme of its own on top of it, applied live and ready to download.
+// Settings bar built from Glaze components, floating at the bottom of the
+// page. Picking a theme and mode previews the built-in themes; the Customize
+// popover shows the chosen theme's values, and changing any of them builds a
+// theme of its own on top of it, applied live and ready to download.
 export function ControlPanel() {
   const { theme, setTheme, mode, setMode, resolvedMode, density, setDensity } =
     useTheme()
