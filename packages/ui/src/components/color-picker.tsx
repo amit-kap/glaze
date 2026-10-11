@@ -18,6 +18,7 @@ import {
   type Rgba,
 } from "@amit-kap/glaze/lib/color"
 import { Button } from "@amit-kap/glaze/components/button"
+import { Card, CardContent } from "@amit-kap/glaze/components/card"
 import { Input } from "@amit-kap/glaze/components/input"
 import {
   Popover,
@@ -27,6 +28,7 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -70,6 +72,8 @@ type ColorPickerProps = {
   /** Colours to pick from; the row is hidden when omitted. */
   swatches?: string[]
   hideEyedropper?: boolean
+  /** Draw the picker in a card; the popover turns this off. */
+  card?: boolean
   className?: string
 }
 
@@ -96,6 +100,7 @@ function ColorPicker({
   onFormatChange,
   swatches,
   hideEyedropper = false,
+  card = true,
   className,
 }: ColorPickerProps) {
   const [hsva, setHsva, setSeen] = useHsva(value, defaultValue)
@@ -244,11 +249,8 @@ function ColorPicker({
   const hueColor = css(hsvaToRgba({ h: hsva.h, s: 1, v: 1, a: 1 }))
   const solid = css({ ...rgba, a: 1 })
 
-  return (
-    <div
-      data-slot="color-picker"
-      className={cn("flex w-full min-w-0 flex-col gap-3", className)}
-    >
+  const content = (
+    <>
       <div
         ref={areaRef}
         data-slot="color-picker-area"
@@ -321,24 +323,37 @@ function ColorPicker({
         />
       </div>
 
-      <div className="flex items-center gap-2">
+      <div
+        className={cn(
+          "grid items-end gap-1.5",
+          format === "hex"
+            ? "grid-cols-[minmax(0,1fr)_4rem]"
+            : "grid-cols-[repeat(3,minmax(0,1fr))_4rem]"
+        )}
+      >
         <Select
           items={formats}
           value={format}
           onValueChange={(v) => v && changeFormat(v as ColorFormat)}
         >
-          <SelectTrigger size="sm" aria-label="Colour format" className="w-24">
+          <SelectTrigger
+            size="sm"
+            aria-label="Colour format"
+            className={cn("w-full", format !== "hex" && "col-span-3")}
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {formats.map((f) => (
-              <SelectItem key={f.value} value={f.value}>
-                {f.label}
-              </SelectItem>
-            ))}
+            <SelectGroup>
+              {formats.map((f) => (
+                <SelectItem key={f.value} value={f.value}>
+                  {f.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
-        {canPick && (
+        {canPick ? (
           <Tooltip>
             <TooltipTrigger
               render={
@@ -346,6 +361,7 @@ function ColorPicker({
                   variant="outline"
                   size="icon-sm"
                   aria-label="Pick a colour from the screen"
+                  className="w-full"
                   onClick={eyedrop}
                 />
               }
@@ -354,14 +370,13 @@ function ColorPicker({
             </TooltipTrigger>
             <TooltipContent>Eyedropper</TooltipContent>
           </Tooltip>
+        ) : (
+          <span />
         )}
-      </div>
 
-      <div className="flex items-end gap-1.5">
         {format === "hex" ? (
           <ChannelField
-            label="Hex"
-            className="flex-1"
+            ariaLabel="Hex"
             text={formatColor({ ...rgba, a: 1 }, "hex")}
             onCommit={(text) => {
               const parsed = parseColor(text)
@@ -373,7 +388,6 @@ function ColorPicker({
             <ChannelField
               key={f.label}
               label={f.label}
-              className="flex-1"
               text={String(Number(f.value.toFixed(f.digits ?? 0)))}
               onCommit={(text) => {
                 const n = Number.parseFloat(text)
@@ -383,8 +397,7 @@ function ColorPicker({
           ))
         )}
         <ChannelField
-          label="A"
-          className="w-14 shrink-0"
+          ariaLabel="Opacity"
           text={`${Math.round(hsva.a * 100)}%`}
           onCommit={(text) => {
             const n = Number.parseFloat(text)
@@ -419,6 +432,23 @@ function ColorPicker({
           })}
         </div>
       )}
+    </>
+  )
+
+  return card ? (
+    <Card
+      data-slot="color-picker"
+      size="sm"
+      className={cn("w-full min-w-0", className)}
+    >
+      <CardContent className="flex flex-col gap-3">{content}</CardContent>
+    </Card>
+  ) : (
+    <div
+      data-slot="color-picker"
+      className={cn("flex w-full min-w-0 flex-col gap-3", className)}
+    >
+      {content}
     </div>
   )
 }
@@ -427,11 +457,15 @@ function ColorPicker({
 // Enter; text that doesn't parse reverts to the current value.
 function ChannelField({
   label,
+  ariaLabel,
   text,
   onCommit,
   className,
 }: {
-  label: string
+  /** A visible label above the field. */
+  label?: string
+  /** The name for fields without a visible label. */
+  ariaLabel?: string
   text: string
   onCommit: (text: string) => void
   className?: string
@@ -443,8 +477,11 @@ function ChannelField({
   }
   return (
     <label className={cn("flex min-w-0 flex-col gap-1", className)}>
-      <span className="text-caption text-muted-foreground">{label}</span>
+      {label && (
+        <span className="text-caption text-muted-foreground">{label}</span>
+      )}
       <Input
+        aria-label={label ? undefined : ariaLabel}
         value={draft ?? text}
         spellCheck={false}
         autoComplete="off"
@@ -503,6 +540,7 @@ function ColorPickerPopover({
       <PopoverContent align="start" className="w-72">
         <ColorPicker
           {...props}
+          card={false}
           value={current}
           onValueChange={(next, color) => {
             setState(next)

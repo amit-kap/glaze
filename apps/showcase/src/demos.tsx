@@ -77,10 +77,7 @@ import {
   type ChartConfig,
 } from "@amit-kap/glaze/components/chart"
 import { Checkbox } from "@amit-kap/glaze/components/checkbox"
-import {
-  ColorPicker,
-  ColorPickerPopover,
-} from "@amit-kap/glaze/components/color-picker"
+import { ColorPicker } from "@amit-kap/glaze/components/color-picker"
 import {
   Command,
   CommandEmpty,
@@ -609,27 +606,21 @@ export function SliderDemo() {
   )
 }
 
-// Stories: Default, Popover.
+// Stories: Default, Swatches.
 export function ColorPickerDemo() {
   return (
-    <div className="flex w-full max-w-64 flex-col items-center gap-4">
-      <ColorPicker
-        defaultValue="#6B97FF"
-        swatches={[
-          "#171717",
-          "#E7000B",
-          "#A65F00",
-          "#008236",
-          "#155DFC",
-          "#6B97FF",
-        ]}
-      />
-      <ColorPickerPopover
-        triggerLabel="Brand"
-        defaultValue="oklch(20.5% 0 0)"
-        defaultFormat="oklch"
-      />
-    </div>
+    <ColorPicker
+      className="max-w-72"
+      defaultValue="#6B97FF"
+      swatches={[
+        "#171717",
+        "#E7000B",
+        "#A65F00",
+        "#008236",
+        "#155DFC",
+        "#6B97FF",
+      ]}
+    />
   )
 }
 
