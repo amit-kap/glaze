@@ -10,6 +10,8 @@ Glaze is a React component library built on [shadcn/ui](https://ui.shadcn.com) a
 
 This repository is a Vite monorepo containing the library, a web app, a showcase and Storybook.
 
+**Live:** [showcase and theme builder](https://amit-kap.github.io/glaze/) · [Storybook](https://amit-kap.github.io/glaze/storybook/)
+
 ## Contents
 
 - [Features](#features)
@@ -203,7 +205,7 @@ Anything the converter cannot map becomes a component token (see "Converting sto
 
 ### Showcase
 
-`apps/showcase` presents the library in the style of fluidfunctionalism.com: a centre column of live components and a floating settings panel (Theme, Mode, Density) in the top right.
+`apps/showcase` presents the library in the style of fluidfunctionalism.com: a centre column of live components and a floating settings panel in the top right (Theme, Mode, and a Customize section that builds and exports your own theme). It's published at [https://amit-kap.github.io/glaze/](https://amit-kap.github.io/glaze/).
 
 ```bash
 npm run dev -w showcase     # http://localhost:5180
@@ -211,7 +213,7 @@ npm run dev -w showcase     # http://localhost:5180
 
 ### Storybook
 
-Every component in `packages/ui` has a story in `apps/storybook/src/stories`.
+Every component in `packages/ui` has a story in `apps/storybook/src/stories`. It's published at [https://amit-kap.github.io/glaze/storybook/](https://amit-kap.github.io/glaze/storybook/).
 
 ```bash
 npm run dev -w storybook    # http://localhost:6006
@@ -219,6 +221,12 @@ npm run build -w storybook  # static build in apps/storybook/dist
 ```
 
 The toolbar provides the **Theme**, **Mode** and **Density** switches. Link to a specific state with `&globals=theme:maia;mode:dark;density:compact`. Test themes that should not ship belong in `apps/storybook/src/themes`; they appear in the Theme switch but are not part of the package.
+
+Both are deployed to GitHub Pages on every push to `main` (`.github/workflows/pages.yml`).
+
+### Dependencies
+
+Dependabot (`.github/dependabot.yml`) opens weekly PRs: one for all minor and patch updates, one per major update, and one for GitHub Actions. CI runs on each; merge when it passes.
 
 ### Releasing
 
