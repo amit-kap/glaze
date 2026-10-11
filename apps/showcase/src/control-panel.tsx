@@ -114,7 +114,10 @@ export function ControlPanel() {
           <InputGroupInput readOnly value={install} aria-label="Install command" />
           <InputGroupAddon align="inline-end">
             <InputGroupButton size="icon-xs" aria-label="Copy install command" onClick={copy}>
-              {copied ? <CheckIcon /> : <CopyIcon />}
+              <span className="icon-swap" data-swapped={copied || undefined}>
+                <CopyIcon />
+                <CheckIcon />
+              </span>
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>

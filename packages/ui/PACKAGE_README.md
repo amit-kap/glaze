@@ -133,7 +133,7 @@ A theme is a CSS file that sets the required inputs for light and dark. Everythi
 }
 ```
 
-Optional inputs change the feel beyond colour: `--shape-item`, `--shape-control`, `--shape-floating`, `--shape-container` (corners per component family), `--space-base` (spacing and control height), `--typeface-sans`, `--typeface-heading`, `--type-body` (type), `--elevation-raised`, `--elevation-floating`, `--elevation-modal` (shadows) and `--motion-base`, `--motion-ease-standard` (motion). The theme files in `@amit-kap/glaze/themes/` are complete examples.
+Optional inputs change the feel beyond colour: `--shape-item`, `--shape-control`, `--shape-floating`, `--shape-container` (corners per component family), `--space-base` (spacing and control height), `--typeface-sans`, `--typeface-heading`, `--type-body` (type), `--elevation-raised`, `--elevation-floating`, `--elevation-modal` (shadows) and `--motion-base`, `--motion-ease-standard`, `--motion-ease-spring`, `--motion-exit-scale` (motion). `--fade-scale: 0` turns fades off as well under reduced motion. The theme files in `@amit-kap/glaze/themes/` are complete examples.
 
 Import it after `globals.css` and use `data-theme="my-theme"`.
 

@@ -14,6 +14,9 @@
 :where(:root) {
   --density: 1;
   --motion-scale: 1;
+  --fade-scale: 1;
+  /* exits run at this share of the enter duration */
+  --motion-exit-scale: 0.75;
 
   /* device safe areas: non-zero only when the page sets viewport-fit=cover */
   --safe-top: env(safe-area-inset-top, 0px);
@@ -56,9 +59,30 @@
   --density: 0.875;
 }
 
+/*
+ * Reduced motion means fewer, gentler changes, not none: movement stops
+ * (--motion-scale) while fades keep running (--fade-scale), since a fade
+ * still tells the eye where something came from. Popups enter and exit
+ * through tw-animate keyframes that fade and zoom or slide together, so the
+ * movement half is set to identity here; unlayered, this beats the zoom-*
+ * and slide-* utilities.
+ */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion-scale: 0;
+  }
+
+  *,
+  ::before,
+  ::after {
+    --tw-enter-translate-x: 0;
+    --tw-enter-translate-y: 0;
+    --tw-enter-scale: 1;
+    --tw-enter-rotate: 0;
+    --tw-exit-translate-x: 0;
+    --tw-exit-translate-y: 0;
+    --tw-exit-scale: 1;
+    --tw-exit-rotate: 0;
   }
 }
 
@@ -127,6 +151,21 @@
   --duration-base: calc(var(--motion-base) * var(--motion-scale));
   --duration-moderate: calc(var(--motion-moderate) * var(--motion-scale));
   --duration-slow: calc(var(--motion-slow) * var(--motion-scale));
+  /* fades: opacity-only motion, which reduced motion keeps */
+  --duration-fade-fast: calc(var(--motion-fast) * var(--fade-scale));
+  --duration-fade-base: calc(var(--motion-base) * var(--fade-scale));
+  --duration-fade-moderate: calc(var(--motion-moderate) * var(--fade-scale));
+  /* exits: quicker than the matching enter, so a dismissal reads as final
+     rather than the entrance replayed; they fade, so --fade-scale applies */
+  --duration-exit-fast: calc(
+    var(--motion-fast) * var(--motion-exit-scale) * var(--fade-scale)
+  );
+  --duration-exit-base: calc(
+    var(--motion-base) * var(--motion-exit-scale) * var(--fade-scale)
+  );
+  --duration-exit-moderate: calc(
+    var(--motion-moderate) * var(--motion-exit-scale) * var(--fade-scale)
+  );
 
   /*
    * tier 3: component tokens. Each defaults to the Nova value, derived from
