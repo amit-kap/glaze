@@ -317,7 +317,7 @@ export function ControlPanel({
     <div
       role="toolbar"
       aria-label="Theme settings"
-      className={`fixed inset-x-3 bottom-6 z-40 mx-auto flex max-w-2xl items-center gap-1.5 rounded-container border bg-popover p-4 text-popover-foreground shadow-floating motion-reduce:transition-none sm:gap-4 lg:transition-[right] lg:duration-(--duration-moderate) lg:ease-standard ${open ? "lg:right-[calc(--spacing(80)+--spacing(3))]" : ""}`}
+      className={`fixed inset-x-3 bottom-6 z-40 mx-auto flex max-w-2xl items-center gap-1.5 rounded-container border bg-popover p-4 text-popover-foreground shadow-floating motion-reduce:transition-none sm:gap-4 lg:transition-[right] lg:duration-(--duration-moderate) lg:ease-standard ${open ? "lg:inset-e-[calc(--spacing(80)+--spacing(3))]" : ""}`}
     >
       <span className="flex items-center gap-0.5">
         <span className="me-1.5 font-heading text-title font-medium max-sm:me-0.5 max-sm:text-body">
@@ -385,7 +385,7 @@ export function ControlPanel({
       aria-label="Customize"
       inert={!open}
       data-open={open || undefined}
-      className="invisible fixed inset-y-0 right-0 z-50 flex w-full translate-x-full flex-col gap-5 overflow-y-auto border-l border-border bg-background px-4 pt-4 pb-6 transition-[translate,visibility] duration-(--duration-moderate) ease-standard motion-reduce:transition-none sm:w-80 data-open:visible data-open:translate-x-0"
+      className="invisible fixed inset-y-0 inset-e-0 z-50 flex w-full translate-x-full flex-col gap-5 overflow-y-auto border-s border-border bg-background px-4 pt-4 pb-6 transition-[translate,visibility] duration-(--duration-moderate) ease-standard motion-reduce:transition-none sm:w-80 data-open:visible data-open:translate-x-0"
     >
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-title font-medium">Customize</h2>
