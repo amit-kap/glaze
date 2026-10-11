@@ -14,11 +14,11 @@
   "dependencies": {
     "@amit-kap/glaze": "*",
     "input-otp": "^1.5.0",
-    "lucide-react": "^1.49.0",
+    "lucide-react": "^1.53.0",
     "react": "^19.2.8",
     "react-day-picker": "^10.0.2",
     "react-dom": "^19.2.8",
-    "recharts": "^3.8.0"
+    "recharts": "^3.10.1"
   },
   "devDependencies": {
     "@ai-sdk/react": "^4.0.140",
@@ -32,14 +32,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "ai": "^7.0.137",
-    "eslint": "^10",
+    "eslint": "^10.12.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-storybook": "^10.6.1",
-    "globals": "^17",
+    "globals": "^17.13.0",
     "motion": "^12.43.0",
     "storybook": "^10.6.1",
     "typescript": "~6.0.2",
-    "typescript-eslint": "^8",
-    "vite": "^8"
+    "typescript-eslint": "^8.71.1",
+    "vite": "^8.3.3"
   }
 }
