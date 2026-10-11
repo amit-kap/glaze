@@ -1,59 +1,83 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@amit-kap/glaze/components/avatar"
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@amit-kap/glaze/components/hover-card"
-import { CalendarIcon } from "lucide-react"
 
+// Stories follow the upstream shadcn/ui (base-nova) Hover Card examples:
+// https://ui.shadcn.com/docs/components/base/hover-card
 const meta = {
   title: "Components/Hover Card",
-  component: HoverCard,
-  subcomponents: { HoverCardContent, HoverCardTrigger },
+  component: HoverCardContent,
+  subcomponents: { HoverCard, HoverCardTrigger },
   parameters: {
     docs: {
       description: {
         component:
-          "For sighted users to preview content available behind a link.",
+          "For sighted users to preview content available behind a link. Set `delay` and `closeDelay` on the trigger to tune when it opens and closes.",
       },
     },
   },
-} satisfies Meta<typeof HoverCard>
+  argTypes: {
+    side: {
+      control: "inline-radio",
+      options: ["top", "right", "bottom", "left"],
+    },
+    align: { control: "inline-radio", options: ["start", "center", "end"] },
+  },
+  render: (args) => (
+    <HoverCard>
+      <HoverCardTrigger
+        delay={10}
+        closeDelay={100}
+        render={<Button variant="link" />}
+      >
+        Hover Here
+      </HoverCardTrigger>
+      <HoverCardContent className="flex w-64 flex-col gap-0.5" {...args}>
+        <div className="font-semibold">@nextjs</div>
+        <div>The React Framework – created and maintained by @vercel.</div>
+        <div className="mt-1 text-caption text-muted-foreground">
+          Joined December 2021
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  ),
+} satisfies Meta<typeof HoverCardContent>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
-  render: (args) => (
-    <HoverCard {...args}>
-      <HoverCardTrigger
-        href="#"
-        className="text-sm font-medium underline underline-offset-4"
-      >
-        @nextjs
-      </HoverCardTrigger>
-      <HoverCardContent className="w-80">
-        <div className="flex gap-4">
-          <Avatar>
-            <AvatarImage src="https://github.com/vercel.png" />
-            <AvatarFallback>VC</AvatarFallback>
-          </Avatar>
-          <div className="space-y-1">
-            <h4 className="text-sm font-semibold">@nextjs</h4>
-            <p className="text-sm">
-              The React Framework – created and maintained by @vercel.
-            </p>
-            <div className="flex items-center pt-2 text-xs text-muted-foreground">
-              <CalendarIcon className="mr-2 size-4" /> Joined December 2021
+// --- Basic ----------------------------------------------------------------
+
+export const Default: Story = {}
+
+// --- Variants -------------------------------------------------------------
+
+const HOVER_CARD_SIDES = ["left", "top", "bottom", "right"] as const
+
+export const Sides: Story = {
+  render: () => (
+    <div className="flex flex-wrap justify-center gap-2">
+      {HOVER_CARD_SIDES.map((side) => (
+        <HoverCard key={side}>
+          <HoverCardTrigger
+            delay={100}
+            closeDelay={100}
+            render={<Button variant="outline" className="capitalize" />}
+          >
+            {side}
+          </HoverCardTrigger>
+          <HoverCardContent side={side}>
+            <div className="flex flex-col gap-1">
+              <h4 className="font-medium">Hover Card</h4>
+              <p>This hover card appears on the {side} side of the trigger.</p>
             </div>
-          </div>
-        </div>
-      </HoverCardContent>
-    </HoverCard>
+          </HoverCardContent>
+        </HoverCard>
+      ))}
+    </div>
   ),
 }

@@ -1,5 +1,5 @@
-import type * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { SaveIcon } from "lucide-react"
 import { Button } from "@amit-kap/glaze/components/button"
 import { Kbd } from "@amit-kap/glaze/components/kbd"
 import {
@@ -8,27 +8,9 @@ import {
   TooltipTrigger,
 } from "@amit-kap/glaze/components/tooltip"
 
-type Side = React.ComponentProps<typeof TooltipContent>["side"]
-
-function TooltipDemo({
-  side = "top",
-  label = "Add to library",
-}: {
-  side?: Side
-  label?: string
-}) {
-  return (
-    <Tooltip>
-      <TooltipTrigger
-        render={<Button variant="outline" className="capitalize" />}
-      >
-        {side}
-      </TooltipTrigger>
-      <TooltipContent side={side}>{label}</TooltipContent>
-    </Tooltip>
-  )
-}
-
+// Stories follow the upstream shadcn/ui (base-nova) Tooltip examples:
+// https://ui.shadcn.com/docs/components/base/tooltip
+// The Storybook preview wraps every story in a TooltipProvider.
 const meta = {
   title: "Components/Tooltip",
   component: TooltipContent,
@@ -42,34 +24,82 @@ const meta = {
     },
   },
   argTypes: {
-    side: { control: "radio", options: ["top", "right", "bottom", "left"] },
+    side: {
+      control: "inline-radio",
+      options: ["top", "right", "bottom", "left"],
+    },
+    align: { control: "inline-radio", options: ["start", "center", "end"] },
   },
-  render: (args) => <TooltipDemo side={args.side} />,
+  render: (args) => (
+    <Tooltip>
+      <TooltipTrigger render={<Button variant="outline" />}>
+        Hover
+      </TooltipTrigger>
+      <TooltipContent {...args}>
+        <p>Add to library</p>
+      </TooltipContent>
+    </Tooltip>
+  ),
 } satisfies Meta<typeof TooltipContent>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = { args: { side: "top" } }
+// --- Basic ----------------------------------------------------------------
 
-export const Sides: Story = {
+export const Default: Story = {}
+
+// --- Variants -------------------------------------------------------------
+
+export const Side: Story = {
   render: () => (
-    <div className="flex gap-2">
-      {(["top", "right", "bottom", "left"] as const).map((side) => (
-        <TooltipDemo key={side} side={side} />
+    <div className="flex flex-wrap gap-2">
+      {(["left", "top", "bottom", "right"] as const).map((side) => (
+        <Tooltip key={side}>
+          <TooltipTrigger
+            render={<Button variant="outline" className="w-fit capitalize" />}
+          >
+            {side}
+          </TooltipTrigger>
+          <TooltipContent side={side}>
+            <p>Add to library</p>
+          </TooltipContent>
+        </Tooltip>
       ))}
     </div>
   ),
 }
 
-export const WithKbd: Story = {
+// --- Compositions ---------------------------------------------------------
+
+export const WithKeyboardShortcut: Story = {
   render: () => (
     <Tooltip>
-      <TooltipTrigger render={<Button variant="outline" />}>
-        Save
+      <TooltipTrigger
+        render={
+          <Button variant="outline" size="icon-sm" aria-label="Save changes" />
+        }
+      >
+        <SaveIcon />
       </TooltipTrigger>
       <TooltipContent>
-        Save changes <Kbd>⌘S</Kbd>
+        Save Changes <Kbd>S</Kbd>
+      </TooltipContent>
+    </Tooltip>
+  ),
+}
+
+// Disabled buttons don't fire pointer events, so wrap them in a span trigger.
+export const DisabledButton: Story = {
+  render: () => (
+    <Tooltip>
+      <TooltipTrigger render={<span className="inline-block w-fit" />}>
+        <Button variant="outline" disabled>
+          Disabled
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>This feature is currently unavailable</p>
       </TooltipContent>
     </Tooltip>
   ),

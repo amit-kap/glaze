@@ -20,7 +20,9 @@
     "recharts": "^3.8.0"
   },
   "devDependencies": {
+    "@ai-sdk/react": "^4.0.140",
     "@eslint/js": "^10",
+    "@shadcn/helpers": "^0.2.0",
     "@storybook/addon-a11y": "^10.6.1",
     "@storybook/addon-docs": "^10.6.1",
     "@storybook/react-vite": "^10.6.1",
@@ -28,10 +30,12 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "ai": "^7.0.137",
     "eslint": "^10",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-storybook": "^10.6.1",
     "globals": "^17",
+    "motion": "^12.43.0",
     "storybook": "^10.6.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8",
