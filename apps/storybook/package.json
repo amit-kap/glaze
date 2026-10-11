@@ -38,7 +38,7 @@
     "globals": "^17",
     "motion": "^12.43.0",
     "storybook": "^10.6.1",
-    "typescript": "~6.0.2",
+    "typescript": "~7.0.2",
     "typescript-eslint": "^8",
     "vite": "^8"
   }
