@@ -29,7 +29,7 @@ function BubbleContent({ className, render, ...props }) {
     return useRender({
         defaultTagName: "div",
         props: mergeProps({
-            className: cn("w-fit max-w-full min-w-0 overflow-hidden rounded-container border border-transparent px-3 py-2 text-body leading-relaxed wrap-break-word group-data-[align=end]/bubble:self-end [button]:text-left [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/50", className),
+            className: cn("flow-root w-fit max-w-full min-w-0 overflow-clip rounded-container border border-transparent px-3 py-2 text-body leading-relaxed wrap-break-word group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/50", className),
         }, props),
         render,
         state: {
@@ -44,8 +44,8 @@ const bubbleReactionsVariants = cva("absolute z-10 flex w-fit shrink-0 items-cen
             bottom: "bottom-0 translate-y-3/4",
         },
         align: {
-            start: "left-3",
-            end: "right-3",
+            start: "inset-s-3",
+            end: "inset-e-3",
         },
     },
     defaultVariants: {

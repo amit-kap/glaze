@@ -1,12 +1,21 @@
 {
   "name": "@amit-kap/glaze",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Glaze: shadcn/ui on Base UI, themed entirely through tokens.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amit-kap/glaze.git",
+    "directory": "packages/ui"
+  },
+  "homepage": "https://github.com/amit-kap/glaze",
   "type": "module",
   "sideEffects": [
     "**/*.css"
   ],
+  "bin": {
+    "glaze": "./bin/glaze.js"
+  },
   "exports": {
     "./globals.css": "./styles/globals.css",
     "./tokens.css": "./styles/tokens.css",

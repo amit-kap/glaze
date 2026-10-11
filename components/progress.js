@@ -15,6 +15,6 @@ function ProgressLabel({ className, ...props }) {
     return (_jsx(ProgressPrimitive.Label, { className: cn("text-body font-medium", className), "data-slot": "progress-label", ...props }));
 }
 function ProgressValue({ className, ...props }) {
-    return (_jsx(ProgressPrimitive.Value, { className: cn("ml-auto text-body text-muted-foreground tabular-nums", className), "data-slot": "progress-value", ...props }));
+    return (_jsx(ProgressPrimitive.Value, { className: cn("ms-auto text-body text-muted-foreground tabular-nums", className), "data-slot": "progress-value", ...props }));
 }
 export { Progress, ProgressTrack, ProgressIndicator, ProgressLabel, ProgressValue, };

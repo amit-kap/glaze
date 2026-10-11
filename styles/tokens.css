@@ -13,6 +13,38 @@
 :where(:root) {
   --density: 1;
   --motion-scale: 1;
+
+  /* device safe areas: non-zero only when the page sets viewport-fit=cover */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-inline: max(var(--safe-left), var(--safe-right));
+
+  /*
+   * Mode mixes: how much ink tints a fill, per mode. Dark surfaces need more
+   * ink to read as raised than light ones, so one percentage cannot serve
+   * both. The dark values reproduce shadcn's dark neutrals from the dark
+   * inputs (secondary L 0.269 from surface 0.205 and ink 0.985, and so on).
+   * Inherited inputs: a theme may override any of them.
+   */
+  --mix-fill: 6%;
+  --mix-muted: 4%;
+  --mix-sidebar: 3%;
+  --mix-strong: 12%;
+  --mix-ring: 100%;
+
+  /* icon beside text: 1lh - 4px is 16px on a 20px line, 12px on 16px;
+     rounded to whole pixels so strokes stay crisp */
+  --icon-size: round(1lh - 0.25rem, 1px);
+}
+
+:where(.dark) {
+  --mix-fill: 8%;
+  --mix-muted: 15%;
+  --mix-sidebar: 7%;
+  --mix-strong: 6%;
+  --mix-ring: 53%;
 }
 
 [data-density="comfortable"] {
@@ -37,7 +69,7 @@
   --card-foreground: var(--ink);
   --popover: var(--surface);
   --popover-foreground: var(--ink);
-  --muted: color-mix(in oklab, var(--ink) 4%, var(--canvas));
+  --muted: color-mix(in oklab, var(--ink) var(--mix-muted), var(--canvas));
   --muted-foreground: var(--ink-muted);
   --subtle-foreground: color-mix(in oklab, var(--ink-muted) 65%, var(--canvas));
 
@@ -46,9 +78,9 @@
   --primary-foreground: var(--brand-ink);
   --primary-subtle: color-mix(in oklab, var(--brand) 12%, transparent);
   --primary-border: color-mix(in oklab, var(--brand) 40%, transparent);
-  --secondary: color-mix(in oklab, var(--ink) 6%, var(--surface));
+  --secondary: color-mix(in oklab, var(--ink) var(--mix-fill), var(--surface));
   --secondary-foreground: var(--ink);
-  --accent: color-mix(in oklab, var(--ink) 6%, var(--surface));
+  --accent: color-mix(in oklab, var(--ink) var(--mix-fill), var(--surface));
   --accent-foreground: var(--ink);
 
   /* colour: interaction states */
@@ -58,9 +90,9 @@
 
   /* colour: lines */
   --border: var(--line);
-  --border-strong: color-mix(in oklab, var(--ink) 12%, var(--line));
+  --border-strong: color-mix(in oklab, var(--ink) var(--mix-strong), var(--line));
   --input: var(--border-strong);
-  --ring: var(--brand);
+  --ring: color-mix(in oklab, var(--brand) var(--mix-ring), var(--canvas));
 
   /* colour: status */
   --destructive: var(--danger);
@@ -69,19 +101,19 @@
   --warning-subtle: color-mix(in oklab, var(--warning) 12%, transparent);
   --info-subtle: color-mix(in oklab, var(--info) 12%, transparent);
   --severity-critical: var(--danger);
-  --severity-high: color-mix(in oklab, var(--danger) 50%, var(--warning));
+  --severity-high: var(--caution, color-mix(in oklab, var(--danger) 50%, var(--warning)));
   --severity-medium: var(--warning);
   --severity-low: var(--success);
 
   /* colour: sidebar */
-  --sidebar: color-mix(in oklab, var(--ink) 3%, var(--canvas));
+  --sidebar: color-mix(in oklab, var(--ink) var(--mix-sidebar), var(--canvas));
   --sidebar-foreground: var(--ink);
-  --sidebar-primary: var(--brand);
-  --sidebar-primary-foreground: var(--brand-ink);
-  --sidebar-accent: color-mix(in oklab, var(--ink) 6%, var(--sidebar));
+  --sidebar-primary: var(--sidebar-brand, var(--brand));
+  --sidebar-primary-foreground: var(--sidebar-brand-ink, var(--brand-ink));
+  --sidebar-accent: color-mix(in oklab, var(--ink) var(--mix-fill), var(--sidebar));
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--line);
-  --sidebar-ring: var(--brand);
+  --sidebar-ring: var(--ring);
 
   /* shape: optional inputs defaulting to the base radius */
   --shape-item: calc(var(--radius) * 0.8);
@@ -114,8 +146,14 @@
   --chart-tooltip-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --slider-thumb-fill: #fff;
   --toast-duration: calc(250ms * var(--motion-scale));
+  --toast-stack-duration: calc(500ms * var(--motion-scale));
   --message-scroller-duration: calc(400ms * var(--motion-scale));
   --drawer-duration: calc(450ms * var(--motion-scale));
+  --drawer-release-duration: calc(400ms * var(--motion-scale));
+  --drawer-overlay-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --drawer-content-ease: cubic-bezier(0.45, 1.005, 0, 1.005);
+  --message-scroller-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  --navigation-menu-duration: calc(350ms * var(--motion-scale));
 }
 
 :where(:root, [data-theme], [data-density], .dark) {

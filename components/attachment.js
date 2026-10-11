@@ -20,7 +20,7 @@ const attachmentVariants = cva("group/attachment relative flex w-fit max-w-full 
 function Attachment({ className, state = "done", size = "default", orientation = "horizontal", ...props }) {
     return (_jsx("div", { "data-slot": "attachment", "data-state": state, "data-size": size, "data-orientation": orientation, className: cn(attachmentVariants({ size, orientation }), className), ...props }));
 }
-const attachmentMediaVariants = cva("relative flex aspect-square w-10 shrink-0 items-center justify-center overflow-hidden rounded-control bg-muted text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-item group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5", {
+const attachmentMediaVariants = cva("relative flex aspect-square w-10 shrink-0 items-center justify-center overflow-clip rounded-control bg-muted text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-item group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5", {
     variants: {
         variant: {
             icon: "",
@@ -44,7 +44,7 @@ function AttachmentDescription({ className, ...props }) {
     return (_jsx("span", { "data-slot": "attachment-description", className: cn("mt-0.5 block min-w-0 truncate text-caption text-muted-foreground group-data-[state=error]/attachment:text-destructive/80", "max-w-full", className), ...props }));
 }
 function AttachmentActions({ className, ...props }) {
-    return (_jsx("div", { "data-slot": "attachment-actions", className: cn("relative z-20 flex shrink-0 items-center group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:right-3 group-data-[orientation=vertical]/attachment:gap-1", className), ...props }));
+    return (_jsx("div", { "data-slot": "attachment-actions", className: cn("relative z-20 flex shrink-0 items-center group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:inset-e-3 group-data-[orientation=vertical]/attachment:gap-1", className), ...props }));
 }
 function AttachmentAction({ className, variant, size = "icon-xs", ...props }) {
     return (_jsx(Button, { "data-slot": "attachment-action", variant: variant ?? "ghost", size: size, className: cn(className), ...props }));

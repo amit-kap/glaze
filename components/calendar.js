@@ -7,7 +7,7 @@ import { Button, buttonVariants } from "./button.js";
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react";
 function Calendar({ className, classNames, showOutsideDays = true, captionLayout = "label", buttonVariant = "ghost", locale, formatters, components, ...props }) {
     const defaultClassNames = getDefaultClassNames();
-    return (_jsx(DayPicker, { showOutsideDays: showOutsideDays, className: cn("group/calendar bg-background p-2 [--cell-radius:var(--radius-item)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent", String.raw `rtl:**:[.rdp-button\_next>svg]:rotate-180`, String.raw `rtl:**:[.rdp-button\_previous>svg]:rotate-180`, className), captionLayout: captionLayout, locale: locale, formatters: {
+    return (_jsx(DayPicker, { showOutsideDays: showOutsideDays, className: cn("group/calendar bg-background p-2 tabular-nums [--cell-radius:var(--radius-item)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent", String.raw `rtl:**:[.rdp-button\_next>svg]:rotate-180`, String.raw `rtl:**:[.rdp-button\_previous>svg]:rotate-180`, className), captionLayout: captionLayout, locale: locale, formatters: {
             formatMonthDropdown: (date) => date.toLocaleString(locale?.code, { month: "short" }),
             ...formatters,
         }, classNames: {
@@ -30,12 +30,12 @@ function Calendar({ className, classNames, showOutsideDays = true, captionLayout
             week: cn("mt-2 flex w-full", defaultClassNames.week),
             week_number_header: cn("w-(--cell-size) select-none", defaultClassNames.week_number_header),
             week_number: cn("text-[0.8rem] text-muted-foreground select-none", defaultClassNames.week_number),
-            day: cn("group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-(--cell-radius)", props.showWeekNumber
-                ? "[&:nth-child(2)[data-selected=true]_button]:rounded-l-(--cell-radius)"
-                : "[&:first-child[data-selected=true]_button]:rounded-l-(--cell-radius)", defaultClassNames.day),
-            range_start: cn("relative isolate z-0 rounded-l-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:right-0 after:w-4 after:bg-muted", defaultClassNames.range_start),
+            day: cn("group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-e-(--cell-radius)", props.showWeekNumber
+                ? "[&:nth-child(2)[data-selected=true]_button]:rounded-s-(--cell-radius)"
+                : "[&:first-child[data-selected=true]_button]:rounded-s-(--cell-radius)", defaultClassNames.day),
+            range_start: cn("relative isolate z-0 rounded-s-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:inset-e-0 after:w-4 after:bg-muted", defaultClassNames.range_start),
             range_middle: cn("rounded-none", defaultClassNames.range_middle),
-            range_end: cn("relative isolate z-0 rounded-r-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:left-0 after:w-4 after:bg-muted", defaultClassNames.range_end),
+            range_end: cn("relative isolate z-0 rounded-e-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:inset-s-0 after:w-4 after:bg-muted", defaultClassNames.range_end),
             today: cn("rounded-(--cell-radius) bg-muted text-foreground data-[selected=true]:rounded-none", defaultClassNames.today),
             outside: cn("text-muted-foreground aria-selected:text-muted-foreground", defaultClassNames.outside),
             disabled: cn("text-muted-foreground opacity-50", defaultClassNames.disabled),
@@ -71,6 +71,6 @@ function CalendarDayButton({ className, day, modifiers, locale, ...props }) {
     return (_jsx(Button, { variant: "ghost", size: "icon", "data-day": day.date.toLocaleDateString(locale?.code), "data-selected-single": modifiers.selected &&
             !modifiers.range_start &&
             !modifiers.range_end &&
-            !modifiers.range_middle, "data-range-start": modifiers.range_start, "data-range-end": modifiers.range_end, "data-range-middle": modifiers.range_middle, className: cn("relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&>span]:text-caption [&>span]:opacity-70", defaultClassNames.day, className), ...props }));
+            !modifiers.range_middle, "data-range-start": modifiers.range_start, "data-range-end": modifiers.range_end, "data-range-middle": modifiers.range_middle, className: cn("relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-e-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-s-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&>span]:text-caption [&>span]:opacity-70", defaultClassNames.day, className), ...props }));
 }
 export { Calendar, CalendarDayButton };

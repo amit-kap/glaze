@@ -12,13 +12,13 @@ function PaginationItem({ ...props }) {
     return _jsx("li", { "data-slot": "pagination-item", ...props });
 }
 function PaginationLink({ className, isActive, size = "icon", ...props }) {
-    return (_jsx(Button, { variant: isActive ? "outline" : "ghost", size: size, className: cn(className), nativeButton: false, render: _jsx("a", { "aria-current": isActive ? "page" : undefined, "data-slot": "pagination-link", "data-active": isActive, ...props }) }));
+    return (_jsx(Button, { variant: isActive ? "outline" : "ghost", size: size, className: cn("tabular-nums", className), nativeButton: false, render: _jsx("a", { "aria-current": isActive ? "page" : undefined, "data-slot": "pagination-link", "data-active": isActive, ...props }) }));
 }
 function PaginationPrevious({ className, text = "Previous", ...props }) {
-    return (_jsxs(PaginationLink, { "aria-label": "Go to previous page", size: "default", className: cn("pl-1.5!", className), ...props, children: [_jsx(ChevronLeftIcon, { "data-icon": "inline-start" }), _jsx("span", { className: "hidden sm:block", children: text })] }));
+    return (_jsxs(PaginationLink, { "aria-label": "Go to previous page", size: "default", className: cn("ps-1.5!", className), ...props, children: [_jsx(ChevronLeftIcon, { "data-icon": "inline-start" }), _jsx("span", { className: "hidden sm:block", children: text })] }));
 }
 function PaginationNext({ className, text = "Next", ...props }) {
-    return (_jsxs(PaginationLink, { "aria-label": "Go to next page", size: "default", className: cn("pr-1.5!", className), ...props, children: [_jsx("span", { className: "hidden sm:block", children: text }), _jsx(ChevronRightIcon, { "data-icon": "inline-end" })] }));
+    return (_jsxs(PaginationLink, { "aria-label": "Go to next page", size: "default", className: cn("pe-1.5!", className), ...props, children: [_jsx("span", { className: "hidden sm:block", children: text }), _jsx(ChevronRightIcon, { "data-icon": "inline-end" })] }));
 }
 function PaginationEllipsis({ className, ...props }) {
     return (_jsxs("span", { "aria-hidden": true, "data-slot": "pagination-ellipsis", className: cn("flex size-8 items-center justify-center [&_svg:not([class*='size-'])]:size-4", className), ...props, children: [_jsx(MoreHorizontalIcon, {}), _jsx("span", { className: "sr-only", children: "More pages" })] }));

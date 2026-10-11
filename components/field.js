@@ -38,7 +38,7 @@ function FieldTitle({ className, ...props }) {
     return (_jsx("div", { "data-slot": "field-label", className: cn("flex w-fit items-center gap-2 text-body font-medium group-data-[disabled=true]/field:opacity-50", className), ...props }));
 }
 function FieldDescription({ className, ...props }) {
-    return (_jsx("p", { "data-slot": "field-description", className: cn("text-left text-body leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5", "last:mt-0 nth-last-2:-mt-1", "[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary", className), ...props }));
+    return (_jsx("p", { "data-slot": "field-description", className: cn("text-start text-body leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5", "last:mt-0 nth-last-2:-mt-1", "[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary", className), ...props }));
 }
 function FieldSeparator({ children, className, ...props }) {
     return (_jsxs("div", { "data-slot": "field-separator", "data-content": !!children, className: cn("relative -my-2 h-5 text-body group-data-[variant=outline]/field-group:-mb-2", className), ...props, children: [_jsx(Separator, { className: "absolute inset-0 top-1/2" }), children && (_jsx("span", { className: "relative mx-auto block w-fit bg-background px-2 text-muted-foreground", "data-slot": "field-separator-content", children: children }))] }));
@@ -57,7 +57,7 @@ function FieldError({ className, children, errors, ...props }) {
         if (uniqueErrors?.length == 1) {
             return uniqueErrors[0]?.message;
         }
-        return (_jsx("ul", { className: "ml-4 flex list-disc flex-col gap-1", children: uniqueErrors.map((error, index) => error?.message && _jsx("li", { children: error.message }, index)) }));
+        return (_jsx("ul", { className: "ms-4 flex list-disc flex-col gap-1", children: uniqueErrors.map((error, index) => error?.message && _jsx("li", { children: error.message }, index)) }));
     }, [children, errors]);
     if (!content) {
         return null;

@@ -47,7 +47,7 @@ const itemMediaVariants = cva("flex shrink-0 items-center justify-center gap-2 g
         variant: {
             default: "bg-transparent",
             icon: "[&_svg:not([class*='size-'])]:size-4",
-            image: "size-10 overflow-hidden rounded-item-sm group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover",
+            image: "size-10 overflow-clip rounded-item-sm group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover",
         },
     },
     defaultVariants: {
@@ -64,7 +64,7 @@ function ItemTitle({ className, ...props }) {
     return (_jsx("div", { "data-slot": "item-title", className: cn("line-clamp-1 flex w-fit items-center gap-2 text-body leading-snug font-medium underline-offset-4", className), ...props }));
 }
 function ItemDescription({ className, ...props }) {
-    return (_jsx("p", { "data-slot": "item-description", className: cn("line-clamp-2 text-left text-body leading-normal font-normal text-muted-foreground group-data-[size=xs]/item:text-caption [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary", className), ...props }));
+    return (_jsx("p", { "data-slot": "item-description", className: cn("line-clamp-2 text-start text-body leading-normal font-normal text-muted-foreground group-data-[size=xs]/item:text-caption [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary", className), ...props }));
 }
 function ItemActions({ className, ...props }) {
     return (_jsx("div", { "data-slot": "item-actions", className: cn("flex items-center gap-2", className), ...props }));

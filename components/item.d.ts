@@ -10,7 +10,7 @@ declare const itemVariants: (props?: ({
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 declare function Item({ className, variant, size, render, ...props }: useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>): React.ReactElement<unknown, string | React.JSXElementConstructor<any>>;
 declare const itemMediaVariants: (props?: ({
-    variant?: "image" | "default" | "icon" | null | undefined;
+    variant?: "default" | "image" | "icon" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 declare function ItemMedia({ className, variant, ...props }: React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants>): React.JSX.Element;
 declare function ItemContent({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element;
