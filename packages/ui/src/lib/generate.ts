@@ -36,6 +36,12 @@ function parse(css: string): Record<Kind, Block> {
   return blocks
 }
 
+/**
+ * A theme file's declarations by rule kind, e.g. `readThemeCss(css).dark.get("--brand")`.
+ * Only what the file itself sets: optional inputs it leaves out come from Nova.
+ */
+export const readThemeCss = (css: string) => parse(css)
+
 const rule = (selector: string, block: Block) =>
   `${selector} {\n${[...block].map(([k, v]) => `  ${k}: ${v};`).join("\n")}\n}\n`
 
