@@ -78,9 +78,9 @@ const tiles: { name: string; demo: () => React.ReactNode; wide?: boolean }[] = [
 export function App() {
   return (
     <div className="min-h-svh bg-background text-foreground">
-      <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4 py-4 sm:py-10 xl:py-16">
-        <ControlPanel />
-        <main className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      {/* Tiles fill the width, with room at the bottom for the settings bar. */}
+      <div className="px-3 pt-3 pb-32 sm:px-6 sm:pt-6">
+        <main className="grid grid-flow-dense grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {tiles.map(({ name, demo: Demo, wide }) => (
             <section
               key={name}
@@ -97,6 +97,7 @@ export function App() {
           ))}
         </main>
       </div>
+      <ControlPanel />
     </div>
   )
 }

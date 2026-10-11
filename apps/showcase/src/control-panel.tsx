@@ -1,23 +1,15 @@
 import * as React from "react"
 import {
   CheckIcon,
-  ChevronDownIcon,
   CopyIcon,
   DownloadIcon,
   RotateCcwIcon,
+  SlidersHorizontalIcon,
 } from "lucide-react"
 
 import { useTheme, type Density, type Mode } from "@amit-kap/glaze/theme"
 import { Badge } from "@amit-kap/glaze/components/badge"
 import { Button } from "@amit-kap/glaze/components/button"
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@amit-kap/glaze/components/card"
 import {
   Field,
   FieldDescription,
@@ -25,17 +17,17 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@amit-kap/glaze/components/field"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@amit-kap/glaze/components/collapsible"
 import { Input } from "@amit-kap/glaze/components/input"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
 } from "@amit-kap/glaze/components/input-group"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@amit-kap/glaze/components/popover"
 import {
   Select,
   SelectContent,
@@ -164,6 +156,50 @@ function Row({
   )
 }
 
+// Theme and Mode in the bar: the label shows from sm up.
+function BarSelect({
+  className,
+  id,
+  label,
+  items,
+  value,
+  onChange,
+}: {
+  className?: string
+  id: string
+  label: string
+  items: { value: string; label: string }[]
+  value: string
+  onChange: (value: string) => void
+}) {
+  return (
+    <div className={`flex min-w-0 items-center gap-2 ${className}`}>
+      <label
+        htmlFor={id}
+        className="text-body text-muted-foreground max-sm:sr-only"
+      >
+        {label}
+      </label>
+      <Select
+        items={items}
+        value={value}
+        onValueChange={(v) => v && onChange(v as string)}
+      >
+        <SelectTrigger id={id} size="sm" className="w-36 max-sm:w-full">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {items.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
+
 function ColorRow({
   id,
   label,
@@ -192,11 +228,10 @@ function ColorRow({
   )
 }
 
-// Settings panel, built only from Glaze components. Floats top right on wide
-// screens and sits above the column otherwise. Picking a theme, mode and
-// density previews the built-in themes; the Customize section shows the
-// chosen theme's values, and changing any of them builds a theme of its own
-// on top of it, applied live and ready to download.
+// Settings bar, built only from Glaze components, floating at the bottom of
+// the page. Picking a theme and mode previews the built-in themes; the
+// Customize popover shows the chosen theme's values, and changing any of them
+// builds a theme of its own on top of it, applied live and ready to download.
 export function ControlPanel() {
   const { theme, setTheme, mode, setMode, resolvedMode, density, setDensity } =
     useTheme()
@@ -217,7 +252,6 @@ export function ControlPanel() {
   const config = toConfig(base, custom, mode, density)
   const result = customized ? themeCss(config) : null
   const css = result && "css" in result ? result.css : null
-  const [open, setOpen] = React.useState(customized)
 
   // The setup command for what's picked: a built-in theme with its options,
   // or the downloaded config once the theme is customized.
@@ -278,242 +312,228 @@ export function ControlPanel() {
   }
 
   return (
-    <Card
-      size="sm"
+    <div
+      role="toolbar"
       aria-label="Theme settings"
-      className="z-40 w-full xl:fixed xl:inset-e-4 xl:top-4 xl:max-h-[calc(100dvh-2rem)] xl:w-72 xl:overflow-y-auto"
+      className="fixed inset-x-3 bottom-6 z-40 mx-auto flex max-w-2xl items-center gap-1.5 rounded-container border bg-popover p-4 text-popover-foreground shadow-floating sm:gap-4"
     >
-      <CardHeader className="items-center">
-        <CardTitle>Glaze</CardTitle>
-        <CardAction className="flex">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            aria-label="Glaze on npm"
-            nativeButton={false}
-            render={<a href="https://www.npmjs.com/package/@amit-kap/glaze" />}
-          >
-            <NpmIcon />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            aria-label="Glaze on GitHub"
-            nativeButton={false}
-            render={<a href="https://github.com/amit-kap/glaze" />}
-          >
-            <GitHubIcon />
-          </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <FieldGroup>
-          <Row
-            id="panel-theme"
-            label="Theme"
-            items={themes}
-            value={base}
-            onChange={(v) =>
-              // A new theme starts the Customize section from its values.
-              isBaseTheme(v) &&
-              setState((s) => ({ base: v, custom: { name: s.custom.name } }))
-            }
-          />
-          <Row
-            id="panel-mode"
-            label="Mode"
-            items={modes}
-            value={mode}
-            onChange={(v) => setMode(v as Mode)}
-          />
-        </FieldGroup>
-
-        <Collapsible open={open} onOpenChange={setOpen}>
-          <CollapsibleTrigger
-            render={
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full justify-between"
-              />
-            }
-          >
-            <span className="flex items-center gap-2">
-              Customize
-              {customized && <Badge variant="secondary">Custom</Badge>}
-            </span>
-            <ChevronDownIcon
-              className={
-                open
-                  ? "rotate-180 transition-transform"
-                  : "transition-transform"
-              }
+      <span className="flex items-center gap-0.5">
+        <span className="me-1.5 font-heading text-title font-medium max-sm:me-0.5 max-sm:text-body">
+          Glaze
+        </span>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label="Glaze on npm"
+          className="max-sm:hidden"
+          nativeButton={false}
+          render={<a href="https://www.npmjs.com/package/@amit-kap/glaze" />}
+        >
+          <NpmIcon />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label="Glaze on GitHub"
+          className="max-sm:hidden"
+          nativeButton={false}
+          render={<a href="https://github.com/amit-kap/glaze" />}
+        >
+          <GitHubIcon />
+        </Button>
+      </span>
+      <BarSelect
+        className="max-sm:flex-3"
+        id="panel-theme"
+        label="Theme"
+        items={themes}
+        value={base}
+        onChange={(v) =>
+          // A new theme starts the Customize section from its values.
+          isBaseTheme(v) &&
+          setState((s) => ({ base: v, custom: { name: s.custom.name } }))
+        }
+      />
+      <BarSelect
+        className="max-sm:flex-2"
+        id="panel-mode"
+        label="Mode"
+        items={modes}
+        value={mode}
+        onChange={(v) => setMode(v as Mode)}
+      />
+      <Popover>
+        <PopoverTrigger
+          render={<Button variant="outline" size="sm" className="ms-auto" />}
+        >
+          <SlidersHorizontalIcon />
+          <span className="max-sm:sr-only">Customize</span>
+          {customized && <Badge variant="secondary">Custom</Badge>}
+        </PopoverTrigger>
+        <PopoverContent
+          side="top"
+          align="end"
+          sideOffset={12}
+          className="max-h-(--available-height) w-80 gap-4 overflow-y-auto p-4"
+        >
+          <FieldGroup>
+            <ColorRow
+              id="panel-brand"
+              label={resolvedMode === "dark" ? "Brand, dark" : "Brand, light"}
+              value={values[brandKey]}
+              onChange={(v) => change(brandKey, v)}
             />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pt-4">
-            <FieldGroup>
-              <ColorRow
-                id="panel-brand"
-                label={resolvedMode === "dark" ? "Brand, dark" : "Brand, light"}
-                value={values[brandKey]}
-                onChange={(v) => change(brandKey, v)}
-              />
-              <Field>
-                <div className="flex items-center justify-between">
-                  <FieldLabel htmlFor="panel-radius">Radius</FieldLabel>
-                  <span className="text-caption text-muted-foreground">
-                    {values.radius}px
-                  </span>
-                </div>
-                <Slider
-                  id="panel-radius"
-                  aria-label="Radius"
-                  min={0}
-                  max={24}
-                  step={1}
-                  value={[values.radius]}
-                  onValueChange={(v) =>
-                    change("radius", Array.isArray(v) ? v[0] : v)
-                  }
-                />
-              </Field>
-              <Field>
-                <div className="flex items-center justify-between">
-                  <FieldLabel htmlFor="panel-height">Control height</FieldLabel>
-                  <span className="text-caption text-muted-foreground">
-                    {values.height}px
-                  </span>
-                </div>
-                <Slider
-                  id="panel-height"
-                  aria-label="Control height"
-                  min={24}
-                  max={48}
-                  step={1}
-                  value={[values.height]}
-                  onValueChange={(v) =>
-                    change("height", Array.isArray(v) ? v[0] : v)
-                  }
-                />
-              </Field>
-              <Row
-                id="panel-controls"
-                label="Controls"
-                items={controlShapes}
-                value={values.controls}
-                onChange={(v) => change("controls", v)}
-              />
-              <Row
-                id="panel-font"
-                label="Font"
-                items={fonts}
-                value={values.font}
-                onChange={(v) => change("font", v)}
-              />
-              <Row
-                id="panel-density"
-                label="Density"
-                items={densities}
-                value={density}
-                onChange={(v) => setDensity(v as Density)}
-              />
-
-              {customized && (
-                <Field
-                  data-invalid={result && "error" in result ? true : undefined}
-                >
-                  <FieldLabel htmlFor="panel-name">Theme name</FieldLabel>
-                  <Input
-                    id="panel-name"
-                    value={custom.name}
-                    onChange={(e) => update({ name: e.target.value })}
-                    aria-invalid={
-                      result && "error" in result ? true : undefined
-                    }
-                  />
-                  {result && "error" in result && (
-                    <FieldError>{result.error}</FieldError>
-                  )}
-                </Field>
-              )}
-
-              <div className="flex flex-col gap-2">
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    size="sm"
-                    disabled={!css}
-                    onClick={() =>
-                      css && download(`${custom.name}.css`, css, "text/css")
-                    }
-                  >
-                    <DownloadIcon />
-                    Theme CSS
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={!css}
-                    onClick={() =>
-                      download(
-                        "glaze.config.json",
-                        JSON.stringify(config, null, 2) + "\n",
-                        "application/json"
-                      )
-                    }
-                  >
-                    <DownloadIcon />
-                    Config
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    disabled={!customized}
-                    onClick={reset}
-                  >
-                    <RotateCcwIcon />
-                    Reset to theme defaults
-                  </Button>
-                </div>
-                <FieldDescription>
-                  {customized
-                    ? "Download the config and run the command below in your project."
-                    : "Change a setting above to make your own theme."}
-                </FieldDescription>
+            <Field>
+              <div className="flex items-center justify-between">
+                <FieldLabel htmlFor="panel-radius">Radius</FieldLabel>
+                <span className="text-caption text-muted-foreground">
+                  {values.radius}px
+                </span>
               </div>
-            </FieldGroup>
-          </CollapsibleContent>
-        </Collapsible>
-      </CardContent>
-      <CardFooter>
-        {/* Text rather than an input, so a long command wraps instead of
-            scrolling out of view. Each flag stays on one line with its value;
-            browsers would otherwise break after the "--". */}
-        <InputGroup className="h-auto items-start py-1">
-          <code
-            aria-label="Setup command"
-            className="min-w-0 flex-1 px-3 py-1 font-mono text-caption break-words select-all"
-          >
-            {command.split(/ (?=--)/).map((part, i) => (
-              <React.Fragment key={part}>
-                {i > 0 && " "}
-                <span className="whitespace-nowrap">{part}</span>
-              </React.Fragment>
-            ))}
-          </code>
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton
-              size="icon-xs"
-              aria-label="Copy setup command"
-              onClick={copy}
+              <Slider
+                id="panel-radius"
+                aria-label="Radius"
+                min={0}
+                max={24}
+                step={1}
+                value={[values.radius]}
+                onValueChange={(v) =>
+                  change("radius", Array.isArray(v) ? v[0] : v)
+                }
+              />
+            </Field>
+            <Field>
+              <div className="flex items-center justify-between">
+                <FieldLabel htmlFor="panel-height">Control height</FieldLabel>
+                <span className="text-caption text-muted-foreground">
+                  {values.height}px
+                </span>
+              </div>
+              <Slider
+                id="panel-height"
+                aria-label="Control height"
+                min={24}
+                max={48}
+                step={1}
+                value={[values.height]}
+                onValueChange={(v) =>
+                  change("height", Array.isArray(v) ? v[0] : v)
+                }
+              />
+            </Field>
+            <Row
+              id="panel-controls"
+              label="Controls"
+              items={controlShapes}
+              value={values.controls}
+              onChange={(v) => change("controls", v)}
+            />
+            <Row
+              id="panel-font"
+              label="Font"
+              items={fonts}
+              value={values.font}
+              onChange={(v) => change("font", v)}
+            />
+            <Row
+              id="panel-density"
+              label="Density"
+              items={densities}
+              value={density}
+              onChange={(v) => setDensity(v as Density)}
+            />
+
+            {customized && (
+              <Field
+                data-invalid={result && "error" in result ? true : undefined}
+              >
+                <FieldLabel htmlFor="panel-name">Theme name</FieldLabel>
+                <Input
+                  id="panel-name"
+                  value={custom.name}
+                  onChange={(e) => update({ name: e.target.value })}
+                  aria-invalid={result && "error" in result ? true : undefined}
+                />
+                {result && "error" in result && (
+                  <FieldError>{result.error}</FieldError>
+                )}
+              </Field>
+            )}
+
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  disabled={!css}
+                  onClick={() =>
+                    css && download(`${custom.name}.css`, css, "text/css")
+                  }
+                >
+                  <DownloadIcon />
+                  Theme CSS
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={!css}
+                  onClick={() =>
+                    download(
+                      "glaze.config.json",
+                      JSON.stringify(config, null, 2) + "\n",
+                      "application/json"
+                    )
+                  }
+                >
+                  <DownloadIcon />
+                  Config
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  disabled={!customized}
+                  onClick={reset}
+                >
+                  <RotateCcwIcon />
+                  Reset to theme defaults
+                </Button>
+              </div>
+              <FieldDescription>
+                {customized
+                  ? "Download the config and run the command below in your project."
+                  : "Change a setting above to make your own theme."}
+              </FieldDescription>
+            </div>
+          </FieldGroup>
+          {/* Text rather than an input, so a long command wraps instead of
+              scrolling out of view. Each flag stays on one line with its
+              value; browsers would otherwise break after the "--". */}
+          <InputGroup className="h-auto items-start py-1">
+            <code
+              aria-label="Setup command"
+              className="min-w-0 flex-1 px-3 py-1 font-mono text-caption break-words select-all"
             >
-              <span className="icon-swap" data-swapped={copied || undefined}>
-                <CopyIcon />
-                <CheckIcon />
-              </span>
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
-      </CardFooter>
-    </Card>
+              {command.split(/ (?=--)/).map((part, i) => (
+                <React.Fragment key={part}>
+                  {i > 0 && " "}
+                  <span className="whitespace-nowrap">{part}</span>
+                </React.Fragment>
+              ))}
+            </code>
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
+                size="icon-xs"
+                aria-label="Copy setup command"
+                onClick={copy}
+              >
+                <span className="icon-swap" data-swapped={copied || undefined}>
+                  <CopyIcon />
+                  <CheckIcon />
+                </span>
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }
