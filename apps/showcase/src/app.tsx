@@ -1,4 +1,4 @@
-import type * as React from "react"
+import * as React from "react"
 
 import { Card } from "@amit-kap/glaze/components/card"
 import { ControlPanel } from "./control-panel"
@@ -77,10 +77,13 @@ const tiles: { name: string; demo: () => React.ReactNode; wide?: boolean }[] = [
 ]
 
 export function App() {
+  const [customizing, setCustomizing] = React.useState(false)
   return (
     <div className="min-h-svh bg-background text-foreground">
       {/* Tiles fill the width, with room at the bottom for the settings bar. */}
-      <div className="px-3 pt-3 pb-32 sm:px-6 sm:pt-6">
+      <div
+        className={`px-3 pt-3 pb-32 transition-[padding] duration-(--duration-moderate) ease-standard motion-reduce:transition-none sm:px-6 sm:pt-6 ${customizing ? "lg:pr-[calc(--spacing(80)+--spacing(6))]" : ""}`}
+      >
         <main className="grid grid-flow-dense grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {tiles.map(({ name, demo: Demo, wide }) => (
             <Card
@@ -99,7 +102,7 @@ export function App() {
           ))}
         </main>
       </div>
-      <ControlPanel />
+      <ControlPanel open={customizing} onOpenChange={setCustomizing} />
     </div>
   )
 }
