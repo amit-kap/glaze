@@ -196,7 +196,7 @@ export const BlockStart: Story = {
           <InputGroupAddon align="block-start">
             <FileCodeIcon className="text-muted-foreground" />
             <InputGroupText className="font-mono">script.js</InputGroupText>
-            <InputGroupButton size="icon-xs" className="ml-auto">
+            <InputGroupButton size="icon-xs" className="ms-auto">
               <CopyIcon />
               <span className="sr-only">Copy</span>
             </InputGroupButton>
@@ -232,7 +232,7 @@ export const BlockEnd: Story = {
           />
           <InputGroupAddon align="block-end">
             <InputGroupText>0/280</InputGroupText>
-            <InputGroupButton variant="default" size="sm" className="ml-auto">
+            <InputGroupButton variant="default" size="sm" className="ms-auto">
               Post
             </InputGroupButton>
           </InputGroupAddon>
@@ -298,7 +298,7 @@ export const WithText: Story = {
         <InputGroupAddon>
           <InputGroupText>https://</InputGroupText>
         </InputGroupAddon>
-        <InputGroupInput placeholder="example.com" className="pl-0.5!" />
+        <InputGroupInput placeholder="example.com" className="ps-0.5!" />
         <InputGroupAddon align="inline-end">
           <InputGroupText>.com</InputGroupText>
         </InputGroupAddon>
@@ -367,7 +367,7 @@ export const WithButton: Story = {
               </PopoverContent>
             </Popover>
           </InputGroupAddon>
-          <InputGroupAddon className="pl-1.5 text-muted-foreground">
+          <InputGroupAddon className="ps-1.5 text-muted-foreground">
             https://
           </InputGroupAddon>
           <InputGroupInput id="input-secure" aria-label="URL" />
@@ -443,7 +443,7 @@ export const WithDropdown: Story = {
         <InputGroupAddon align="inline-end">
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={<InputGroupButton variant="ghost" className="pr-1.5!" />}
+              render={<InputGroupButton variant="ghost" className="pe-1.5!" />}
             >
               Search In... <ChevronDownIcon className="size-3" />
             </DropdownMenuTrigger>
@@ -515,7 +515,7 @@ export const WithTextarea: Story = {
       />
       <InputGroupAddon align="block-end" className="border-t">
         <InputGroupText>Line 1, Column 1</InputGroupText>
-        <InputGroupButton size="sm" className="ml-auto" variant="default">
+        <InputGroupButton size="sm" className="ms-auto" variant="default">
           Run <CornerDownLeftIcon />
         </InputGroupButton>
       </InputGroupAddon>
@@ -525,7 +525,7 @@ export const WithTextarea: Story = {
           script.js
         </InputGroupText>
         <InputGroupButton
-          className="ml-auto"
+          className="ms-auto"
           size="icon-xs"
           aria-label="Refresh"
         >
@@ -552,7 +552,7 @@ export const CustomInput: Story = {
         placeholder="Autoresize textarea..."
       />
       <InputGroupAddon align="block-end">
-        <InputGroupButton className="ml-auto" size="sm" variant="default">
+        <InputGroupButton className="ms-auto" size="sm" variant="default">
           Submit
         </InputGroupButton>
       </InputGroupAddon>

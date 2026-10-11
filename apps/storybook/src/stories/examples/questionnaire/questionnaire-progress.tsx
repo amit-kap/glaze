@@ -50,8 +50,8 @@ export function QuestionnaireProgressExample() {
                   key={index}
                   className={
                     index < state.current
-                      ? "h-1.5 flex-1 rounded-full bg-primary"
-                      : "h-1.5 flex-1 rounded-full bg-muted"
+                      ? "h-1.5 flex-1 rounded-pill bg-primary"
+                      : "h-1.5 flex-1 rounded-pill bg-muted"
                   }
                 />
               ))}

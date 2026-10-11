@@ -66,7 +66,7 @@ function LoginForm({ id }: { id: string }) {
             <Label htmlFor={`password-${id}`}>Password</Label>
             <a
               href="#"
-              className="ml-auto inline-block text-body underline-offset-4 hover:underline"
+              className="ms-auto inline-block text-body underline-offset-4 hover:underline"
             >
               Forgot your password?
             </a>

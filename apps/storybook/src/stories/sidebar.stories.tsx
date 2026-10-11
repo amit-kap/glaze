@@ -149,17 +149,17 @@ function TeamSwitcher({ teams }: { teams: typeof data.teams }) {
           <DropdownMenuTrigger
             render={<SidebarMenuButton size="lg" className={openMenuButton} />}
           >
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-control bg-sidebar-primary text-sidebar-primary-foreground">
               <activeTeam.logo className="size-4" />
             </div>
-            <div className="grid flex-1 text-left text-body leading-tight">
+            <div className="grid flex-1 text-start text-body leading-tight">
               <span className="truncate font-medium">{activeTeam.name}</span>
               <span className="truncate text-caption">{activeTeam.plan}</span>
             </div>
-            <ChevronsUpDownIcon className="ml-auto" />
+            <ChevronsUpDownIcon className="ms-auto" />
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--anchor-width) min-w-56 rounded-lg"
+            className="w-(--anchor-width) min-w-56 rounded-control"
             align="start"
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
@@ -174,7 +174,7 @@ function TeamSwitcher({ teams }: { teams: typeof data.teams }) {
                   onClick={() => setActiveTeam(team)}
                   className="gap-2 p-2"
                 >
-                  <div className="flex size-6 items-center justify-center rounded-md border">
+                  <div className="flex size-6 items-center justify-center rounded-item border">
                     <team.logo className="size-3.5 shrink-0" />
                   </div>
                   {team.name}
@@ -185,7 +185,7 @@ function TeamSwitcher({ teams }: { teams: typeof data.teams }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem className="gap-2 p-2">
-                <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
+                <div className="flex size-6 items-center justify-center rounded-item border bg-transparent">
                   <PlusIcon className="size-4" />
                 </div>
                 <div className="font-medium text-muted-foreground">
@@ -217,7 +217,7 @@ function NavMain({ items }: { items: typeof data.navMain }) {
               >
                 <item.icon />
                 <span>{item.title}</span>
-                <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-open/collapsible:rotate-90" />
+                <ChevronRightIcon className="ms-auto transition-transform duration-(--duration-moderate) group-data-open/collapsible:rotate-90" />
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
@@ -257,7 +257,7 @@ function NavProjects({ projects }: { projects: typeof data.projects }) {
                 <span className="sr-only">More</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-48 rounded-lg"
+                className="w-48 rounded-control"
                 side={isMobile ? "bottom" : "right"}
                 align={isMobile ? "end" : "start"}
               >
@@ -292,11 +292,11 @@ function NavProjects({ projects }: { projects: typeof data.projects }) {
 function UserLabel({ user }: { user: typeof data.user }) {
   return (
     <>
-      <Avatar className="h-8 w-8 rounded-lg">
+      <Avatar className="h-8 w-8 rounded-control">
         <AvatarImage src={user.avatar} alt={user.name} />
-        <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+        <AvatarFallback className="rounded-control">CN</AvatarFallback>
       </Avatar>
-      <div className="grid flex-1 text-left text-body leading-tight">
+      <div className="grid flex-1 text-start text-body leading-tight">
         <span className="truncate font-medium">{user.name}</span>
         <span className="truncate text-caption">{user.email}</span>
       </div>
@@ -315,17 +315,17 @@ function NavUser({ user }: { user: typeof data.user }) {
             render={<SidebarMenuButton size="lg" className={openMenuButton} />}
           >
             <UserLabel user={user} />
-            <ChevronsUpDownIcon className="ml-auto size-4" />
+            <ChevronsUpDownIcon className="ms-auto size-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--anchor-width) min-w-56 rounded-lg"
+            className="w-(--anchor-width) min-w-56 rounded-control"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
           >
             <DropdownMenuGroup>
               <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-body">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-start text-body">
                   <UserLabel user={user} />
                 </div>
               </DropdownMenuLabel>
@@ -440,7 +440,7 @@ const meta = {
           >
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger
-                className={isRight ? "-mr-1 rotate-180" : "-ml-1"}
+                className={isRight ? "-me-1 rotate-180" : "-ms-1"}
               />
             </div>
           </header>

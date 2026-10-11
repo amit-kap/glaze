@@ -29,7 +29,7 @@ function Photo() {
     <img
       src="https://avatar.vercel.sh/shadcn1"
       alt="Photo"
-      className="absolute inset-0 size-full rounded-lg object-cover grayscale dark:brightness-20"
+      className="absolute inset-0 size-full rounded-control object-cover grayscale dark:brightness-20"
     />
   )
 }
@@ -38,7 +38,7 @@ function Photo() {
 
 export const Default: Story = {
   render: (args) => (
-    <AspectRatio {...args} className="w-sm rounded-lg bg-muted">
+    <AspectRatio {...args} className="w-sm rounded-control bg-muted">
       <Photo />
     </AspectRatio>
   ),
@@ -58,7 +58,7 @@ export const Ratios: Story = {
     <div className="flex items-start gap-4">
       {RATIOS.map(({ label, ratio }) => (
         <figure key={label} className="flex w-[12rem] flex-col gap-2">
-          <AspectRatio ratio={ratio} className="rounded-lg bg-muted">
+          <AspectRatio ratio={ratio} className="rounded-control bg-muted">
             <Photo />
           </AspectRatio>
           <figcaption className="text-caption text-muted-foreground">
@@ -72,7 +72,7 @@ export const Ratios: Story = {
 
 export const Portrait: Story = {
   render: () => (
-    <AspectRatio ratio={9 / 16} className="w-[10rem] rounded-lg bg-muted">
+    <AspectRatio ratio={9 / 16} className="w-[10rem] rounded-control bg-muted">
       <Photo />
     </AspectRatio>
   ),

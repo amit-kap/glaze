@@ -217,7 +217,7 @@ export const Custom: Story = {
             aria-label="Bold"
             className={fontWeightItem}
           >
-            <span className="text-title leading-none font-bold">Aa</span>
+            <span className="text-title leading-none font-strong">Aa</span>
             <span className="text-caption text-muted-foreground">Bold</span>
           </ToggleGroupItem>
         </ToggleGroup>

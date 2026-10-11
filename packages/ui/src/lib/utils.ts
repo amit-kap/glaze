@@ -9,7 +9,7 @@ export const cn: CnFunction = createCn({
       text: ["caption", "body", "title", "heading", "display"],
       radius: ["item-sm", "item", "control", "floating", "container", "pill"],
       shadow: ["raised", "floating", "modal"],
-      ease: ["standard", "emphasized", "exit"],
+      ease: ["standard", "emphasized", "exit", "enter"],
       spacing: ["control-xs", "control-sm", "control-md", "control-lg"],
       "font-weight": ["strong"],
     },

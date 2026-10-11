@@ -376,7 +376,7 @@ export const WithDropdownMenu: Story = {
           render={
             <Button
               variant="outline"
-              className="pl-2!"
+              className="ps-2!"
               aria-label="More options"
             />
           }

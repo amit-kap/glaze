@@ -140,7 +140,7 @@ export const Multiple: Story = {
 
 export const Borders: Story = {
   render: () => (
-    <Accordion className="w-lg rounded-lg border" defaultValue={["billing"]}>
+    <Accordion className="w-lg rounded-control border" defaultValue={["billing"]}>
       <Items
         className="border-b px-4 last:border-b-0"
         items={[

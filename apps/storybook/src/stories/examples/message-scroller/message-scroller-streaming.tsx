@@ -224,7 +224,7 @@ export function MessageScrollerStreaming() {
                     variant="default"
                     size="icon-sm"
                     disabled={!nextMessage || isBusy}
-                    className="ml-auto"
+                    className="ms-auto"
                   >
                     <ArrowUpIcon />
                     <span className="sr-only">Send</span>

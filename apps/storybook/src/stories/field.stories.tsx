@@ -564,7 +564,7 @@ export const Group: Story = {
 export const Responsive: Story = {
   parameters: { wrapperClassName: "w-full max-w-3xl" },
   render: () => (
-    <div className="mx-auto w-xl max-w-full min-w-64 resize-x overflow-auto rounded-lg border border-dashed p-6">
+    <div className="mx-auto w-xl max-w-full min-w-64 resize-x overflow-auto rounded-control border border-dashed p-6">
       <form>
         <FieldSet>
           <FieldLegend>Profile</FieldLegend>

@@ -110,7 +110,7 @@ export function MessageScrollerVisibility() {
               </MessageScroller>
             </CardContent>
           </Card>
-          <div className="absolute top-1/2 -right-12 -translate-y-1/2">
+          <div className="absolute top-1/2 -inset-e-12 -translate-y-1/2">
             <TranscriptOutline />
           </div>
         </div>
@@ -133,7 +133,7 @@ function TranscriptOutline() {
           <button
             type="button"
             aria-label="Open transcript outline"
-            className="flex h-9 w-9 flex-col items-center justify-center gap-1 rounded-md transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="flex h-9 w-9 flex-col items-center justify-center gap-1 rounded-item transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           />
         }
       >
@@ -141,7 +141,7 @@ function TranscriptOutline() {
           <span
             key={message.id}
             data-current={message.id === currentAnchorId}
-            className="h-0.5 w-4 rounded-full bg-muted-foreground/40 data-[current=true]:bg-foreground"
+            className="h-0.5 w-4 rounded-pill bg-muted-foreground/40 data-[current=true]:bg-foreground"
           />
         ))}
       </HoverCardTrigger>
@@ -149,7 +149,7 @@ function TranscriptOutline() {
         align="center"
         side="left"
         sideOffset={-28}
-        className="flex w-64 flex-col gap-1 rounded-2xl p-1"
+        className="flex w-64 flex-col gap-1 rounded-container p-1"
       >
         {userMessages.map((message) => (
           <button
@@ -158,7 +158,7 @@ function TranscriptOutline() {
             aria-current={
               currentAnchorId === message.id ? "location" : undefined
             }
-            className="flex min-h-7 items-center rounded-xl px-2 py-1.5 text-left text-body transition-colors outline-none hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground aria-current:bg-accent aria-current:text-accent-foreground"
+            className="flex min-h-7 items-center rounded-container px-2 py-1.5 text-start text-body transition-colors outline-none hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground aria-current:bg-accent aria-current:text-accent-foreground"
             onClick={() =>
               scrollToMessage(message.id, {
                 align: "start",

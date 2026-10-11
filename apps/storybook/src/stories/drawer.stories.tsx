@@ -410,7 +410,7 @@ export const Responsive: Story = {
           Edit Profile
         </DrawerTrigger>
         <DrawerContent>
-          <DrawerHeader className="text-left">
+          <DrawerHeader className="text-start">
             <DrawerTitle>Edit profile</DrawerTitle>
             <DrawerDescription>
               Make changes to your profile here. Click save when you&apos;re

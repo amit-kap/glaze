@@ -475,7 +475,7 @@ export const WithAvatar: Story = {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full"
+            className="rounded-pill"
             aria-label="Open account menu"
           />
         }

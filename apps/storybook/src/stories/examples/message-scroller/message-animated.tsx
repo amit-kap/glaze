@@ -103,7 +103,7 @@ function MessageAnimatedRow({
             return (
               <div
                 key={part.key}
-                className="w-full border-l-2 border-muted-foreground/30 pl-3 text-muted-foreground"
+                className="w-full border-s-2 border-muted-foreground/30 ps-3 text-muted-foreground"
               >
                 <div className="mb-1 flex items-center gap-1.5 text-caption font-medium">
                   <BrainIcon className="size-3.5" />

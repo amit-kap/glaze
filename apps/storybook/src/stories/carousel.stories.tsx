@@ -56,7 +56,7 @@ function Slide({
         <CardContent
           className={cn("flex items-center justify-center p-6", className)}
         >
-          <span className={cn("font-semibold", textClassName)}>
+          <span className={cn("font-strong", textClassName)}>
             {index + 1}
           </span>
         </CardContent>
@@ -112,9 +112,9 @@ export const Sizes: Story = {
 export const Spacing: Story = {
   render: () => (
     <Carousel className="w-sm">
-      <CarouselContent className="-ml-1">
+      <CarouselContent className="-ms-1">
         {slides.map((index) => (
-          <CarouselItem key={index} className="basis-1/2 pl-1 lg:basis-1/3">
+          <CarouselItem key={index} className="basis-1/2 ps-1 lg:basis-1/3">
             <Slide
               index={index}
               className="aspect-square"
@@ -180,7 +180,7 @@ export const Api: Story = {
               <CarouselItem key={index}>
                 <Card className="m-px">
                   <CardContent className="flex aspect-square items-center justify-center p-6">
-                    <span className="text-display font-semibold">
+                    <span className="text-display font-strong">
                       {index + 1}
                     </span>
                   </CardContent>

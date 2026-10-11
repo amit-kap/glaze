@@ -64,6 +64,7 @@
   --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-ease-emphasized: cubic-bezier(0.34, 1.56, 0.64, 1);
   --motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --motion-ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :where(.dark),
@@ -81,15 +82,19 @@
   --warning: oklch(0.852 0.199 91.936);
   --success: oklch(0.792 0.209 151.711);
   --info: oklch(0.707 0.165 254.624);
+  --sidebar-brand: oklch(0.488 0.243 264.376);
+  --sidebar-brand-ink: oklch(0.985 0 0);
+  --caution: oklch(0.75 0.183 55.934);
 }
 
 /*
- * System overrides: shadcn's neutral values aren't expressible as one
- * derivation across both modes, so Nova pins them to match shadcn exactly.
- * Scoped to Nova (no data-theme, or "nova") so other themes still derive.
+ * System overrides: shadcn's light neutrals aren't the light derivation, so
+ * Nova pins them to match shadcn exactly. Light mode only; dark mode derives
+ * them from the inputs (see the mode mixes in tokens.css). Scoped to Nova (no
+ * data-theme, or "nova") so other themes still derive.
  */
-:root:not([data-theme]),
-[data-theme="nova"] {
+:root:not([data-theme], .dark, .dark *),
+[data-theme="nova"]:not(.dark, .dark *) {
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --accent-foreground: oklch(0.205 0 0);
@@ -104,23 +109,3 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-:root:not([data-theme]).dark,
-:root:not([data-theme]) .dark,
-[data-theme="nova"].dark,
-.dark [data-theme="nova"],
-[data-theme="nova"] .dark {
-  --secondary: oklch(0.269 0 0);
-  --muted: oklch(0.269 0 0);
-  --accent: oklch(0.269 0 0);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --severity-high: oklch(0.75 0.183 55.934);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-ring: oklch(0.556 0 0);
-}
