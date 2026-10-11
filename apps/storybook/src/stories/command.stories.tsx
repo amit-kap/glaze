@@ -1,5 +1,31 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import {
+  BellIcon,
+  CalculatorIcon,
+  CalendarIcon,
+  ClipboardPasteIcon,
+  CodeIcon,
+  CopyIcon,
+  CreditCardIcon,
+  FileTextIcon,
+  FolderIcon,
+  FolderPlusIcon,
+  HelpCircleIcon,
+  HomeIcon,
+  ImageIcon,
+  InboxIcon,
+  LayoutGridIcon,
+  ListIcon,
+  PlusIcon,
+  ScissorsIcon,
+  SettingsIcon,
+  SmileIcon,
+  TrashIcon,
+  UserIcon,
+  ZoomInIcon,
+  ZoomOutIcon,
+} from "lucide-react"
 import { Button } from "@amit-kap/glaze/components/button"
 import {
   Command,
@@ -12,86 +38,9 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@amit-kap/glaze/components/command"
-import {
-  CalculatorIcon,
-  CalendarIcon,
-  CreditCardIcon,
-  SettingsIcon,
-  SmileIcon,
-  UserIcon,
-} from "lucide-react"
 
-function CommandItems() {
-  return (
-    <>
-      <CommandEmpty>No results found.</CommandEmpty>
-      <CommandGroup heading="Suggestions">
-        <CommandItem>
-          <CalendarIcon />
-          Calendar
-        </CommandItem>
-        <CommandItem>
-          <SmileIcon />
-          Search emoji
-        </CommandItem>
-        <CommandItem disabled>
-          <CalculatorIcon />
-          Calculator
-        </CommandItem>
-      </CommandGroup>
-      <CommandSeparator />
-      <CommandGroup heading="Settings">
-        <CommandItem>
-          <UserIcon />
-          Profile
-          <CommandShortcut>⌘P</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <CreditCardIcon />
-          Billing
-          <CommandShortcut>⌘B</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <SettingsIcon />
-          Settings
-          <CommandShortcut>⌘S</CommandShortcut>
-        </CommandItem>
-      </CommandGroup>
-    </>
-  )
-}
-
-function CommandDialogDemo() {
-  const [open, setOpen] = React.useState(false)
-
-  React.useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((value) => !value)
-      }
-    }
-    document.addEventListener("keydown", onKeyDown)
-    return () => document.removeEventListener("keydown", onKeyDown)
-  }, [])
-
-  return (
-    <>
-      <Button variant="outline" onClick={() => setOpen(true)}>
-        Open palette (⌘J)
-      </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <Command>
-          <CommandInput placeholder="Type a command or search..." />
-          <CommandList>
-            <CommandItems />
-          </CommandList>
-        </Command>
-      </CommandDialog>
-    </>
-  )
-}
-
+// Stories follow the upstream shadcn/ui (base-nova) Command examples:
+// https://ui.shadcn.com/docs/components/base/command
 const meta = {
   title: "Components/Command",
   component: Command,
@@ -108,7 +57,8 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: "Fast, composable, unstyled command menu. Built on cmdk.",
+        component:
+          "Fast, composable command menu. Built on [cmdk](https://cmdk.paco.me); wrap it in `CommandDialog` for a command palette.",
       },
     },
   },
@@ -117,17 +67,275 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+// --- Basic ----------------------------------------------------------------
+
 export const Default: Story = {
-  render: () => (
-    <Command className="w-md rounded-lg border">
+  render: (args) => (
+    <Command className="w-sm border" {...args}>
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
-        <CommandItems />
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading="Suggestions">
+          <CommandItem>
+            <CalendarIcon />
+            <span>Calendar</span>
+          </CommandItem>
+          <CommandItem>
+            <SmileIcon />
+            <span>Search Emoji</span>
+          </CommandItem>
+          <CommandItem disabled>
+            <CalculatorIcon />
+            <span>Calculator</span>
+          </CommandItem>
+        </CommandGroup>
+        <CommandSeparator />
+        <CommandGroup heading="Settings">
+          <CommandItem>
+            <UserIcon />
+            <span>Profile</span>
+            <CommandShortcut>⌘P</CommandShortcut>
+          </CommandItem>
+          <CommandItem>
+            <CreditCardIcon />
+            <span>Billing</span>
+            <CommandShortcut>⌘B</CommandShortcut>
+          </CommandItem>
+          <CommandItem>
+            <SettingsIcon />
+            <span>Settings</span>
+            <CommandShortcut>⌘S</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
       </CommandList>
     </Command>
   ),
 }
 
-export const Dialog: Story = {
-  render: () => <CommandDialogDemo />,
+// The remaining upstream examples open the menu in a `CommandDialog`.
+function CommandMenu({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Button onClick={() => setOpen(true)} variant="outline" className="w-fit">
+        Open Menu
+      </Button>
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <Command>
+          <CommandInput placeholder="Type a command or search..." />
+          <CommandList>
+            <CommandEmpty>No results found.</CommandEmpty>
+            {children}
+          </CommandList>
+        </Command>
+      </CommandDialog>
+    </div>
+  )
+}
+
+export const Basic: Story = {
+  render: () => (
+    <CommandMenu>
+      <CommandGroup heading="Suggestions">
+        <CommandItem>Calendar</CommandItem>
+        <CommandItem>Search Emoji</CommandItem>
+        <CommandItem>Calculator</CommandItem>
+      </CommandGroup>
+    </CommandMenu>
+  ),
+}
+
+// --- Variants -------------------------------------------------------------
+
+export const Shortcuts: Story = {
+  render: () => (
+    <CommandMenu>
+      <CommandGroup heading="Settings">
+        <CommandItem>
+          <UserIcon />
+          <span>Profile</span>
+          <CommandShortcut>⌘P</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <CreditCardIcon />
+          <span>Billing</span>
+          <CommandShortcut>⌘B</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <SettingsIcon />
+          <span>Settings</span>
+          <CommandShortcut>⌘S</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+    </CommandMenu>
+  ),
+}
+
+export const Groups: Story = {
+  render: () => (
+    <CommandMenu>
+      <CommandGroup heading="Suggestions">
+        <CommandItem>
+          <CalendarIcon />
+          <span>Calendar</span>
+        </CommandItem>
+        <CommandItem>
+          <SmileIcon />
+          <span>Search Emoji</span>
+        </CommandItem>
+        <CommandItem>
+          <CalculatorIcon />
+          <span>Calculator</span>
+        </CommandItem>
+      </CommandGroup>
+      <CommandSeparator />
+      <CommandGroup heading="Settings">
+        <CommandItem>
+          <UserIcon />
+          <span>Profile</span>
+          <CommandShortcut>⌘P</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <CreditCardIcon />
+          <span>Billing</span>
+          <CommandShortcut>⌘B</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <SettingsIcon />
+          <span>Settings</span>
+          <CommandShortcut>⌘S</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+    </CommandMenu>
+  ),
+}
+
+// `CommandList` caps its height and scrolls past that.
+export const Scrollable: Story = {
+  render: () => (
+    <CommandMenu>
+      <CommandGroup heading="Navigation">
+        <CommandItem>
+          <HomeIcon />
+          <span>Home</span>
+          <CommandShortcut>⌘H</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <InboxIcon />
+          <span>Inbox</span>
+          <CommandShortcut>⌘I</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <FileTextIcon />
+          <span>Documents</span>
+          <CommandShortcut>⌘D</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <FolderIcon />
+          <span>Folders</span>
+          <CommandShortcut>⌘F</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+      <CommandSeparator />
+      <CommandGroup heading="Actions">
+        <CommandItem>
+          <PlusIcon />
+          <span>New File</span>
+          <CommandShortcut>⌘N</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <FolderPlusIcon />
+          <span>New Folder</span>
+          <CommandShortcut>⇧⌘N</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <CopyIcon />
+          <span>Copy</span>
+          <CommandShortcut>⌘C</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <ScissorsIcon />
+          <span>Cut</span>
+          <CommandShortcut>⌘X</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <ClipboardPasteIcon />
+          <span>Paste</span>
+          <CommandShortcut>⌘V</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <TrashIcon />
+          <span>Delete</span>
+          <CommandShortcut>⌫</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+      <CommandSeparator />
+      <CommandGroup heading="View">
+        <CommandItem>
+          <LayoutGridIcon />
+          <span>Grid View</span>
+        </CommandItem>
+        <CommandItem>
+          <ListIcon />
+          <span>List View</span>
+        </CommandItem>
+        <CommandItem>
+          <ZoomInIcon />
+          <span>Zoom In</span>
+          <CommandShortcut>⌘+</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <ZoomOutIcon />
+          <span>Zoom Out</span>
+          <CommandShortcut>⌘-</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+      <CommandSeparator />
+      <CommandGroup heading="Account">
+        <CommandItem>
+          <UserIcon />
+          <span>Profile</span>
+          <CommandShortcut>⌘P</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <CreditCardIcon />
+          <span>Billing</span>
+          <CommandShortcut>⌘B</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <SettingsIcon />
+          <span>Settings</span>
+          <CommandShortcut>⌘S</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <BellIcon />
+          <span>Notifications</span>
+        </CommandItem>
+        <CommandItem>
+          <HelpCircleIcon />
+          <span>Help & Support</span>
+        </CommandItem>
+      </CommandGroup>
+      <CommandSeparator />
+      <CommandGroup heading="Tools">
+        <CommandItem>
+          <CalculatorIcon />
+          <span>Calculator</span>
+        </CommandItem>
+        <CommandItem>
+          <CalendarIcon />
+          <span>Calendar</span>
+        </CommandItem>
+        <CommandItem>
+          <ImageIcon />
+          <span>Image Editor</span>
+        </CommandItem>
+        <CommandItem>
+          <CodeIcon />
+          <span>Code Editor</span>
+        </CommandItem>
+      </CommandGroup>
+    </CommandMenu>
+  ),
 }

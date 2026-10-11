@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { BoldIcon, BookmarkIcon, ItalicIcon } from "lucide-react"
 import { Toggle } from "@amit-kap/glaze/components/toggle"
-import { BoldIcon, ItalicIcon } from "lucide-react"
 
+// Stories follow the upstream shadcn/ui (base-nova) Toggle examples:
+// https://ui.shadcn.com/docs/components/base/toggle
 const meta = {
   title: "Components/Toggle",
   component: Toggle,
@@ -13,14 +15,16 @@ const meta = {
     },
   },
   argTypes: {
-    variant: { control: "radio", options: ["default", "outline"] },
-    size: { control: "radio", options: ["sm", "default", "lg"] },
+    variant: { control: "inline-radio", options: ["default", "outline"] },
+    size: { control: "inline-radio", options: ["sm", "default", "lg"] },
     disabled: { control: "boolean" },
+    defaultPressed: { control: "boolean" },
   },
-  args: { "aria-label": "Toggle bold" },
+  args: { "aria-label": "Toggle bookmark", size: "sm", variant: "outline" },
   render: (args) => (
     <Toggle {...args}>
-      <BoldIcon />
+      <BookmarkIcon className="group-aria-pressed/toggle:fill-foreground" />
+      Bookmark
     </Toggle>
   ),
 } satisfies Meta<typeof Toggle>
@@ -28,14 +32,69 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+// --- Basic ----------------------------------------------------------------
+
 export const Default: Story = {}
-export const Outline: Story = { args: { variant: "outline" } }
-export const Pressed: Story = { args: { defaultPressed: true } }
-export const Disabled: Story = { args: { disabled: true } }
+
+export const Pressed: Story = {
+  args: { defaultPressed: true },
+}
+
+// --- Variants -------------------------------------------------------------
+
+export const Outline: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Toggle variant="outline" aria-label="Toggle italic">
+        <ItalicIcon />
+        Italic
+      </Toggle>
+      <Toggle variant="outline" aria-label="Toggle bold">
+        <BoldIcon />
+        Bold
+      </Toggle>
+    </div>
+  ),
+}
+
+// --- Sizes ----------------------------------------------------------------
+
+export const Size: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Toggle variant="outline" aria-label="Toggle small" size="sm">
+        Small
+      </Toggle>
+      <Toggle variant="outline" aria-label="Toggle default" size="default">
+        Default
+      </Toggle>
+      <Toggle variant="outline" aria-label="Toggle large" size="lg">
+        Large
+      </Toggle>
+    </div>
+  ),
+}
+
+// --- States ---------------------------------------------------------------
+
+export const Disabled: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Toggle aria-label="Toggle disabled" disabled>
+        Disabled
+      </Toggle>
+      <Toggle variant="outline" aria-label="Toggle disabled outline" disabled>
+        Disabled
+      </Toggle>
+    </div>
+  ),
+}
+
+// --- Compositions ---------------------------------------------------------
 
 export const WithText: Story = {
-  render: (args) => (
-    <Toggle {...args} aria-label="Toggle italic">
+  render: () => (
+    <Toggle aria-label="Toggle italic">
       <ItalicIcon />
       Italic
     </Toggle>
