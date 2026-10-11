@@ -69,7 +69,7 @@ function InvoiceTable({ rows }: { rows: number }) {
           <TableHead className="w-[100px]">Invoice</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="text-end">Amount</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -78,14 +78,14 @@ function InvoiceTable({ rows }: { rows: number }) {
             <TableCell className="font-medium">{invoice}</TableCell>
             <TableCell>{status}</TableCell>
             <TableCell>{method}</TableCell>
-            <TableCell className="text-right">{amount}</TableCell>
+            <TableCell className="text-end">{amount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
         <TableRow>
           <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
+          <TableCell className="text-end">$2,500.00</TableCell>
         </TableRow>
       </TableFooter>
     </Table>
@@ -111,7 +111,7 @@ export const Actions: Story = {
         <TableRow>
           <TableHead>Product</TableHead>
           <TableHead>Price</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead className="text-end">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -123,7 +123,7 @@ export const Actions: Story = {
           <TableRow key={product}>
             <TableCell className="font-medium">{product}</TableCell>
             <TableCell>{price}</TableCell>
-            <TableCell className="text-right">
+            <TableCell className="text-end">
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={

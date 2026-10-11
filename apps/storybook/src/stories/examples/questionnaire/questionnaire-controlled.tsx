@@ -44,7 +44,7 @@ export function QuestionnaireControlled() {
   return (
     <div className="relative mx-auto flex h-full w-full max-w-md flex-col">
       <p
-        className="absolute end-0 top-0 text-body text-muted-foreground"
+        className="absolute inset-e-0 top-0 text-body text-muted-foreground"
         role="status"
       >
         Current checkpoint: {itemLabels[item]}

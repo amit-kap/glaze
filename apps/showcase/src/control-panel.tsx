@@ -92,7 +92,7 @@ export function ControlPanel() {
   }
 
   return (
-    <Card size="sm" aria-label="Theme settings" className="z-40 w-full xl:fixed xl:top-4 xl:right-4 xl:w-72">
+    <Card size="sm" aria-label="Theme settings" className="z-40 w-full xl:fixed xl:top-4 xl:inset-e-4 xl:w-72">
       <CardHeader>
         <CardTitle>Glaze</CardTitle>
       </CardHeader>

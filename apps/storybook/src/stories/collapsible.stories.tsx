@@ -62,7 +62,7 @@ export const Default: Story = {
         className="flex w-[350px] flex-col gap-2"
       >
         <div className="flex items-center justify-between gap-4 px-4">
-          <h4 className="text-body font-semibold">Order #4189</h4>
+          <h4 className="text-body font-strong">Order #4189</h4>
           <CollapsibleTrigger
             render={<Button variant="ghost" size="icon" className="size-8" />}
           >
@@ -70,18 +70,18 @@ export const Default: Story = {
             <span className="sr-only">Toggle details</span>
           </CollapsibleTrigger>
         </div>
-        <div className="flex items-center justify-between rounded-md border px-4 py-2 text-body">
+        <div className="flex items-center justify-between rounded-item border px-4 py-2 text-body">
           <span className="text-muted-foreground">Status</span>
           <span className="font-medium">Shipped</span>
         </div>
         <CollapsibleContent className="flex flex-col gap-2">
-          <div className="rounded-md border px-4 py-2 text-body">
+          <div className="rounded-item border px-4 py-2 text-body">
             <p className="font-medium">Shipping address</p>
             <p className="text-muted-foreground">
               100 Market St, San Francisco
             </p>
           </div>
-          <div className="rounded-md border px-4 py-2 text-body">
+          <div className="rounded-item border px-4 py-2 text-body">
             <p className="font-medium">Items</p>
             <p className="text-muted-foreground">2x Studio Headphones</p>
           </div>
@@ -95,12 +95,12 @@ export const Basic: Story = {
   render: () => (
     <Card className="w-sm">
       <CardContent>
-        <Collapsible className="rounded-md data-open:bg-muted">
+        <Collapsible className="rounded-item data-open:bg-muted">
           <CollapsibleTrigger
             render={<Button variant="ghost" className="w-full" />}
           >
             Product details
-            <ChevronDownIcon className="ml-auto group-data-panel-open/button:rotate-180" />
+            <ChevronDownIcon className="ms-auto group-data-panel-open/button:rotate-180" />
           </CollapsibleTrigger>
           <CollapsibleContent className="flex flex-col items-start gap-2 p-2.5 pt-0 text-body">
             <div>
@@ -259,7 +259,7 @@ function FileTreeNode({ item }: { item: FileTreeItem }) {
           <FolderIcon />
           {item.name}
         </CollapsibleTrigger>
-        <CollapsibleContent className="mt-1 ml-5">
+        <CollapsibleContent className="mt-1 ms-5">
           <div className="flex flex-col gap-1">
             {item.items.map((child) => (
               <FileTreeNode key={child.name} item={child} />

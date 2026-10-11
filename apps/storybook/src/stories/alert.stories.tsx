@@ -90,7 +90,7 @@ export const Destructive: Story = {
 // Override the border, background and text colors with classes.
 export const CustomColors: Story = {
   render: () => (
-    <Alert className="w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
+    <Alert className="w-md border-warning/40 bg-warning-subtle text-warning">
       <AlertTriangleIcon />
       <AlertTitle>Your subscription will expire in 3 days.</AlertTitle>
       <AlertDescription>

@@ -155,11 +155,11 @@ export const Icon: Story = {
 export const Rounded: Story = {
   render: () => (
     <div className="flex gap-2">
-      <Button className="rounded-full">Get Started</Button>
+      <Button className="rounded-pill">Get Started</Button>
       <Button
         variant="outline"
         size="icon"
-        className="rounded-full"
+        className="rounded-pill"
         aria-label="Submit"
       >
         <ArrowUpIcon />

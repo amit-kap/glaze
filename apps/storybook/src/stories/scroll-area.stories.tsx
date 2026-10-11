@@ -30,7 +30,7 @@ const tags = Array.from({ length: 50 }).map(
 
 export const Vertical: Story = {
   render: (args) => (
-    <ScrollArea className="h-72 w-48 rounded-md border" {...args}>
+    <ScrollArea className="h-72 w-48 rounded-item border" {...args}>
       <div className="p-4">
         <h4 className="mb-4 text-body leading-none font-medium">Tags</h4>
         {tags.map((tag) => (
@@ -62,11 +62,11 @@ const works = [
 // Upstream uses `next/image`; a plain <img> with the same size here.
 export const Horizontal: Story = {
   render: () => (
-    <ScrollArea className="w-96 rounded-md border whitespace-nowrap">
+    <ScrollArea className="w-96 rounded-item border whitespace-nowrap">
       <div className="flex w-max space-x-4 p-4">
         {works.map((artwork) => (
           <figure key={artwork.artist} className="shrink-0">
-            <div className="overflow-hidden rounded-md">
+            <div className="overflow-hidden rounded-item">
               <img
                 src={artwork.art}
                 alt={`Photo by ${artwork.artist}`}
@@ -77,7 +77,7 @@ export const Horizontal: Story = {
             </div>
             <figcaption className="pt-2 text-caption text-muted-foreground">
               Photo by{" "}
-              <span className="font-semibold text-foreground">
+              <span className="font-strong text-foreground">
                 {artwork.artist}
               </span>
             </figcaption>

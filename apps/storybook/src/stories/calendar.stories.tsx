@@ -65,14 +65,14 @@ export const Default: Story = {
         mode="single"
         selected={date}
         onSelect={setDate}
-        className="rounded-lg border"
+        className="rounded-control border"
       />
     )
   },
 }
 
 export const Basic: Story = {
-  render: () => <Calendar mode="single" className="rounded-lg border" />,
+  render: () => <Calendar mode="single" className="rounded-control border" />,
 }
 
 // --- Variants -------------------------------------------------------------
@@ -91,7 +91,7 @@ export const Range: Story = {
         selected={dateRange}
         onSelect={setDateRange}
         numberOfMonths={2}
-        className="rounded-lg border"
+        className="rounded-control border"
       />
     )
   },
@@ -103,7 +103,7 @@ export const MonthAndYearSelector: Story = {
     <Calendar
       mode="single"
       captionLayout="dropdown"
-      className="rounded-lg border"
+      className="rounded-control border"
     />
   ),
 }

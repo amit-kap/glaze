@@ -224,7 +224,7 @@ export const WithAvatar: Story = {
           <Button
             size="icon-sm"
             variant="outline"
-            className="rounded-full"
+            className="rounded-pill"
             aria-label="Invite"
           >
             <PlusIcon />
@@ -338,7 +338,7 @@ export const Group: Story = {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full"
+              className="rounded-pill"
               aria-label={`Add ${person.username}`}
             >
               <PlusIcon />
@@ -383,7 +383,7 @@ export const Header: Story = {
                 alt={model.name}
                 width={128}
                 height={128}
-                className="aspect-square w-full rounded-sm object-cover"
+                className="aspect-square w-full rounded-item-sm object-cover"
               />
             </ItemHeader>
             <ItemContent>

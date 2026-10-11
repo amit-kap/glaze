@@ -1,6 +1,7 @@
 // One demo per Glaze component, with the same content as that component's
 // Storybook stories (apps/storybook/src/stories), so the showcase and the docs
-// show one product. Each demo names the stories it mirrors.
+// show one product. Each demo names the stories it mirrors. Like the stories,
+// classes follow the token contract (npm run check:tokens checks both).
 import * as React from "react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import {
@@ -824,7 +825,7 @@ export function SpinnerDemo() {
 export function SkeletonDemo() {
   return (
     <div className="flex items-center gap-4">
-      <Skeleton className="size-12 rounded-full" />
+      <Skeleton className="size-12 rounded-pill" />
       <div className="space-y-2">
         <Skeleton className="h-4 w-[250px]" />
         <Skeleton className="h-4 w-[200px]" />
@@ -1036,7 +1037,7 @@ export function AvatarDemo() {
         <Avatar>
           <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
           <AvatarFallback>ER</AvatarFallback>
-          <AvatarBadge className="bg-green-600 dark:bg-green-800" />
+          <AvatarBadge className="bg-success " />
         </Avatar>
         <AvatarGroup className="grayscale">
           {people.map((person) => (
@@ -1135,7 +1136,7 @@ export function TableDemo() {
 // Story: Default.
 export function CalendarDemo() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
-  return <Calendar captionLayout="dropdown" mode="single" selected={date} onSelect={setDate} className="rounded-lg border" />
+  return <Calendar captionLayout="dropdown" mode="single" selected={date} onSelect={setDate} className="rounded-control border" />
 }
 
 const visitors = [
@@ -1207,7 +1208,7 @@ export function ChartDemo() {
               onClick={() => setActiveChart(chart)}
             >
               <span className="text-caption text-muted-foreground">{visitorsConfig[chart].label}</span>
-              <span className="text-title leading-none font-bold sm:text-heading">{total[chart].toLocaleString()}</span>
+              <span className="text-title leading-none font-strong sm:text-heading">{total[chart].toLocaleString()}</span>
             </button>
           ))}
         </div>

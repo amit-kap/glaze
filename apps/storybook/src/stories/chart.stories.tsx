@@ -129,13 +129,13 @@ export const Default: Story = {
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-t-0 sm:border-l sm:px-8 sm:py-6"
+                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-start even:border-s data-[active=true]:bg-muted/50 sm:border-t-0 sm:border-s sm:px-8 sm:py-6"
                 onClick={() => setActiveChart(chart)}
               >
                 <span className="text-caption text-muted-foreground">
                   {visitorsConfig[chart].label}
                 </span>
-                <span className="text-title leading-none font-bold sm:text-heading">
+                <span className="text-title leading-none font-strong sm:text-heading">
                   {total[chart].toLocaleString()}
                 </span>
               </button>

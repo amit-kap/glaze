@@ -167,7 +167,7 @@ export function MessageScrollerAnchoring() {
           <Button
             type="button"
             size="icon"
-            className="ml-auto"
+            className="ms-auto"
             disabled={!nextMessage}
             onClick={() => {
               if (!nextMessage) {

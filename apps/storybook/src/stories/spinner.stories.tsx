@@ -163,7 +163,7 @@ export const InInputGroup: Story = {
         />
         <InputGroupAddon align="block-end">
           <Spinner /> Validating...
-          <InputGroupButton className="ml-auto" variant="default">
+          <InputGroupButton className="ms-auto" variant="default">
             <ArrowUpIcon />
             <span className="sr-only">Send</span>
           </InputGroupButton>

@@ -157,7 +157,7 @@ export function MessageScrollerAnimation() {
           <Button
             type="button"
             size="icon"
-            className="ml-auto"
+            className="ms-auto"
             disabled={!nextMessage || isBusy}
             onClick={() => {
               if (!nextMessage || isBusy) {
