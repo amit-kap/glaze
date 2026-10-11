@@ -166,7 +166,7 @@ export function MessageScrollerStreaming() {
               }}
               className="w-full"
             >
-              <InputGroup>
+              <InputGroup className="bg-background">
                 <div className="h-14 w-full px-3 py-2.5">
                   <span
                     className="line-clamp-2 opacity-60 data-[status=ready]:opacity-100"

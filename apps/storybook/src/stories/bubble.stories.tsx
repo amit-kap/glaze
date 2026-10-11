@@ -327,6 +327,32 @@ export const Reactions: Story = {
   ),
 }
 
+// Use the controls to move the reactions to any corner of the bubble.
+export const ReactionPlacement: StoryObj<typeof BubbleReactions> = {
+  args: { side: "top", align: "end" },
+  argTypes: {
+    side: { control: "inline-radio", options: ["top", "bottom"] },
+    align: { control: "inline-radio", options: ["start", "end"] },
+  },
+  render: (args) => (
+    <div className="py-8">
+      <Bubble variant="muted">
+        <BubbleContent>
+          Move my reactions around with the side and align controls.
+        </BubbleContent>
+        <BubbleReactions
+          {...args}
+          role="img"
+          aria-label="Reactions: thumbs up, heart"
+        >
+          <span>👍</span>
+          <span>❤️</span>
+        </BubbleReactions>
+      </Bubble>
+    </div>
+  ),
+}
+
 const longText = `The accessibility review found two focus states that were visually too subtle in dark mode.
 
 I checked the dialog, menu, and drawer paths because each one renders focusable controls inside a layered surface.
