@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "-w", "storybook"],
       "port": 6006
+    },
+    {
+      "name": "showcase",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "-w", "showcase"],
+      "port": 5180
     }
   ]
 }
