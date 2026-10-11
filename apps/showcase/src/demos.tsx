@@ -1224,7 +1224,9 @@ export function ChartDemo() {
                   className="w-[150px]"
                   nameKey="views"
                   labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                    typeof value !== "string" && typeof value !== "number"
+                      ? value
+                      : new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
                   }
                 />
               }
