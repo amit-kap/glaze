@@ -27,6 +27,7 @@ const forbidden = [
   [`shadow-(?:2xs|xs|sm|md|lg|xl|2xl)`, "use shadow-raised / -floating / -modal"],
   [`duration-(?!0\\b)\\d+`, "use duration-(--duration-*) or a component token"],
   [`ease-(?:in|out|in-out)`, "use ease-standard / -emphasized / -exit / -enter"],
+  [`transition-all`, "name the properties: transition (colour, opacity, shadow, transform) or transition-[…]"],
   [`(?:(?:duration|delay|ease|transition|animate)-\\[|\\[(?:transition|animation)(?:-[a-z-]+)?:)[^\\]]*(?:\\d(?:ms|s)\\b|cubic-bezier)[^\\]]*\\]`, "literal timing: use a motion token or a component token"],
   [`(?:-?(?:p[lr]|m[lr]|scroll-[mp][lr]|left|right)-[^\\s"'!]+|border-[lr](?:-[^\\s"'!]+)?|rounded-(?:[lr]|[tb][lr])(?:-[^\\s"'!]+)?|text-(?:left|right)|float-(?:left|right))`, "physical direction: use ps/pe, ms/me, inset-s/-e, border-s/-e, rounded-s/-e, text-start/-end"],
   [`-?(?:start|end)-[^\\s"'!]+`, "deprecated in Tailwind 4.3: use inset-s / inset-e"],

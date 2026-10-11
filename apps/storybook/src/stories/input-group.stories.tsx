@@ -341,7 +341,10 @@ export const WithButton: Story = {
                 setTimeout(() => setIsCopied(false), 2000)
               }}
             >
-              {isCopied ? <CheckIcon /> : <CopyIcon />}
+              <span className="icon-swap" data-swapped={isCopied || undefined}>
+                <CopyIcon />
+                <CheckIcon />
+              </span>
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>

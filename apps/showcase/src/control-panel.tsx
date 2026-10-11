@@ -506,7 +506,10 @@ export function ControlPanel() {
               aria-label="Copy setup command"
               onClick={copy}
             >
-              {copied ? <CheckIcon /> : <CopyIcon />}
+              <span className="icon-swap" data-swapped={copied || undefined}>
+                <CopyIcon />
+                <CheckIcon />
+              </span>
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>

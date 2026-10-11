@@ -108,6 +108,7 @@
     --ease-emphasized: var(--motion-ease-emphasized);
     --ease-exit: var(--motion-ease-exit);
     --ease-enter: var(--motion-ease-enter);
+    --ease-spring: var(--motion-ease-spring);
 }
 
 /*
@@ -141,6 +142,128 @@
     --default-transition-timing-function: var(--motion-ease-standard);
 }
 
+/*
+ * One highlight per list. A single ::after layer moves to the current row
+ * instead of each row switching its own background, so the highlight
+ * glides between rows rather than blinking. useHighlightLayer
+ * (hooks/use-highlight-layer.ts) measures the row and writes
+ * --highlight-x/-y/-w/-h here; data-highlight marks that a row is lit.
+ * The layer sits at z-index -1 inside the isolated list: above the list
+ * background, below the rows. Physical left/translate on purpose: the hook
+ * measures offsetLeft, which is physical in RTL too.
+ */
+@utility highlight-scope {
+  position: relative;
+  isolation: isolate;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: var(--highlight-w, 0);
+    height: var(--highlight-h, 0);
+    translate: var(--highlight-x, 0) var(--highlight-y, 0);
+    border-radius: var(--radius-item);
+    background-color: var(--active);
+    opacity: 0;
+    pointer-events: none;
+    transition-property: translate, width, height, opacity;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-spring);
+  }
+
+  &[data-highlight]::after {
+    opacity: 1;
+  }
+
+  /* a fresh entry appears on its row instead of travelling from the last one */
+  &[data-highlight-entering]::after {
+    transition-property: opacity;
+  }
+
+  &:has([data-highlighted][data-variant="destructive"])::after {
+    background-color: color-mix(in oklab, var(--destructive) 10%, transparent);
+  }
+
+  &:is(.dark *):has([data-highlighted][data-variant="destructive"])::after {
+    background-color: color-mix(in oklab, var(--destructive) 20%, transparent);
+  }
+
+  /*
+   * Rows beside a separator reach halfway into its gap, so a pointer between
+   * groups still rests on a row and the highlight stays lit. Rows may sit
+   * directly beside the separator or at the edge of a group next to it.
+   */
+  & :is([role^="menuitem"], [role="option"]):is(
+      :has(+ [role="separator"]),
+      [role="group"]:has(+ [role="separator"]) > :last-child,
+      [role="separator"] + *,
+      [role="separator"] + [role="group"] > :first-child
+    ) {
+    position: relative;
+  }
+
+  & :is([role^="menuitem"], [role="option"]):is(
+      :has(+ [role="separator"]),
+      [role="group"]:has(+ [role="separator"]) > :last-child
+    )::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    height: calc(var(--spacing) + 0.5px);
+  }
+
+  & :is([role^="menuitem"], [role="option"]):is(
+      [role="separator"] + *,
+      [role="separator"] + [role="group"] > :first-child
+    )::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 100%;
+    height: calc(var(--spacing) + 0.5px);
+  }
+}
+
+/*
+ * Two glyphs, one cell: a control whose icon changes with state (copy →
+ * check) keeps both icons mounted and crossfades them, so the slot never
+ * resizes. The first child shows by default, the last with data-swapped.
+ * The leaving glyph shrinks, blurs and fades on the exit duration; the
+ * arriving one reverses that on the full duration, so an appear always
+ * outlasts a disappear. Reduced motion keeps the crossfade only.
+ */
+@utility icon-swap {
+  display: inline-grid;
+  place-items: center;
+
+  & > * {
+    grid-area: 1 / 1;
+    transition-property: opacity, scale, filter;
+    transition-duration: var(--duration-fade-fast);
+    transition-timing-function: var(--ease-enter);
+  }
+
+  &:not([data-swapped]) > :last-child,
+  &[data-swapped] > :first-child {
+    opacity: 0;
+    scale: 0.6;
+    filter: blur(4px);
+    transition-duration: var(--duration-exit-fast);
+    transition-timing-function: var(--ease-exit);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & > * {
+      scale: none !important;
+      filter: none !important;
+    }
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -153,5 +276,44 @@
   [data-theme],
   .dark {
     @apply font-sans text-foreground;
+    }
+  /* Anything a click acts on shows the pointer; disabled controls do not.
+     Zero specificity, so a component's own cursor-* class still wins. */
+  :where(
+      button,
+      a[href],
+      summary,
+      select,
+      label:has(> input:is([type="checkbox"], [type="radio"])),
+      input:is(
+          [type="checkbox"],
+          [type="radio"],
+          [type="range"],
+          [type="color"],
+          [type="file"],
+          [type="button"],
+          [type="submit"],
+          [type="reset"]
+        ),
+      [role="button"],
+      [role="link"],
+      [role="tab"],
+      [role="menuitem"],
+      [role="menuitemcheckbox"],
+      [role="menuitemradio"],
+      [role="option"],
+      [role="checkbox"],
+      [role="radio"],
+      [role="switch"],
+      [role="slider"]
+    ) {
+    cursor: pointer;
+    }
+  :where(
+      :disabled,
+      [aria-disabled="true"],
+      [data-disabled]:not([data-disabled="false"])
+    ) {
+    cursor: default;
     }
 }

@@ -204,6 +204,28 @@ npm run check:tokens                   # fail on any class the token contract fo
 
 Anything the converter cannot map becomes a component token (see "Converting stock shadcn code" in the specification). Every new component also needs a matching `<component>.stories.tsx`.
 
+### Motion
+
+Every duration and easing comes from a motion token; `check:tokens` rejects literal timings and `transition-all`. Pick the token by what moves:
+
+| Motion | Duration | Easing | Used by |
+|---|---|---|---|
+| Hover, focus and colour changes | default (`--duration-base`) | `ease-standard` | buttons, toggles, inputs, tab labels |
+| A highlight or indicator travelling between targets | `--duration-fast` (highlight, hover pill), `--duration-moderate` (tab indicator) | `ease-spring` | menu highlight (`highlight-scope`), tab hover pill (`highlight-scope` following the pointer), tab indicator |
+| A popup or overlay fading in | `--duration-fade-*` | tw-animate default | menus, select, combobox, popover, tooltip, hover card, dialogs, sheet overlay |
+| The same popup leaving | `--duration-exit-*` on `data-closed` | tw-animate default | as above |
+| A panel resizing | `--duration-moderate` | `ease-standard` | collapsible, accordion |
+| A large surface sliding | component tokens (`--drawer-duration`, …) | `ease-enter` | drawer, sheet |
+
+Rules:
+
+- **The bigger the thing that moves, the slower it moves.** Small state changes use `fast`, travelling indicators `moderate`, surfaces `slow`.
+- **Exits are quicker than enters** (`--motion-exit-scale`, 0.75), so a dismissal reads as final rather than the entrance replayed.
+- **Reduced motion keeps fades and drops movement.** `--motion-scale` goes to 0, so `--duration-*` stops; `--fade-scale` stays 1, so `--duration-fade-*` and `--duration-exit-*` keep running, and popups lose their zoom and slide but still fade. Use a `fade` duration only for opacity and colour.
+- **Move with `transform`, `opacity` and colour.** Animate layout (`width`, `height`, insets) only when the size itself is the information (progress, collapsible, the tab indicator's width).
+- **Weight changes reserve their width.** A label that gets heavier with state goes through `reserveWeight()` (`lib/label.ts`), so its neighbours never shift.
+- **Shared patterns are utilities:** `highlight-scope` with `useHighlightLayer()` (one highlight per list: the hook measures the current row, the utility draws and moves the layer) and `icon-swap` (two-icon crossfade). Reuse them instead of hand-rolling the effect.
+
 ### Showcase
 
 `apps/showcase` presents the library in the style of fluidfunctionalism.com: a centre column of live components and a floating settings panel in the top right (Theme, Mode, and a Customize section that builds and exports your own theme). It's published at [https://amit-kap.github.io/glaze/](https://amit-kap.github.io/glaze/).
