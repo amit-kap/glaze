@@ -11,7 +11,8 @@
     "check:tokens": "node scripts/glaze-check.mjs",
     "convert:tokens": "node scripts/glaze-convert.mjs",
     "build:glaze": "node scripts/glaze-build.mjs",
-    "release:glaze": "node scripts/glaze-release.mjs"
+    "release:glaze": "node scripts/glaze-release.mjs",
+    "theme": "node packages/ui/src/bin/glaze.ts theme"
   },
   "devDependencies": {
     "prettier": "^3.9.9",

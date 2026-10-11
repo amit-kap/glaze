@@ -57,6 +57,7 @@ const out = {
   license: "MIT",
   type: "module",
   sideEffects: ["**/*.css"],
+  bin: { glaze: "./bin/glaze.js" },
   exports: {
     "./globals.css": "./styles/globals.css",
     "./tokens.css": "./styles/tokens.css",
