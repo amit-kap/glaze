@@ -31,3 +31,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Fluid Functionalism
+
+https://github.com/mickadesign/fluid-functionalism (MIT, Copyright (c) 2026 Micka Touillaud)
+
+`components/color-picker.tsx` is written for Glaze from Glaze components. Its format switcher (HEX, RGB, HSL, OKLCH), opacity channel and eyedropper follow that project's colour picker as a design reference; no code is copied.

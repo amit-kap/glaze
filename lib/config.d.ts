@@ -1,5 +1,5 @@
 import { z } from "zod";
-export declare const builtInThemes: readonly ["nova", "vega", "maia", "lyra", "mira", "luma", "sera", "rhea"];
+export declare const builtInThemes: readonly ["nova", "vega", "maia", "lyra", "mira", "luma", "sera", "rhea", "gr8r"];
 export declare const glazeConfigSchema: z.ZodObject<{
     $schema: z.ZodOptional<z.ZodString>;
     version: z.ZodLiteral<1>;
@@ -13,6 +13,7 @@ export declare const glazeConfigSchema: z.ZodObject<{
         luma: "luma";
         sera: "sera";
         rhea: "rhea";
+        gr8r: "gr8r";
     }>>;
     defaults: z.ZodOptional<z.ZodObject<{
         mode: z.ZodOptional<z.ZodEnum<{
@@ -81,6 +82,7 @@ export declare const glazeConfigSchema: z.ZodObject<{
     }, z.core.$strict>>;
     space: z.ZodOptional<z.ZodObject<{
         "space-base": z.ZodOptional<z.ZodString>;
+        "control-height": z.ZodOptional<z.ZodString>;
     }, z.core.$strict>>;
     type: z.ZodOptional<z.ZodObject<{
         "typeface-sans": z.ZodOptional<z.ZodString>;
@@ -128,7 +130,7 @@ export declare const defineConfig: (config: GlazeConfigInput) => {
     version: 1;
     name: string;
     $schema?: string | undefined;
-    extends?: "nova" | "vega" | "maia" | "lyra" | "mira" | "luma" | "sera" | "rhea" | undefined;
+    extends?: "nova" | "vega" | "maia" | "lyra" | "mira" | "luma" | "sera" | "rhea" | "gr8r" | undefined;
     defaults?: {
         mode?: "light" | "dark" | "system" | undefined;
         density?: "comfortable" | "compact" | undefined;
@@ -189,6 +191,7 @@ export declare const defineConfig: (config: GlazeConfigInput) => {
     } | undefined;
     space?: {
         "space-base"?: string | undefined;
+        "control-height"?: string | undefined;
     } | undefined;
     type?: {
         "typeface-sans"?: string | undefined;

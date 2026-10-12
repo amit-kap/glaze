@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { cva } from "class-variance-authority";
 import { cn } from "../lib/utils.js";
-const alertVariants = cva("group/alert relative grid w-full gap-0.5 rounded-control border px-2.5 py-2 text-start text-body has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pe-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-(--icon-size)", {
+const alertVariants = cva("group/alert relative grid w-full gap-0.5 rounded-floating border px-2.5 py-2 text-start text-body has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pe-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-(--icon-size)", {
     variants: {
         variant: {
             default: "bg-card text-card-foreground",

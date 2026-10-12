@@ -9,7 +9,7 @@ function ProgressTrack({ className, ...props }) {
     return (_jsx(ProgressPrimitive.Track, { className: cn("relative flex h-1 w-full items-center overflow-x-hidden rounded-pill bg-muted", className), "data-slot": "progress-track", ...props }));
 }
 function ProgressIndicator({ className, ...props }) {
-    return (_jsx(ProgressPrimitive.Indicator, { "data-slot": "progress-indicator", className: cn("h-full bg-primary transition-all", className), ...props }));
+    return (_jsx(ProgressPrimitive.Indicator, { "data-slot": "progress-indicator", className: cn("h-full bg-primary transition-[width]", className), ...props }));
 }
 function ProgressLabel({ className, ...props }) {
     return (_jsx(ProgressPrimitive.Label, { className: cn("text-body font-medium", className), "data-slot": "progress-label", ...props }));

@@ -10,7 +10,7 @@ function ItemGroup({ className, ...props }) {
 function ItemSeparator({ className, ...props }) {
     return (_jsx(Separator, { "data-slot": "item-separator", orientation: "horizontal", className: cn("my-2", className), ...props }));
 }
-const itemVariants = cva("group/item flex w-full flex-wrap items-center rounded-control border text-body transition-colors duration-(--duration-fast) outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-muted", {
+const itemVariants = cva("group/item flex w-full flex-wrap items-center rounded-control border text-body transition-colors duration-(--duration-fast) outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/25 [a]:transition-colors [a]:hover:bg-muted", {
     variants: {
         variant: {
             default: "border-transparent",

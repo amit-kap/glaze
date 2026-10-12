@@ -3,7 +3,7 @@ import { type VariantProps } from "class-variance-authority";
 import { Button } from "./button.js";
 declare function InputGroup({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element;
 declare const inputGroupAddonVariants: (props?: ({
-    align?: "inline-start" | "inline-end" | "block-start" | "block-end" | null | undefined;
+    align?: "inline-end" | "inline-start" | "block-start" | "block-end" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 declare function InputGroupAddon({ className, align, ...props }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>): React.JSX.Element;
 declare const inputGroupButtonVariants: (props?: ({
