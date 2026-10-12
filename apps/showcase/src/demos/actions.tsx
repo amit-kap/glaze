@@ -1,14 +1,24 @@
 import {
+  ArrowLeftIcon,
   ArrowUpRightIcon,
   BoldIcon,
   BookmarkIcon,
   ItalicIcon,
+  MoreHorizontalIcon,
   UnderlineIcon,
 } from "lucide-react"
 
 import { Badge } from "@amit-kap/glaze/components/badge"
 import { Button } from "@amit-kap/glaze/components/button"
-import { Spinner } from "@amit-kap/glaze/components/spinner"
+import { ButtonGroup } from "@amit-kap/glaze/components/button-group"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@amit-kap/glaze/components/dropdown-menu"
 import { toast } from "@amit-kap/glaze/components/toast"
 import { Toggle } from "@amit-kap/glaze/components/toggle"
 import {
@@ -30,38 +40,58 @@ export function ButtonDemo() {
         <Button variant="secondary">Secondary</Button>
         <Button variant="ghost">Ghost</Button>
         <Button variant="destructive">Destructive</Button>
-        <Button variant="link">Link</Button>
       </Row>
-      <div className="flex flex-wrap items-start justify-center gap-6">
-        {(
-          [
-            ["xs", "icon-xs", "Extra Small"],
-            ["sm", "icon-sm", "Small"],
-            ["default", "icon", "Default"],
-            ["lg", "icon-lg", "Large"],
-          ] as const
-        ).map(([size, iconSize, label]) => (
-          <div key={size} className="flex items-start gap-2">
-            <Button size={size} variant="outline">
-              {label}
-            </Button>
-            <Button size={iconSize} aria-label="Submit" variant="outline">
-              <ArrowUpRightIcon />
-            </Button>
-          </div>
-        ))}
-      </div>
       <Row>
-        <Button variant="outline" disabled>
-          <Spinner data-icon="inline-start" />
-          Generating
-        </Button>
-        <Button variant="secondary" disabled>
-          Downloading
-          <Spinner data-icon="inline-end" />
-        </Button>
+        {(["icon-xs", "icon-sm", "icon", "icon-lg"] as const).map((size) => (
+          <Button key={size} size={size} variant="outline" aria-label="Submit">
+            <ArrowUpRightIcon />
+          </Button>
+        ))}
       </Row>
     </div>
+  )
+}
+
+// Stories: Default.
+export function ButtonGroupDemo() {
+  return (
+    <ButtonGroup className="flex-wrap justify-center">
+      <ButtonGroup>
+        <Button variant="outline" size="icon" aria-label="Go Back">
+          <ArrowLeftIcon />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button variant="outline">Archive</Button>
+        <Button variant="outline">Report</Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button variant="outline">Snooze</Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button variant="outline" size="icon" aria-label="More Options" />
+            }
+          >
+            <MoreHorizontalIcon />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>Mark as Read</DropdownMenuItem>
+              <DropdownMenuItem>Archive</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>Snooze</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </ButtonGroup>
+    </ButtonGroup>
   )
 }
 

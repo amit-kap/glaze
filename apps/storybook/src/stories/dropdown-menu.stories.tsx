@@ -34,11 +34,6 @@ import {
   UserIcon,
   WalletIcon,
 } from "lucide-react"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@amit-kap/glaze/components/avatar"
 import { Button } from "@amit-kap/glaze/components/button"
 import {
   DropdownMenu,
@@ -162,14 +157,31 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+// Shows the menu already open, anchored to an invisible point that stands in
+// for the trigger button.
+function StaticMenu({
+  children,
+}: {
+  children: React.ReactElement<{
+    anchor?: React.RefObject<Element | null>
+  }>
+}) {
+  const anchor = React.useRef<HTMLDivElement>(null)
+  return (
+    <DropdownMenu open>
+      <div ref={anchor} className="size-0" />
+      {React.cloneElement(children, { anchor })}
+    </DropdownMenu>
+  )
+}
+
 // --- Basic ----------------------------------------------------------------
 
 export const Default: Story = {}
 
 export const Basic: Story = {
   render: () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<MenuButton />}>Open</DropdownMenuTrigger>
+    <StaticMenu>
       <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -182,7 +194,7 @@ export const Basic: Story = {
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuItem disabled>API</DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </StaticMenu>
   ),
 }
 
@@ -190,8 +202,7 @@ export const Basic: Story = {
 
 export const Submenu: Story = {
   render: () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<MenuButton />}>Open</DropdownMenuTrigger>
+    <StaticMenu>
       <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuItem>Team</DropdownMenuItem>
@@ -223,14 +234,13 @@ export const Submenu: Story = {
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </StaticMenu>
   ),
 }
 
 export const Shortcuts: Story = {
   render: () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<MenuButton />}>Open</DropdownMenuTrigger>
+    <StaticMenu>
       <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -253,14 +263,13 @@ export const Shortcuts: Story = {
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </StaticMenu>
   ),
 }
 
 export const Icons: Story = {
   render: () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<MenuButton />}>Open</DropdownMenuTrigger>
+    <StaticMenu>
       <DropdownMenuContent>
         <DropdownMenuItem>
           <UserIcon />
@@ -280,7 +289,7 @@ export const Icons: Story = {
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </StaticMenu>
   ),
 }
 
@@ -291,8 +300,7 @@ export const Checkboxes: Story = {
     const [showPanel, setShowPanel] = React.useState(false)
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger render={<MenuButton />}>Open</DropdownMenuTrigger>
+      <StaticMenu>
         <DropdownMenuContent className="w-40">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Appearance</DropdownMenuLabel>
@@ -317,7 +325,7 @@ export const Checkboxes: Story = {
             </DropdownMenuCheckboxItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </StaticMenu>
     )
   },
 }
@@ -331,10 +339,7 @@ export const CheckboxesIcons: Story = {
     })
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger render={<MenuButton />}>
-          Notifications
-        </DropdownMenuTrigger>
+      <StaticMenu>
         <DropdownMenuContent className="w-48">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Notification Preferences</DropdownMenuLabel>
@@ -367,7 +372,7 @@ export const CheckboxesIcons: Story = {
             </DropdownMenuCheckboxItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </StaticMenu>
     )
   },
 }
@@ -377,8 +382,7 @@ export const RadioGroup: Story = {
     const [position, setPosition] = React.useState("bottom")
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger render={<MenuButton />}>Open</DropdownMenuTrigger>
+      <StaticMenu>
         <DropdownMenuContent className="w-32">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
@@ -394,7 +398,7 @@ export const RadioGroup: Story = {
             </DropdownMenuRadioGroup>
           </DropdownMenuGroup>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </StaticMenu>
     )
   },
 }
@@ -404,10 +408,7 @@ export const RadioIcons: Story = {
     const [paymentMethod, setPaymentMethod] = React.useState("card")
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger render={<MenuButton />}>
-          Payment Method
-        </DropdownMenuTrigger>
+      <StaticMenu>
         <DropdownMenuContent className="min-w-56">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Select Payment Method</DropdownMenuLabel>
@@ -430,15 +431,14 @@ export const RadioIcons: Story = {
             </DropdownMenuRadioGroup>
           </DropdownMenuGroup>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </StaticMenu>
     )
   },
 }
 
 export const Destructive: Story = {
   render: () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<MenuButton />}>Open</DropdownMenuTrigger>
+    <StaticMenu>
       <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuItem>
@@ -458,7 +458,7 @@ export const Destructive: Story = {
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </StaticMenu>
   ),
 }
 
@@ -466,22 +466,7 @@ export const Destructive: Story = {
 
 export const WithAvatar: Story = {
   render: () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-pill"
-            aria-label="Open account menu"
-          />
-        }
-      >
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
-          <AvatarFallback>LR</AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
+    <StaticMenu>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
           <DropdownMenuItem>
@@ -503,7 +488,7 @@ export const WithAvatar: Story = {
           Sign Out
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </StaticMenu>
   ),
 }
 
@@ -742,10 +727,7 @@ export const Complex: Story = {
     const [theme, setTheme] = React.useState("light")
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger render={<MenuButton />}>
-          Complex Menu
-        </DropdownMenuTrigger>
+      <StaticMenu>
         <DropdownMenuContent className="w-44">
           <FileMenuGroup />
           <DropdownMenuSeparator />
@@ -780,7 +762,7 @@ export const Complex: Story = {
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </StaticMenu>
     )
   },
 }

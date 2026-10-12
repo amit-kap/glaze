@@ -33,13 +33,14 @@ function ContextMenuContent({
   className,
   align = "start",
   alignOffset = 4,
+  anchor,
   side = "right",
   sideOffset = 0,
   ...props
 }: ContextMenuPrimitive.Popup.Props &
   Pick<
     ContextMenuPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
+    "align" | "alignOffset" | "anchor" | "side" | "sideOffset"
   >) {
   const layerRef = useHighlightLayer(
     (props as { ref?: React.Ref<HTMLDivElement> }).ref
@@ -50,6 +51,7 @@ function ContextMenuContent({
         className="isolate z-50 outline-none"
         align={align}
         alignOffset={alignOffset}
+        anchor={anchor}
         side={side}
         sideOffset={sideOffset}
       >

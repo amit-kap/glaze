@@ -1,5 +1,10 @@
 import * as React from "react"
-import { AlertCircleIcon, CheckCircle2Icon, InfoIcon } from "lucide-react"
+import {
+  AlertCircleIcon,
+  AlertTriangleIcon,
+  CheckCircle2Icon,
+  InfoIcon,
+} from "lucide-react"
 
 import {
   Alert,
@@ -49,6 +54,14 @@ export function AlertDemo() {
         <AlertDescription>
           Your payment could not be processed. Please check your payment method
           and try again.
+        </AlertDescription>
+      </Alert>
+      <Alert className="border-warning/40 bg-warning-subtle text-warning">
+        <AlertTriangleIcon />
+        <AlertTitle>Storage almost full</AlertTitle>
+        <AlertDescription>
+          You&apos;ve used 90% of your storage. Upgrade your plan to add more
+          space.
         </AlertDescription>
       </Alert>
     </div>

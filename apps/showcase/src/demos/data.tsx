@@ -43,33 +43,35 @@ const invoices = [
 // Story: Default.
 export function TableDemo() {
   return (
-    <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-end">Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices.map(([invoice, status, amount, method]) => (
-          <TableRow key={invoice}>
-            <TableCell className="font-medium">{invoice}</TableCell>
-            <TableCell>{status}</TableCell>
-            <TableCell>{method}</TableCell>
-            <TableCell className="text-end">{amount}</TableCell>
+    <div className="w-full overflow-x-auto">
+      <Table>
+        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Invoice</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Method</TableHead>
+            <TableHead className="text-end">Amount</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-end">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {invoices.map(([invoice, status, amount, method]) => (
+            <TableRow key={invoice}>
+              <TableCell className="font-medium">{invoice}</TableCell>
+              <TableCell>{status}</TableCell>
+              <TableCell>{method}</TableCell>
+              <TableCell className="text-end">{amount}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={3}>Total</TableCell>
+            <TableCell className="text-end">$2,500.00</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </div>
   )
 }
 

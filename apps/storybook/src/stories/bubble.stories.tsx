@@ -148,24 +148,6 @@ export const Variants: Story = {
           <span>🔥</span>
         </BubbleReactions>
       </Bubble>
-      {/* Upstream renders this text through a Markdown component. */}
-      <Bubble variant="ghost">
-        <BubbleContent className="space-y-3">
-          <p>
-            Ghost bubbles work for assistant text, <strong>markdown</strong>,
-            and other content that should not be framed.
-          </p>
-          <p>
-            This is perfect for assistant messages that should not have a frame
-            and can take the full width of the container. You can also render{" "}
-            <code>code</code> in it.
-          </p>
-          <p>
-            Ghost bubbles are full width and can take the full width of the
-            container.
-          </p>
-        </BubbleContent>
-      </Bubble>
     </div>
   ),
 }
