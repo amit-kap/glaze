@@ -167,22 +167,36 @@ const countries = [
 
 type Country = (typeof countries)[number]
 
+// The popup a plain string-item combobox needs: an empty message and a list
+// that renders each item as itself.
+function StringList({
+  empty = "No items found.",
+  anchor,
+}: {
+  empty?: string
+  anchor?: React.RefObject<HTMLElement | null>
+}) {
+  return (
+    <ComboboxContent anchor={anchor}>
+      <ComboboxEmpty>{empty}</ComboboxEmpty>
+      <ComboboxList>
+        {(item: string) => (
+          <ComboboxItem key={item} value={item}>
+            {item}
+          </ComboboxItem>
+        )}
+      </ComboboxList>
+    </ComboboxContent>
+  )
+}
+
 // --- Basic ----------------------------------------------------------------
 
 export const Default: Story = {
   render: (args) => (
     <Combobox items={frameworks}>
       <ComboboxInput {...args} />
-      <ComboboxContent>
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
-        <ComboboxList>
-          {(item: string) => (
-            <ComboboxItem key={item} value={item}>
-              {item}
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-      </ComboboxContent>
+      <StringList />
     </Combobox>
   ),
 }
@@ -212,16 +226,7 @@ export const Multiple: Story = {
             )}
           </ComboboxValue>
         </ComboboxChips>
-        <ComboboxContent anchor={anchor}>
-          <ComboboxEmpty>No items found.</ComboboxEmpty>
-          <ComboboxList>
-            {(item: string) => (
-              <ComboboxItem key={item} value={item}>
-                {item}
-              </ComboboxItem>
-            )}
-          </ComboboxList>
-        </ComboboxContent>
+        <StringList anchor={anchor} />
       </Combobox>
     )
   },
@@ -232,16 +237,7 @@ export const ClearButton: Story = {
   render: () => (
     <Combobox items={frameworks} defaultValue={frameworks[0]}>
       <ComboboxInput placeholder="Select a framework" showClear />
-      <ComboboxContent>
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
-        <ComboboxList>
-          {(item: string) => (
-            <ComboboxItem key={item} value={item}>
-              {item}
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-      </ComboboxContent>
+      <StringList />
     </Combobox>
   ),
 }
@@ -251,16 +247,7 @@ export const AutoHighlight: Story = {
   render: () => (
     <Combobox items={frameworks} autoHighlight>
       <ComboboxInput placeholder="Select a framework" />
-      <ComboboxContent>
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
-        <ComboboxList>
-          {(item: string) => (
-            <ComboboxItem key={item} value={item}>
-              {item}
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-      </ComboboxContent>
+      <StringList />
     </Combobox>
   ),
 }
@@ -300,16 +287,7 @@ export const Disabled: Story = {
   render: () => (
     <Combobox items={frameworks}>
       <ComboboxInput placeholder="Select a framework" disabled />
-      <ComboboxContent>
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
-        <ComboboxList>
-          {(item: string) => (
-            <ComboboxItem key={item} value={item}>
-              {item}
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-      </ComboboxContent>
+      <StringList />
     </Combobox>
   ),
 }
@@ -318,21 +296,30 @@ export const Invalid: Story = {
   render: () => (
     <Combobox items={frameworks}>
       <ComboboxInput placeholder="Select a framework" aria-invalid="true" />
-      <ComboboxContent>
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
-        <ComboboxList>
-          {(item: string) => (
-            <ComboboxItem key={item} value={item}>
-              {item}
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-      </ComboboxContent>
+      <StringList />
     </Combobox>
   ),
 }
 
 // --- Compositions ---------------------------------------------------------
+
+// Both grouped stories render timezones the same way; `separated` draws a
+// divider between groups.
+const timezoneGroup =
+  (separated: boolean) =>
+  (group: (typeof timezones)[number], index: number) => (
+    <ComboboxGroup key={group.value} items={group.items}>
+      <ComboboxLabel>{group.value}</ComboboxLabel>
+      <ComboboxCollection>
+        {(item: string) => (
+          <ComboboxItem key={item} value={item}>
+            {item}
+          </ComboboxItem>
+        )}
+      </ComboboxCollection>
+      {separated && index < timezones.length - 1 && <ComboboxSeparator />}
+    </ComboboxGroup>
+  )
 
 export const WithGroups: Story = {
   render: () => (
@@ -340,21 +327,7 @@ export const WithGroups: Story = {
       <ComboboxInput placeholder="Select a timezone" />
       <ComboboxContent>
         <ComboboxEmpty>No timezones found.</ComboboxEmpty>
-        <ComboboxList>
-          {(group: (typeof timezones)[number], index: number) => (
-            <ComboboxGroup key={group.value} items={group.items}>
-              <ComboboxLabel>{group.value}</ComboboxLabel>
-              <ComboboxCollection>
-                {(item: string) => (
-                  <ComboboxItem key={item} value={item}>
-                    {item}
-                  </ComboboxItem>
-                )}
-              </ComboboxCollection>
-              {index < timezones.length - 1 && <ComboboxSeparator />}
-            </ComboboxGroup>
-          )}
-        </ComboboxList>
+        <ComboboxList>{timezoneGroup(true)}</ComboboxList>
       </ComboboxContent>
     </Combobox>
   ),
@@ -403,20 +376,7 @@ export const WithInputGroup: Story = {
       </ComboboxInput>
       <ComboboxContent alignOffset={-28} className="w-60">
         <ComboboxEmpty>No timezones found.</ComboboxEmpty>
-        <ComboboxList>
-          {(group: (typeof timezones)[number]) => (
-            <ComboboxGroup key={group.value} items={group.items}>
-              <ComboboxLabel>{group.value}</ComboboxLabel>
-              <ComboboxCollection>
-                {(item: string) => (
-                  <ComboboxItem key={item} value={item}>
-                    {item}
-                  </ComboboxItem>
-                )}
-              </ComboboxCollection>
-            </ComboboxGroup>
-          )}
-        </ComboboxList>
+        <ComboboxList>{timezoneGroup(false)}</ComboboxList>
       </ComboboxContent>
     </Combobox>
   ),

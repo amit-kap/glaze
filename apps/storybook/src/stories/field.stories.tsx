@@ -73,6 +73,29 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+// A checkbox with its label, side by side — the row shape the composition
+// stories repeat.
+function CheckRow({
+  id,
+  label,
+  checked,
+  disabled,
+}: {
+  id: string
+  label: string
+  checked?: boolean
+  disabled?: boolean
+}) {
+  return (
+    <Field orientation="horizontal">
+      <Checkbox id={id} defaultChecked={checked} disabled={disabled} />
+      <FieldLabel htmlFor={id} className="font-normal">
+        {label}
+      </FieldLabel>
+    </Field>
+  )
+}
+
 // --- Basic ----------------------------------------------------------------
 
 export const Default: Story = {
@@ -103,9 +126,43 @@ const years = [
   })),
 ]
 
+// A labelled Select field over plain {label, value} options.
+function SelectField({
+  id,
+  label,
+  items,
+  description,
+}: {
+  id: string
+  label: string
+  items: { label: string; value: string | null }[]
+  description?: string
+}) {
+  return (
+    <Field>
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      <Select items={items}>
+        <SelectTrigger id={id}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {items.map((item) => (
+              <SelectItem key={item.label} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      {description ? <FieldDescription>{description}</FieldDescription> : null}
+    </Field>
+  )
+}
+
 // Upstream's hero demo: a full checkout form built from Field primitives.
-export const Demo: Story = {
-  render: () => (
+function CheckoutForm() {
+  return (
     <form>
       <FieldGroup>
         <FieldSet>
@@ -136,40 +193,12 @@ export const Demo: Story = {
               </FieldDescription>
             </Field>
             <div className="grid grid-cols-3 gap-4">
-              <Field>
-                <FieldLabel htmlFor="checkout-exp-month">Month</FieldLabel>
-                <Select items={months}>
-                  <SelectTrigger id="checkout-exp-month">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {months.map((item) => (
-                        <SelectItem key={item.label} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="checkout-exp-year">Year</FieldLabel>
-                <Select items={years}>
-                  <SelectTrigger id="checkout-exp-year">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {years.map((item) => (
-                        <SelectItem key={item.label} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </Field>
+              <SelectField
+                id="checkout-exp-month"
+                label="Month"
+                items={months}
+              />
+              <SelectField id="checkout-exp-year" label="Year" items={years} />
               <Field>
                 <FieldLabel htmlFor="checkout-cvv">CVV</FieldLabel>
                 <Input id="checkout-cvv" placeholder="123" required />
@@ -215,7 +244,11 @@ export const Demo: Story = {
         </Field>
       </FieldGroup>
     </form>
-  ),
+  )
+}
+
+export const Demo: Story = {
+  render: () => <CheckoutForm />,
 }
 
 // --- States ---------------------------------------------------------------
@@ -301,26 +334,14 @@ const departments = [
 
 export const WithSelect: Story = {
   render: () => (
-    <Field className="w-full max-w-xs">
-      <FieldLabel htmlFor="department">Department</FieldLabel>
-      <Select items={departments}>
-        <SelectTrigger id="department">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {departments.map((item) => (
-              <SelectItem key={item.label} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <FieldDescription>
-        Select your department or area of work.
-      </FieldDescription>
-    </Field>
+    <div className="w-full max-w-xs">
+      <SelectField
+        id="department"
+        label="Department"
+        items={departments}
+        description="Select your department or area of work."
+      />
+    </div>
   ),
 }
 
@@ -377,6 +398,13 @@ export const WithFieldset: Story = {
   ),
 }
 
+const desktopItems = [
+  { id: "finder-hard-disks", label: "Hard disks", checked: true },
+  { id: "finder-external-disks", label: "External disks" },
+  { id: "finder-cds-dvds", label: "CDs, DVDs, and iPods" },
+  { id: "finder-connected-servers", label: "Connected servers" },
+]
+
 export const WithCheckbox: Story = {
   render: () => (
     <FieldGroup className="w-full max-w-xs">
@@ -388,33 +416,14 @@ export const WithCheckbox: Story = {
           Select the items you want to show on the desktop.
         </FieldDescription>
         <FieldGroup className="gap-3">
-          <Field orientation="horizontal">
-            <Checkbox id="finder-hard-disks" defaultChecked />
-            <FieldLabel htmlFor="finder-hard-disks" className="font-normal">
-              Hard disks
-            </FieldLabel>
-          </Field>
-          <Field orientation="horizontal">
-            <Checkbox id="finder-external-disks" />
-            <FieldLabel htmlFor="finder-external-disks" className="font-normal">
-              External disks
-            </FieldLabel>
-          </Field>
-          <Field orientation="horizontal">
-            <Checkbox id="finder-cds-dvds" />
-            <FieldLabel htmlFor="finder-cds-dvds" className="font-normal">
-              CDs, DVDs, and iPods
-            </FieldLabel>
-          </Field>
-          <Field orientation="horizontal">
-            <Checkbox id="finder-connected-servers" />
-            <FieldLabel
-              htmlFor="finder-connected-servers"
-              className="font-normal"
-            >
-              Connected servers
-            </FieldLabel>
-          </Field>
+          {desktopItems.map((item) => (
+            <CheckRow
+              key={item.id}
+              id={item.id}
+              label={item.label}
+              checked={item.checked}
+            />
+          ))}
         </FieldGroup>
       </FieldSet>
       <FieldSeparator />
@@ -434,6 +443,12 @@ export const WithCheckbox: Story = {
   ),
 }
 
+const plans = [
+  { value: "monthly", label: "Monthly ($9.99/month)" },
+  { value: "yearly", label: "Yearly ($99.99/year)" },
+  { value: "lifetime", label: "Lifetime ($299.99)" },
+]
+
 export const WithRadio: Story = {
   render: () => (
     <FieldSet className="w-full max-w-xs">
@@ -442,24 +457,14 @@ export const WithRadio: Story = {
         Yearly and lifetime plans offer significant savings.
       </FieldDescription>
       <RadioGroup defaultValue="monthly">
-        <Field orientation="horizontal">
-          <RadioGroupItem value="monthly" id="plan-monthly" />
-          <FieldLabel htmlFor="plan-monthly" className="font-normal">
-            Monthly ($9.99/month)
-          </FieldLabel>
-        </Field>
-        <Field orientation="horizontal">
-          <RadioGroupItem value="yearly" id="plan-yearly" />
-          <FieldLabel htmlFor="plan-yearly" className="font-normal">
-            Yearly ($99.99/year)
-          </FieldLabel>
-        </Field>
-        <Field orientation="horizontal">
-          <RadioGroupItem value="lifetime" id="plan-lifetime" />
-          <FieldLabel htmlFor="plan-lifetime" className="font-normal">
-            Lifetime ($299.99)
-          </FieldLabel>
-        </Field>
+        {plans.map((plan) => (
+          <Field key={plan.value} orientation="horizontal">
+            <RadioGroupItem value={plan.value} id={`plan-${plan.value}`} />
+            <FieldLabel htmlFor={`plan-${plan.value}`} className="font-normal">
+              {plan.label}
+            </FieldLabel>
+          </Field>
+        ))}
       </RadioGroup>
     </FieldSet>
   ),
@@ -474,6 +479,19 @@ export const WithSwitch: Story = {
   ),
 }
 
+const environments = [
+  {
+    value: "kubernetes",
+    title: "Kubernetes",
+    description: "Run GPU workloads on a K8s cluster.",
+  },
+  {
+    value: "vm",
+    title: "Virtual Machine",
+    description: "Access a cluster to run GPU workloads.",
+  },
+]
+
 // Wrap Field in FieldLabel to make the whole card a selectable target.
 export const ChoiceCard: Story = {
   render: () => (
@@ -484,75 +502,81 @@ export const ChoiceCard: Story = {
           Select the compute environment for your cluster.
         </FieldDescription>
         <RadioGroup defaultValue="kubernetes">
-          <FieldLabel htmlFor="kubernetes">
-            <Field orientation="horizontal">
-              <FieldContent>
-                <FieldTitle>Kubernetes</FieldTitle>
-                <FieldDescription>
-                  Run GPU workloads on a K8s cluster.
-                </FieldDescription>
-              </FieldContent>
-              <RadioGroupItem value="kubernetes" id="kubernetes" />
-            </Field>
-          </FieldLabel>
-          <FieldLabel htmlFor="vm">
-            <Field orientation="horizontal">
-              <FieldContent>
-                <FieldTitle>Virtual Machine</FieldTitle>
-                <FieldDescription>
-                  Access a cluster to run GPU workloads.
-                </FieldDescription>
-              </FieldContent>
-              <RadioGroupItem value="vm" id="vm" />
-            </Field>
-          </FieldLabel>
+          {environments.map((env) => (
+            <FieldLabel key={env.value} htmlFor={env.value}>
+              <Field orientation="horizontal">
+                <FieldContent>
+                  <FieldTitle>{env.title}</FieldTitle>
+                  <FieldDescription>{env.description}</FieldDescription>
+                </FieldContent>
+                <RadioGroupItem value={env.value} id={env.value} />
+              </Field>
+            </FieldLabel>
+          ))}
         </RadioGroup>
       </FieldSet>
     </FieldGroup>
   ),
 }
 
+type CheckItem = {
+  id: string
+  label: string
+  checked?: boolean
+  disabled?: boolean
+}
+
+const notificationGroups: {
+  legend: string
+  description: string
+  link?: boolean
+  items: CheckItem[]
+}[] = [
+  {
+    legend: "Responses",
+    description:
+      "Get notified when ChatGPT responds to requests that take time, like research or image generation.",
+    items: [
+      {
+        id: "push",
+        label: "Push notifications",
+        checked: true,
+        disabled: true,
+      },
+    ],
+  },
+  {
+    legend: "Tasks",
+    description: "Get notified when tasks you've created have updates.",
+    link: true,
+    items: [
+      { id: "push-tasks", label: "Push notifications" },
+      { id: "email-tasks", label: "Email notifications" },
+    ],
+  },
+]
+
 // Stack Field components with FieldGroup; FieldSeparator divides them.
 export const Group: Story = {
   render: () => (
     <FieldGroup className="w-full max-w-xs">
-      <FieldSet>
-        <FieldLabel>Responses</FieldLabel>
-        <FieldDescription>
-          Get notified when ChatGPT responds to requests that take time, like
-          research or image generation.
-        </FieldDescription>
-        <FieldGroup data-slot="checkbox-group">
-          <Field orientation="horizontal">
-            <Checkbox id="push" defaultChecked disabled />
-            <FieldLabel htmlFor="push" className="font-normal">
-              Push notifications
-            </FieldLabel>
-          </Field>
-        </FieldGroup>
-      </FieldSet>
-      <FieldSeparator />
-      <FieldSet>
-        <FieldLabel>Tasks</FieldLabel>
-        <FieldDescription>
-          Get notified when tasks you&apos;ve created have updates.{" "}
-          <a href="#">Manage tasks</a>
-        </FieldDescription>
-        <FieldGroup data-slot="checkbox-group">
-          <Field orientation="horizontal">
-            <Checkbox id="push-tasks" />
-            <FieldLabel htmlFor="push-tasks" className="font-normal">
-              Push notifications
-            </FieldLabel>
-          </Field>
-          <Field orientation="horizontal">
-            <Checkbox id="email-tasks" />
-            <FieldLabel htmlFor="email-tasks" className="font-normal">
-              Email notifications
-            </FieldLabel>
-          </Field>
-        </FieldGroup>
-      </FieldSet>
+      {notificationGroups.map((group, i) => (
+        <React.Fragment key={group.legend}>
+          {i > 0 && <FieldSeparator />}
+          <FieldSet>
+            <FieldLabel>{group.legend}</FieldLabel>
+            <FieldDescription>
+              {group.description}{" "}
+              {group.link ? <a href="#">Manage tasks</a> : null}
+            </FieldDescription>
+            <FieldGroup data-slot="checkbox-group">
+              {group.items.map((item) => (
+                <CheckRow key={item.id} {...item} />
+              ))}
+            </FieldGroup>
+          </FieldSet>
+        </React.Fragment>
+      ))}
     </FieldGroup>
   ),
 }

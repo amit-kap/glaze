@@ -43,6 +43,22 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+// Checkbox + label in a horizontal Field — the shape most stories repeat.
+function LabeledCheckbox({
+  id,
+  label,
+  ...props
+}: React.ComponentProps<typeof Checkbox> & { id: string; label: string }) {
+  return (
+    <Field orientation="horizontal">
+      <Checkbox id={id} name={id} {...props} />
+      <FieldLabel htmlFor={id} className="font-normal">
+        {label}
+      </FieldLabel>
+    </Field>
+  )
+}
+
 // --- Basic ----------------------------------------------------------------
 
 export const Default: Story = {}
@@ -53,6 +69,8 @@ export const Checked: Story = {
 
 // --- States ---------------------------------------------------------------
 
+// `data-disabled`/`data-invalid` live on the Field — that's where the
+// muted/invalid styling hooks read them.
 export const Disabled: Story = {
   render: () => (
     <FieldGroup className="mx-auto w-56">
@@ -92,12 +110,10 @@ export const Invalid: Story = {
 export const WithLabel: Story = {
   render: () => (
     <FieldGroup className="mx-auto w-56">
-      <Field orientation="horizontal">
-        <Checkbox id="terms-checkbox-basic" name="terms-checkbox-basic" />
-        <FieldLabel htmlFor="terms-checkbox-basic">
-          Accept terms and conditions
-        </FieldLabel>
-      </Field>
+      <LabeledCheckbox
+        id="terms-checkbox-basic"
+        label="Accept terms and conditions"
+      />
     </FieldGroup>
   ),
 }
@@ -161,30 +177,18 @@ export const WithGroup: Story = {
         Select the items you want to show on the desktop.
       </FieldDescription>
       <FieldGroup className="gap-3">
-        <Field orientation="horizontal">
-          <Checkbox id="hard-disks" name="hard-disks" defaultChecked />
-          <FieldLabel htmlFor="hard-disks" className="font-normal">
-            Hard disks
-          </FieldLabel>
-        </Field>
-        <Field orientation="horizontal">
-          <Checkbox id="external-disks" name="external-disks" defaultChecked />
-          <FieldLabel htmlFor="external-disks" className="font-normal">
-            External disks
-          </FieldLabel>
-        </Field>
-        <Field orientation="horizontal">
-          <Checkbox id="cds-dvds" name="cds-dvds" />
-          <FieldLabel htmlFor="cds-dvds" className="font-normal">
-            CDs, DVDs, and iPods
-          </FieldLabel>
-        </Field>
-        <Field orientation="horizontal">
-          <Checkbox id="connected-servers" name="connected-servers" />
-          <FieldLabel htmlFor="connected-servers" className="font-normal">
-            Connected servers
-          </FieldLabel>
-        </Field>
+        {[
+          { id: "hard-disks", label: "Hard disks", defaultChecked: true },
+          {
+            id: "external-disks",
+            label: "External disks",
+            defaultChecked: true,
+          },
+          { id: "cds-dvds", label: "CDs, DVDs, and iPods" },
+          { id: "connected-servers", label: "Connected servers" },
+        ].map((item) => (
+          <LabeledCheckbox key={item.id} {...item} />
+        ))}
       </FieldGroup>
     </FieldSet>
   ),

@@ -42,7 +42,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Displays a button or a component that looks like a button. Mark icons with `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` so the padding adjusts. Use `buttonVariants` to style a link or another element as a button.",
+          'Displays a button or a component that looks like a button. Mark icons with `data-icon="inline-start"` or `data-icon="inline-end"` so the padding adjusts. Use `buttonVariants` to style a link or another element as a button.',
       },
     },
   },
@@ -107,39 +107,27 @@ export const Link: Story = {
 
 // --- Sizes ----------------------------------------------------------------
 
+// Text size paired with its icon counterpart.
+const sizePairs = [
+  { size: "xs", iconSize: "icon-xs", label: "Extra Small" },
+  { size: "sm", iconSize: "icon-sm", label: "Small" },
+  { size: "default", iconSize: "icon", label: "Default" },
+  { size: "lg", iconSize: "icon-lg", label: "Large" },
+] as const
+
 export const Size: Story = {
   render: () => (
     <div className="flex flex-col items-start gap-8 sm:flex-row">
-      <div className="flex items-start gap-2">
-        <Button size="xs" variant="outline">
-          Extra Small
-        </Button>
-        <Button size="icon-xs" aria-label="Submit" variant="outline">
-          <ArrowUpRightIcon />
-        </Button>
-      </div>
-      <div className="flex items-start gap-2">
-        <Button size="sm" variant="outline">
-          Small
-        </Button>
-        <Button size="icon-sm" aria-label="Submit" variant="outline">
-          <ArrowUpRightIcon />
-        </Button>
-      </div>
-      <div className="flex items-start gap-2">
-        <Button variant="outline">Default</Button>
-        <Button size="icon" aria-label="Submit" variant="outline">
-          <ArrowUpRightIcon />
-        </Button>
-      </div>
-      <div className="flex items-start gap-2">
-        <Button variant="outline" size="lg">
-          Large
-        </Button>
-        <Button size="icon-lg" aria-label="Submit" variant="outline">
-          <ArrowUpRightIcon />
-        </Button>
-      </div>
+      {sizePairs.map(({ size, iconSize, label }) => (
+        <div key={size} className="flex items-start gap-2">
+          <Button size={size} variant="outline">
+            {label}
+          </Button>
+          <Button size={iconSize} aria-label="Submit" variant="outline">
+            <ArrowUpRightIcon />
+          </Button>
+        </div>
+      ))}
     </div>
   ),
 }
@@ -205,96 +193,92 @@ export const WithIcon: Story = {
   ),
 }
 
-export const WithButtonGroup: Story = {
-  render: function Render() {
-    const [label, setLabel] = React.useState("personal")
+// The trailing "more" dropdown of the button group.
+function MoreOptionsMenu() {
+  const [label, setLabel] = React.useState("personal")
 
-    return (
-      <ButtonGroup>
-        <ButtonGroup className="hidden sm:flex">
-          <Button variant="outline" size="icon" aria-label="Go Back">
-            <ArrowLeftIcon />
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button variant="outline">Archive</Button>
-          <Button variant="outline">Report</Button>
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button variant="outline">Snooze</Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  variant="outline"
-                  size="icon"
-                  aria-label="More Options"
-                />
-              }
-            >
-              <MoreHorizontalIcon />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <MailCheckIcon />
-                  Mark as Read
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <ArchiveIcon />
-                  Archive
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <ClockIcon />
-                  Snooze
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CalendarPlusIcon />
-                  Add to Calendar
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <ListFilterIcon />
-                  Add to List
-                </DropdownMenuItem>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    <TagIcon />
-                    Label As...
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuRadioGroup
-                      value={label}
-                      onValueChange={setLabel}
-                    >
-                      <DropdownMenuRadioItem value="personal">
-                        Personal
-                      </DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="work">
-                        Work
-                      </DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="other">
-                        Other
-                      </DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem variant="destructive">
-                  <Trash2Icon />
-                  Trash
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </ButtonGroup>
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button variant="outline" size="icon" aria-label="More Options" />
+        }
+      >
+        <MoreHorizontalIcon />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-40">
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <MailCheckIcon />
+            Mark as Read
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <ArchiveIcon />
+            Archive
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <ClockIcon />
+            Snooze
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <CalendarPlusIcon />
+            Add to Calendar
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <ListFilterIcon />
+            Add to List
+          </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <TagIcon />
+              Label As...
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={label} onValueChange={setLabel}>
+                <DropdownMenuRadioItem value="personal">
+                  Personal
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="work">Work</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="other">
+                  Other
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem variant="destructive">
+            <Trash2Icon />
+            Trash
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+export const WithButtonGroup: Story = {
+  render: () => (
+    <ButtonGroup>
+      <ButtonGroup className="hidden sm:flex">
+        <Button variant="outline" size="icon" aria-label="Go Back">
+          <ArrowLeftIcon />
+        </Button>
       </ButtonGroup>
-    )
-  },
+      <ButtonGroup>
+        <Button variant="outline">Archive</Button>
+        <Button variant="outline">Report</Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button variant="outline">Snooze</Button>
+        <MoreOptionsMenu />
+      </ButtonGroup>
+    </ButtonGroup>
+  ),
 }
 
 export const AsLink: Story = {

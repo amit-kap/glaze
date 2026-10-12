@@ -118,6 +118,17 @@ export const Basic: Story = {
 // --- Compositions ---------------------------------------------------------
 
 // Upstream reuses one id for all four inputs; each gets its own here.
+function RadiusField({ id, label }: { id: string; label: string }) {
+  return (
+    <Field>
+      <FieldLabel htmlFor={id} className="sr-only">
+        {label}
+      </FieldLabel>
+      <Input id={id} placeholder="0" defaultValue={0} />
+    </Field>
+  )
+}
+
 export const SettingsPanel: Story = {
   render: function Render() {
     const [isOpen, setIsOpen] = React.useState(false)
@@ -137,39 +148,11 @@ export const SettingsPanel: Story = {
             className="flex items-start gap-2"
           >
             <FieldGroup className="grid w-full grid-cols-2 gap-2">
-              <Field>
-                <FieldLabel htmlFor="radius-x" className="sr-only">
-                  Radius X
-                </FieldLabel>
-                <Input id="radius-x" placeholder="0" defaultValue={0} />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="radius-y" className="sr-only">
-                  Radius Y
-                </FieldLabel>
-                <Input id="radius-y" placeholder="0" defaultValue={0} />
-              </Field>
+              <RadiusField id="radius-x" label="Radius X" />
+              <RadiusField id="radius-y" label="Radius Y" />
               <CollapsibleContent className="col-span-full grid grid-cols-subgrid gap-2">
-                <Field>
-                  <FieldLabel htmlFor="radius-bottom-x" className="sr-only">
-                    Bottom radius X
-                  </FieldLabel>
-                  <Input
-                    id="radius-bottom-x"
-                    placeholder="0"
-                    defaultValue={0}
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="radius-bottom-y" className="sr-only">
-                    Bottom radius Y
-                  </FieldLabel>
-                  <Input
-                    id="radius-bottom-y"
-                    placeholder="0"
-                    defaultValue={0}
-                  />
-                </Field>
+                <RadiusField id="radius-bottom-x" label="Bottom radius X" />
+                <RadiusField id="radius-bottom-y" label="Bottom radius Y" />
               </CollapsibleContent>
             </FieldGroup>
             <CollapsibleTrigger
@@ -259,7 +242,7 @@ function FileTreeNode({ item }: { item: FileTreeItem }) {
           <FolderIcon />
           {item.name}
         </CollapsibleTrigger>
-        <CollapsibleContent className="mt-1 ms-5">
+        <CollapsibleContent className="ms-5 mt-1">
           <div className="flex flex-col gap-1">
             {item.items.map((child) => (
               <FileTreeNode key={child.name} item={child} />

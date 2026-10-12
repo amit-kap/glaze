@@ -152,120 +152,109 @@ export const Default: Story = {
 
 // --- Sizes ----------------------------------------------------------------
 
+const sizeRows: {
+  size: "default" | "sm" | "xs"
+  title: string
+  meta?: string
+}[] = [
+  { size: "default", title: "Default attachment", meta: "PDF · 2.4 MB" },
+  { size: "sm", title: "Small attachment", meta: "PDF · 2.4 MB" },
+  { size: "xs", title: "Extra small attachment" },
+]
+
 export const Sizes: Story = {
   render: () => (
     <div className="flex flex-col gap-3">
-      <Attachment size="default" className="w-full">
-        <AttachmentMedia>
-          <FileTextIcon />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>Default attachment</AttachmentTitle>
-          <AttachmentDescription>PDF · 2.4 MB</AttachmentDescription>
-        </AttachmentContent>
-      </Attachment>
-      <Attachment size="sm" className="w-full">
-        <AttachmentMedia>
-          <FileTextIcon />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>Small attachment</AttachmentTitle>
-          <AttachmentDescription>PDF · 2.4 MB</AttachmentDescription>
-        </AttachmentContent>
-      </Attachment>
-      <Attachment size="xs" className="w-full">
-        <AttachmentMedia>
-          <FileTextIcon />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>Extra small attachment</AttachmentTitle>
-        </AttachmentContent>
-      </Attachment>
+      {sizeRows.map((row) => (
+        <Attachment key={row.size} size={row.size} className="w-full">
+          <AttachmentMedia>
+            <FileTextIcon />
+          </AttachmentMedia>
+          <AttachmentContent>
+            <AttachmentTitle>{row.title}</AttachmentTitle>
+            {row.meta && (
+              <AttachmentDescription>{row.meta}</AttachmentDescription>
+            )}
+          </AttachmentContent>
+        </Attachment>
+      ))}
     </div>
   ),
 }
 
 // --- States ---------------------------------------------------------------
 
+const stateRows: {
+  state: "idle" | "uploading" | "processing" | "error" | "done"
+  title: string
+  meta: string
+  icon: LucideIcon | "spinner"
+  removeLabel: string
+  retry?: boolean
+}[] = [
+  {
+    state: "idle",
+    title: "selected-file.pdf",
+    meta: "Ready to upload",
+    icon: ClockIcon,
+    removeLabel: "Remove selected-file.pdf",
+  },
+  {
+    state: "uploading",
+    title: "design-system.zip",
+    meta: "Uploading · 64%",
+    icon: "spinner",
+    removeLabel: "Cancel upload",
+  },
+  {
+    state: "processing",
+    title: "market-research.pdf",
+    meta: "Processing document",
+    icon: FileTextIcon,
+    removeLabel: "Remove market-research.pdf",
+  },
+  {
+    state: "error",
+    title: "financial-model.xlsx",
+    meta: "Upload failed. Try again.",
+    icon: FileWarningIcon,
+    removeLabel: "Remove financial-model.xlsx",
+    retry: true,
+  },
+  {
+    state: "done",
+    title: "uploaded-report.pdf",
+    meta: "Uploaded · 1.8 MB",
+    icon: CheckIcon,
+    removeLabel: "Remove uploaded-report.pdf",
+  },
+]
+
 // `state` drives the border, shimmer and error styling.
 export const States: Story = {
   render: () => (
     <div className="flex flex-col gap-2">
-      <Attachment state="idle" className="w-full">
-        <AttachmentMedia>
-          <ClockIcon />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>selected-file.pdf</AttachmentTitle>
-          <AttachmentDescription>Ready to upload</AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Remove selected-file.pdf">
-            <XIcon />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
-      <Attachment state="uploading" className="w-full">
-        <AttachmentMedia>
-          <Spinner />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>design-system.zip</AttachmentTitle>
-          <AttachmentDescription>Uploading · 64%</AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Cancel upload">
-            <XIcon />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
-      <Attachment state="processing" className="w-full">
-        <AttachmentMedia>
-          <FileTextIcon />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>market-research.pdf</AttachmentTitle>
-          <AttachmentDescription>Processing document</AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Remove market-research.pdf">
-            <XIcon />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
-      <Attachment state="error" className="w-full">
-        <AttachmentMedia>
-          <FileWarningIcon />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>financial-model.xlsx</AttachmentTitle>
-          <AttachmentDescription>
-            Upload failed. Try again.
-          </AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Retry upload">
-            <RefreshCwIcon />
-          </AttachmentAction>
-          <AttachmentAction aria-label="Remove financial-model.xlsx">
-            <XIcon />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
-      <Attachment state="done" className="w-full">
-        <AttachmentMedia>
-          <CheckIcon />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>uploaded-report.pdf</AttachmentTitle>
-          <AttachmentDescription>Uploaded · 1.8 MB</AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Remove uploaded-report.pdf">
-            <XIcon />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
+      {stateRows.map((row) => (
+        <Attachment key={row.state} state={row.state} className="w-full">
+          <AttachmentMedia>
+            {row.icon === "spinner" ? <Spinner /> : <row.icon />}
+          </AttachmentMedia>
+          <AttachmentContent>
+            <AttachmentTitle>{row.title}</AttachmentTitle>
+            <AttachmentDescription>{row.meta}</AttachmentDescription>
+          </AttachmentContent>
+          <AttachmentActions>
+            {row.retry && (
+              <AttachmentAction aria-label="Retry upload">
+                <RefreshCwIcon />
+              </AttachmentAction>
+            )}
+            <AttachmentAction aria-label={row.removeLabel}>
+              <XIcon />
+            </AttachmentAction>
+          </AttachmentActions>
+        </Attachment>
+      ))}
     </div>
   ),
 }

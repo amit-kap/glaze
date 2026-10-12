@@ -16,25 +16,25 @@ import {
   QuestionnaireSubmit,
   QuestionnaireTitle,
 } from "@amit-kap/glaze/components/questionnaire"
-import { QuestionnaireAnimated } from "./examples/questionnaire/questionnaire-animated"
-import { QuestionnaireCard } from "./examples/questionnaire/questionnaire-card"
-import { QuestionnaireConditional } from "./examples/questionnaire/questionnaire-conditional"
-import { QuestionnaireControlled } from "./examples/questionnaire/questionnaire-controlled"
-import { QuestionnaireDemo } from "./examples/questionnaire/questionnaire-demo"
-import { QuestionnaireDialog } from "./examples/questionnaire/questionnaire-dialog"
-import { QuestionnaireFreeform } from "./examples/questionnaire/questionnaire-freeform"
-import { QuestionnaireMultiple } from "./examples/questionnaire/questionnaire-multiple"
-import { QuestionnaireNavigationState } from "./examples/questionnaire/questionnaire-navigation-state"
-import { QuestionnaireProgressExample } from "./examples/questionnaire/questionnaire-progress"
-import { QuestionnaireResume } from "./examples/questionnaire/questionnaire-resume"
-import { QuestionnaireShortcuts } from "./examples/questionnaire/questionnaire-shortcuts"
-import { QuestionnaireSkipExample } from "./examples/questionnaire/questionnaire-skip"
-import { QuestionnaireValidation } from "./examples/questionnaire/questionnaire-validation"
-import { ExampleToaster } from "./examples/toast"
+import { QuestionnaireAnimated } from "../examples/questionnaire/questionnaire-animated"
+import { QuestionnaireCard } from "../examples/questionnaire/questionnaire-card"
+import { QuestionnaireConditional } from "../examples/questionnaire/questionnaire-conditional"
+import { QuestionnaireControlled } from "../examples/questionnaire/questionnaire-controlled"
+import { QuestionnaireDemo } from "../examples/questionnaire/questionnaire-demo"
+import { QuestionnaireDialog } from "../examples/questionnaire/questionnaire-dialog"
+import { QuestionnaireFreeform } from "../examples/questionnaire/questionnaire-freeform"
+import { QuestionnaireMultiple } from "../examples/questionnaire/questionnaire-multiple"
+import { QuestionnaireNavigationState } from "../examples/questionnaire/questionnaire-navigation-state"
+import { QuestionnaireProgressExample } from "../examples/questionnaire/questionnaire-progress"
+import { QuestionnaireResume } from "../examples/questionnaire/questionnaire-resume"
+import { QuestionnaireShortcuts } from "../examples/questionnaire/questionnaire-shortcuts"
+import { QuestionnaireSkipExample } from "../examples/questionnaire/questionnaire-skip"
+import { QuestionnaireValidation } from "../examples/questionnaire/questionnaire-validation"
+import { ExampleToaster } from "../examples/toast"
 
 // Stories follow the upstream shadcn/ui (base-nova) Questionnaire examples:
 // https://ui.shadcn.com/docs/components/base/questionnaire
-// The examples are long, so they live in ./examples/questionnaire as copies
+// The examples are long, so they live in src/examples/questionnaire as copies
 // of upstream with Glaze imports; sonner's toast goes through ../toast.
 const meta = {
   title: "Components/Questionnaire",

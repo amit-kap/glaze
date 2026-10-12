@@ -78,6 +78,32 @@ const tiles: { name: string; demo: () => React.ReactNode; wide?: boolean }[] = [
   { name: "Chart", demo: ChartDemo, wide: true },
 ]
 
+// One demo in a card, with the component's name in the footer strip.
+function DemoTile({
+  name,
+  wide,
+  children,
+}: {
+  name: string
+  wide?: boolean
+  children: React.ReactNode
+}) {
+  return (
+    <Card
+      role="region"
+      aria-label={name}
+      className={`min-w-0 gap-0 overflow-hidden py-0 ${wide ? "sm:col-span-2" : ""}`}
+    >
+      <div className="flex min-h-56 flex-1 items-center justify-center px-6 py-10">
+        {children}
+      </div>
+      <div className="shrink-0 border-t border-border/40 px-4 py-3 text-body text-muted-foreground">
+        {name}
+      </div>
+    </Card>
+  )
+}
+
 export function App() {
   const [customizing, setCustomizing] = React.useState(false)
   return (
@@ -88,19 +114,9 @@ export function App() {
       >
         <main className="grid grid-flow-dense grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {tiles.map(({ name, demo: Demo, wide }) => (
-            <Card
-              key={name}
-              role="region"
-              aria-label={name}
-              className={`min-w-0 gap-0 overflow-hidden py-0 ${wide ? "sm:col-span-2" : ""}`}
-            >
-              <div className="flex min-h-56 flex-1 items-center justify-center px-6 py-10">
-                <Demo />
-              </div>
-              <div className="shrink-0 border-t border-border/40 px-4 py-3 text-body text-muted-foreground">
-                {name}
-              </div>
-            </Card>
+            <DemoTile key={name} name={name} wide={wide}>
+              <Demo />
+            </DemoTile>
           ))}
         </main>
       </div>
