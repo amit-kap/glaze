@@ -38,6 +38,9 @@ function getSystemTheme(): ResolvedTheme {
   return "light"
 }
 
+// Blocks all CSS transitions while a theme change applies, then removes the
+// override. The forced reflow plus two rAFs let the new theme paint once
+// before transitions come back, so the swap never animates.
 function disableTransitionsTemporarily() {
   const style = document.createElement("style")
   style.appendChild(
@@ -138,6 +141,8 @@ export function ThemeProvider({
     }
   }, [theme, applyTheme])
 
+  // Scaffold shortcut: `d` toggles dark/light (system resolves to its
+  // opposite), skipping repeats, modifiers and editable elements.
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.repeat) {
@@ -178,6 +183,7 @@ export function ThemeProvider({
     }
   }, [storageKey])
 
+  // Keeps theme in sync across tabs: `storage` only fires on other tabs.
   React.useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.storageArea !== localStorage) {

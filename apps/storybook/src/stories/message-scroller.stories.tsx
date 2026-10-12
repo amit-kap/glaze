@@ -7,22 +7,22 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@amit-kap/glaze/components/message-scroller"
-import { MessageScrollerAnchoring } from "./examples/message-scroller/message-scroller-anchoring"
-import { MessageScrollerAnimation } from "./examples/message-scroller/message-scroller-animation"
-import { MessageScrollerCommands } from "./examples/message-scroller/message-scroller-commands"
-import { MessageScrollerDemo } from "./examples/message-scroller/message-scroller-demo"
-import { MessageScrollerGroupChat } from "./examples/message-scroller/message-scroller-group-chat"
-import { MessageScrollerLoadHistory } from "./examples/message-scroller/message-scroller-load-history"
-import { MessageScrollerOpeningPosition } from "./examples/message-scroller/message-scroller-opening-position"
-import { MessageScrollerPreviousContext } from "./examples/message-scroller/message-scroller-previous-context"
-import { MessageScrollerScrollable } from "./examples/message-scroller/message-scroller-scrollable"
-import { MessageScrollerStreaming } from "./examples/message-scroller/message-scroller-streaming"
-import { MessageScrollerVisibility } from "./examples/message-scroller/message-scroller-visibility"
-import { ExampleToaster } from "./examples/toast"
+import { MessageScrollerAnchoring } from "../examples/message-scroller/message-scroller-anchoring"
+import { MessageScrollerAnimation } from "../examples/message-scroller/message-scroller-animation"
+import { MessageScrollerCommands } from "../examples/message-scroller/message-scroller-commands"
+import { MessageScrollerDemo } from "../examples/message-scroller/message-scroller-demo"
+import { MessageScrollerGroupChat } from "../examples/message-scroller/message-scroller-group-chat"
+import { MessageScrollerLoadHistory } from "../examples/message-scroller/message-scroller-load-history"
+import { MessageScrollerOpeningPosition } from "../examples/message-scroller/message-scroller-opening-position"
+import { MessageScrollerPreviousContext } from "../examples/message-scroller/message-scroller-previous-context"
+import { MessageScrollerScrollable } from "../examples/message-scroller/message-scroller-scrollable"
+import { MessageScrollerStreaming } from "../examples/message-scroller/message-scroller-streaming"
+import { MessageScrollerVisibility } from "../examples/message-scroller/message-scroller-visibility"
+import { ExampleToaster } from "../examples/toast"
 
 // Stories follow the upstream shadcn/ui Message Scroller examples:
 // https://ui.shadcn.com/docs/components/base/message-scroller
-// The examples live in ./examples/message-scroller as copies of upstream with
+// The examples live in src/examples/message-scroller as copies of upstream with
 // Glaze imports. They stream from a fake chat built on the AI SDK
 // (`ai`, `@ai-sdk/react`, `@shadcn/helpers`), as upstream does.
 const meta = {

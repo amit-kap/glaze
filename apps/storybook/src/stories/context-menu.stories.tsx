@@ -72,6 +72,53 @@ function Area({ label = "here" }: { label?: string }) {
   )
 }
 
+// A menu item with its keyboard shortcut — the most repeated shape here.
+function ShortcutItem({
+  label,
+  keys,
+  disabled,
+  destructive,
+}: {
+  label: string
+  keys: string
+  disabled?: boolean
+  destructive?: boolean
+}) {
+  return (
+    <ContextMenuItem
+      disabled={disabled}
+      variant={destructive ? "destructive" : undefined}
+    >
+      {label}
+      <ContextMenuShortcut>{keys}</ContextMenuShortcut>
+    </ContextMenuItem>
+  )
+}
+
+// The "More Tools" submenu, shared by the Default and Submenu stories.
+function MoreToolsSub({ className }: { className?: string }) {
+  return (
+    <ContextMenuSub>
+      <ContextMenuSubTrigger>More Tools</ContextMenuSubTrigger>
+      <ContextMenuSubContent className={className}>
+        <ContextMenuGroup>
+          <ContextMenuItem>Save Page...</ContextMenuItem>
+          <ContextMenuItem>Create Shortcut...</ContextMenuItem>
+          <ContextMenuItem>Name Window...</ContextMenuItem>
+        </ContextMenuGroup>
+        <ContextMenuSeparator />
+        <ContextMenuGroup>
+          <ContextMenuItem>Developer Tools</ContextMenuItem>
+        </ContextMenuGroup>
+        <ContextMenuSeparator />
+        <ContextMenuGroup>
+          <ContextMenuItem variant="destructive">Delete</ContextMenuItem>
+        </ContextMenuGroup>
+      </ContextMenuSubContent>
+    </ContextMenuSub>
+  )
+}
+
 // --- Basic ----------------------------------------------------------------
 
 // Upstream passes `checked` and `value` without handlers, which freezes the
@@ -82,36 +129,10 @@ export const Default: Story = {
       <Area />
       <ContextMenuContent className="w-48">
         <ContextMenuGroup>
-          <ContextMenuItem>
-            Back
-            <ContextMenuShortcut>⌘[</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem disabled>
-            Forward
-            <ContextMenuShortcut>⌘]</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Reload
-            <ContextMenuShortcut>⌘R</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuSub>
-            <ContextMenuSubTrigger>More Tools</ContextMenuSubTrigger>
-            <ContextMenuSubContent className="w-44">
-              <ContextMenuGroup>
-                <ContextMenuItem>Save Page...</ContextMenuItem>
-                <ContextMenuItem>Create Shortcut...</ContextMenuItem>
-                <ContextMenuItem>Name Window...</ContextMenuItem>
-              </ContextMenuGroup>
-              <ContextMenuSeparator />
-              <ContextMenuGroup>
-                <ContextMenuItem>Developer Tools</ContextMenuItem>
-              </ContextMenuGroup>
-              <ContextMenuSeparator />
-              <ContextMenuGroup>
-                <ContextMenuItem variant="destructive">Delete</ContextMenuItem>
-              </ContextMenuGroup>
-            </ContextMenuSubContent>
-          </ContextMenuSub>
+          <ShortcutItem label="Back" keys="⌘[" />
+          <ShortcutItem label="Forward" keys="⌘]" disabled />
+          <ShortcutItem label="Reload" keys="⌘R" />
+          <MoreToolsSub className="w-44" />
         </ContextMenuGroup>
         <ContextMenuSeparator />
         <ContextMenuGroup>
@@ -158,33 +179,10 @@ export const Submenu: Story = {
       <Area />
       <ContextMenuContent>
         <ContextMenuGroup>
-          <ContextMenuItem>
-            Copy
-            <ContextMenuShortcut>⌘C</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Cut
-            <ContextMenuShortcut>⌘X</ContextMenuShortcut>
-          </ContextMenuItem>
+          <ShortcutItem label="Copy" keys="⌘C" />
+          <ShortcutItem label="Cut" keys="⌘X" />
         </ContextMenuGroup>
-        <ContextMenuSub>
-          <ContextMenuSubTrigger>More Tools</ContextMenuSubTrigger>
-          <ContextMenuSubContent>
-            <ContextMenuGroup>
-              <ContextMenuItem>Save Page...</ContextMenuItem>
-              <ContextMenuItem>Create Shortcut...</ContextMenuItem>
-              <ContextMenuItem>Name Window...</ContextMenuItem>
-            </ContextMenuGroup>
-            <ContextMenuSeparator />
-            <ContextMenuGroup>
-              <ContextMenuItem>Developer Tools</ContextMenuItem>
-            </ContextMenuGroup>
-            <ContextMenuSeparator />
-            <ContextMenuGroup>
-              <ContextMenuItem variant="destructive">Delete</ContextMenuItem>
-            </ContextMenuGroup>
-          </ContextMenuSubContent>
-        </ContextMenuSub>
+        <MoreToolsSub />
       </ContextMenuContent>
     </ContextMenu>
   ),
@@ -196,89 +194,67 @@ export const Shortcuts: Story = {
       <Area />
       <ContextMenuContent>
         <ContextMenuGroup>
-          <ContextMenuItem>
-            Back
-            <ContextMenuShortcut>⌘[</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem disabled>
-            Forward
-            <ContextMenuShortcut>⌘]</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Reload
-            <ContextMenuShortcut>⌘R</ContextMenuShortcut>
-          </ContextMenuItem>
+          <ShortcutItem label="Back" keys="⌘[" />
+          <ShortcutItem label="Forward" keys="⌘]" disabled />
+          <ShortcutItem label="Reload" keys="⌘R" />
         </ContextMenuGroup>
         <ContextMenuSeparator />
         <ContextMenuGroup>
-          <ContextMenuItem>
-            Save
-            <ContextMenuShortcut>⌘S</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Save As...
-            <ContextMenuShortcut>⇧⌘S</ContextMenuShortcut>
-          </ContextMenuItem>
+          <ShortcutItem label="Save" keys="⌘S" />
+          <ShortcutItem label="Save As..." keys="⇧⌘S" />
         </ContextMenuGroup>
       </ContextMenuContent>
     </ContextMenu>
   ),
 }
 
+const menuGroups: {
+  label?: string
+  items: { label: string; keys: string; destructive?: boolean }[]
+}[] = [
+  {
+    label: "File",
+    items: [
+      { label: "New File", keys: "⌘N" },
+      { label: "Open File", keys: "⌘O" },
+      { label: "Save", keys: "⌘S" },
+    ],
+  },
+  {
+    label: "Edit",
+    items: [
+      { label: "Undo", keys: "⌘Z" },
+      { label: "Redo", keys: "⇧⌘Z" },
+    ],
+  },
+  {
+    items: [
+      { label: "Cut", keys: "⌘X" },
+      { label: "Copy", keys: "⌘C" },
+      { label: "Paste", keys: "⌘V" },
+    ],
+  },
+  { items: [{ label: "Delete", keys: "⌫", destructive: true }] },
+]
+
 export const Groups: Story = {
   render: () => (
     <ContextMenu>
       <Area />
       <ContextMenuContent>
-        <ContextMenuGroup>
-          <ContextMenuLabel>File</ContextMenuLabel>
-          <ContextMenuItem>
-            New File
-            <ContextMenuShortcut>⌘N</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Open File
-            <ContextMenuShortcut>⌘O</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Save
-            <ContextMenuShortcut>⌘S</ContextMenuShortcut>
-          </ContextMenuItem>
-        </ContextMenuGroup>
-        <ContextMenuSeparator />
-        <ContextMenuGroup>
-          <ContextMenuLabel>Edit</ContextMenuLabel>
-          <ContextMenuItem>
-            Undo
-            <ContextMenuShortcut>⌘Z</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Redo
-            <ContextMenuShortcut>⇧⌘Z</ContextMenuShortcut>
-          </ContextMenuItem>
-        </ContextMenuGroup>
-        <ContextMenuSeparator />
-        <ContextMenuGroup>
-          <ContextMenuItem>
-            Cut
-            <ContextMenuShortcut>⌘X</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Copy
-            <ContextMenuShortcut>⌘C</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem>
-            Paste
-            <ContextMenuShortcut>⌘V</ContextMenuShortcut>
-          </ContextMenuItem>
-        </ContextMenuGroup>
-        <ContextMenuSeparator />
-        <ContextMenuGroup>
-          <ContextMenuItem variant="destructive">
-            Delete
-            <ContextMenuShortcut>⌫</ContextMenuShortcut>
-          </ContextMenuItem>
-        </ContextMenuGroup>
+        {menuGroups.map((group, i) => (
+          <React.Fragment key={group.label ?? i}>
+            {i > 0 && <ContextMenuSeparator />}
+            <ContextMenuGroup>
+              {group.label && (
+                <ContextMenuLabel>{group.label}</ContextMenuLabel>
+              )}
+              {group.items.map((item) => (
+                <ShortcutItem key={item.label} {...item} />
+              ))}
+            </ContextMenuGroup>
+          </React.Fragment>
+        ))}
       </ContextMenuContent>
     </ContextMenu>
   ),

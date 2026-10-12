@@ -15,6 +15,7 @@ import {
   SearchIcon,
   StarIcon,
   EyeOffIcon,
+  type LucideIcon,
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -247,37 +248,48 @@ export const BlockEnd: Story = {
 
 // --- Compositions ---------------------------------------------------------
 
+// Each row: input props, start icon, optional end icons.
+const iconRows: {
+  input: React.ComponentProps<typeof InputGroupInput>
+  start?: LucideIcon
+  end?: LucideIcon[]
+}[] = [
+  { input: { placeholder: "Search..." }, start: SearchIcon },
+  {
+    input: { type: "email", placeholder: "Enter your email" },
+    start: MailIcon,
+  },
+  {
+    input: { placeholder: "Card number" },
+    start: CreditCardIcon,
+    end: [CheckIcon],
+  },
+  {
+    input: { placeholder: "Card number" },
+    end: [StarIcon, InfoIcon],
+  },
+]
+
 export const WithIcon: Story = {
   render: () => (
     <div className="grid gap-6">
-      <InputGroup>
-        <InputGroupInput placeholder="Search..." />
-        <InputGroupAddon>
-          <SearchIcon />
-        </InputGroupAddon>
-      </InputGroup>
-      <InputGroup>
-        <InputGroupInput type="email" placeholder="Enter your email" />
-        <InputGroupAddon>
-          <MailIcon />
-        </InputGroupAddon>
-      </InputGroup>
-      <InputGroup>
-        <InputGroupInput placeholder="Card number" />
-        <InputGroupAddon>
-          <CreditCardIcon />
-        </InputGroupAddon>
-        <InputGroupAddon align="inline-end">
-          <CheckIcon />
-        </InputGroupAddon>
-      </InputGroup>
-      <InputGroup>
-        <InputGroupInput placeholder="Card number" />
-        <InputGroupAddon align="inline-end">
-          <StarIcon />
-          <InfoIcon />
-        </InputGroupAddon>
-      </InputGroup>
+      {iconRows.map(({ input, start: Start, end }, i) => (
+        <InputGroup key={i}>
+          <InputGroupInput {...input} />
+          {Start && (
+            <InputGroupAddon>
+              <Start />
+            </InputGroupAddon>
+          )}
+          {end && (
+            <InputGroupAddon align="inline-end">
+              {end.map((Icon, j) => (
+                <Icon key={j} />
+              ))}
+            </InputGroupAddon>
+          )}
+        </InputGroup>
+      ))}
     </div>
   ),
 }
@@ -413,90 +425,97 @@ export const WithKbd: Story = {
   ),
 }
 
+// An `InputGroupButton` that opens a dropdown; `trigger` renders as the button.
+function TrailingDropdown({
+  trigger,
+  items,
+}: {
+  trigger: React.ReactElement
+  items: string[]
+}) {
+  return (
+    <InputGroupAddon align="inline-end">
+      <DropdownMenu>
+        <DropdownMenuTrigger render={trigger} />
+        <DropdownMenuContent align="end" sideOffset={8} alignOffset={-4}>
+          <DropdownMenuGroup>
+            {items.map((item) => (
+              <DropdownMenuItem key={item}>{item}</DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </InputGroupAddon>
+  )
+}
+
 export const WithDropdown: Story = {
   render: () => (
     <div className="grid gap-4">
       <InputGroup>
         <InputGroupInput placeholder="Enter file name" />
-        <InputGroupAddon align="inline-end">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <InputGroupButton
-                  variant="ghost"
-                  aria-label="More"
-                  size="icon-xs"
-                />
-              }
-            >
+        <TrailingDropdown
+          trigger={
+            <InputGroupButton variant="ghost" aria-label="More" size="icon-xs">
               <MoreHorizontalIcon />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" sideOffset={8} alignOffset={-4}>
-              <DropdownMenuGroup>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Copy path</DropdownMenuItem>
-                <DropdownMenuItem>Open location</DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </InputGroupAddon>
+            </InputGroupButton>
+          }
+          items={["Settings", "Copy path", "Open location"]}
+        />
       </InputGroup>
       <InputGroup>
         <InputGroupInput placeholder="Enter search query" />
-        <InputGroupAddon align="inline-end">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<InputGroupButton variant="ghost" className="pe-1.5!" />}
-            >
+        <TrailingDropdown
+          trigger={
+            <InputGroupButton variant="ghost" className="pe-1.5!">
               Search In... <ChevronDownIcon className="size-3" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" sideOffset={8} alignOffset={-4}>
-              <DropdownMenuGroup>
-                <DropdownMenuItem>Documentation</DropdownMenuItem>
-                <DropdownMenuItem>Blog Posts</DropdownMenuItem>
-                <DropdownMenuItem>Changelog</DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </InputGroupAddon>
+            </InputGroupButton>
+          }
+          items={["Documentation", "Blog Posts", "Changelog"]}
+        />
       </InputGroup>
     </div>
   ),
 }
 
+// Each row: input placeholder plus the addons to render.
+const spinnerRows: {
+  placeholder: string
+  start?: React.ReactNode
+  end?: React.ReactNode
+}[] = [
+  { placeholder: "Searching...", end: <Spinner /> },
+  { placeholder: "Processing...", start: <Spinner /> },
+  {
+    placeholder: "Saving changes...",
+    end: (
+      <>
+        <InputGroupText>Saving...</InputGroupText>
+        <Spinner />
+      </>
+    ),
+  },
+  {
+    placeholder: "Refreshing data...",
+    start: <LoaderIcon className="animate-spin" />,
+    end: (
+      <InputGroupText className="text-muted-foreground">
+        Please wait...
+      </InputGroupText>
+    ),
+  },
+]
+
 export const WithSpinner: Story = {
   render: () => (
     <div className="grid gap-4">
-      <InputGroup>
-        <InputGroupInput placeholder="Searching..." />
-        <InputGroupAddon align="inline-end">
-          <Spinner />
-        </InputGroupAddon>
-      </InputGroup>
-      <InputGroup>
-        <InputGroupInput placeholder="Processing..." />
-        <InputGroupAddon>
-          <Spinner />
-        </InputGroupAddon>
-      </InputGroup>
-      <InputGroup>
-        <InputGroupInput placeholder="Saving changes..." />
-        <InputGroupAddon align="inline-end">
-          <InputGroupText>Saving...</InputGroupText>
-          <Spinner />
-        </InputGroupAddon>
-      </InputGroup>
-      <InputGroup>
-        <InputGroupInput placeholder="Refreshing data..." />
-        <InputGroupAddon>
-          <LoaderIcon className="animate-spin" />
-        </InputGroupAddon>
-        <InputGroupAddon align="inline-end">
-          <InputGroupText className="text-muted-foreground">
-            Please wait...
-          </InputGroupText>
-        </InputGroupAddon>
-      </InputGroup>
+      {spinnerRows.map(({ placeholder, start, end }) => (
+        <InputGroup key={placeholder}>
+          <InputGroupInput placeholder={placeholder} />
+          {start && <InputGroupAddon>{start}</InputGroupAddon>}
+          {end && <InputGroupAddon align="inline-end">{end}</InputGroupAddon>}
+        </InputGroup>
+      ))}
     </div>
   ),
 }

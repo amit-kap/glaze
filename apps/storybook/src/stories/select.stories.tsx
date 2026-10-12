@@ -56,7 +56,27 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const fruits = [
+type Option = { label: string; value: string | null; disabled?: boolean }
+
+// A labelled group of plain options — the shape every Select demo repeats.
+function OptionGroup({ label, items }: { label?: string; items: Option[] }) {
+  return (
+    <SelectGroup>
+      {label && <SelectLabel>{label}</SelectLabel>}
+      {items.map((item) => (
+        <SelectItem
+          key={item.value}
+          value={item.value}
+          disabled={item.disabled}
+        >
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectGroup>
+  )
+}
+
+const fruits: Option[] = [
   { label: "Select a fruit", value: null },
   { label: "Apple", value: "apple" },
   { label: "Banana", value: "banana" },
@@ -74,14 +94,7 @@ export const Default: Story = {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          {fruits.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
+        <OptionGroup label="Fruits" items={fruits} />
       </SelectContent>
     </Select>
   ),
@@ -122,13 +135,7 @@ export const AlignItemWithTrigger: Story = {
               <SelectValue />
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={alignItemWithTrigger}>
-              <SelectGroup>
-                {fruits.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
+              <OptionGroup items={fruits} />
             </SelectContent>
           </Select>
         </Field>
@@ -188,6 +195,14 @@ const timezones = [
   ...southAmerica,
 ]
 
+const timezoneGroups: [string, Option[]][] = [
+  ["North America", northAmerica],
+  ["Europe & Africa", europeAfrica],
+  ["Asia", asia],
+  ["Australia & Pacific", australiaPacific],
+  ["South America", southAmerica],
+]
+
 export const Scrollable: Story = {
   render: () => (
     <Select items={timezones}>
@@ -195,46 +210,9 @@ export const Scrollable: Story = {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectGroup>
-          <SelectLabel>North America</SelectLabel>
-          {northAmerica.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>Europe & Africa</SelectLabel>
-          {europeAfrica.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>Asia</SelectLabel>
-          {asia.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>Australia & Pacific</SelectLabel>
-          {australiaPacific.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>South America</SelectLabel>
-          {southAmerica.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
+        {timezoneGroups.map(([label, items]) => (
+          <OptionGroup key={label} label={label} items={items} />
+        ))}
       </SelectContent>
     </Select>
   ),
@@ -242,37 +220,22 @@ export const Scrollable: Story = {
 
 // --- States ---------------------------------------------------------------
 
+// Same fruits, one option disabled.
+const disabledFruits: Option[] = fruits.map((item) =>
+  item.value === "grapes" ? { ...item, disabled: true } : item
+)
+
 export const Disabled: Story = {
-  render: () => {
-    const items = [
-      { label: "Select a fruit", value: null },
-      { label: "Apple", value: "apple" },
-      { label: "Banana", value: "banana" },
-      { label: "Blueberry", value: "blueberry" },
-      { label: "Grapes", value: "grapes", disabled: true },
-      { label: "Pineapple", value: "pineapple" },
-    ]
-    return (
-      <Select items={items} disabled>
-        <SelectTrigger aria-label="Fruit" className="w-full max-w-48">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {items.map((item) => (
-              <SelectItem
-                key={item.value}
-                value={item.value}
-                disabled={item.disabled}
-              >
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    )
-  },
+  render: () => (
+    <Select items={disabledFruits} disabled>
+      <SelectTrigger aria-label="Fruit" className="w-full max-w-48">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <OptionGroup items={disabledFruits} />
+      </SelectContent>
+    </Select>
+  ),
 }
 
 export const Invalid: Story = {
@@ -284,13 +247,7 @@ export const Invalid: Story = {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup>
-            {fruits.slice(0, 4).map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
+          <OptionGroup items={fruits.slice(0, 4)} />
         </SelectContent>
       </Select>
       <FieldDescription>Please select a fruit.</FieldDescription>
@@ -300,48 +257,34 @@ export const Invalid: Story = {
 
 // --- Compositions ---------------------------------------------------------
 
+const groupFruits = [
+  { label: "Apple", value: "apple" },
+  { label: "Banana", value: "banana" },
+  { label: "Blueberry", value: "blueberry" },
+]
+const vegetables = [
+  { label: "Carrot", value: "carrot" },
+  { label: "Broccoli", value: "broccoli" },
+  { label: "Spinach", value: "spinach" },
+]
+
 export const WithGroups: Story = {
-  render: () => {
-    const fruits = [
-      { label: "Apple", value: "apple" },
-      { label: "Banana", value: "banana" },
-      { label: "Blueberry", value: "blueberry" },
-    ]
-    const vegetables = [
-      { label: "Carrot", value: "carrot" },
-      { label: "Broccoli", value: "broccoli" },
-      { label: "Spinach", value: "spinach" },
-    ]
-    const allItems = [
-      { label: "Select a fruit", value: null },
-      ...fruits,
-      ...vegetables,
-    ]
-    return (
-      <Select items={allItems}>
-        <SelectTrigger aria-label="Food" className="w-full max-w-48">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Fruits</SelectLabel>
-            {fruits.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-          <SelectSeparator />
-          <SelectGroup>
-            <SelectLabel>Vegetables</SelectLabel>
-            {vegetables.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    )
-  },
+  render: () => (
+    <Select
+      items={[
+        { label: "Select a fruit", value: null },
+        ...groupFruits,
+        ...vegetables,
+      ]}
+    >
+      <SelectTrigger aria-label="Food" className="w-full max-w-48">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <OptionGroup label="Fruits" items={groupFruits} />
+        <SelectSeparator />
+        <OptionGroup label="Vegetables" items={vegetables} />
+      </SelectContent>
+    </Select>
+  ),
 }

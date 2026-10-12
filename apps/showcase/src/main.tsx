@@ -9,7 +9,11 @@ import { App } from "./app"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="nova" defaultMode="system" storageKey="glaze-showcase">
+    <ThemeProvider
+      defaultTheme="nova"
+      defaultMode="system"
+      storageKey="glaze-showcase"
+    >
       <TooltipProvider>
         <App />
         <Toaster />

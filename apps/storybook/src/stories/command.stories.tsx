@@ -1,5 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { LucideIcon } from "lucide-react"
 import {
   BellIcon,
   CalculatorIcon,
@@ -67,6 +68,58 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+// One row: icon, label, optional shortcut. Most items below use this shape.
+function Entry({
+  icon: Icon,
+  label,
+  keys,
+  disabled,
+}: {
+  icon: LucideIcon
+  label: string
+  keys?: string
+  disabled?: boolean
+}) {
+  return (
+    <CommandItem disabled={disabled}>
+      <Icon />
+      <span>{label}</span>
+      {keys && <CommandShortcut>{keys}</CommandShortcut>}
+    </CommandItem>
+  )
+}
+
+const suggestions: Parameters<typeof Entry>[0][] = [
+  { icon: CalendarIcon, label: "Calendar" },
+  { icon: SmileIcon, label: "Search Emoji" },
+  { icon: CalculatorIcon, label: "Calculator" },
+]
+const settings: Parameters<typeof Entry>[0][] = [
+  { icon: UserIcon, label: "Profile", keys: "⌘P" },
+  { icon: CreditCardIcon, label: "Billing", keys: "⌘B" },
+  { icon: SettingsIcon, label: "Settings", keys: "⌘S" },
+]
+
+function SuggestionsGroup() {
+  return (
+    <CommandGroup heading="Suggestions">
+      {suggestions.map((item) => (
+        <Entry key={item.label} {...item} />
+      ))}
+    </CommandGroup>
+  )
+}
+
+function SettingsGroup() {
+  return (
+    <CommandGroup heading="Settings">
+      {settings.map((item) => (
+        <Entry key={item.label} {...item} />
+      ))}
+    </CommandGroup>
+  )
+}
+
 // --- Basic ----------------------------------------------------------------
 
 export const Default: Story = {
@@ -76,37 +129,13 @@ export const Default: Story = {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Suggestions">
-          <CommandItem>
-            <CalendarIcon />
-            <span>Calendar</span>
-          </CommandItem>
-          <CommandItem>
-            <SmileIcon />
-            <span>Search Emoji</span>
-          </CommandItem>
-          <CommandItem disabled>
-            <CalculatorIcon />
-            <span>Calculator</span>
-          </CommandItem>
+          {suggestions.map((item, i) => (
+            // Calculator is disabled upstream.
+            <Entry key={item.label} {...item} disabled={i === 2} />
+          ))}
         </CommandGroup>
         <CommandSeparator />
-        <CommandGroup heading="Settings">
-          <CommandItem>
-            <UserIcon />
-            <span>Profile</span>
-            <CommandShortcut>⌘P</CommandShortcut>
-          </CommandItem>
-          <CommandItem>
-            <CreditCardIcon />
-            <span>Billing</span>
-            <CommandShortcut>⌘B</CommandShortcut>
-          </CommandItem>
-          <CommandItem>
-            <SettingsIcon />
-            <span>Settings</span>
-            <CommandShortcut>⌘S</CommandShortcut>
-          </CommandItem>
-        </CommandGroup>
+        <SettingsGroup />
       </CommandList>
     </Command>
   ),
@@ -151,23 +180,7 @@ export const Basic: Story = {
 export const Shortcuts: Story = {
   render: () => (
     <CommandMenu>
-      <CommandGroup heading="Settings">
-        <CommandItem>
-          <UserIcon />
-          <span>Profile</span>
-          <CommandShortcut>⌘P</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <CreditCardIcon />
-          <span>Billing</span>
-          <CommandShortcut>⌘B</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <SettingsIcon />
-          <span>Settings</span>
-          <CommandShortcut>⌘S</CommandShortcut>
-        </CommandItem>
-      </CommandGroup>
+      <SettingsGroup />
     </CommandMenu>
   ),
 }
@@ -175,167 +188,76 @@ export const Shortcuts: Story = {
 export const Groups: Story = {
   render: () => (
     <CommandMenu>
-      <CommandGroup heading="Suggestions">
-        <CommandItem>
-          <CalendarIcon />
-          <span>Calendar</span>
-        </CommandItem>
-        <CommandItem>
-          <SmileIcon />
-          <span>Search Emoji</span>
-        </CommandItem>
-        <CommandItem>
-          <CalculatorIcon />
-          <span>Calculator</span>
-        </CommandItem>
-      </CommandGroup>
+      <SuggestionsGroup />
       <CommandSeparator />
-      <CommandGroup heading="Settings">
-        <CommandItem>
-          <UserIcon />
-          <span>Profile</span>
-          <CommandShortcut>⌘P</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <CreditCardIcon />
-          <span>Billing</span>
-          <CommandShortcut>⌘B</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <SettingsIcon />
-          <span>Settings</span>
-          <CommandShortcut>⌘S</CommandShortcut>
-        </CommandItem>
-      </CommandGroup>
+      <SettingsGroup />
     </CommandMenu>
   ),
 }
+
+const scrollableGroups: [string, Parameters<typeof Entry>[0][]][] = [
+  [
+    "Navigation",
+    [
+      { icon: HomeIcon, label: "Home", keys: "⌘H" },
+      { icon: InboxIcon, label: "Inbox", keys: "⌘I" },
+      { icon: FileTextIcon, label: "Documents", keys: "⌘D" },
+      { icon: FolderIcon, label: "Folders", keys: "⌘F" },
+    ],
+  ],
+  [
+    "Actions",
+    [
+      { icon: PlusIcon, label: "New File", keys: "⌘N" },
+      { icon: FolderPlusIcon, label: "New Folder", keys: "⇧⌘N" },
+      { icon: CopyIcon, label: "Copy", keys: "⌘C" },
+      { icon: ScissorsIcon, label: "Cut", keys: "⌘X" },
+      { icon: ClipboardPasteIcon, label: "Paste", keys: "⌘V" },
+      { icon: TrashIcon, label: "Delete", keys: "⌫" },
+    ],
+  ],
+  [
+    "View",
+    [
+      { icon: LayoutGridIcon, label: "Grid View" },
+      { icon: ListIcon, label: "List View" },
+      { icon: ZoomInIcon, label: "Zoom In", keys: "⌘+" },
+      { icon: ZoomOutIcon, label: "Zoom Out", keys: "⌘-" },
+    ],
+  ],
+  [
+    "Account",
+    [
+      ...settings,
+      { icon: BellIcon, label: "Notifications" },
+      { icon: HelpCircleIcon, label: "Help & Support" },
+    ],
+  ],
+  [
+    "Tools",
+    [
+      { icon: CalculatorIcon, label: "Calculator" },
+      { icon: CalendarIcon, label: "Calendar" },
+      { icon: ImageIcon, label: "Image Editor" },
+      { icon: CodeIcon, label: "Code Editor" },
+    ],
+  ],
+]
 
 // `CommandList` caps its height and scrolls past that.
 export const Scrollable: Story = {
   render: () => (
     <CommandMenu>
-      <CommandGroup heading="Navigation">
-        <CommandItem>
-          <HomeIcon />
-          <span>Home</span>
-          <CommandShortcut>⌘H</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <InboxIcon />
-          <span>Inbox</span>
-          <CommandShortcut>⌘I</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <FileTextIcon />
-          <span>Documents</span>
-          <CommandShortcut>⌘D</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <FolderIcon />
-          <span>Folders</span>
-          <CommandShortcut>⌘F</CommandShortcut>
-        </CommandItem>
-      </CommandGroup>
-      <CommandSeparator />
-      <CommandGroup heading="Actions">
-        <CommandItem>
-          <PlusIcon />
-          <span>New File</span>
-          <CommandShortcut>⌘N</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <FolderPlusIcon />
-          <span>New Folder</span>
-          <CommandShortcut>⇧⌘N</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <CopyIcon />
-          <span>Copy</span>
-          <CommandShortcut>⌘C</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <ScissorsIcon />
-          <span>Cut</span>
-          <CommandShortcut>⌘X</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <ClipboardPasteIcon />
-          <span>Paste</span>
-          <CommandShortcut>⌘V</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <TrashIcon />
-          <span>Delete</span>
-          <CommandShortcut>⌫</CommandShortcut>
-        </CommandItem>
-      </CommandGroup>
-      <CommandSeparator />
-      <CommandGroup heading="View">
-        <CommandItem>
-          <LayoutGridIcon />
-          <span>Grid View</span>
-        </CommandItem>
-        <CommandItem>
-          <ListIcon />
-          <span>List View</span>
-        </CommandItem>
-        <CommandItem>
-          <ZoomInIcon />
-          <span>Zoom In</span>
-          <CommandShortcut>⌘+</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <ZoomOutIcon />
-          <span>Zoom Out</span>
-          <CommandShortcut>⌘-</CommandShortcut>
-        </CommandItem>
-      </CommandGroup>
-      <CommandSeparator />
-      <CommandGroup heading="Account">
-        <CommandItem>
-          <UserIcon />
-          <span>Profile</span>
-          <CommandShortcut>⌘P</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <CreditCardIcon />
-          <span>Billing</span>
-          <CommandShortcut>⌘B</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <SettingsIcon />
-          <span>Settings</span>
-          <CommandShortcut>⌘S</CommandShortcut>
-        </CommandItem>
-        <CommandItem>
-          <BellIcon />
-          <span>Notifications</span>
-        </CommandItem>
-        <CommandItem>
-          <HelpCircleIcon />
-          <span>Help & Support</span>
-        </CommandItem>
-      </CommandGroup>
-      <CommandSeparator />
-      <CommandGroup heading="Tools">
-        <CommandItem>
-          <CalculatorIcon />
-          <span>Calculator</span>
-        </CommandItem>
-        <CommandItem>
-          <CalendarIcon />
-          <span>Calendar</span>
-        </CommandItem>
-        <CommandItem>
-          <ImageIcon />
-          <span>Image Editor</span>
-        </CommandItem>
-        <CommandItem>
-          <CodeIcon />
-          <span>Code Editor</span>
-        </CommandItem>
-      </CommandGroup>
+      {scrollableGroups.map(([heading, items], i) => (
+        <React.Fragment key={heading}>
+          {i > 0 && <CommandSeparator />}
+          <CommandGroup heading={heading}>
+            {items.map((item) => (
+              <Entry key={item.label} {...item} />
+            ))}
+          </CommandGroup>
+        </React.Fragment>
+      ))}
     </CommandMenu>
   ),
 }

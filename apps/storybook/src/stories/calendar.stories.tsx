@@ -52,6 +52,20 @@ function addDays(date: Date, days: number) {
 
 const year = new Date().getFullYear()
 
+// Chrome's native time-input picker icon clashes with the input group addon.
+const timeInputClassName =
+  "appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+
+// Unpadded card wrapping a calendar — shared by WeekNumbers, BookedDates and
+// CustomCellSize.
+function CalendarCard({ children }: { children: React.ReactNode }) {
+  return (
+    <Card className="mx-auto w-fit p-0">
+      <CardContent className="p-0">{children}</CardContent>
+    </Card>
+  )
+}
+
 // --- Basic ----------------------------------------------------------------
 
 export const Default: Story = {
@@ -115,17 +129,15 @@ export const WeekNumbers: Story = {
     )
 
     return (
-      <Card className="mx-auto w-fit p-0">
-        <CardContent className="p-0">
-          <Calendar
-            mode="single"
-            defaultMonth={date}
-            selected={date}
-            onSelect={setDate}
-            showWeekNumber
-          />
-        </CardContent>
-      </Card>
+      <CalendarCard>
+        <Calendar
+          mode="single"
+          defaultMonth={date}
+          selected={date}
+          onSelect={setDate}
+          showWeekNumber
+        />
+      </CalendarCard>
     )
   },
 }
@@ -186,8 +198,33 @@ export const Presets: Story = {
   },
 }
 
-const timeInputClassName =
-  "appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+function TimeField({
+  id,
+  label,
+  defaultValue,
+}: {
+  id: string
+  label: string
+  defaultValue: string
+}) {
+  return (
+    <Field>
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      <InputGroup>
+        <InputGroupInput
+          id={id}
+          type="time"
+          step="1"
+          defaultValue={defaultValue}
+          className={timeInputClassName}
+        />
+        <InputGroupAddon>
+          <Clock2Icon className="text-muted-foreground" />
+        </InputGroupAddon>
+      </InputGroup>
+    </Field>
+  )
+}
 
 export const DateAndTimePicker: Story = {
   render: function Render() {
@@ -207,36 +244,12 @@ export const DateAndTimePicker: Story = {
         </CardContent>
         <CardFooter className="border-t bg-card">
           <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="time-from">Start Time</FieldLabel>
-              <InputGroup>
-                <InputGroupInput
-                  id="time-from"
-                  type="time"
-                  step="1"
-                  defaultValue="10:30:00"
-                  className={timeInputClassName}
-                />
-                <InputGroupAddon>
-                  <Clock2Icon className="text-muted-foreground" />
-                </InputGroupAddon>
-              </InputGroup>
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="time-to">End Time</FieldLabel>
-              <InputGroup>
-                <InputGroupInput
-                  id="time-to"
-                  type="time"
-                  step="1"
-                  defaultValue="12:30:00"
-                  className={timeInputClassName}
-                />
-                <InputGroupAddon>
-                  <Clock2Icon className="text-muted-foreground" />
-                </InputGroupAddon>
-              </InputGroup>
-            </Field>
+            <TimeField
+              id="time-from"
+              label="Start Time"
+              defaultValue="10:30:00"
+            />
+            <TimeField id="time-to" label="End Time" defaultValue="12:30:00" />
           </FieldGroup>
         </CardFooter>
       </Card>
@@ -256,23 +269,21 @@ export const BookedDates: Story = {
     )
 
     return (
-      <Card className="mx-auto w-fit p-0">
-        <CardContent className="p-0">
-          <Calendar
-            mode="single"
-            defaultMonth={date}
-            selected={date}
-            onSelect={setDate}
-            disabled={bookedDates}
-            modifiers={{
-              booked: bookedDates,
-            }}
-            modifiersClassNames={{
-              booked: "[&>button]:line-through opacity-100",
-            }}
-          />
-        </CardContent>
-      </Card>
+      <CalendarCard>
+        <Calendar
+          mode="single"
+          defaultMonth={date}
+          selected={date}
+          onSelect={setDate}
+          disabled={bookedDates}
+          modifiers={{
+            booked: bookedDates,
+          }}
+          modifiersClassNames={{
+            booked: "[&>button]:line-through opacity-100",
+          }}
+        />
+      </CalendarCard>
     )
   },
 }
@@ -286,39 +297,37 @@ export const CustomCellSize: Story = {
     })
 
     return (
-      <Card className="mx-auto w-fit p-0">
-        <CardContent className="p-0">
-          <Calendar
-            mode="range"
-            defaultMonth={range?.from}
-            selected={range}
-            onSelect={setRange}
-            numberOfMonths={1}
-            captionLayout="dropdown"
-            className="[--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
-            formatters={{
-              formatMonthDropdown: (date) => {
-                return date.toLocaleString("default", { month: "long" })
-              },
-            }}
-            components={{
-              DayButton: ({ children, modifiers, day, ...props }) => {
-                const isWeekend =
-                  day.date.getDay() === 0 || day.date.getDay() === 6
+      <CalendarCard>
+        <Calendar
+          mode="range"
+          defaultMonth={range?.from}
+          selected={range}
+          onSelect={setRange}
+          numberOfMonths={1}
+          captionLayout="dropdown"
+          className="[--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
+          formatters={{
+            formatMonthDropdown: (date) => {
+              return date.toLocaleString("default", { month: "long" })
+            },
+          }}
+          components={{
+            DayButton: ({ children, modifiers, day, ...props }) => {
+              const isWeekend =
+                day.date.getDay() === 0 || day.date.getDay() === 6
 
-                return (
-                  <CalendarDayButton day={day} modifiers={modifiers} {...props}>
-                    {children}
-                    {!modifiers.outside && (
-                      <span>{isWeekend ? "$120" : "$100"}</span>
-                    )}
-                  </CalendarDayButton>
-                )
-              },
-            }}
-          />
-        </CardContent>
-      </Card>
+              return (
+                <CalendarDayButton day={day} modifiers={modifiers} {...props}>
+                  {children}
+                  {!modifiers.outside && (
+                    <span>{isWeekend ? "$120" : "$100"}</span>
+                  )}
+                </CalendarDayButton>
+              )
+            },
+          }}
+        />
+      </CalendarCard>
     )
   },
 }

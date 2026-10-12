@@ -47,6 +47,27 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+// `count` consecutive slots starting at `from`; `invalid` marks each slot.
+function SlotGroup({
+  from,
+  count,
+  invalid,
+  className,
+}: {
+  from: number
+  count: number
+  invalid?: boolean
+  className?: string
+}) {
+  return (
+    <InputOTPGroup className={className}>
+      {Array.from({ length: count }, (_, i) => (
+        <InputOTPSlot key={from + i} index={from + i} aria-invalid={invalid} />
+      ))}
+    </InputOTPGroup>
+  )
+}
+
 // --- Basic ----------------------------------------------------------------
 
 // Upstream passes `defaultValue`, but input-otp already controls its <input>,
@@ -62,14 +83,7 @@ export const Default: Story = {
         onChange={setValue}
         disabled={args.disabled}
       >
-        <InputOTPGroup>
-          <InputOTPSlot index={0} />
-          <InputOTPSlot index={1} />
-          <InputOTPSlot index={2} />
-          <InputOTPSlot index={3} />
-          <InputOTPSlot index={4} />
-          <InputOTPSlot index={5} />
-        </InputOTPGroup>
+        <SlotGroup from={0} count={6} />
       </InputOTP>
     )
   },
@@ -80,17 +94,9 @@ export const Default: Story = {
 export const Disabled: Story = {
   render: () => (
     <InputOTP id="disabled" maxLength={6} disabled value="123456">
-      <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-        <InputOTPSlot index={2} />
-      </InputOTPGroup>
+      <SlotGroup from={0} count={3} />
       <InputOTPSeparator />
-      <InputOTPGroup>
-        <InputOTPSlot index={3} />
-        <InputOTPSlot index={4} />
-        <InputOTPSlot index={5} />
-      </InputOTPGroup>
+      <SlotGroup from={3} count={3} />
     </InputOTP>
   ),
 }
@@ -102,20 +108,11 @@ export const Invalid: Story = {
 
     return (
       <InputOTP maxLength={6} value={value} onChange={setValue}>
-        <InputOTPGroup>
-          <InputOTPSlot index={0} aria-invalid />
-          <InputOTPSlot index={1} aria-invalid />
-        </InputOTPGroup>
+        <SlotGroup from={0} count={2} invalid />
         <InputOTPSeparator />
-        <InputOTPGroup>
-          <InputOTPSlot index={2} aria-invalid />
-          <InputOTPSlot index={3} aria-invalid />
-        </InputOTPGroup>
+        <SlotGroup from={2} count={2} invalid />
         <InputOTPSeparator />
-        <InputOTPGroup>
-          <InputOTPSlot index={4} aria-invalid />
-          <InputOTPSlot index={5} aria-invalid />
-        </InputOTPGroup>
+        <SlotGroup from={4} count={2} invalid />
       </InputOTP>
     )
   },
@@ -129,14 +126,7 @@ export const Pattern: Story = {
     <Field className="w-fit">
       <FieldLabel htmlFor="digits-only">Digits Only</FieldLabel>
       <InputOTP id="digits-only" maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
-        <InputOTPGroup>
-          <InputOTPSlot index={0} />
-          <InputOTPSlot index={1} />
-          <InputOTPSlot index={2} />
-          <InputOTPSlot index={3} />
-          <InputOTPSlot index={4} />
-          <InputOTPSlot index={5} />
-        </InputOTPGroup>
+        <SlotGroup from={0} count={6} />
       </InputOTP>
     </Field>
   ),
@@ -145,20 +135,11 @@ export const Pattern: Story = {
 export const Separator: Story = {
   render: () => (
     <InputOTP maxLength={6}>
-      <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-      </InputOTPGroup>
+      <SlotGroup from={0} count={2} />
       <InputOTPSeparator />
-      <InputOTPGroup>
-        <InputOTPSlot index={2} />
-        <InputOTPSlot index={3} />
-      </InputOTPGroup>
+      <SlotGroup from={2} count={2} />
       <InputOTPSeparator />
-      <InputOTPGroup>
-        <InputOTPSlot index={4} />
-        <InputOTPSlot index={5} />
-      </InputOTPGroup>
+      <SlotGroup from={4} count={2} />
     </InputOTP>
   ),
 }
@@ -166,12 +147,7 @@ export const Separator: Story = {
 export const FourDigits: Story = {
   render: () => (
     <InputOTP maxLength={4} pattern={REGEXP_ONLY_DIGITS}>
-      <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-        <InputOTPSlot index={2} />
-        <InputOTPSlot index={3} />
-      </InputOTPGroup>
+      <SlotGroup from={0} count={4} />
     </InputOTP>
   ),
 }
@@ -179,17 +155,9 @@ export const FourDigits: Story = {
 export const Alphanumeric: Story = {
   render: () => (
     <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
-      <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-        <InputOTPSlot index={2} />
-      </InputOTPGroup>
+      <SlotGroup from={0} count={3} />
       <InputOTPSeparator />
-      <InputOTPGroup>
-        <InputOTPSlot index={3} />
-        <InputOTPSlot index={4} />
-        <InputOTPSlot index={5} />
-      </InputOTPGroup>
+      <SlotGroup from={3} count={3} />
     </InputOTP>
   ),
 }
@@ -207,14 +175,7 @@ export const Controlled: Story = {
           value={value}
           onChange={(value) => setValue(value)}
         >
-          <InputOTPGroup>
-            <InputOTPSlot index={0} />
-            <InputOTPSlot index={1} />
-            <InputOTPSlot index={2} />
-            <InputOTPSlot index={3} />
-            <InputOTPSlot index={4} />
-            <InputOTPSlot index={5} />
-          </InputOTPGroup>
+          <SlotGroup from={0} count={6} />
         </InputOTP>
         <div className="text-center text-body">
           {value === "" ? (
@@ -253,18 +214,10 @@ export const Form: Story = {
             </Button>
           </div>
           <InputOTP maxLength={6} id="otp-verification" required>
-            <InputOTPGroup className={largeSlots}>
-              <InputOTPSlot index={0} />
-              <InputOTPSlot index={1} />
-              <InputOTPSlot index={2} />
-            </InputOTPGroup>
+            <SlotGroup from={0} count={3} className={largeSlots} />
             {/* InputOTPSeparator replaces (not merges) its base classes, so restate them. */}
             <InputOTPSeparator className="mx-2 flex items-center" />
-            <InputOTPGroup className={largeSlots}>
-              <InputOTPSlot index={3} />
-              <InputOTPSlot index={4} />
-              <InputOTPSlot index={5} />
-            </InputOTPGroup>
+            <SlotGroup from={3} count={3} className={largeSlots} />
           </InputOTP>
           <FieldDescription>
             <a href="#">I no longer have access to this email address.</a>
