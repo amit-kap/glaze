@@ -84,6 +84,8 @@
     --font-sans: var(--typeface-sans);
     --font-heading: var(--typeface-heading);
     --font-mono: var(--typeface-mono);
+    --text-micro: var(--type-micro);
+    --text-micro--line-height: var(--type-micro-leading);
     --text-caption: var(--type-caption);
     --text-caption--line-height: var(--type-caption-leading);
     --text-body: var(--type-body);
@@ -104,6 +106,7 @@
     --shadow-modal: var(--elevation-modal);
 
     /* motion */
+    --ease-linear: var(--motion-ease-linear);
     --ease-standard: var(--motion-ease-standard);
     --ease-emphasized: var(--motion-ease-emphasized);
     --ease-exit: var(--motion-ease-exit);

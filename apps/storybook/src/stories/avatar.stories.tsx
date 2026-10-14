@@ -1,5 +1,6 @@
+import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { PlusIcon } from "lucide-react"
+import { ChevronDownIcon, PlusIcon } from "lucide-react"
 import {
   Avatar,
   AvatarBadge,
@@ -83,7 +84,7 @@ export const Default: Story = {
           alt="@evilrabbit"
         />
         <AvatarFallback>ER</AvatarFallback>
-        <AvatarBadge className="bg-success " />
+        <AvatarBadge className="bg-success" />
       </Avatar>
       <AvatarGroup className="grayscale">
         {people.map((person) => (
@@ -130,7 +131,7 @@ export const Badge: Story = {
     <Avatar>
       <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
       <AvatarFallback>CN</AvatarFallback>
-      <AvatarBadge className="bg-success " />
+      <AvatarBadge className="bg-success" />
     </Avatar>
   ),
 }
@@ -184,34 +185,47 @@ export const GroupWithIcon: Story = {
 }
 
 export const WithDropdown: Story = {
-  render: () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-pill"
-            aria-label="Open account menu"
-          />
-        }
-      >
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-32">
-        <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem variant="destructive">Log out</DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  ),
+  render: function Render() {
+    const [open, setOpen] = React.useState(false)
+    return (
+      <div className="flex items-center gap-1">
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-pill"
+                aria-label="Open account menu"
+              />
+            }
+          >
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-32">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem variant="destructive">Log out</DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          aria-label="Open account menu"
+          onClick={() => setOpen(true)}
+        >
+          <ChevronDownIcon />
+        </Button>
+      </div>
+    )
+  },
 }

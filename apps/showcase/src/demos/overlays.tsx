@@ -1,6 +1,23 @@
-import { SaveIcon } from "lucide-react"
+import { XIcon } from "lucide-react"
 
 import { Button } from "@amit-kap/glaze/components/button"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuTrigger,
+} from "@amit-kap/glaze/components/context-menu"
+import {
+  Dialog,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@amit-kap/glaze/components/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +32,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@amit-kap/glaze/components/dropdown-menu"
+import { Field, FieldGroup } from "@amit-kap/glaze/components/field"
 import { Input } from "@amit-kap/glaze/components/input"
-import { Kbd } from "@amit-kap/glaze/components/kbd"
 import { Label } from "@amit-kap/glaze/components/label"
 import {
   Popover,
@@ -37,38 +54,20 @@ import { Row } from "./layout"
 // Stories: Side, With Keyboard Shortcut.
 export function TooltipDemo() {
   return (
-    <div className="flex flex-col items-center gap-3">
-      <Row>
-        {(["left", "top", "bottom", "right"] as const).map((side) => (
-          <Tooltip key={side}>
-            <TooltipTrigger
-              render={<Button variant="outline" className="w-fit capitalize" />}
-            >
-              {side}
-            </TooltipTrigger>
-            <TooltipContent side={side}>
-              <p>Add to library</p>
-            </TooltipContent>
-          </Tooltip>
-        ))}
-      </Row>
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <Button
-              variant="outline"
-              size="icon-sm"
-              aria-label="Save changes"
-            />
-          }
-        >
-          <SaveIcon />
-        </TooltipTrigger>
-        <TooltipContent>
-          Save Changes <Kbd>S</Kbd>
-        </TooltipContent>
-      </Tooltip>
-    </div>
+    <Row>
+      {(["left", "top", "bottom", "right"] as const).map((side) => (
+        <Tooltip key={side}>
+          <TooltipTrigger
+            render={<Button variant="outline" className="w-fit capitalize" />}
+          >
+            {side}
+          </TooltipTrigger>
+          <TooltipContent side={side}>
+            <p>Add to library</p>
+          </TooltipContent>
+        </Tooltip>
+      ))}
+    </Row>
   )
 }
 
@@ -167,5 +166,95 @@ export function DropdownMenuDemo() {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  )
+}
+
+// Story: Default.
+export function ContextMenuDemo() {
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger className="flex aspect-video w-full max-w-xs items-center justify-center rounded-container border border-dashed text-body">
+        <span className="hidden pointer-fine:inline-block">
+          Right click here
+        </span>
+        <span className="hidden pointer-coarse:inline-block">
+          Long press here
+        </span>
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-48">
+        <ContextMenuGroup>
+          <ContextMenuLabel>File</ContextMenuLabel>
+          <ContextMenuItem>
+            New File
+            <ContextMenuShortcut>⌘N</ContextMenuShortcut>
+          </ContextMenuItem>
+          <ContextMenuItem>
+            Open File
+            <ContextMenuShortcut>⌘O</ContextMenuShortcut>
+          </ContextMenuItem>
+          <ContextMenuItem>
+            Save
+            <ContextMenuShortcut>⌘S</ContextMenuShortcut>
+          </ContextMenuItem>
+        </ContextMenuGroup>
+        <ContextMenuSeparator />
+        <ContextMenuGroup>
+          <ContextMenuLabel>Edit</ContextMenuLabel>
+          <ContextMenuItem>
+            Undo
+            <ContextMenuShortcut>⌘Z</ContextMenuShortcut>
+          </ContextMenuItem>
+          <ContextMenuItem>
+            Redo
+            <ContextMenuShortcut>⇧⌘Z</ContextMenuShortcut>
+          </ContextMenuItem>
+        </ContextMenuGroup>
+        <ContextMenuSeparator />
+        <ContextMenuGroup>
+          <ContextMenuItem variant="destructive">
+            Delete
+            <ContextMenuShortcut>⌫</ContextMenuShortcut>
+          </ContextMenuItem>
+        </ContextMenuGroup>
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
+
+// Story: Default — rendered statically in place, without a trigger.
+export function DialogDemo() {
+  return (
+    <Dialog>
+      <div className="relative grid w-full max-w-sm gap-4 rounded-container bg-popover p-4 text-body text-popover-foreground ring-1 ring-foreground/10">
+        <Button
+          variant="ghost"
+          className="absolute inset-e-2 top-2"
+          size="icon-sm"
+          aria-label="Close"
+        >
+          <XIcon />
+        </Button>
+        <DialogHeader>
+          <DialogTitle>Edit profile</DialogTitle>
+          <DialogDescription>
+            Make changes to your profile here. Click save when you&apos;re done.
+          </DialogDescription>
+        </DialogHeader>
+        <FieldGroup>
+          <Field>
+            <Label htmlFor="name-1">Name</Label>
+            <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
+          </Field>
+          <Field>
+            <Label htmlFor="username-1">Username</Label>
+            <Input id="username-1" name="username" defaultValue="@peduarte" />
+          </Field>
+        </FieldGroup>
+        <DialogFooter>
+          <Button variant="outline">Cancel</Button>
+          <Button>Save changes</Button>
+        </DialogFooter>
+      </div>
+    </Dialog>
   )
 }

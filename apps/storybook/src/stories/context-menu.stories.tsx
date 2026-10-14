@@ -72,6 +72,24 @@ function Area({ label = "here" }: { label?: string }) {
   )
 }
 
+// Shows the menu already open, anchored to an invisible point that stands in
+// for the right-click target.
+function StaticMenu({
+  children,
+}: {
+  children: React.ReactElement<{
+    anchor?: React.RefObject<Element | null>
+  }>
+}) {
+  const anchor = React.useRef<HTMLDivElement>(null)
+  return (
+    <ContextMenu open>
+      <div ref={anchor} className="size-0" />
+      {React.cloneElement(children, { anchor })}
+    </ContextMenu>
+  )
+}
+
 // A menu item with its keyboard shortcut — the most repeated shape here.
 function ShortcutItem({
   label,
@@ -158,8 +176,7 @@ export const Default: Story = {
 
 export const Basic: Story = {
   render: () => (
-    <ContextMenu>
-      <Area />
+    <StaticMenu>
       <ContextMenuContent>
         <ContextMenuGroup>
           <ContextMenuItem>Back</ContextMenuItem>
@@ -167,7 +184,7 @@ export const Basic: Story = {
           <ContextMenuItem>Reload</ContextMenuItem>
         </ContextMenuGroup>
       </ContextMenuContent>
-    </ContextMenu>
+    </StaticMenu>
   ),
 }
 
@@ -175,8 +192,7 @@ export const Basic: Story = {
 
 export const Submenu: Story = {
   render: () => (
-    <ContextMenu>
-      <Area />
+    <StaticMenu>
       <ContextMenuContent>
         <ContextMenuGroup>
           <ShortcutItem label="Copy" keys="⌘C" />
@@ -184,14 +200,13 @@ export const Submenu: Story = {
         </ContextMenuGroup>
         <MoreToolsSub />
       </ContextMenuContent>
-    </ContextMenu>
+    </StaticMenu>
   ),
 }
 
 export const Shortcuts: Story = {
   render: () => (
-    <ContextMenu>
-      <Area />
+    <StaticMenu>
       <ContextMenuContent>
         <ContextMenuGroup>
           <ShortcutItem label="Back" keys="⌘[" />
@@ -204,7 +219,7 @@ export const Shortcuts: Story = {
           <ShortcutItem label="Save As..." keys="⇧⌘S" />
         </ContextMenuGroup>
       </ContextMenuContent>
-    </ContextMenu>
+    </StaticMenu>
   ),
 }
 
@@ -239,8 +254,7 @@ const menuGroups: {
 
 export const Groups: Story = {
   render: () => (
-    <ContextMenu>
-      <Area />
+    <StaticMenu>
       <ContextMenuContent>
         {menuGroups.map((group, i) => (
           <React.Fragment key={group.label ?? i}>
@@ -256,14 +270,13 @@ export const Groups: Story = {
           </React.Fragment>
         ))}
       </ContextMenuContent>
-    </ContextMenu>
+    </StaticMenu>
   ),
 }
 
 export const Icons: Story = {
   render: () => (
-    <ContextMenu>
-      <Area />
+    <StaticMenu>
       <ContextMenuContent>
         <ContextMenuGroup>
           <ContextMenuItem>
@@ -287,14 +300,13 @@ export const Icons: Story = {
           </ContextMenuItem>
         </ContextMenuGroup>
       </ContextMenuContent>
-    </ContextMenu>
+    </StaticMenu>
   ),
 }
 
 export const Checkboxes: Story = {
   render: () => (
-    <ContextMenu>
-      <Area />
+    <StaticMenu>
       <ContextMenuContent>
         <ContextMenuGroup>
           <ContextMenuCheckboxItem defaultChecked>
@@ -306,7 +318,7 @@ export const Checkboxes: Story = {
           </ContextMenuCheckboxItem>
         </ContextMenuGroup>
       </ContextMenuContent>
-    </ContextMenu>
+    </StaticMenu>
   ),
 }
 
@@ -316,8 +328,7 @@ export const Radio: Story = {
     const [theme, setTheme] = React.useState("light")
 
     return (
-      <ContextMenu>
-        <Area />
+      <StaticMenu>
         <ContextMenuContent>
           <ContextMenuGroup>
             <ContextMenuLabel>People</ContextMenuLabel>
@@ -340,15 +351,14 @@ export const Radio: Story = {
             </ContextMenuRadioGroup>
           </ContextMenuGroup>
         </ContextMenuContent>
-      </ContextMenu>
+      </StaticMenu>
     )
   },
 }
 
 export const Destructive: Story = {
   render: () => (
-    <ContextMenu>
-      <Area />
+    <StaticMenu>
       <ContextMenuContent>
         <ContextMenuGroup>
           <ContextMenuItem>
@@ -368,7 +378,7 @@ export const Destructive: Story = {
           </ContextMenuItem>
         </ContextMenuGroup>
       </ContextMenuContent>
-    </ContextMenu>
+    </StaticMenu>
   ),
 }
 
@@ -379,8 +389,7 @@ export const Sides: Story = {
   render: () => (
     <div className="grid w-2xl grid-cols-2 gap-4">
       {SIDES.map((side) => (
-        <ContextMenu key={side}>
-          <Area label={`(${side})`} />
+        <StaticMenu key={side}>
           <ContextMenuContent side={side}>
             <ContextMenuGroup>
               <ContextMenuItem>Back</ContextMenuItem>
@@ -388,7 +397,7 @@ export const Sides: Story = {
               <ContextMenuItem>Reload</ContextMenuItem>
             </ContextMenuGroup>
           </ContextMenuContent>
-        </ContextMenu>
+        </StaticMenu>
       ))}
     </div>
   ),

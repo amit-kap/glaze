@@ -1,12 +1,20 @@
+import * as React from "react"
 import {
   CalculatorIcon,
   CalendarIcon,
+  ChevronsUpDownIcon,
   CreditCardIcon,
   SettingsIcon,
   SmileIcon,
   UserIcon,
 } from "lucide-react"
 
+import { Button } from "@amit-kap/glaze/components/button"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@amit-kap/glaze/components/collapsible"
 import {
   Accordion,
   AccordionContent,
@@ -175,5 +183,42 @@ export function CommandDemo() {
         </CommandGroup>
       </CommandList>
     </Command>
+  )
+}
+
+// Story: Default.
+export function CollapsibleDemo() {
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  return (
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="flex w-full max-w-sm flex-col gap-2"
+    >
+      <div className="flex items-center justify-between gap-4 px-4">
+        <h4 className="text-body font-strong">Order #4189</h4>
+        <CollapsibleTrigger
+          render={<Button variant="ghost" size="icon" className="size-8" />}
+        >
+          <ChevronsUpDownIcon />
+          <span className="sr-only">Toggle details</span>
+        </CollapsibleTrigger>
+      </div>
+      <div className="flex items-center justify-between rounded-item border px-4 py-2 text-body">
+        <span className="text-muted-foreground">Status</span>
+        <span className="font-medium">Shipped</span>
+      </div>
+      <CollapsibleContent className="flex flex-col gap-2">
+        <div className="rounded-item border px-4 py-2 text-body">
+          <p className="font-medium">Shipping address</p>
+          <p className="text-muted-foreground">100 Market St, San Francisco</p>
+        </div>
+        <div className="rounded-item border px-4 py-2 text-body">
+          <p className="font-medium">Items</p>
+          <p className="text-muted-foreground">2x Studio Headphones</p>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   )
 }

@@ -4,7 +4,6 @@ import { Checkbox } from "@amit-kap/glaze/components/checkbox"
 import { ColorPicker } from "@amit-kap/glaze/components/color-picker"
 import {
   Field,
-  FieldContent,
   FieldDescription,
   FieldGroup,
   FieldLabel,
@@ -19,7 +18,6 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@amit-kap/glaze/components/input-group"
-import { Label } from "@amit-kap/glaze/components/label"
 import {
   RadioGroup,
   RadioGroupItem,
@@ -30,7 +28,6 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@amit-kap/glaze/components/select"
@@ -158,112 +155,125 @@ export function CheckboxDemo() {
 // Story: With Description.
 export function RadioGroupDemo() {
   return (
-    <RadioGroup defaultValue="comfortable" className="w-fit">
-      {[
-        {
-          value: "default",
-          label: "Default",
-          description: "Standard spacing for most use cases.",
-        },
-        {
-          value: "comfortable",
-          label: "Comfortable",
-          description: "More space between elements.",
-        },
-        {
-          value: "compact",
-          label: "Compact",
-          description: "Minimal spacing for dense layouts.",
-        },
-      ].map((option) => (
-        <Field key={option.value} orientation="horizontal">
-          <RadioGroupItem value={option.value} id={`desc-${option.value}`} />
-          <FieldContent>
-            <FieldLabel htmlFor={`desc-${option.value}`}>
-              {option.label}
+    <FieldSet className="w-full max-w-xs">
+      <FieldLegend variant="label">Subscription Plan</FieldLegend>
+      <FieldDescription>
+        Yearly and lifetime plans offer significant savings.
+      </FieldDescription>
+      <RadioGroup defaultValue="monthly">
+        {[
+          ["monthly", "Monthly ($9.99/month)"],
+          ["yearly", "Yearly ($99.99/year)"],
+          ["lifetime", "Lifetime ($299.99)"],
+        ].map(([value, label]) => (
+          <Field key={value} orientation="horizontal">
+            <RadioGroupItem value={value} id={`plan-${value}`} />
+            <FieldLabel htmlFor={`plan-${value}`} className="font-normal">
+              {label}
             </FieldLabel>
-            <FieldDescription>{option.description}</FieldDescription>
-          </FieldContent>
-        </Field>
-      ))}
-    </RadioGroup>
+          </Field>
+        ))}
+      </RadioGroup>
+    </FieldSet>
   )
 }
 
 // Stories: With Label, Size.
 export function SwitchDemo() {
   return (
-    <div className="flex flex-col items-start gap-6">
-      <div className="flex items-center space-x-2">
-        <Switch id="airplane-mode" />
-        <Label htmlFor="airplane-mode">Airplane Mode</Label>
-      </div>
-      <FieldGroup className="w-40">
-        <Field orientation="horizontal">
-          <Switch id="switch-size-sm" size="sm" />
-          <FieldLabel htmlFor="switch-size-sm">Small</FieldLabel>
-        </Field>
-        <Field orientation="horizontal">
-          <Switch id="switch-size-default" size="default" />
-          <FieldLabel htmlFor="switch-size-default">Default</FieldLabel>
-        </Field>
-      </FieldGroup>
-    </div>
+    <FieldGroup className="w-40">
+      <Field orientation="horizontal">
+        <Switch id="switch-size-sm" size="sm" />
+        <FieldLabel htmlFor="switch-size-sm">Small</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Switch id="switch-size-default" size="default" />
+        <FieldLabel htmlFor="switch-size-default">Default</FieldLabel>
+      </Field>
+    </FieldGroup>
   )
 }
 
-const fruits = [
-  { label: "Apple", value: "apple" },
-  { label: "Banana", value: "banana" },
-  { label: "Blueberry", value: "blueberry" },
-  { label: "Grapes", value: "grapes" },
+const timezoneGroups = [
+  {
+    label: "North America",
+    items: [
+      { label: "Eastern Standard Time", value: "est" },
+      { label: "Central Standard Time", value: "cst" },
+      { label: "Mountain Standard Time", value: "mst" },
+      { label: "Pacific Standard Time", value: "pst" },
+      { label: "Alaska Standard Time", value: "akst" },
+      { label: "Hawaii Standard Time", value: "hst" },
+    ],
+  },
+  {
+    label: "Europe & Africa",
+    items: [
+      { label: "Greenwich Mean Time", value: "gmt" },
+      { label: "Central European Time", value: "cet" },
+      { label: "Eastern European Time", value: "eet" },
+      { label: "Western European Summer Time", value: "west" },
+      { label: "Central Africa Time", value: "cat" },
+      { label: "East Africa Time", value: "eat" },
+    ],
+  },
+  {
+    label: "Asia",
+    items: [
+      { label: "Moscow Time", value: "msk" },
+      { label: "India Standard Time", value: "ist" },
+      { label: "China Standard Time", value: "cst_china" },
+      { label: "Japan Standard Time", value: "jst" },
+      { label: "Korea Standard Time", value: "kst" },
+      { label: "Indonesia Central Standard Time", value: "ist_indonesia" },
+    ],
+  },
+  {
+    label: "Australia & Pacific",
+    items: [
+      { label: "Australian Western Standard Time", value: "awst" },
+      { label: "Australian Central Standard Time", value: "acst" },
+      { label: "Australian Eastern Standard Time", value: "aest" },
+      { label: "New Zealand Standard Time", value: "nzst" },
+      { label: "Fiji Time", value: "fjt" },
+    ],
+  },
+  {
+    label: "South America",
+    items: [
+      { label: "Argentina Time", value: "art" },
+      { label: "Bolivia Time", value: "bot" },
+      { label: "Brasilia Time", value: "brt" },
+      { label: "Chile Standard Time", value: "clt" },
+    ],
+  },
 ]
-const vegetables = [
-  { label: "Carrot", value: "carrot" },
-  { label: "Leek", value: "leek" },
+
+const timezones = [
+  { label: "Select a timezone", value: null },
+  ...timezoneGroups.flatMap((group) => group.items),
 ]
 
 // Stories: Default, Small.
 export function SelectDemo() {
   return (
-    <div className="flex flex-col items-center gap-3">
-      <Select items={[...fruits, ...vegetables]} defaultValue="banana">
-        <SelectTrigger className="w-48" aria-label="Produce">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Fruits</SelectLabel>
-            {fruits.map((item) => (
+    <Select items={timezones}>
+      <SelectTrigger aria-label="Timezone" className="w-full max-w-64">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent className="max-h-72">
+        {timezoneGroups.map((group) => (
+          <SelectGroup key={group.label}>
+            <SelectLabel>{group.label}</SelectLabel>
+            {group.items.map((item) => (
               <SelectItem key={item.value} value={item.value}>
                 {item.label}
               </SelectItem>
             ))}
           </SelectGroup>
-          <SelectSeparator />
-          <SelectGroup>
-            <SelectLabel>Vegetables</SelectLabel>
-            {vegetables.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <Select items={fruits} defaultValue="apple">
-        <SelectTrigger size="sm" className="w-40" aria-label="Fruit (small)">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {fruits.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
 
@@ -273,13 +283,6 @@ export function SliderDemo() {
     <Stack loose>
       <Slider defaultValue={[75]} max={100} step={1} aria-label="Volume" />
       <Slider defaultValue={[25, 50]} max={100} step={5} aria-label="Range" />
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        step={1}
-        disabled
-        aria-label="Volume"
-      />
     </Stack>
   )
 }

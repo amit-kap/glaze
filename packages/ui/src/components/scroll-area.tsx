@@ -11,7 +11,7 @@ function ScrollArea({
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
       className={cn(
-        "relative transition-[color,box-shadow] has-[>[data-slot=scroll-area-viewport]:focus-visible]:ring-[3px] has-[>[data-slot=scroll-area-viewport]:focus-visible]:ring-ring/25 has-[>[data-slot=scroll-area-viewport]:focus-visible]:outline-1",
+        "relative transition-[color,box-shadow] has-[>[data-slot=scroll-area-viewport]:focus-visible]:ring-3 has-[>[data-slot=scroll-area-viewport]:focus-visible]:ring-ring/25 has-[>[data-slot=scroll-area-viewport]:focus-visible]:outline-1",
         className
       )}
       {...props}

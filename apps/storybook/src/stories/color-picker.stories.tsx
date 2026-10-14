@@ -8,7 +8,7 @@ import {
 // Glaze's own component; the format switcher and eyedropper follow the colour
 // picker at https://www.fluidfunctionalism.com/docs/color-picker.
 const meta = {
-  title: "Components/ColorPicker",
+  title: "Components/Color Picker",
   component: ColorPicker,
   parameters: {
     docs: {

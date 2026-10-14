@@ -114,18 +114,6 @@ export const Line: Story = {
   ),
 }
 
-export const Vertical: Story = {
-  render: () => (
-    <Tabs defaultValue="account" orientation="vertical">
-      <TabsList>
-        <TabsTrigger value="account">Account</TabsTrigger>
-        <TabsTrigger value="password">Password</TabsTrigger>
-        <TabsTrigger value="notifications">Notifications</TabsTrigger>
-      </TabsList>
-    </Tabs>
-  ),
-}
-
 // --- States ---------------------------------------------------------------
 
 export const Disabled: Story = {

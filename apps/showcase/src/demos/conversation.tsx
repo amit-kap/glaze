@@ -1,4 +1,4 @@
-import { FileCodeIcon, XIcon } from "lucide-react"
+import { FileCodeIcon, GitBranchIcon, SearchIcon, XIcon } from "lucide-react"
 
 import {
   Attachment,
@@ -21,7 +21,11 @@ import {
   BubbleGroup,
   BubbleReactions,
 } from "@amit-kap/glaze/components/bubble"
-import { Marker, MarkerContent } from "@amit-kap/glaze/components/marker"
+import {
+  Marker,
+  MarkerContent,
+  MarkerIcon,
+} from "@amit-kap/glaze/components/marker"
 import {
   Message,
   MessageAvatar,
@@ -54,28 +58,35 @@ export function BubbleDemo() {
           primary color.
         </BubbleContent>
       </Bubble>
-      <Bubble variant="outline">
-        <BubbleContent>We can also use an outlined variant.</BubbleContent>
-      </Bubble>
-      <Bubble variant="destructive" align="end">
-        <BubbleContent>Or a destructive variant with a reaction.</BubbleContent>
-        <BubbleReactions role="img" aria-label="Reaction: fire">
-          <span>🔥</span>
-        </BubbleReactions>
-      </Bubble>
-      <Bubble variant="ghost">
-        <BubbleContent className="space-y-3">
-          <p>
-            Ghost bubbles work for assistant text, <strong>markdown</strong>,
-            and other content that should not be framed.
-          </p>
-          <p>
-            This is perfect for assistant messages that should not have a frame
-            and can take the full width of the container. You can also render{" "}
-            <code>code</code> in it.
-          </p>
-        </BubbleContent>
-      </Bubble>
+    </div>
+  )
+}
+
+// Stories: Default, Thinking, Separator.
+export function MarkerDemo() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-8">
+      <Marker>
+        <MarkerIcon>
+          <GitBranchIcon />
+        </MarkerIcon>
+        <MarkerContent>Switched to a new branch</MarkerContent>
+      </Marker>
+      <Marker role="status">
+        <MarkerIcon>
+          <Spinner />
+        </MarkerIcon>
+        <MarkerContent className="shimmer">Thinking...</MarkerContent>
+      </Marker>
+      <Marker variant="separator">
+        <MarkerContent>Conversation compacted</MarkerContent>
+      </Marker>
+      <Marker>
+        <MarkerIcon>
+          <SearchIcon />
+        </MarkerIcon>
+        <MarkerContent>Explored 4 files</MarkerContent>
+      </Marker>
     </div>
   )
 }
