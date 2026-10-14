@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { useTheme, type Mode } from "@amit-kap/glaze/theme"
+import { useTheme } from "@amit-kap/glaze/theme"
 
 import { CustomizeSidebar } from "../customize-sidebar"
 import { SettingsBar } from "./settings-bar"
@@ -33,7 +33,7 @@ export function ControlPanel({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
-  const { theme, setTheme, mode, setMode, density } = useTheme()
+  const { theme, setTheme, mode, setMode, resolvedMode, density } = useTheme()
   const [copied, setCopied] = React.useState(false)
   const [state, setState] = React.useState<CustomThemeState>(
     () =>
@@ -103,23 +103,16 @@ export function ControlPanel({
   return (
     <>
       <SettingsBar
-        base={base}
-        mode={mode}
         customized={customized}
         open={open}
-        onBaseChange={(v) =>
-          // A new theme starts the Customize section from its values.
-          setState((s) => ({
-            base: v,
-            custom: { ...emptyCustom, name: s.custom.name },
-          }))
-        }
-        onModeChange={(v: Mode) => setMode(v)}
         onOpenChange={onOpenChange}
+        mode={resolvedMode}
+        onModeChange={setMode}
       />
       <CustomizeSidebar
         open={open}
         onOpenChange={onOpenChange}
+        mode={resolvedMode}
         custom={custom}
         setCustom={setCustom}
         defaults={defaults}

@@ -58,27 +58,104 @@ export const controlShapes = [
   { value: "pill", label: "Pill" },
 ]
 
+// `derives` lists the tier-2 tokens an input feeds (tokens.css), for the
+// label tooltips in the sidebar.
 export const brandRows = [
-  { key: "brand", label: "Brand" },
-  { key: "brand-ink", label: "Brand ink" },
-  { key: "canvas", label: "Canvas" },
-  { key: "surface", label: "Surface" },
-  { key: "ink", label: "Ink" },
-  { key: "ink-muted", label: "Ink muted" },
-  { key: "line", label: "Line" },
-  { key: "overlay", label: "Overlay" },
+  {
+    key: "brand",
+    label: "Brand",
+    derives: [
+      "--primary",
+      "--primary-subtle",
+      "--primary-border",
+      "--ring",
+      "--selected",
+      "--sidebar-primary",
+    ],
+  },
+  {
+    key: "brand-ink",
+    label: "Brand ink",
+    derives: ["--primary-foreground", "--sidebar-primary-foreground"],
+  },
+  {
+    key: "canvas",
+    label: "Canvas",
+    derives: [
+      "--background",
+      "--muted",
+      "--subtle-foreground",
+      "--sidebar",
+      "--ring",
+    ],
+  },
+  {
+    key: "surface",
+    label: "Surface",
+    derives: ["--card", "--popover", "--secondary", "--accent"],
+  },
+  {
+    key: "ink",
+    label: "Ink",
+    derives: [
+      "--foreground",
+      "--card-foreground",
+      "--popover-foreground",
+      "--secondary",
+      "--secondary-foreground",
+      "--accent",
+      "--accent-foreground",
+      "--muted",
+      "--hover",
+      "--active",
+      "--border-strong",
+      "--subtle-foreground",
+      "--sidebar",
+      "--sidebar-foreground",
+      "--sidebar-accent",
+    ],
+  },
+  {
+    key: "ink-muted",
+    label: "Ink muted",
+    derives: ["--muted-foreground", "--subtle-foreground"],
+  },
+  {
+    key: "line",
+    label: "Line",
+    derives: ["--border", "--border-strong", "--input", "--sidebar-border"],
+  },
+  { key: "overlay", label: "Overlay", derives: ["--overlay"] },
 ]
 
 export const statusRows = [
-  { key: "danger", label: "Danger" },
-  { key: "warning", label: "Warning" },
-  { key: "success", label: "Success" },
-  { key: "info", label: "Info" },
+  {
+    key: "danger",
+    label: "Danger",
+    derives: [
+      "--destructive",
+      "--danger-subtle",
+      "--severity-critical",
+      "--severity-high",
+    ],
+  },
+  {
+    key: "warning",
+    label: "Warning",
+    derives: ["--warning-subtle", "--severity-medium", "--severity-high"],
+  },
+  {
+    key: "success",
+    label: "Success",
+    derives: ["--success-subtle", "--severity-low"],
+  },
+  { key: "info", label: "Info", derives: ["--info-subtle"] },
 ]
 
 export const chartRows = [1, 2, 3, 4, 5].map((n) => ({
   key: `chart-${n}`,
   label: `Chart ${n}`,
+  derives: [`--chart-${n}`],
 }))
 
 export const typeSteps = [

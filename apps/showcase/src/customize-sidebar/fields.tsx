@@ -1,4 +1,5 @@
 import * as React from "react"
+import { ChevronDownIcon } from "lucide-react"
 
 import { cn } from "@amit-kap/glaze/lib/utils"
 import {
@@ -7,6 +8,11 @@ import {
   type ColorFormat,
 } from "@amit-kap/glaze/lib/color"
 import { Button } from "@amit-kap/glaze/components/button"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@amit-kap/glaze/components/collapsible"
 import { ColorPicker } from "@amit-kap/glaze/components/color-picker"
 import { Field, FieldLabel } from "@amit-kap/glaze/components/field"
 import {
@@ -41,23 +47,52 @@ export const toHex = (css: string | undefined) => {
 
 // --- Building blocks -------------------------------------------------------
 
+// A collapsible section inside a tab. `dots` are swatch previews shown on the
+// collapsed header, so a closed colour group still hints at its contents.
 export function Section({
   title,
+  dots,
+  defaultOpen = false,
   children,
 }: {
   title: string
+  dots?: string[]
+  defaultOpen?: boolean
   children: React.ReactNode
 }) {
+  const [open, setOpen] = React.useState(defaultOpen)
   return (
-    <section
-      aria-label={title}
-      className="flex flex-col gap-3 border-t border-border pt-5"
+    <Collapsible
+      open={open}
+      onOpenChange={setOpen}
+      className="border-b border-border"
     >
-      <h3 className="text-caption font-medium tracking-wider text-muted-foreground uppercase">
-        {title}
-      </h3>
-      {children}
-    </section>
+      <CollapsibleTrigger className="flex w-full items-center justify-between py-2.5">
+        <span>{title}</span>
+        <span className="flex items-center gap-2">
+          {!open && dots && (
+            <span aria-hidden="true" className="flex gap-1">
+              {dots.slice(0, 6).map((color, i) => (
+                <span
+                  key={i}
+                  className="size-3.5 rounded-pill border border-border/60"
+                  style={{ backgroundColor: color }}
+                />
+              ))}
+            </span>
+          )}
+          <ChevronDownIcon
+            className={cn(
+              "size-4 text-muted-foreground transition-transform",
+              open && "rotate-180"
+            )}
+          />
+        </span>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="flex flex-col gap-3 pb-3">
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
   )
 }
 
@@ -82,7 +117,7 @@ export function SelectRow({
         value={value}
         onValueChange={(v) => v && onChange(v as string)}
       >
-        <SelectTrigger id={id} size="sm" className="w-36">
+        <SelectTrigger id={id} className="w-36">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -131,7 +166,7 @@ export function NumberField({
     setDraft(null)
   }
   return (
-    <InputGroup className={className ?? "h-control-sm w-20"}>
+    <InputGroup className={className ?? "w-20"}>
       <InputGroupInput
         aria-label={label}
         inputMode="decimal"
@@ -142,7 +177,7 @@ export function NumberField({
           if (event.key === "Enter") done()
           if (event.key === "Escape") setDraft(null)
         }}
-        className={cn("text-body", inputClassName)}
+        className={inputClassName}
       />
       {suffix && (
         <InputGroupAddon align="inline-end">
@@ -215,9 +250,8 @@ export function ColorField({
         render={
           <Button
             variant="outline"
-            size="sm"
             aria-label={label}
-            className="min-w-0 flex-1 justify-start gap-1.5 ps-1.5 font-mono text-caption"
+            className="min-w-0 flex-1 justify-start gap-1.5 ps-1.5"
           />
         }
       >
@@ -250,15 +284,5 @@ export function ColorField({
         />
       </PopoverContent>
     </Popover>
-  )
-}
-
-export function ModeColumns() {
-  return (
-    <div className="flex gap-2 text-caption text-muted-foreground">
-      <span className="w-20 shrink-0" />
-      <span className="flex-1">Light</span>
-      <span className="flex-1">Dark</span>
-    </div>
   )
 }

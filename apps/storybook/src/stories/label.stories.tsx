@@ -3,6 +3,11 @@ import { Checkbox } from "@amit-kap/glaze/components/checkbox"
 import { Field, FieldLabel } from "@amit-kap/glaze/components/field"
 import { Input } from "@amit-kap/glaze/components/input"
 import { Label } from "@amit-kap/glaze/components/label"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@amit-kap/glaze/components/tooltip"
 
 // Stories follow the upstream shadcn/ui (base-nova) Label examples:
 // https://ui.shadcn.com/docs/components/base/label
@@ -53,6 +58,32 @@ export const InField: Story = {
     <Field className="w-72">
       <FieldLabel htmlFor="field-email">Your email address</FieldLabel>
       <Input id="field-email" type="email" />
+    </Field>
+  ),
+}
+
+// A label can be a tooltip trigger itself via `render`, for hint-on-hover
+// text like what a token drives. The dotted underline marks it; the label
+// still focuses its control on click.
+export const WithTooltip: Story = {
+  render: () => (
+    <Field className="w-72">
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <FieldLabel
+              htmlFor="token-brand"
+              className="cursor-help underline decoration-muted-foreground/40 decoration-dotted underline-offset-4"
+            />
+          }
+        >
+          Brand
+        </TooltipTrigger>
+        <TooltipContent side="inline-start" className="font-mono">
+          --primary --primary-subtle --primary-border --ring
+        </TooltipContent>
+      </Tooltip>
+      <Input id="token-brand" placeholder="oklch(0.55 0.2 264)" />
     </Field>
   ),
 }
