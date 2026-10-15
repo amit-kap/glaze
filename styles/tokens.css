@@ -204,4 +204,13 @@
   --control-xs: calc(var(--control-md) - var(--space) * 2);
   --control-sm: calc(var(--control-md) - var(--space));
   --control-lg: calc(var(--control-md) + var(--space));
+
+  /* switch: a fixed-size control that tracks --space like the control
+     heights, so it scales with theme spacing and density */
+  --switch-width: calc(var(--space) * 8);
+  --switch-height: calc(var(--space) * 4.6);
+  --switch-width-sm: calc(var(--space) * 6);
+  --switch-height-sm: calc(var(--space) * 3.5);
+  --switch-thumb: calc(var(--space) * 4);
+  --switch-thumb-sm: calc(var(--space) * 3);
 }

@@ -6,7 +6,7 @@ import { cn } from "../lib/utils.js";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuRadioGroup, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, } from "./dropdown-menu.js";
 import { CheckIcon } from "lucide-react";
 function Menubar({ className, ...props }) {
-    return (_jsx(MenubarPrimitive, { "data-slot": "menubar", className: cn("flex h-control-md items-center gap-0.5 rounded-control border p-[3px]", className), ...props }));
+    return (_jsx(MenubarPrimitive, { "data-slot": "menubar", className: cn("flex h-control-md items-center gap-0.5 rounded-control border p-0.75", className), ...props }));
 }
 function MenubarMenu({ ...props }) {
     return _jsx(DropdownMenu, { "data-slot": "menubar-menu", ...props });
@@ -18,7 +18,7 @@ function MenubarPortal({ ...props }) {
     return _jsx(DropdownMenuPortal, { "data-slot": "menubar-portal", ...props });
 }
 function MenubarTrigger({ className, ...props }) {
-    return (_jsx(DropdownMenuTrigger, { "data-slot": "menubar-trigger", className: cn("flex items-center rounded-item-sm px-1.5 py-[2px] text-body font-medium outline-hidden select-none hover:bg-muted aria-expanded:bg-muted", className), ...props }));
+    return (_jsx(DropdownMenuTrigger, { "data-slot": "menubar-trigger", className: cn("flex items-center rounded-item-sm px-1.5 py-0.5 text-body font-medium outline-hidden select-none hover:bg-muted aria-expanded:bg-muted", className), ...props }));
 }
 function MenubarContent({ className, align = "start", alignOffset = -4, sideOffset = 8, ...props }) {
     return (_jsx(DropdownMenuContent, { "data-slot": "menubar-content", align: align, alignOffset: alignOffset, sideOffset: sideOffset, className: cn("min-w-36 rounded-floating bg-popover p-1 text-popover-foreground shadow-floating ring-1 ring-foreground/10 duration-(--duration-fade-fast) data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95", className), ...props }));

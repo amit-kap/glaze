@@ -11,8 +11,8 @@ function InputGroup({ className, ...props }) {
 const inputGroupAddonVariants = cva("flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-body font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-(--input-group-kbd-radius) [&>svg:not([class*='size-'])]:size-(--icon-size)", {
     variants: {
         align: {
-            "inline-start": "order-first ps-2 has-[>button]:ms-[-0.3rem] has-[>kbd]:ms-[-0.15rem]",
-            "inline-end": "order-last pe-2 has-[>button]:me-[-0.3rem] has-[>kbd]:me-[-0.15rem]",
+            "inline-start": "order-first ps-2 has-[>button]:-ms-1.2 has-[>kbd]:-ms-0.6",
+            "inline-end": "order-last pe-2 has-[>button]:-me-1.2 has-[>kbd]:-me-0.6",
             "block-start": "order-first w-full justify-start px-2.5 pt-2 group-has-[>input]/input-group:pt-2 [.border-b]:pb-2",
             "block-end": "order-last w-full justify-start px-2.5 pb-2 group-has-[>input]/input-group:pb-2 [.border-t]:pt-2",
         },

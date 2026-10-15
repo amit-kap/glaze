@@ -3,7 +3,7 @@ import { ContextMenu as ContextMenuPrimitive } from "@base-ui/react/context-menu
 declare function ContextMenu({ ...props }: ContextMenuPrimitive.Root.Props): React.JSX.Element;
 declare function ContextMenuPortal({ ...props }: ContextMenuPrimitive.Portal.Props): React.JSX.Element;
 declare function ContextMenuTrigger({ className, ...props }: ContextMenuPrimitive.Trigger.Props): React.JSX.Element;
-declare function ContextMenuContent({ className, align, alignOffset, side, sideOffset, ...props }: ContextMenuPrimitive.Popup.Props & Pick<ContextMenuPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">): React.JSX.Element;
+declare function ContextMenuContent({ className, align, alignOffset, anchor, side, sideOffset, ...props }: ContextMenuPrimitive.Popup.Props & Pick<ContextMenuPrimitive.Positioner.Props, "align" | "alignOffset" | "anchor" | "side" | "sideOffset">): React.JSX.Element;
 declare function ContextMenuGroup({ ...props }: ContextMenuPrimitive.Group.Props): React.JSX.Element;
 declare function ContextMenuLabel({ className, inset, ...props }: ContextMenuPrimitive.GroupLabel.Props & {
     inset?: boolean;
