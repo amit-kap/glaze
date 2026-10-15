@@ -1,6 +1,15 @@
-import { SearchIcon } from "lucide-react"
+import {
+  BotIcon,
+  EyeIcon,
+  MoonIcon,
+  PencilIcon,
+  SearchIcon,
+  SunIcon,
+  UserIcon,
+} from "lucide-react"
 
 import { Checkbox } from "@amit-kap/glaze/components/checkbox"
+import { IconSwitch } from "@amit-kap/glaze/components/icon-switch"
 import { ColorPicker } from "@amit-kap/glaze/components/color-picker"
 import {
   Field,
@@ -35,7 +44,7 @@ import { Slider } from "@amit-kap/glaze/components/slider"
 import { Switch } from "@amit-kap/glaze/components/switch"
 import { Textarea } from "@amit-kap/glaze/components/textarea"
 
-import { Stack } from "./layout"
+import { Row, Stack } from "./layout"
 
 // Stories: Default, Disabled, Invalid.
 export function InputDemo() {
@@ -175,6 +184,46 @@ export function RadioGroupDemo() {
         ))}
       </RadioGroup>
     </FieldSet>
+  )
+}
+
+// Stories: Default, Sizes, Controlled, Pairs.
+export function IconSwitchDemo() {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Row>
+        <IconSwitch
+          icon={<UserIcon />}
+          checkedIcon={<BotIcon />}
+          aria-label="Switch between human and agent mode"
+        />
+        <IconSwitch
+          icon={<SunIcon />}
+          checkedIcon={<MoonIcon />}
+          defaultChecked
+          aria-label="Toggle color mode"
+        />
+        <IconSwitch
+          icon={<EyeIcon />}
+          checkedIcon={<PencilIcon />}
+          aria-label="Switch between preview and edit"
+        />
+      </Row>
+      <Row>
+        <IconSwitch
+          size="sm"
+          icon={<SunIcon />}
+          checkedIcon={<MoonIcon />}
+          aria-label="Toggle color mode"
+        />
+        <IconSwitch
+          size="sm"
+          icon={<UserIcon />}
+          checkedIcon={<BotIcon />}
+          aria-label="Switch between human and agent mode"
+        />
+      </Row>
+    </div>
   )
 }
 
