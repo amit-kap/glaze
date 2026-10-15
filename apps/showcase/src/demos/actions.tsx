@@ -3,14 +3,20 @@ import {
   ArrowUpRightIcon,
   BoldIcon,
   BookmarkIcon,
+  CopyIcon,
   ItalicIcon,
   MoreHorizontalIcon,
+  PlusIcon,
+  SearchIcon,
+  ShareIcon,
+  Trash2Icon,
   UnderlineIcon,
 } from "lucide-react"
 
 import { Badge } from "@amit-kap/glaze/components/badge"
 import { Button } from "@amit-kap/glaze/components/button"
 import { ButtonGroup } from "@amit-kap/glaze/components/button-group"
+import { RevealButton } from "@amit-kap/glaze/components/reveal-button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,6 +53,46 @@ export function ButtonDemo() {
             <ArrowUpRightIcon />
           </Button>
         ))}
+      </Row>
+    </div>
+  )
+}
+
+// Stories: Variants, Sizes, IconEnd, InToolbar.
+export function RevealButtonDemo() {
+  return (
+    <div className="flex flex-col items-center gap-6">
+      <Row>
+        <RevealButton variant="default" label="Create">
+          <PlusIcon />
+        </RevealButton>
+        <RevealButton variant="outline" label="Search">
+          <SearchIcon />
+        </RevealButton>
+        <RevealButton variant="secondary" label="Copy">
+          <CopyIcon />
+        </RevealButton>
+        <RevealButton variant="ghost" label="Share">
+          <ShareIcon />
+        </RevealButton>
+        <RevealButton variant="destructive" label="Delete">
+          <Trash2Icon />
+        </RevealButton>
+      </Row>
+      <Row>
+        {(["xs", "sm", "default", "lg"] as const).map((size) => (
+          <RevealButton key={size} variant="outline" size={size} label={size}>
+            <SearchIcon />
+          </RevealButton>
+        ))}
+      </Row>
+      <Row>
+        <RevealButton variant="outline" iconSide="end" label="Search">
+          <SearchIcon />
+        </RevealButton>
+        <RevealButton variant="outline" iconSide="end" label="Copy">
+          <CopyIcon />
+        </RevealButton>
       </Row>
     </div>
   )

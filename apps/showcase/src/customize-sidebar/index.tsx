@@ -187,7 +187,7 @@ export function CustomizeSidebar({
         aria-orientation="vertical"
         aria-label="Resize panel"
         onPointerDown={startResize}
-        className="absolute inset-y-0 start-0 w-2 cursor-ew-resize touch-none max-sm:hidden"
+        className="absolute inset-y-0 inset-s-0 w-2 cursor-ew-resize touch-none max-sm:hidden"
       />
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-title font-medium">Customize</h2>
