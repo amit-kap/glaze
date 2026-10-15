@@ -28,7 +28,7 @@
     "@storybook/addon-docs": "^10.6.1",
     "@storybook/react-vite": "^10.6.1",
     "@tailwindcss/vite": "^4",
-    "@types/node": "^24",
+    "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "ai": "^7.0.137",
