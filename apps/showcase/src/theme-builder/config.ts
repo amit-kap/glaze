@@ -41,6 +41,11 @@ export function toConfig(
       light: some(c.light) ? c.light : undefined,
       dark: some(c.dark) ? c.dark : undefined,
     }
+  if (c.system && (some(c.system.light) || some(c.system.dark)))
+    config.system = {
+      light: some(c.system.light) ? c.system.light : undefined,
+      dark: some(c.system.dark) ? c.system.dark : undefined,
+    }
 
   const groups: Record<string, Record<string, string>> = {
     shape: {},

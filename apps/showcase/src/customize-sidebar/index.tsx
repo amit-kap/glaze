@@ -27,8 +27,11 @@ import {
 } from "./sections"
 import { toHex } from "./fields"
 import {
+  brandRows,
+  chartRows,
   inkFor,
   pxToRem,
+  statusRows,
   toPx,
   type Custom,
   type Defaults,
@@ -82,6 +85,51 @@ export function CustomizeSidebar({
   const color = (m: "light" | "dark", key: string) =>
     custom[m][key] ?? defaults[m][key]
 
+  // The tier-2 tokens the colour rows can drill into. Their stored values
+  // are formulas (color-mix, var chains), so the real colour is read back
+  // off a probe element after styles apply — in a rAF, which runs after
+  // the parent has injected the generated stylesheet and the theme attr.
+  const derivedTokens = React.useMemo(
+    () => [
+      ...new Set(
+        [...brandRows, ...statusRows, ...chartRows].flatMap((r) => r.derives)
+      ),
+    ],
+    []
+  )
+  const [resolved, setResolved] = React.useState<Record<string, string>>({})
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      const probe = document.createElement("div")
+      probe.style.visibility = "hidden"
+      document.body.append(probe)
+      const next: Record<string, string> = {}
+      for (const name of derivedTokens) {
+        probe.style.backgroundColor = `var(${name})`
+        next[name] = getComputedStyle(probe).backgroundColor
+      }
+      probe.remove()
+      setResolved(next)
+    })
+    return () => cancelAnimationFrame(id)
+  }, [mode, css, defaults, derivedTokens])
+
+  // A system-token pin: the override, or the live derived value.
+  const system = (m: "light" | "dark", key: string) =>
+    custom.system?.[m]?.[key] ?? resolved[`--${key}`] ?? ""
+  const systemOverridden = (m: "light" | "dark", key: string) =>
+    custom.system?.[m]?.[key] !== undefined
+  const setSystem = (m: "light" | "dark", key: string, hex: string | null) =>
+    setCustom((c) => {
+      const sys = {
+        light: { ...c.system?.light },
+        dark: { ...c.system?.dark },
+      }
+      if (hex === null) delete sys[m][key]
+      else sys[m][key] = hex
+      return { ...c, system: sys }
+    })
+
   // An override equal to the theme's own is no change, so it's dropped.
   const setShared = (key: string, value: string, unchanged: boolean) =>
     setCustom((c) => {
@@ -128,10 +176,13 @@ export function CustomizeSidebar({
     mode,
     color,
     shared,
+    system,
+    systemOverridden,
     setCustom,
     setPx,
     setNum,
     setColor,
+    setSystem,
     radius,
     pill,
   }

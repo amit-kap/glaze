@@ -231,41 +231,25 @@ export function SliderField({
   )
 }
 
-// A colour as a swatch and its hex; the picker opens below it.
-export function ColorField({
+// The colour picker in a popover, around whatever trigger is given.
+function ColorPopover({
   label,
   value,
   onChange,
+  trigger,
+  children,
 }: {
   label: string
   value: string
   onChange: (hex: string) => void
+  trigger: React.ReactElement
+  children?: React.ReactNode
 }) {
   const [format, setFormat] = React.useState<ColorFormat>("hex")
   const parsed = parseColor(value) ?? { r: 0, g: 0, b: 0, a: 1 }
-  const fill = `rgb(${parsed.r} ${parsed.g} ${parsed.b} / ${parsed.a})`
   return (
     <Popover>
-      <PopoverTrigger
-        render={
-          <Button
-            variant="outline"
-            aria-label={label}
-            className="min-w-0 flex-1 justify-start gap-1.5 ps-1.5"
-          />
-        }
-      >
-        <span
-          aria-hidden="true"
-          className="size-4.5 shrink-0 rounded-item border border-border"
-          style={{
-            background: `linear-gradient(${fill}, ${fill}), ${checker}`,
-          }}
-        />
-        <span className="truncate">
-          {formatColor(parsed, "hex").slice(0, 7)}
-        </span>
-      </PopoverTrigger>
+      <PopoverTrigger render={trigger}>{children}</PopoverTrigger>
       <PopoverContent side="bottom" align="center" className="w-72">
         <ColorPicker
           card={false}
@@ -284,5 +268,77 @@ export function ColorField({
         />
       </PopoverContent>
     </Popover>
+  )
+}
+
+// A colour as a swatch and its hex; the picker opens below it.
+export function ColorField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: string
+  onChange: (hex: string) => void
+}) {
+  const parsed = parseColor(value) ?? { r: 0, g: 0, b: 0, a: 1 }
+  const fill = `rgb(${parsed.r} ${parsed.g} ${parsed.b} / ${parsed.a})`
+  return (
+    <ColorPopover
+      label={label}
+      value={value}
+      onChange={onChange}
+      trigger={
+        <Button
+          variant="outline"
+          aria-label={label}
+          className="min-w-0 flex-1 justify-start gap-1.5 ps-1.5"
+        />
+      }
+    >
+      <span
+        aria-hidden="true"
+        className="size-4.5 shrink-0 rounded-item border border-border"
+        style={{
+          background: `linear-gradient(${fill}, ${fill}), ${checker}`,
+        }}
+      />
+      <span className="truncate">{formatColor(parsed, "hex").slice(0, 7)}</span>
+    </ColorPopover>
+  )
+}
+
+// The same picker as a bare swatch, for compact rows that carry their own
+// label and hex text.
+export function ColorSwatch({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: string
+  onChange: (hex: string) => void
+}) {
+  const parsed = parseColor(value) ?? { r: 0, g: 0, b: 0, a: 1 }
+  const fill = `rgb(${parsed.r} ${parsed.g} ${parsed.b} / ${parsed.a})`
+  return (
+    <ColorPopover
+      label={label}
+      value={value}
+      onChange={onChange}
+      trigger={
+        <button
+          type="button"
+          aria-label={label}
+          className="relative size-5 shrink-0 overflow-clip rounded-item-sm border border-border"
+        />
+      }
+    >
+      <span
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{ background: `linear-gradient(${fill}, ${fill}), ${checker}` }}
+      />
+    </ColorPopover>
   )
 }

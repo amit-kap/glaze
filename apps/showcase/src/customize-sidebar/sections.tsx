@@ -1,7 +1,19 @@
 import * as React from "react"
-import { CheckIcon, CopyIcon, DownloadIcon } from "lucide-react"
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  CopyIcon,
+  DownloadIcon,
+  RotateCcwIcon,
+} from "lucide-react"
 
+import { cn } from "@amit-kap/glaze/lib/utils"
 import { Button } from "@amit-kap/glaze/components/button"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@amit-kap/glaze/components/collapsible"
 import { Field, FieldError, FieldLabel } from "@amit-kap/glaze/components/field"
 import { Input } from "@amit-kap/glaze/components/input"
 import {
@@ -18,10 +30,12 @@ import {
 
 import {
   ColorField,
+  ColorSwatch,
   NumberField,
   Section,
   SelectRow,
   SliderField,
+  toHex,
 } from "./fields"
 import {
   brandRows,
@@ -55,6 +69,11 @@ export interface ThemeEditor {
   color: (m: Mode, key: string) => string
   /** Effective value of a shared (mode-independent) input, as raw CSS. */
   shared: (key: string) => string
+  /** Effective value of a tier-2 token: the pin, or the derived value
+      resolved under the live theme. */
+  system: (m: Mode, key: string) => string
+  /** True when the token is pinned, i.e. no longer follows its input. */
+  systemOverridden: (m: Mode, key: string) => boolean
   setCustom: (update: (c: Custom) => Custom) => void
   setPx: (key: string, px: number) => void
   setNum: (
@@ -64,33 +83,118 @@ export interface ThemeEditor {
     unit?: string
   ) => void
   setColor: (m: Mode, key: string, hex: string) => void
+  /** Pin a tier-2 token to a colour, or pass null to return it to the
+      input's derivation. */
+  setSystem: (m: Mode, key: string, hex: string | null) => void
   radius: number
   pill: boolean
 }
 
-// One labelled colour field, editing the active mode. Hovering the label
-// lists the tier-2 tokens the input feeds.
+// One derived token inside a colour row's drill-down, at caption scale:
+// swatch opens the same picker as a full colour field, the name truncates
+// with a tooltip rather than clipping, and the hex sits in a fixed column.
+// Once pinned, the token stops following the input — the name goes solid
+// and the reset button returns it to the derivation.
+function DerivedRow({ name, editor }: { name: string; editor: ThemeEditor }) {
+  const { mode } = editor
+  const token = name.slice(2)
+  const overridden = editor.systemOverridden(mode, token)
+  const value = editor.system(mode, token)
+  return (
+    <div className="flex h-6 items-center gap-2">
+      <ColorSwatch
+        label={name}
+        value={value}
+        onChange={(hex) => editor.setSystem(mode, token, hex)}
+      />
+      <span
+        title={name}
+        className={cn(
+          "min-w-0 flex-1 truncate font-mono text-caption",
+          overridden ? "text-foreground" : "text-muted-foreground"
+        )}
+      >
+        {name}
+      </span>
+      <span className="shrink-0 font-mono text-caption text-muted-foreground">
+        {toHex(value)}
+      </span>
+      {/* Fixed slot, so the hex column never shifts when a pin is set. */}
+      <span className="flex size-control-xs shrink-0 items-center justify-center">
+        {overridden && (
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            aria-label={`Reset ${name} to derived`}
+            title="Reset to derived"
+            onClick={() => editor.setSystem(mode, token, null)}
+          >
+            <RotateCcwIcon />
+          </Button>
+        )}
+      </span>
+    </div>
+  )
+}
+
+// One labelled colour field, editing the active mode, expandable to the
+// tier-2 tokens the input feeds. The input's own token ("--overlay" under
+// Overlay, "--chart-1" under Chart 1) is itself, so it isn't listed.
 function ColorRow({
   label,
+  self,
   derives,
   value,
   onChange,
+  editor,
 }: {
   label: string
+  self: string
   derives: string[]
   value: string
   onChange: (hex: string) => void
+  editor: ThemeEditor
 }) {
+  const [open, setOpen] = React.useState(false)
+  const drillable = derives.filter((name) => name !== `--${self}`)
   return (
-    <div className="flex items-center gap-2">
-      <Tooltip>
-        <TooltipTrigger render={<FieldLabel className="w-20 shrink-0" />}>
-          {label}
-        </TooltipTrigger>
-        <TooltipContent side="inline-start">{derives.join(" ")}</TooltipContent>
-      </Tooltip>
-      <ColorField label={label} value={value} onChange={onChange} />
-    </div>
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <div className="flex items-center gap-2">
+        <Tooltip>
+          <TooltipTrigger render={<FieldLabel className="w-20 shrink-0" />}>
+            {label}
+          </TooltipTrigger>
+          <TooltipContent side="inline-start">
+            {derives.join(" ")}
+          </TooltipContent>
+        </Tooltip>
+        <ColorField label={label} value={value} onChange={onChange} />
+        {drillable.length > 0 ? (
+          <CollapsibleTrigger
+            render={<Button variant="ghost" size="icon-xs" />}
+            aria-label={`Tokens fed by ${label}`}
+            aria-expanded={open}
+          >
+            <ChevronDownIcon
+              className={cn(
+                "transition-transform duration-(--duration-fast)",
+                open && "rotate-180"
+              )}
+            />
+          </CollapsibleTrigger>
+        ) : (
+          // Keeps the colour fields aligned with the drillable rows'.
+          <span aria-hidden="true" className="size-control-xs" />
+        )}
+      </div>
+      <CollapsibleContent>
+        <div className="flex flex-col gap-1 ps-14 pt-2 pb-1">
+          {drillable.map((name) => (
+            <DerivedRow key={name} name={name} editor={editor} />
+          ))}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   )
 }
 
@@ -115,9 +219,11 @@ export function ColorsTab({ editor }: { editor: ThemeEditor }) {
             <ColorRow
               key={key}
               label={label}
+              self={key}
               derives={derives}
               value={editor.color(mode, key)}
               onChange={(hex) => editor.setColor(mode, key, hex)}
+              editor={editor}
             />
           ))}
         </Section>

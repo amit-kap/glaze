@@ -140,6 +140,34 @@ export const glazeConfigSchema = z.strictObject({
   type: inputs(typeInputs).optional(),
   elevation: inputs(elevationInputs).optional(),
   motion: inputs(motionInputs).optional(),
+  /** System-token pins (spec: a theme may override a system token when the
+      derivation can't express its intent), per mode, e.g. "secondary". */
+  system: z
+    .strictObject({
+      light: z
+        .record(
+          z
+            .string()
+            .regex(
+              /^[a-z][a-z0-9-]*$/,
+              "use a system token name without the leading --"
+            ),
+          cssValue
+        )
+        .optional(),
+      dark: z
+        .record(
+          z
+            .string()
+            .regex(
+              /^[a-z][a-z0-9-]*$/,
+              "use a system token name without the leading --"
+            ),
+          cssValue
+        )
+        .optional(),
+    })
+    .optional(),
   /** Component tokens (spec: "Component tokens"), e.g. "button-radius-sm". */
   components: z
     .record(

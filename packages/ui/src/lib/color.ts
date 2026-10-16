@@ -92,10 +92,9 @@ export function rgbaToOklch({ r, g, b }: Rgba) {
   return { l: L * 100, c, h }
 }
 
-export function oklchToRgba(l: number, c: number, h: number, a = 1): Rgba {
-  const L = clamp(l, 0, 100) / 100
-  const A = Math.max(c, 0) * Math.cos((h * Math.PI) / 180)
-  const B = Math.max(c, 0) * Math.sin((h * Math.PI) / 180)
+// Oklab → sRGB via the LMS matrix, shared by the oklch (polar) and
+// oklab (cartesian) notations.
+function oklabToSrgb(L: number, A: number, B: number) {
   const l_ = (L + 0.3963377774 * A + 0.2158037573 * B) ** 3
   const m_ = (L - 0.1055613458 * A - 0.0638541728 * B) ** 3
   const s_ = (L - 0.0894841775 * A - 1.291485548 * B) ** 3
@@ -103,8 +102,49 @@ export function oklchToRgba(l: number, c: number, h: number, a = 1): Rgba {
     r: fromLinear(4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_),
     g: fromLinear(-1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_),
     b: fromLinear(-0.0041960863 * l_ - 0.7034186147 * m_ + 1.707614701 * s_),
-    a,
   }
+}
+
+export function oklchToRgba(l: number, c: number, h: number, a = 1): Rgba {
+  const L = clamp(l, 0, 100) / 100
+  const A = Math.max(c, 0) * Math.cos((h * Math.PI) / 180)
+  const B = Math.max(c, 0) * Math.sin((h * Math.PI) / 180)
+  return { ...oklabToSrgb(L, A, B), a }
+}
+
+/** l in 0-100, a and b roughly -0.4-0.4. */
+export function oklabToRgba(l: number, a: number, b: number, alpha = 1): Rgba {
+  return { ...oklabToSrgb(clamp(l, 0, 100) / 100, a, b), a: alpha }
+}
+
+// Display P3 → linear sRGB (P3 gamma-encoded → linearize → gamut matrix).
+const p3LinearToSrgb = (r: number, g: number, b: number) => ({
+  r: 1.22484 * r - 0.22483 * g - 0.00005 * b,
+  g: -0.04204 * r + 1.04191 * g + 0.00001 * b,
+  b: -0.01964 * r - 0.07866 * g + 1.09856 * b,
+})
+
+/** Parses color(<space> r g b / a) for the sRGB family and Display P3. */
+function colorFunctionToRgba(
+  space: string,
+  r: number,
+  g: number,
+  b: number,
+  a: number
+): Rgba | null {
+  if (space === "srgb") return { r: r * 255, g: g * 255, b: b * 255, a }
+  if (space === "srgb-linear")
+    return { r: fromLinear(r), g: fromLinear(g), b: fromLinear(b), a }
+  if (space === "display-p3") {
+    const lin = p3LinearToSrgb(toLinear(r * 255), toLinear(g * 255), toLinear(b * 255))
+    return {
+      r: fromLinear(lin.r),
+      g: fromLinear(lin.g),
+      b: fromLinear(lin.b),
+      a,
+    }
+  }
+  return null
 }
 
 // --- Parsing --------------------------------------------------------------
@@ -130,7 +170,8 @@ function alphaOf(token: string | undefined): number {
   return v === null ? 1 : clamp(v, 0, 1)
 }
 
-/** Parses #rgb, #rgba, #rrggbb, #rrggbbaa, rgb(), hsl() and oklch(). */
+/** Parses #rgb, #rgba, #rrggbb, #rrggbbaa, rgb(), hsl(), oklch(), oklab()
+    and color() — enough to read back computed getComputedStyle colours. */
 export function parseColor(input: string): Rgba | null {
   const text = input.trim().toLowerCase()
 
@@ -142,7 +183,7 @@ export function parseColor(input: string): Rgba | null {
     return { r: n(0), g: n(2), b: n(4), a: h.length === 8 ? n(6) / 255 : 1 }
   }
 
-  const fn = /^(rgba?|hsla?|oklch)\(\s*([^)]+?)\s*\)$/.exec(text)
+  const fn = /^(rgba?|hsla?|oklch|oklab|color)\(\s*([^)]+?)\s*\)$/.exec(text)
   if (!fn) return null
   const [body, alpha] = fn[2].split("/").map((s) => s.trim())
   const parts = body.split(/[\s,]+/).filter(Boolean)
@@ -163,6 +204,21 @@ export function parseColor(input: string): Rgba | null {
     const l = channel(p2, 100)
     if (h === null || s === null || l === null) return null
     return hslToRgba(h, s, l, a)
+  }
+  if (fn[1] === "color") {
+    // color(<space> r g b): parts[0] is the space, not a channel.
+    const r = channel(p1, 1)
+    const g = channel(p2, 1)
+    const b = channel(parts[3], 1)
+    if (r === null || g === null || b === null) return null
+    return colorFunctionToRgba(p0, r, g, b, alphaOf(alpha))
+  }
+  if (fn[1] === "oklab") {
+    const l = channel(p0, 100)
+    const ab = channel(p1, 0.4)
+    const bb = channel(p2, 0.4)
+    if (l === null || ab === null || bb === null) return null
+    return oklabToRgba(p0.endsWith("%") ? l : l * 100, ab, bb, a)
   }
   const l = channel(p0, 100)
   const c = channel(p1, 0.4)

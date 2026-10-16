@@ -79,9 +79,16 @@ export function generateThemeCss(config: GlazeConfig, baseCss: string): string {
   }
 
   // Pins reproduce the base palette's exact light neutrals. Once the light
-  // palette changes they no longer match it, so derive instead.
+  // palette changes they no longer match it, so they're dropped and the
+  // derivation runs instead — except the config's own system-token
+  // overrides, which are explicit and keep their value either way. Light
+  // pins need a :not() rule so they don't leak into dark mode; dark pins
+  // sit inside the dark rule, which only ever matches in dark.
   const keepPins =
     pins.size > 0 && Object.keys(config.color?.light ?? {}).length === 0
+  const lightPins: Block = keepPins ? new Map(pins) : new Map()
+  set(lightPins, config.system?.light)
+  set(dark, config.system?.dark)
 
   // Fonts: importing the base theme's file loads its fonts, resolved from
   // inside Glaze (Nova's font comes with globals.css). Its rules are scoped
@@ -103,7 +110,7 @@ export function generateThemeCss(config: GlazeConfig, baseCss: string): string {
       (imports.length ? "\n" : ""),
     rule(t, light),
     rule(`${t}.dark,\n.dark ${t},\n${t} .dark`, dark),
-    keepPins ? rule(`${t}:not(.dark, .dark *)`, pins) : "",
+    lightPins.size ? rule(`${t}:not(.dark, .dark *)`, lightPins) : "",
   ]
     .filter(Boolean)
     .join("\n")

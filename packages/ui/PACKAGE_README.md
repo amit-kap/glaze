@@ -130,6 +130,8 @@ The quickest way is a config: start from a built-in theme and change only what y
 
 Then `npx @amit-kap/glaze init --config glaze.config.json` generates `my-theme.css` beside your main CSS file and wires it in. To regenerate only the CSS: `npx glaze theme glaze.config.json`.
 
+Beyond the input groups (`color`, `shape`, `space`, `type`, `elevation`, `motion`) a config can pin derived values directly: `"system": { "light": { "secondary": "#eee" }, "dark": { … } }` overrides a system token for one mode, and `"components": { "input-fill": "#f5f5f5" }` sets a component token. Pins win over the derivation, so a pinned token stops following the inputs that derived it.
+
 ### Writing one by hand
 
 A theme is a CSS file that sets the required inputs for light and dark. Everything else (hover states, borders, sidebar colours, focus rings) is derived from them.

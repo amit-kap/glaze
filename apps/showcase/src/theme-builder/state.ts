@@ -11,6 +11,12 @@ export type Custom = {
   dark: Record<string, string>
   /** Every other input, as the CSS value it is written with. */
   shared: Record<string, string>
+  /** Tier-2 token pins, per mode: token name (no "--") → CSS colour. Once
+      pinned, a token stops following the input that derived it. */
+  system?: {
+    light: Record<string, string>
+    dark: Record<string, string>
+  }
   controls?: string
   font?: string
   headingFont?: string
@@ -32,6 +38,8 @@ export const isCustomized = (c: Custom) =>
   Object.keys(c.light).length > 0 ||
   Object.keys(c.dark).length > 0 ||
   Object.keys(c.shared).length > 0 ||
+  Object.keys(c.system?.light ?? {}).length > 0 ||
+  Object.keys(c.system?.dark ?? {}).length > 0 ||
   (["controls", "font", "headingFont", "monoFont", "fades"] as const).some(
     (k) => c[k] !== undefined
   )
