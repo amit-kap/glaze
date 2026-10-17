@@ -5,29 +5,82 @@ import {
   type Custom,
 } from "../theme-builder"
 
-// The custom theme is kept beside ThemeProvider's own storage, so a reload
-// restores it. The key is versioned: earlier shapes are ignored.
-const storageKey = "glaze-showcase-custom-v2"
+// The draft theme and the saved library are kept beside ThemeProvider's own
+// storage, so a reload restores them. Keys are versioned: the draft migrates
+// from the previous shape, anything older is ignored.
+const draftKey = "glaze-showcase-custom-v3"
+const draftKeyV2 = "glaze-showcase-custom-v2"
+const libraryKey = "glaze-showcase-library-v1"
 
-export type CustomThemeState = { base: BaseTheme; custom: Custom }
+export type CustomThemeState = {
+  base: BaseTheme
+  custom: Custom
+  /** The library entry the draft was loaded from, while it still has one. */
+  savedId?: string
+}
 
-export function loadCustomTheme(): CustomThemeState | null {
+export type SavedTheme = {
+  id: string
+  base: BaseTheme
+  custom: Custom
+  savedAt: number
+}
+
+const read = (key: string): unknown => {
   try {
-    const stored = JSON.parse(localStorage.getItem(storageKey) ?? "null")
-    if (!stored || !isBaseTheme(stored.base)) return null
-    return {
-      base: stored.base,
-      custom: { ...emptyCustom, ...stored.custom },
-    }
+    return JSON.parse(localStorage.getItem(key) ?? "null")
   } catch {
     return null
   }
 }
 
-export function saveCustomTheme(value: CustomThemeState) {
+const write = (key: string, value: unknown) => {
   try {
-    localStorage.setItem(storageKey, JSON.stringify(value))
+    localStorage.setItem(key, JSON.stringify(value))
   } catch {
-    // Storage blocked: the custom theme lasts for this visit only.
+    // Storage blocked: the theme lasts for this visit only.
   }
 }
+
+const toState = (stored: unknown): CustomThemeState | null => {
+  if (!stored || typeof stored !== "object") return null
+  const { base, custom, savedId } = stored as Record<string, unknown>
+  if (typeof base !== "string" || !isBaseTheme(base)) return null
+  return {
+    base,
+    custom: { ...emptyCustom, ...(custom as Partial<Custom> | undefined) },
+    savedId: typeof savedId === "string" ? savedId : undefined,
+  }
+}
+
+export function loadCustomTheme(): CustomThemeState | null {
+  return toState(read(draftKey)) ?? toState(read(draftKeyV2))
+}
+
+export function saveCustomTheme(value: CustomThemeState) {
+  write(draftKey, value)
+}
+
+export function loadLibrary(): SavedTheme[] {
+  const stored = read(libraryKey)
+  if (!Array.isArray(stored)) return []
+  return stored.flatMap((entry): SavedTheme[] => {
+    const state = toState(entry)
+    const { id, savedAt } = (entry ?? {}) as Record<string, unknown>
+    if (!state || typeof id !== "string") return []
+    return [
+      {
+        id,
+        base: state.base,
+        custom: state.custom,
+        savedAt: typeof savedAt === "number" ? savedAt : 0,
+      },
+    ]
+  })
+}
+
+export function saveLibrary(list: SavedTheme[]) {
+  write(libraryKey, list)
+}
+
+export const newId = () => crypto.randomUUID()

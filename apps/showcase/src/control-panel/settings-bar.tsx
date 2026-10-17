@@ -1,20 +1,29 @@
-import { MoonIcon, SlidersHorizontalIcon, SunIcon } from "lucide-react"
+import {
+  MoonIcon,
+  Rows3Icon,
+  Rows4Icon,
+  SlidersHorizontalIcon,
+  SunIcon,
+} from "lucide-react"
 
 import { Badge } from "@amit-kap/glaze/components/badge"
 import { Button } from "@amit-kap/glaze/components/button"
 import { Tabs, TabsList, TabsTrigger } from "@amit-kap/glaze/components/tabs"
-import type { Mode } from "@amit-kap/glaze/theme"
+import type { Density, Mode } from "@amit-kap/glaze/theme"
 
 import { GitHubIcon, NpmIcon } from "./brand-icons"
 
 // The settings bar floating at the bottom of the page: brand, links, the
-// light/dark switch, and the button that opens the Customize sidebar.
+// light/dark and density switches, and the button that opens the Customize
+// sidebar.
 export function SettingsBar({
   customized,
   open,
   onOpenChange,
   mode,
   onModeChange,
+  density,
+  onDensityChange,
 }: {
   customized: boolean
   open: boolean
@@ -22,6 +31,8 @@ export function SettingsBar({
   /** The resolved mode, never "system": the switch always shows a side. */
   mode: "light" | "dark"
   onModeChange: (mode: Mode) => void
+  density: Density
+  onDensityChange: (density: Density) => void
 }) {
   return (
     <div
@@ -54,22 +65,35 @@ export function SettingsBar({
           <GitHubIcon />
         </Button>
       </span>
-      <Tabs
-        value={mode}
-        onValueChange={(v) => v && onModeChange(v as Mode)}
-        className="ms-auto"
-      >
-        <TabsList aria-label="Mode">
-          <TabsTrigger value="light">
-            <SunIcon />
-            <span className="max-sm:sr-only">Light</span>
-          </TabsTrigger>
-          <TabsTrigger value="dark">
-            <MoonIcon />
-            <span className="max-sm:sr-only">Dark</span>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <span className="ms-auto flex items-center gap-1.5">
+        <Tabs value={mode} onValueChange={(v) => v && onModeChange(v as Mode)}>
+          <TabsList aria-label="Mode">
+            <TabsTrigger value="light">
+              <SunIcon />
+              <span className="max-sm:sr-only">Light</span>
+            </TabsTrigger>
+            <TabsTrigger value="dark">
+              <MoonIcon />
+              <span className="max-sm:sr-only">Dark</span>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <Tabs
+          value={density}
+          onValueChange={(v) => v && onDensityChange(v as Density)}
+        >
+          <TabsList aria-label="Density">
+            <TabsTrigger value="comfortable">
+              <Rows3Icon />
+              <span className="max-sm:sr-only">Comfortable</span>
+            </TabsTrigger>
+            <TabsTrigger value="compact">
+              <Rows4Icon />
+              <span className="max-sm:sr-only">Compact</span>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </span>
       <Button
         variant="outline"
         size="sm"
