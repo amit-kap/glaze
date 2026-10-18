@@ -14,19 +14,19 @@
   "dependencies": {
     "@amit-kap/glaze": "*",
     "input-otp": "^1.5.0",
-    "lucide-react": "^1.53.0",
-    "react": "^19.2.8",
+    "lucide-react": "^1.57.0",
+    "react": "^19.3.1",
     "react-day-picker": "^10.0.2",
-    "react-dom": "^19.2.8",
+    "react-dom": "^19.3.1",
     "recharts": "^3.10.1"
   },
   "devDependencies": {
-    "@ai-sdk/react": "^4.0.140",
+    "@ai-sdk/react": "^4.0.146",
     "@eslint/js": "^10",
     "@shadcn/helpers": "^0.2.0",
-    "@storybook/addon-a11y": "^10.6.1",
-    "@storybook/addon-docs": "^10.6.1",
-    "@storybook/react-vite": "^10.6.1",
+    "@storybook/addon-a11y": "^10.6.2",
+    "@storybook/addon-docs": "^10.6.2",
+    "@storybook/react-vite": "^10.6.2",
     "@tailwindcss/vite": "^4",
     "@types/node": "^24",
     "@types/react": "^19",
@@ -34,12 +34,12 @@
     "ai": "^7.0.137",
     "eslint": "^10.12.0",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-storybook": "^10.6.1",
+    "eslint-plugin-storybook": "^10.6.2",
     "globals": "^17.13.0",
-    "motion": "^14.0.0",
+    "motion": "^14.3.0",
     "storybook": "^10.6.1",
     "typescript": "~6.0.2",
-    "typescript-eslint": "^8.71.1",
+    "typescript-eslint": "^8.71.2",
     "vite": "^8.3.3"
   }
 }
