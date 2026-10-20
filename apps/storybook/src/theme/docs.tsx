@@ -128,7 +128,7 @@ export function Mono({
 export function Value({ children }: { children: React.ReactNode }) {
   return (
     <span
-      className="block truncate font-mono text-[10px] leading-4 text-muted-foreground"
+      className="block font-mono text-[10px] leading-4 break-words whitespace-normal text-muted-foreground"
       title={typeof children === "string" ? children : undefined}
     >
       {children}

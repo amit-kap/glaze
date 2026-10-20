@@ -26,6 +26,18 @@ function formatDuration(raw: string) {
   return raw
 }
 
+/**
+ * Reads a used time (as getComputedStyle reports it: "0.1s" or "150ms").
+ * Duration tokens are calc() expressions of --motion-scale, so the token text
+ * cannot be parseFloat'd — it has to be measured on a real element.
+ */
+function toMs(time: string) {
+  const value = time.trim()
+  const number = Number.parseFloat(value)
+  if (Number.isNaN(number)) return 0
+  return value.endsWith("ms") ? number : number * 1000
+}
+
 function MotionRow({
   label,
   token,
@@ -41,24 +53,19 @@ function MotionRow({
   raw: string
   showDuration?: boolean
 }) {
-  const dot = React.useRef<HTMLDivElement>(null)
+  const [playing, setPlaying] = React.useState(false)
   const { ref: durationRef, values: durationValues } = useMeasured(
     { animationDuration: `var(${durationToken})` },
     ["animation-duration"]
   )
 
-  const play = () => {
-    const el = dot.current
-    if (!el) return
-    el.getAnimations().forEach((animation) => animation.cancel())
-    const cs = getComputedStyle(el)
-    const ms = Number.parseFloat(cs.getPropertyValue(durationToken)) || 150
-    const easing = cs.getPropertyValue(easingToken).trim() || "linear"
-    el.animate(
-      [{ transform: "translateX(0px)" }, { transform: "translateX(140px)" }],
-      { duration: ms, easing, fill: "forwards" }
-    )
-  }
+  // A CSS animation, not the Web Animations API: dropping animation-name stops
+  // the dot and puts it back at the left edge, and adding it again starts a
+  // fresh run. The loop comes from the keyframes.
+  const canMove = toMs(durationValues["animation-duration"] ?? "") > 0
+  const running = playing && canMove
+
+  const toggle = () => setPlaying((current) => !current)
 
   const value = showDuration
     ? formatDuration(durationValues["animation-duration"] ?? "")
@@ -79,13 +86,30 @@ function MotionRow({
       </div>
       <div className="flex h-6 w-44 items-center rounded-pill bg-muted px-1.5">
         <div
-          ref={dot}
           className="size-3 rounded-pill bg-primary"
-          style={{ willChange: "transform" }}
+          style={
+            running
+              ? {
+                  animationName: "motion-glide",
+                  animationDuration: `var(${durationToken})`,
+                  animationTimingFunction: `var(${easingToken})`,
+                  animationIterationCount: "infinite",
+                  willChange: "transform",
+                }
+              : undefined
+          }
         />
       </div>
-      <Button variant="outline" size="xs" onClick={play}>
-        Replay
+      <Button
+        variant="outline"
+        size="xs"
+        className="w-full"
+        aria-label={`${playing ? "Pause" : "Play"} ${label}`}
+        disabled={!canMove}
+        title={canMove ? undefined : "Reduced motion: travel is off"}
+        onClick={toggle}
+      >
+        {playing ? "Pause" : "Play"}
       </Button>
     </div>
   )
@@ -100,6 +124,12 @@ function MotionPage() {
       title="Motion"
       lead="Four durations and five curves, both named by intent. Exits run at 75% of the matching enter so a dismissal reads as final."
     >
+      <style>{`
+        @keyframes motion-glide {
+          from { transform: translateX(0); }
+          to { transform: translateX(140px); }
+        }
+      `}</style>
       <Section
         title="Durations"
         note="Tokens are multiplied by --motion-scale at use time; also available as duration-(--duration-fast) utilities."
@@ -121,7 +151,7 @@ function MotionPage() {
 
       <Section
         title="Easings"
-        note="All five run at --duration-moderate so the curve is what you see. Spring is a critically damped linear() curve: fast start, no overshoot."
+        note="All five run at --duration-moderate so the curve is what you see. Spring overshoots about 5% and settles back; the other four only ever ease toward the target."
       >
         <div className="flex flex-col">
           {easings.map((easing) => (

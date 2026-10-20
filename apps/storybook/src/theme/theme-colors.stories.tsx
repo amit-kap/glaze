@@ -80,7 +80,7 @@ function Group({
           </p>
         ) : null}
       </div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-x-4 gap-y-6">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-x-4 gap-y-6">
         {tokens.map((swatch) => (
           <Swatch
             key={swatch.token}
