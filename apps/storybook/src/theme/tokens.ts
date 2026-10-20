@@ -22,7 +22,7 @@ export const colorInputs: ColorInput[] = [
   {
     token: "--canvas",
     group: "Neutrals",
-    role: "The page colour. Muted fills, the sidebar, disabled text and the focus ring mix their ink over it.",
+    role: "The page colour. Quiet fills and the focus ring are mixed from it.",
     tokens: [
       {
         token: "--background",
