@@ -31,7 +31,23 @@ const preview: Preview = {
       },
     },
     options: {
-      storySort: { method: "alphabetical" },
+      storySort: {
+        method: "alphabetical",
+        order: [
+          ["Components", ["*"]],
+          [
+            "Theme",
+            [
+              "Colors",
+              "Typography",
+              "Shape",
+              "Elevation",
+              "Motion",
+              "Component tokens",
+            ],
+          ],
+        ],
+      },
     },
     a11y: { test: "todo" },
   },
