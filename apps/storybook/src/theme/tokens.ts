@@ -4,103 +4,315 @@
  * and both densities without a second source of truth.
  */
 
-export type Swatch = { token: string; on?: string }
+/**
+ * What a theme sets, and everything derived from it. Each derived token
+ * carries a note saying what it affects, so the page answers "what will this
+ * change?" rather than just listing names. Values are read live from the
+ * cascade; nothing here is a copy of a theme.
+ */
+export type ColorToken = { token: string; note: string }
+export type ColorInput = {
+  token: string
+  group: "Neutrals" | "Brand" | "Status" | "Data" | "Overlay"
+  role: string
+  tokens: ColorToken[]
+}
 
-export const colors: { title: string; note?: string; tokens: Swatch[] }[] = [
+export const colorInputs: ColorInput[] = [
   {
-    title: "Surfaces and text",
-    note: "Nested surfaces use the same tokens: a card on a page, a popover on a card.",
+    token: "--canvas",
+    group: "Neutrals",
+    role: "The page background. Every tint is mixed against it.",
     tokens: [
-      { token: "--background" },
-      { token: "--card" },
-      { token: "--popover" },
-      { token: "--muted" },
-      { token: "--foreground", on: "--background" },
-      { token: "--card-foreground", on: "--card" },
-      { token: "--popover-foreground", on: "--popover" },
-      { token: "--muted-foreground", on: "--muted" },
-      { token: "--subtle-foreground", on: "--background" },
+      {
+        token: "--background",
+        note: "The page itself — anything content sits on directly.",
+      },
+      {
+        token: "--muted",
+        note: "Quiet fills: badges, table headers, code blocks, skeletons.",
+      },
+      {
+        token: "--subtle-foreground",
+        note: "Disabled text and placeholders — the quietest text on a page.",
+      },
+      {
+        token: "--sidebar",
+        note: "Sidebar and rail surface, one step off the page.",
+      },
+      {
+        token: "--ring",
+        note: "Keyboard focus ring around buttons, inputs and links.",
+      },
     ],
   },
   {
-    title: "Actions",
-    note: "One brand moment per screen: the primary action. Everything else stays neutral.",
+    token: "--surface",
+    group: "Neutrals",
+    role: "Any raised surface: cards, menus, popovers.",
     tokens: [
-      { token: "--primary" },
-      { token: "--primary-foreground", on: "--primary" },
-      { token: "--primary-subtle" },
-      { token: "--primary-border" },
-      { token: "--secondary" },
-      { token: "--secondary-foreground", on: "--secondary" },
+      {
+        token: "--card",
+        note: "Raised containers: cards, panels, table shells, tiles.",
+      },
+      {
+        token: "--popover",
+        note: "Floating surfaces: menus, popovers, tooltips, command palette, selects.",
+      },
+      {
+        token: "--secondary",
+        note: "Secondary buttons, chips, keycaps, segmented controls.",
+      },
+      {
+        token: "--accent",
+        note: "Hovered and current items in menus and command lists.",
+      },
     ],
   },
   {
-    title: "Interaction states",
-    note: "States are their own tokens so a theme can tint them without touching components.",
+    token: "--ink",
+    group: "Neutrals",
+    role: "Primary text, and the ink that tints every neutral fill.",
     tokens: [
-      { token: "--hover" },
-      { token: "--active" },
-      { token: "--selected" },
-      { token: "--accent" },
-      { token: "--accent-foreground", on: "--accent" },
-      { token: "--overlay" },
+      {
+        token: "--foreground",
+        note: "Primary text and icons on the page, cards and popovers.",
+      },
+      { token: "--card-foreground", note: "Text and icons on cards." },
+      {
+        token: "--popover-foreground",
+        note: "Text and icons in menus, popovers and tooltips.",
+      },
+      {
+        token: "--muted",
+        note: "Quiet fills, tinted with ink: 4% in light, 15% in dark.",
+      },
+      {
+        token: "--hover",
+        note: "Wash under the pointer on rows, menu items and ghost buttons.",
+      },
+      {
+        token: "--active",
+        note: "Pressed state, one step stronger than hover.",
+      },
+      {
+        token: "--border-strong",
+        note: "Outlines that must read: field borders, menu edges, chosen chips.",
+      },
+      {
+        token: "--sidebar",
+        note: "Sidebar surface — ink at 3% (light) or 7% (dark) over the page.",
+      },
+      {
+        token: "--sidebar-accent",
+        note: "Hovered item inside the sidebar.",
+      },
+      {
+        token: "--sidebar-foreground",
+        note: "Sidebar text and icons.",
+      },
+      {
+        token: "--sidebar-accent-foreground",
+        note: "Text on a hovered sidebar item.",
+      },
+      {
+        token: "--secondary-foreground",
+        note: "Text and icons on secondary fills.",
+      },
+      {
+        token: "--accent-foreground",
+        note: "Text and icons on accent highlights.",
+      },
     ],
   },
   {
-    title: "Lines and focus",
+    token: "--ink-muted",
+    group: "Neutrals",
+    role: "Secondary text, and the base for disabled text.",
     tokens: [
-      { token: "--border" },
-      { token: "--border-strong" },
-      { token: "--input" },
-      { token: "--ring" },
+      {
+        token: "--muted-foreground",
+        note: "Second-level text: labels, helper text, metadata, inactive items.",
+      },
+      {
+        token: "--subtle-foreground",
+        note: "Disabled text and placeholders — muted ink pulled 65% toward the page.",
+      },
     ],
   },
   {
-    title: "Status",
+    token: "--line",
+    group: "Neutrals",
+    role: "Every hairline and border.",
     tokens: [
-      { token: "--destructive", on: "--background" },
-      { token: "--danger" },
-      { token: "--danger-subtle" },
-      { token: "--success" },
-      { token: "--success-subtle" },
-      { token: "--warning" },
-      { token: "--warning-subtle" },
-      { token: "--info" },
-      { token: "--info-subtle" },
+      {
+        token: "--border",
+        note: "Hairlines: dividers, card and table outlines, row rules.",
+      },
+      {
+        token: "--border-strong",
+        note: "Stronger separators, and the base for field borders.",
+      },
+      {
+        token: "--input",
+        note: "Form control border at rest (aliases border-strong).",
+      },
+      {
+        token: "--sidebar-border",
+        note: "Sidebar dividers and its outer edge.",
+      },
     ],
   },
   {
-    title: "Severity",
-    note: "Mapped onto status colours; a theme may re-point one without changing the others.",
+    token: "--brand",
+    group: "Brand",
+    role: "One brand colour for actions, selection and focus.",
     tokens: [
-      { token: "--severity-critical" },
-      { token: "--severity-high" },
-      { token: "--severity-medium" },
-      { token: "--severity-low" },
+      {
+        token: "--primary",
+        note: "Primary buttons, checked boxes/radios/switches, the active tab pill.",
+      },
+      {
+        token: "--primary-subtle",
+        note: "Selected rows, active menu items, tinted chips.",
+      },
+      {
+        token: "--primary-border",
+        note: "Outline around brand-tinted elements: selected card, avatar ring.",
+      },
+      {
+        token: "--selected",
+        note: "Persistent selection: current menu item, chosen row.",
+      },
+      {
+        token: "--ring",
+        note: "Focus ring — brand mixed toward the page so it reads on any surface.",
+      },
+      {
+        token: "--sidebar-primary",
+        note: "Active item in the sidebar.",
+      },
+      {
+        token: "--sidebar-ring",
+        note: "Focus ring inside the sidebar (aliases ring).",
+      },
     ],
   },
   {
-    title: "Data",
+    token: "--brand-ink",
+    group: "Brand",
+    role: "Text and icons that sit on the brand colour.",
     tokens: [
-      { token: "--chart-1" },
-      { token: "--chart-2" },
-      { token: "--chart-3" },
-      { token: "--chart-4" },
-      { token: "--chart-5" },
+      {
+        token: "--primary-foreground",
+        note: "Text and icons on primary buttons and checked controls.",
+      },
+      {
+        token: "--sidebar-primary-foreground",
+        note: "Text and icon on the active sidebar item.",
+      },
     ],
   },
   {
-    title: "Sidebar",
+    token: "--danger",
+    group: "Status",
+    role: "Errors and destructive actions.",
     tokens: [
-      { token: "--sidebar" },
-      { token: "--sidebar-foreground", on: "--sidebar" },
-      { token: "--sidebar-primary" },
-      { token: "--sidebar-primary-foreground", on: "--sidebar-primary" },
-      { token: "--sidebar-accent", on: "--sidebar" },
-      { token: "--sidebar-accent-foreground", on: "--sidebar-accent" },
-      { token: "--sidebar-border" },
-      { token: "--sidebar-ring" },
+      {
+        token: "--destructive",
+        note: "Destructive text and icons: delete, remove, validation messages.",
+      },
+      {
+        token: "--danger-subtle",
+        note: "Error banners, invalid fields, destructive confirmations.",
+      },
+      {
+        token: "--severity-critical",
+        note: "Critical severity dot, chip and row stripe.",
+      },
+      {
+        token: "--severity-high",
+        note: "High severity — danger mixed half-and-half with warning.",
+      },
     ],
+  },
+  {
+    token: "--warning",
+    group: "Status",
+    role: "Warnings and attention states.",
+    tokens: [
+      {
+        token: "--warning-subtle",
+        note: "Warning banners and rows that need attention.",
+      },
+      {
+        token: "--severity-medium",
+        note: "Medium severity dot, chip and row stripe.",
+      },
+      {
+        token: "--severity-high",
+        note: "High severity — danger mixed half-and-half with warning.",
+      },
+    ],
+  },
+  {
+    token: "--success",
+    group: "Status",
+    role: "Positive outcomes.",
+    tokens: [
+      {
+        token: "--success-subtle",
+        note: "Success notices and positive badges.",
+      },
+      {
+        token: "--severity-low",
+        note: "Low severity dot, chip and row stripe.",
+      },
+    ],
+  },
+  {
+    token: "--info",
+    group: "Status",
+    role: "Informational states.",
+    tokens: [
+      { token: "--info-subtle", note: "Informational notices and badges." },
+    ],
+  },
+  {
+    token: "--chart-1",
+    group: "Data",
+    role: "Chart series 1 — lightest of the five in Nova.",
+    tokens: [],
+  },
+  {
+    token: "--chart-2",
+    group: "Data",
+    role: "Chart series 2.",
+    tokens: [],
+  },
+  {
+    token: "--chart-3",
+    group: "Data",
+    role: "Chart series 3.",
+    tokens: [],
+  },
+  {
+    token: "--chart-4",
+    group: "Data",
+    role: "Chart series 4.",
+    tokens: [],
+  },
+  {
+    token: "--chart-5",
+    group: "Data",
+    role: "Chart series 5 — darkest of the five in Nova.",
+    tokens: [],
+  },
+  {
+    token: "--overlay",
+    group: "Overlay",
+    role: "The scrim behind dialogs, alert dialogs, sheets and the drawer.",
+    tokens: [],
   },
 ]
 
