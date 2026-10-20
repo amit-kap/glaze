@@ -136,7 +136,7 @@ export const colorInputs: ColorInput[] = [
       },
       {
         token: "--subtle-foreground",
-        note: "Disabled text and placeholders — muted ink pulled 65% toward the page.",
+        note: "Disabled text and placeholders — muted ink a third of the way to the page.",
       },
     ],
   },

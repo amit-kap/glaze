@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
-import { Page, Section, TokenUse, Value, Mono, useTokens } from "./docs"
+import { Page, Section, TokenUse, Value, Mono, usePaintedColors } from "./docs"
 import { colorInputs, tokenUses, type ColorInput } from "./tokens"
 
 const meta = {
@@ -94,13 +94,14 @@ function InputBlock({
 }
 
 function ColorsPage() {
-  const values = useTokens(allTokens)
+  const { values, probes } = usePaintedColors(allTokens)
 
   return (
     <Page
       title="Colors"
-      lead="Seventeen inputs a theme sets, and every token built from each one. The value beside a token is live: switch theme or mode in the toolbar and this page re-reads it."
+      lead="Seventeen inputs a theme sets, and every token built from each one. The value beside a token is the colour it paints: switch theme or mode in the toolbar and this page re-reads it."
     >
+      {probes}
       {groups.map((group) => (
         <section
           key={group.name}

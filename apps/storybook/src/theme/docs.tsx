@@ -83,6 +83,64 @@ export function useTokens(names: string[]) {
 }
 
 /**
+ * The colour a token actually paints, read from a real element. Custom
+ * properties keep color-mix() as text (or are pinned to a literal by a theme),
+ * so reading the variable gives two different kinds of answer. Painting the
+ * token settles both into one used colour, which is what a value column should
+ * show. The paint is asked for in oklch so every row reads in the same space as
+ * a theme writes them, and a missing hue is shown as 0 rather than "none".
+ */
+export function usePaintedColors(names: string[]) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [values, setValues] = React.useState<Record<string, string>>({})
+  const key = names.join("|")
+
+  React.useEffect(() => {
+    const read = () => {
+      const root = ref.current
+      if (!root) return
+      const next: Record<string, string> = {}
+      root.querySelectorAll<HTMLElement>("[data-token]").forEach((el) => {
+        const token = el.dataset.token
+        if (token) {
+          next[token] = getComputedStyle(el)
+            .backgroundColor.replace(/\bnone\b/g, "0")
+            .replace(
+              /-?\d+\.\d{4,}/g,
+              (n) => `${Math.round(Number(n) * 1000) / 1000}`
+            )
+        }
+      })
+      setValues(next)
+    }
+    read()
+    const observer = new MutationObserver(read)
+    observer.observe(document.documentElement, { attributes: true })
+    return () => observer.disconnect()
+  }, [key])
+
+  const probes = (
+    <div
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none absolute opacity-0"
+    >
+      {names.map((name) => (
+        <span
+          key={name}
+          data-token={name}
+          style={{
+            backgroundColor: `color-mix(in oklch, var(${name}), var(${name}))`,
+          }}
+        />
+      ))}
+    </div>
+  )
+
+  return { values, probes }
+}
+
+/**
  * Mounts an element with the given style and reports the computed values of
  * the requested properties ("width", "font-size", ...). Sizes arrive as px
  * even when the token is authored in rem or calc().
