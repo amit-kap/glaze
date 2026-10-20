@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react"
+import type { CSSProperties, ReactNode } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
 import { Page, Section, TokenUse, Value, Mono, useTokens } from "./docs"
@@ -27,6 +27,28 @@ function tileStyle(token: string): CSSProperties {
   }
 }
 
+/** Colour inputs a theme sets. Everything else on this page is derived. */
+const inputs = [
+  "--canvas",
+  "--surface",
+  "--ink",
+  "--ink-muted",
+  "--line",
+  "--brand",
+  "--brand-ink",
+  "--danger",
+  "--warning",
+  "--success",
+  "--info",
+  "--overlay",
+  "--chart-1",
+  "--chart-2",
+  "--chart-3",
+  "--chart-4",
+  "--chart-5",
+]
+const inputTokens = new Set(inputs)
+
 function Swatch({
   token,
   raw,
@@ -52,10 +74,23 @@ function Swatch({
         ) : null}
       </div>
       <div className="min-w-0">
-        <Mono className="block truncate text-foreground">{token}</Mono>
+        <div className="flex items-start gap-1.5">
+          <Mono className="block break-words whitespace-normal text-foreground">
+            {token}
+          </Mono>
+          {inputTokens.has(token) ? <Tag>input</Tag> : null}
+        </div>
         <Value>{raw}</Value>
       </div>
     </div>
+  )
+}
+
+function Tag({ children }: { children: ReactNode }) {
+  return (
+    <span className="mt-px shrink-0 rounded-pill border border-border px-1.5 font-mono text-[9px] leading-4 tracking-[0.08em] text-muted-foreground uppercase">
+      {children}
+    </span>
   )
 }
 
@@ -111,8 +146,28 @@ function ColorsPage() {
   return (
     <Page
       title="Colors"
-      lead="Semantic colours, never raw values. Every token on this page is derived from the theme's inputs, so the same name reads correctly in every theme, in light and dark."
+      lead="Semantic colours, never raw values. A theme sets seventeen colour inputs; every other token on this page is derived from them, so the same name reads correctly in every theme, in light and dark."
     >
+      <Section
+        title="Inputs you set"
+        note="These are the knobs: the only colours a theme file assigns. Everything below is computed from them by tokens.css, so changing one input moves every token built on it."
+      >
+        <div className="flex flex-wrap gap-2">
+          {inputs.map((token) => (
+            <span
+              key={token}
+              className="flex items-center gap-2 rounded-item border border-border bg-card py-1 ps-1 pe-2.5"
+            >
+              <span
+                className="size-5 rounded-item-sm border border-border"
+                style={{ background: `var(${token})` }}
+              />
+              <Mono className="text-foreground">{token}</Mono>
+            </span>
+          ))}
+        </div>
+      </Section>
+
       <Section
         title="Choosing a token"
         note="Start from the surface, then pick the text colour that sits on it. Reach for a status colour only when the meaning is status."
