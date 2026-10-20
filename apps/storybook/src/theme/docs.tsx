@@ -83,12 +83,37 @@ export function useTokens(names: string[]) {
 }
 
 /**
+ * A used colour arrives as oklch(0.97 0 0): three bare numbers, where the
+ * first is a share of 1 and the third is an angle. Write them as such, so the
+ * value says what each part is. Chroma stays a plain number — a percentage
+ * would be relative to 0.4, which hides how much colour there actually is.
+ */
+function formatOklch(color: string) {
+  const match = color.match(
+    /^oklch\(([\d.]+) ([\d.]+) ([\d.]+)(?: \/ ([\d.]+))?\)$/
+  )
+  if (!match) return color
+  const [, l, c, h, a] = match
+  const parts = [
+    `${round(Number(l) * 100, 1)}%`,
+    round(Number(c), 4),
+    `${round(Number(h), 1)}deg`,
+  ]
+  if (a) parts.push(`/ ${round(Number(a) * 100, 1)}%`)
+  return `oklch(${parts.join(" ")})`
+}
+
+function round(value: number, digits: number) {
+  return String(Number(value.toFixed(digits)))
+}
+
+/**
  * The colour a token actually paints, read from a real element. Custom
  * properties keep color-mix() as text (or are pinned to a literal by a theme),
  * so reading the variable gives two different kinds of answer. Painting the
  * token settles both into one used colour, which is what a value column should
  * show. The paint is asked for in oklch so every row reads in the same space as
- * a theme writes them, and a missing hue is shown as 0 rather than "none".
+ * a theme writes them.
  */
 export function usePaintedColors(names: string[]) {
   const ref = React.useRef<HTMLDivElement>(null)
@@ -103,12 +128,9 @@ export function usePaintedColors(names: string[]) {
       root.querySelectorAll<HTMLElement>("[data-token]").forEach((el) => {
         const token = el.dataset.token
         if (token) {
-          next[token] = getComputedStyle(el)
-            .backgroundColor.replace(/\bnone\b/g, "0")
-            .replace(
-              /-?\d+\.\d{4,}/g,
-              (n) => `${Math.round(Number(n) * 1000) / 1000}`
-            )
+          next[token] = formatOklch(
+            getComputedStyle(el).backgroundColor.replace(/\bnone\b/g, "0")
+          )
         }
       })
       setValues(next)
