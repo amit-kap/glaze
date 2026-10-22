@@ -35,6 +35,7 @@ const preview: Preview = {
         method: "alphabetical",
         order: [
           ["Components", ["*"]],
+          ["Custom", ["*"]],
           [
             "Theme",
             [
