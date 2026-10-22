@@ -19,7 +19,7 @@ export function Page({
 }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex w-full max-w-[1040px] flex-col gap-12 px-10 py-14">
+      <div className="mx-auto flex w-full max-w-[1040px] flex-col gap-10 px-5 py-8 sm:gap-12 sm:px-10 sm:py-14">
         <header className="flex flex-col gap-3">
           <div className="font-mono text-caption tracking-[0.16em] text-muted-foreground uppercase">
             Theme
@@ -74,7 +74,12 @@ export function useTokens(names: string[]) {
     read()
     const observer = new MutationObserver(read)
     observer.observe(document.documentElement, { attributes: true })
-    return () => observer.disconnect()
+    const motion = matchMedia("(prefers-reduced-motion: reduce)")
+    motion.addEventListener("change", read)
+    return () => {
+      observer.disconnect()
+      motion.removeEventListener("change", read)
+    }
     // names is stable per page; key captures its contents
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key])
@@ -88,7 +93,7 @@ export function useTokens(names: string[]) {
  * value says what each part is. Chroma stays a plain number — a percentage
  * would be relative to 0.4, which hides how much colour there actually is.
  */
-function formatOklch(color: string) {
+export function formatOklch(color: string) {
   const match = color.match(
     /^oklch\(([\d.]+) ([\d.]+) ([\d.]+)(?: \/ ([\d.]+))?\)$/
   )
@@ -138,7 +143,12 @@ export function usePaintedColors(names: string[]) {
     read()
     const observer = new MutationObserver(read)
     observer.observe(document.documentElement, { attributes: true })
-    return () => observer.disconnect()
+    const motion = matchMedia("(prefers-reduced-motion: reduce)")
+    motion.addEventListener("change", read)
+    return () => {
+      observer.disconnect()
+      motion.removeEventListener("change", read)
+    }
   }, [key])
 
   const probes = (
@@ -187,7 +197,12 @@ export function useMeasured(style: React.CSSProperties, props: string[]) {
     read()
     const observer = new MutationObserver(read)
     observer.observe(document.documentElement, { attributes: true })
-    return () => observer.disconnect()
+    const motion = matchMedia("(prefers-reduced-motion: reduce)")
+    motion.addEventListener("change", read)
+    return () => {
+      observer.disconnect()
+      motion.removeEventListener("change", read)
+    }
   }, [styleKey, propsKey])
 
   return { ref, values }

@@ -31,23 +31,22 @@ const preview: Preview = {
       },
     },
     options: {
-      storySort: {
-        method: "alphabetical",
-        order: [
-          ["Components", ["*"]],
-          ["Custom", ["*"]],
-          [
-            "Theme",
-            [
-              "Colors",
-              "Typography",
-              "Shape",
-              "Elevation",
-              "Motion",
-              "Component tokens",
-            ],
-          ],
-        ],
+      storySort: (a, b) => {
+        if (a.title === b.title) {
+          // Keep component examples in their authored order; order only Theme pages.
+          if (a.title !== "Theme") return 0
+          const order = [
+            "Colors",
+            "Typography",
+            "Spacing & size",
+            "Corners",
+            "Shadows",
+            "Motion",
+            "Component details",
+          ]
+          return order.indexOf(a.name) - order.indexOf(b.name)
+        }
+        return a.title.localeCompare(b.title, undefined, { numeric: true })
       },
     },
     a11y: { test: "todo" },
