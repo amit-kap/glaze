@@ -17,6 +17,8 @@ export type Custom = {
     light: Record<string, string>
     dark: Record<string, string>
   }
+  /** Component tokens (no "--") → CSS value, e.g. "button-radius-sm". */
+  components?: Record<string, string>
   controls?: string
   font?: string
   headingFont?: string
@@ -34,15 +36,25 @@ export const emptyCustom: Custom = {
   shared: {},
 }
 
-export const isCustomized = (c: Custom) =>
-  Object.keys(c.light).length > 0 ||
-  Object.keys(c.dark).length > 0 ||
-  Object.keys(c.shared).length > 0 ||
-  Object.keys(c.system?.light ?? {}).length > 0 ||
-  Object.keys(c.system?.dark ?? {}).length > 0 ||
-  (["controls", "font", "headingFont", "monoFont", "fades"] as const).some(
-    (k) => c[k] !== undefined
-  )
+const flagKeys = [
+  "controls",
+  "font",
+  "headingFont",
+  "monoFont",
+  "fades",
+] as const
+
+/** How many inputs the user overrode: one per key, one per set flag. */
+export const countChanges = (c: Custom) =>
+  Object.keys(c.light).length +
+  Object.keys(c.dark).length +
+  Object.keys(c.shared).length +
+  Object.keys(c.system?.light ?? {}).length +
+  Object.keys(c.system?.dark ?? {}).length +
+  Object.keys(c.components ?? {}).length +
+  flagKeys.filter((k) => c[k] !== undefined).length
+
+export const isCustomized = (c: Custom) => countChanges(c) > 0
 
 /** A theme's own values: raw CSS by input name, with Nova filling the gaps. */
 export type Defaults = {

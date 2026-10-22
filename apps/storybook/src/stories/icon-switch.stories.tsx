@@ -15,7 +15,7 @@ import {
 import { IconSwitch } from "@amit-kap/glaze/components/icon-switch"
 
 const meta = {
-  title: "Components/IconSwitch",
+  title: "Custom/IconSwitch",
   component: IconSwitch,
   parameters: {
     docs: {

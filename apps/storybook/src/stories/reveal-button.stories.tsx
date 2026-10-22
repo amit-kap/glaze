@@ -13,7 +13,7 @@ import {
 import { RevealButton } from "@amit-kap/glaze/components/reveal-button"
 
 const meta = {
-  title: "Components/RevealButton",
+  title: "Custom/RevealButton",
   component: RevealButton,
   parameters: {
     docs: {

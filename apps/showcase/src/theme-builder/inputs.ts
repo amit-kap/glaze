@@ -193,6 +193,63 @@ export const elevations = [
   { key: "elevation-modal", label: "Modal" },
 ]
 
+// Preset shadows for the elevation tiers (and card-shadow). Matching is by
+// CSS text, so anything a theme writes differently shows as "Custom".
+export const shadowPresets = [
+  { value: "none", label: "None", css: "0 0 #0000" },
+  { value: "sm", label: "Subtle", css: "0 1px 2px 0 rgb(0 0 0 / 0.05)" },
+  {
+    value: "md",
+    label: "Raised",
+    css: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+  },
+  {
+    value: "lg",
+    label: "Floating",
+    css: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+  },
+  {
+    value: "xl",
+    label: "Lifted",
+    css: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+  },
+  // Luma/Rhea's modal tier, so their defaults don't read as "Custom".
+  {
+    value: "2xl",
+    label: "Deep",
+    css: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+  },
+  {
+    value: "3xl",
+    label: "Deepest",
+    css: "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+  },
+]
+
+// Preset curves for the easing inputs; the sidebar previews each one.
+export const easingPresets = [
+  { value: "standard", label: "Standard", css: "cubic-bezier(0.4, 0, 0.2, 1)" },
+  {
+    value: "decelerate",
+    label: "Decelerate",
+    css: "cubic-bezier(0, 0, 0.2, 1)",
+  },
+  {
+    value: "accelerate",
+    label: "Accelerate",
+    css: "cubic-bezier(0.4, 0, 1, 1)",
+  },
+  // Nova's enter curve, so the base theme matches a preset out of the box.
+  { value: "settle", label: "Settle", css: "cubic-bezier(0.22, 1, 0.36, 1)" },
+  {
+    value: "overshoot",
+    label: "Overshoot",
+    css: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+  },
+  { value: "snappy", label: "Snappy", css: "cubic-bezier(0.2, 0, 0, 1)" },
+  { value: "linear", label: "Linear", css: "linear" },
+]
+
 // Inputs read from a theme (the rest of the sidebar is derived from these).
 export const colorKeys = [...brandRows, ...statusRows, ...chartRows].map(
   (r) => r.key

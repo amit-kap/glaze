@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { DownloadIcon, RotateCcwIcon, XIcon } from "lucide-react"
+import { DownloadIcon, LibraryIcon, RotateCcwIcon, XIcon } from "lucide-react"
 
 import { Button } from "@amit-kap/glaze/components/button"
 import {
@@ -18,14 +18,18 @@ import {
   TabsTrigger,
 } from "@amit-kap/glaze/components/tabs"
 
-import {
-  ColorsTab,
-  InstallFields,
-  OtherTab,
-  TypographyTab,
-  type ThemeEditor,
-} from "./sections"
+import type { StudioActions } from "../control-panel/actions"
+import type { ThemeEditor } from "./editor"
 import { toHex } from "./fields"
+import { ThemeHeader } from "./header"
+import { LibraryDialog } from "./library"
+import { ChangesTab } from "./tabs/changes"
+import { ColorsTab } from "./tabs/colors"
+import { ComponentsTab } from "./tabs/components"
+import { InstallFields } from "./tabs/install"
+import { MotionTab } from "./tabs/motion"
+import { ShapeTab } from "./tabs/shape"
+import { TypographyTab } from "./tabs/typography"
 import {
   brandRows,
   chartRows,
@@ -64,6 +68,7 @@ export function CustomizeSidebar({
   onCopy,
   onReset,
   configJson,
+  actions,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -80,6 +85,7 @@ export function CustomizeSidebar({
   onCopy: () => void
   onReset: () => void
   configJson: string
+  actions: StudioActions
 }) {
   const shared = (key: string) => custom.shared[key] ?? defaults.shared[key]
   const color = (m: "light" | "dark", key: string) =>
@@ -185,6 +191,7 @@ export function CustomizeSidebar({
     setSystem,
     radius,
     pill,
+    actions,
   }
 
   // Drag to resize: track the pointer (captured to the handle, so drags that
@@ -192,8 +199,7 @@ export function CustomizeSidebar({
   const startResize = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return
     const handle = e.currentTarget
-    const rtl =
-      getComputedStyle(document.documentElement).direction === "rtl"
+    const rtl = getComputedStyle(document.documentElement).direction === "rtl"
     const move = (ev: PointerEvent) => {
       const w = rtl ? ev.clientX : window.innerWidth - ev.clientX
       document.documentElement.style.setProperty(
@@ -243,6 +249,19 @@ export function CustomizeSidebar({
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-title font-medium">Customize</h2>
         <div className="flex items-center gap-1">
+          <LibraryDialog
+            actions={actions}
+            trigger={
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Library"
+                title="Library: saved themes, import, share"
+              >
+                <LibraryIcon />
+              </Button>
+            }
+          />
           <Dialog>
             <DialogTrigger
               render={
@@ -295,22 +314,37 @@ export function CustomizeSidebar({
           </Button>
         </div>
       </div>
+      <ThemeHeader actions={actions} name={custom.name} />
 
       <div className="flex flex-col gap-3">
         <Tabs defaultValue="colors" className="gap-3">
-          <TabsList className="grid w-full grid-cols-3">
+          {/* Six tabs outgrow a 320px panel, so the list scrolls (with the
+              list's own scroll fade) instead of squeezing the labels. */}
+          <TabsList className="w-full">
             <TabsTrigger value="colors">Colors</TabsTrigger>
-            <TabsTrigger value="typography">Typography</TabsTrigger>
-            <TabsTrigger value="other">Other</TabsTrigger>
+            <TabsTrigger value="type">Type</TabsTrigger>
+            <TabsTrigger value="shape">Shape</TabsTrigger>
+            <TabsTrigger value="motion">Motion</TabsTrigger>
+            <TabsTrigger value="components">Components</TabsTrigger>
+            <TabsTrigger value="changes">Changes</TabsTrigger>
           </TabsList>
           <TabsContent value="colors">
             <ColorsTab editor={editor} />
           </TabsContent>
-          <TabsContent value="typography">
+          <TabsContent value="type">
             <TypographyTab editor={editor} />
           </TabsContent>
-          <TabsContent value="other">
-            <OtherTab editor={editor} />
+          <TabsContent value="shape">
+            <ShapeTab editor={editor} />
+          </TabsContent>
+          <TabsContent value="motion">
+            <MotionTab editor={editor} />
+          </TabsContent>
+          <TabsContent value="components">
+            <ComponentsTab editor={editor} />
+          </TabsContent>
+          <TabsContent value="changes">
+            <ChangesTab editor={editor} actions={actions} />
           </TabsContent>
         </Tabs>
       </div>

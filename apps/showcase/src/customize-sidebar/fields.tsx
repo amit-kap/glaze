@@ -233,12 +233,12 @@ export function SliderField({
 
 // The colour picker in a popover, around whatever trigger is given.
 function ColorPopover({
-  label,
   value,
   onChange,
   trigger,
   children,
 }: {
+  /** Carried by the trigger (aria-label); kept so callers stay uniform. */
   label: string
   value: string
   onChange: (hex: string) => void
