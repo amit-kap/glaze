@@ -28,29 +28,46 @@ export const glazeBaseline = "0.3.0"
 
 // Inputs that take a value per mode.
 const colorInputs = [
+  // shadcn's variables
   "background",
-  "card",
   "foreground",
-  "muted-foreground",
-  "border",
-  "brand",
-  "brand-ink",
+  "card",
+  "card-foreground",
+  "popover",
+  "popover-foreground",
   "primary",
   "primary-foreground",
+  "secondary",
+  "secondary-foreground",
+  "muted",
+  "muted-foreground",
+  "accent",
+  "accent-foreground",
   "destructive",
-  "warning",
-  "success",
-  "info",
+  "border",
+  "input",
+  "ring",
   "chart-1",
   "chart-2",
   "chart-3",
   "chart-4",
   "chart-5",
+  "sidebar",
+  "sidebar-foreground",
+  "sidebar-primary",
+  "sidebar-primary-foreground",
+  "sidebar-accent",
+  "sidebar-accent-foreground",
+  "sidebar-border",
+  "sidebar-ring",
+  // Glaze extras
+  "brand",
+  "brand-ink",
   "overlay",
-  // optional, with fallbacks in tokens.css
-  "caution",
-  "sidebar-brand",
-  "sidebar-brand-ink",
+  "severity-critical",
+  "severity-high",
+  "severity-medium",
+  "severity-low",
 ] as const
 
 // Inputs that take one value for both modes, by group.
@@ -220,7 +237,15 @@ const legacyNames: Record<string, string> = {
   "ink-muted": "muted-foreground",
   line: "border",
   danger: "destructive",
+  warning: "severity-medium",
+  success: "severity-low",
+  caution: "severity-high",
+  "sidebar-brand": "brand",
+  "sidebar-brand-ink": "brand-ink",
 }
+
+/** Colour names that no longer have a value to move to. */
+const retiredNames = ["info"]
 
 function migrateNames(value: unknown): unknown {
   if (!value || typeof value !== "object") return value
@@ -248,6 +273,11 @@ function migrateNames(value: unknown): unknown {
         if (!(oldName in values)) continue
         if (values[newName] === undefined) values[newName] = values[oldName]
         delete values[oldName]
+        moved = true
+      }
+      for (const name of retiredNames) {
+        if (!(name in values)) continue
+        delete values[name]
         moved = true
       }
       if (moved) {

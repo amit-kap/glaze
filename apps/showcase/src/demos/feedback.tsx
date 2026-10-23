@@ -56,7 +56,7 @@ export function AlertDemo() {
           and try again.
         </AlertDescription>
       </Alert>
-      <Alert className="border-warning/40 bg-warning-subtle text-warning">
+      <Alert className="border-severity-medium/40 bg-severity-medium/10 text-severity-medium">
         <AlertTriangleIcon />
         <AlertTitle>Storage almost full</AlertTitle>
         <AlertDescription>

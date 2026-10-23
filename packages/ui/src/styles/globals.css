@@ -12,7 +12,7 @@
 
 /* System tokens → Tailwind utilities. */
 @theme inline {
-  /* colour */
+  /* colour: shadcn's variables */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -21,40 +21,32 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-subtle-foreground: var(--subtle-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-primary-subtle: var(--primary-subtle);
-  --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-hover: var(--hover);
-  --color-active: var(--active);
-  --color-selected: var(--selected);
   --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-destructive: var(--destructive);
-  --color-destructive-subtle: var(--destructive-subtle);
-  --color-success: var(--success);
-  --color-success-subtle: var(--success-subtle);
-  --color-warning: var(--warning);
-  --color-warning-subtle: var(--warning-subtle);
-  --color-info: var(--info);
-  --color-info-subtle: var(--info-subtle);
-  --color-severity-critical: var(--severity-critical);
-  --color-severity-high: var(--severity-high);
-  --color-severity-medium: var(--severity-medium);
-  --color-severity-low: var(--severity-low);
-  --color-overlay: var(--overlay);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
+  /* colour: Glaze extras, plain values a theme sets */
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-overlay: var(--overlay);
+  --color-severity-critical: var(--severity-critical);
+  --color-severity-high: var(--severity-high);
+  --color-severity-medium: var(--severity-medium);
+  --color-severity-low: var(--severity-low);
+
+  /* colour: sidebar */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -168,7 +160,7 @@
     height: var(--highlight-h, 0);
     translate: var(--highlight-x, 0) var(--highlight-y, 0);
     border-radius: var(--radius-item);
-    background-color: var(--active);
+    background-color: var(--accent);
     opacity: 0;
     pointer-events: none;
     transition-property: translate, width, height, opacity;

@@ -71,7 +71,7 @@ Prefer the existing shadcn variable names where they already express the propert
 
 The catalog must reflect Glaze's actual usage, including differences from stock shadcn. The table is a starting point, not a claim that it covers every Glaze property.
 
-A theme sets this layer directly. Everything else a component reads is derived from it: `--popover` follows `--card`, `--card-foreground` and `--popover-foreground` follow `--foreground`, and the mixing recipes produce `--muted`, `--secondary`, `--accent`, `--border-strong`, `--input`, `--ring` and the sidebar fills. The only extra inputs are the ones shadcn has no name for: Brand and On brand, Overlay, Warning, Success, Info, High severity, Sidebar brand, and the mix percentages in Advanced mixing.
+A theme sets this layer directly. Everything else a component reads is derived from it: `--popover` follows `--card`, `--card-foreground` and `--popover-foreground` follow `--foreground`, and the three mixing recipes produce `--muted`, `--secondary`, `--accent` and the sidebar fills. The only extra inputs are the ones shadcn has no name for: Brand and On brand, Overlay, and the four severity colours. They are plain values a theme sets; nothing is derived from them.
 
 Remove unnecessary duplicate inputs such as an editor-facing `--canvas` that exists only to feed `--background`, or a private `--ink` that only aliases `--foreground`. The editor should change the meaningful variable directly.
 
@@ -83,7 +83,7 @@ Independent settings stay independent. Editing Primary must not silently recolor
 
 Keep useful shared rules, such as a radius scale or density-adjusted control sizing. Give each rule one documented meaning across themes. Do not select alternate derivation formulas based on a theme's name.
 
-Shared recipes are kept. Where Nova already mixes two colors to produce a third — quiet fills from the background and foreground, focus from Primary and the background, sidebar from the background — the recipe stays, is documented once, and applies in both modes. Editing Background then moves the quiet fills too, by the same rule in every theme.
+Shared recipes are kept. Where Nova already mixes two colors to produce a third — quiet fills from the background and foreground, sidebar from the background — the recipe stays, is documented once, and applies in both modes. Editing Background then moves the quiet fills too, by the same rule in every theme.
 
 A derived value is shown as following its sources, with its current result, and can be overridden like any other setting.
 

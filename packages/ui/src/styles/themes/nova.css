@@ -8,26 +8,38 @@
 
 :where(:root),
 [data-theme="nova"] {
-  /* colour */
+  /* colour: shadcn's Nova set, neutral */
   --background: oklch(1 0 0);
   --card: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --border: oklch(0.922 0 0);
-  --brand: oklch(0.205 0 0);
-  --brand-ink: oklch(0.985 0 0);
+  --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --warning: oklch(0.554 0.135 66.442);
-  --success: oklch(0.527 0.154 150.069);
-  --info: oklch(0.546 0.245 262.881);
-  /* high severity: shadcn's orange, one step warmer than danger/warning mix */
-  --caution: oklch(0.553 0.195 38.402);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --overlay: rgb(0 0 0 / 0.1);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* colour: Glaze extras */
+  --brand: oklch(0.205 0 0);
+  --brand-ink: oklch(0.985 0 0);
+  --overlay: rgb(0 0 0 / 0.5);
+  --severity-critical: oklch(0.577 0.245 27.325);
+  --severity-high: oklch(0.553 0.195 38.402);
+  --severity-medium: oklch(0.554 0.135 66.442);
+  --severity-low: oklch(0.527 0.154 150.069);
 
   /* shape */
   --radius: 0.625rem;
@@ -38,7 +50,9 @@
   /* type */
   --typeface-sans: "Geist Variable", sans-serif;
   --typeface-heading: var(--typeface-sans);
-  --typeface-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --typeface-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   /* one step below caption: keycaps, tick labels */
   --type-micro: 0.625rem;
   --type-micro-leading: 1.2;
@@ -57,9 +71,12 @@
   --weight-strong: 600;
 
   /* elevation */
-  --elevation-raised: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --elevation-floating: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --elevation-modal: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --elevation-raised:
+    0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --elevation-floating:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --elevation-modal:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
   /* motion */
   --motion-fast: 100ms;
@@ -74,9 +91,32 @@
   /* damped spring: overshoots about 5% and settles back, so travel between
      targets reads as physical rather than as an ease-out */
   --motion-ease-spring: linear(
-    0, 0.066, 0.217, 0.397, 0.574, 0.726, 0.846, 0.933, 0.991, 1.025, 1.042,
-    1.046, 1.043, 1.036, 1.028, 1.02, 1.013, 1.007, 1.003, 1, 0.999, 0.998,
-    0.998, 0.998, 0.998, 1
+    0,
+    0.066,
+    0.217,
+    0.397,
+    0.574,
+    0.726,
+    0.846,
+    0.933,
+    0.991,
+    1.025,
+    1.042,
+    1.046,
+    1.043,
+    1.036,
+    1.028,
+    1.02,
+    1.013,
+    1.007,
+    1.003,
+    1,
+    0.999,
+    0.998,
+    0.998,
+    0.998,
+    0.998,
+    1
   );
 }
 
@@ -84,19 +124,31 @@
 [data-theme="nova"].dark,
 .dark [data-theme="nova"],
 [data-theme="nova"] .dark {
+  /* colour: shadcn's Nova set, neutral, dark */
   --background: oklch(0.145 0 0);
   --card: oklch(0.205 0 0);
   --foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --border: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+
+  /* colour: Glaze extras */
   --brand: oklch(0.922 0 0);
   --brand-ink: oklch(0.205 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --warning: oklch(0.852 0.199 91.936);
-  --success: oklch(0.792 0.209 151.711);
-  --info: oklch(0.707 0.165 254.624);
-  --sidebar-brand: oklch(0.488 0.243 264.376);
-  --sidebar-brand-ink: oklch(0.985 0 0);
-  --caution: oklch(0.75 0.183 55.934);
+  --overlay: rgb(0 0 0 / 0.5);
+  --severity-critical: oklch(0.704 0.191 22.216);
+  --severity-high: oklch(0.75 0.183 55.934);
+  --severity-medium: oklch(0.852 0.199 91.936);
+  --severity-low: oklch(0.792 0.209 151.711);
 }
-

@@ -26,20 +26,15 @@
   --safe-inline: max(var(--safe-left), var(--safe-right));
 
   /*
-   * Mode mixes: how much ink tints a fill, per mode. The same recipes run in
-   * both modes; the percentages differ because dark surfaces need more ink to
-   * read as raised. The light values give Nova's neutral look from Nova's
-   * inputs: ink 0.145 at 3.5% over a 1.0 surface is secondary 0.97, at 1.75%
-   * over the page is sidebar 0.985, and brand 0.205 at 37% on white is the
-   * 0.708 focus ring. --mix-strong keeps a field border a step darker than a
-   * plain divider (0.829 against 0.922). Inherited inputs: a theme may
-   * override any of them.
+   * Mode tints: how much of the foreground goes into the quiet fills. The
+   * percentages differ per mode because dark surfaces need more tint to read
+   * as raised. These recipes reproduce shadcn's neutral values from the
+   * theme's inputs: foreground 0.145 at 3.5% over a 1.0 page is secondary
+   * 0.97, at 1.75% over the page is sidebar 0.985.
    */
   --mix-fill: 3.5%;
   --mix-muted: 3.5%;
   --mix-sidebar: 1.75%;
-  --mix-strong: 12%;
-  --mix-ring: 37%;
 
   /* icon beside text: 1lh - 4px is 16px on a 20px line, 12px on 16px;
      rounded to whole pixels so strokes stay crisp */
@@ -50,8 +45,6 @@
   --mix-fill: 8%;
   --mix-muted: 15%;
   --mix-sidebar: 7%;
-  --mix-strong: 6%;
-  --mix-ring: 53%;
 }
 
 [data-density="comfortable"] {
@@ -90,9 +83,8 @@
 }
 
 :where(:root, [data-theme], .dark) {
-  /* colour: surfaces and text. --background, --foreground, --card and the
-     other shared inputs are set by the theme; these are the values
-     components read. */
+  /* colour: slices shadcn writes as their own values, kept as aliases where
+     the result is identical. Nova sets the inputs directly. */
   --popover: var(--card);
   --card-foreground: var(--foreground);
   --popover-foreground: var(--foreground);
@@ -101,17 +93,8 @@
     var(--foreground) var(--mix-muted),
     var(--background)
   );
-  --subtle-foreground: color-mix(
-    in oklab,
-    var(--muted-foreground) 65%,
-    var(--background)
-  );
 
-  /* colour: actions. Primary follows Brand until a theme sets it. */
-  --primary: var(--brand);
-  --primary-foreground: var(--brand-ink);
-  --primary-subtle: color-mix(in oklab, var(--primary) 12%, transparent);
-  --primary-border: color-mix(in oklab, var(--primary) 40%, transparent);
+  /* colour: quiet fills, derived from the foreground */
   --secondary: color-mix(
     in oklab,
     var(--foreground) var(--mix-fill),
@@ -121,40 +104,9 @@
   --accent: color-mix(in oklab, var(--foreground) var(--mix-fill), var(--card));
   --accent-foreground: var(--foreground);
 
-  /* colour: interaction states */
-  --hover: color-mix(in oklab, var(--foreground) 5%, transparent);
-  --active: color-mix(in oklab, var(--foreground) 9%, transparent);
-  --selected: var(--primary-subtle);
-
   /* colour: lines */
-  --border-strong: color-mix(
-    in oklab,
-    var(--foreground) var(--mix-strong),
-    var(--border)
-  );
-  --input: var(--border-strong);
-  --ring: color-mix(
-    in oklab,
-    var(--primary) var(--mix-ring),
-    var(--background)
-  );
-
-  /* colour: status */
-  --destructive-subtle: color-mix(
-    in oklab,
-    var(--destructive) 12%,
-    transparent
-  );
-  --success-subtle: color-mix(in oklab, var(--success) 12%, transparent);
-  --warning-subtle: color-mix(in oklab, var(--warning) 12%, transparent);
-  --info-subtle: color-mix(in oklab, var(--info) 12%, transparent);
-  --severity-critical: var(--destructive);
-  --severity-high: var(
-    --caution,
-    color-mix(in oklab, var(--destructive) 50%, var(--warning))
-  );
-  --severity-medium: var(--warning);
-  --severity-low: var(--success);
+  --input: var(--border);
+  --ring: var(--primary);
 
   /* colour: sidebar */
   --sidebar: color-mix(
@@ -163,11 +115,8 @@
     var(--background)
   );
   --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--sidebar-brand, var(--primary));
-  --sidebar-primary-foreground: var(
-    --sidebar-brand-ink,
-    var(--primary-foreground)
-  );
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: color-mix(
     in oklab,
     var(--foreground) var(--mix-fill),
