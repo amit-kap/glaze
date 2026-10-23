@@ -313,7 +313,7 @@ export const settings: Setting[] = [
   {
     token: "--card",
     label: "Card",
-    note: "Cards and floating panels; also the base of neutral highlights.",
+    note: "Card fill; also the base of neutral highlights.",
     kind: "color",
     group: "colors.surfaces",
     source: "input",

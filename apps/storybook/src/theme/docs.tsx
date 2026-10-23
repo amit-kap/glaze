@@ -3,7 +3,7 @@ import * as React from "react"
 /*
  * Shared chrome for the Theme stories. These pages document the token
  * contract rather than a component, so they read values from the live
- * cascade (whatever data-theme / .dark / data-density the toolbar set)
+ * cascade (the Nova theme and whatever .dark / data-density the toolbar set)
  * instead of restating them. Switching a toolbar global re-reads every
  * value, which is the point of the section.
  */
