@@ -42,13 +42,28 @@ const write = (key: string, value: unknown) => {
   }
 }
 
+/** V4 renamed the page colour input from "canvas" to "background". */
+const renameCanvas = (
+  values: Record<string, string> | undefined
+): Record<string, string> | undefined => {
+  if (!values || !("canvas" in values)) return values
+  const { canvas, ...rest } = values
+  return rest.background === undefined ? { ...rest, background: canvas } : rest
+}
+
 const toState = (stored: unknown): CustomThemeState | null => {
   if (!stored || typeof stored !== "object") return null
   const { base, custom, savedId } = stored as Record<string, unknown>
   if (typeof base !== "string" || !isBaseTheme(base)) return null
+  const values = (custom as Partial<Custom> | undefined) ?? {}
   return {
     base,
-    custom: { ...emptyCustom, ...(custom as Partial<Custom> | undefined) },
+    custom: {
+      ...emptyCustom,
+      ...values,
+      light: renameCanvas(values.light) ?? {},
+      dark: renameCanvas(values.dark) ?? {},
+    },
     savedId: typeof savedId === "string" ? savedId : undefined,
   }
 }

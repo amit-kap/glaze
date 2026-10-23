@@ -17,9 +17,15 @@ export const builtInThemes = [
   "gr8r",
 ] as const
 
+/**
+ * Glaze release this config format and its generated CSS are written against.
+ * Keep in step with `packages/ui/package.json`; `npm run check:catalog` does.
+ */
+export const glazeBaseline = "0.3.0"
+
 // Inputs that take a value per mode.
 const colorInputs = [
-  "canvas",
+  "background",
   "surface",
   "ink",
   "ink-muted",
@@ -189,12 +195,36 @@ export type GlazeConfig = z.output<typeof glazeConfigSchema>
 
 /** Parses and validates a config; throws a readable error listing every problem. */
 export function parseConfig(value: unknown): GlazeConfig {
-  const result = glazeConfigSchema.safeParse(value)
+  const result = glazeConfigSchema.safeParse(legacyCanvas(value))
   if (result.success) return result.data
   const problems = result.error.issues.map(
     (i) => `  ${i.path.join(".") || "(root)"}: ${i.message}`
   )
   throw new Error(`Invalid Glaze config:\n${problems.join("\n")}`)
+}
+
+/**
+ * Configs written before V4 call the page colour `canvas`. It is `background`
+ * now, so move it rather than reject the file.
+ */
+function legacyCanvas(value: unknown): unknown {
+  if (!value || typeof value !== "object") return value
+  const config = value as Record<string, unknown>
+  const color = config.color
+  if (!color || typeof color !== "object") return value
+  const nextColor = { ...(color as Record<string, unknown>) }
+  let changed = false
+  for (const mode of ["light", "dark"]) {
+    const block = nextColor[mode]
+    if (!block || typeof block !== "object") continue
+    const values = { ...(block as Record<string, unknown>) }
+    if (!("canvas" in values)) continue
+    if (values.background === undefined) values.background = values.canvas
+    delete values.canvas
+    nextColor[mode] = values
+    changed = true
+  }
+  return changed ? { ...config, color: nextColor } : value
 }
 
 /** Identity helper for typed configs written in TypeScript. */

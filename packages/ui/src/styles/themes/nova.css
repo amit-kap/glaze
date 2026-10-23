@@ -9,7 +9,7 @@
 :where(:root),
 [data-theme="nova"] {
   /* colour */
-  --canvas: oklch(1 0 0);
+  --background: oklch(1 0 0);
   --surface: oklch(1 0 0);
   --ink: oklch(0.145 0 0);
   --ink-muted: oklch(0.556 0 0);
@@ -20,6 +20,8 @@
   --warning: oklch(0.554 0.135 66.442);
   --success: oklch(0.527 0.154 150.069);
   --info: oklch(0.546 0.245 262.881);
+  /* high severity: shadcn's orange, one step warmer than danger/warning mix */
+  --caution: oklch(0.553 0.195 38.402);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -82,7 +84,7 @@
 [data-theme="nova"].dark,
 .dark [data-theme="nova"],
 [data-theme="nova"] .dark {
-  --canvas: oklch(0.145 0 0);
+  --background: oklch(0.145 0 0);
   --surface: oklch(0.205 0 0);
   --ink: oklch(0.985 0 0);
   --ink-muted: oklch(0.708 0 0);
@@ -96,27 +98,5 @@
   --sidebar-brand: oklch(0.488 0.243 264.376);
   --sidebar-brand-ink: oklch(0.985 0 0);
   --caution: oklch(0.75 0.183 55.934);
-}
-
-/*
- * System overrides: shadcn's light neutrals aren't the light derivation, so
- * Nova pins them to match shadcn exactly. Light mode only; dark mode derives
- * them from the inputs (see the mode mixes in tokens.css). Scoped to Nova (no
- * data-theme, or "nova") so other themes still derive.
- */
-:root:not([data-theme], .dark, .dark *),
-[data-theme="nova"]:not(.dark, .dark *) {
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --accent: oklch(0.97 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --severity-high: oklch(0.553 0.195 38.402);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
 }
 

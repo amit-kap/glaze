@@ -53,6 +53,8 @@
     "./globals.css": "./src/styles/globals.css",
     "./themes/*": "./src/styles/themes/*",
     "./theme": "./src/lib/theme.tsx",
+    "./theme/catalog": "./src/theme/catalog.ts",
+    "./theme/consumers": "./src/theme/consumers.ts",
     "./lib/*": "./src/lib/*.ts",
     "./components/*": "./src/components/*.tsx",
     "./hooks/*": "./src/hooks/*.ts"

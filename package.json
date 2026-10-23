@@ -9,6 +9,7 @@
     "format": "turbo format",
     "typecheck": "turbo typecheck",
     "check:tokens": "node scripts/glaze-check.mjs",
+    "check:catalog": "node scripts/glaze-catalog.mjs",
     "convert:tokens": "node scripts/glaze-convert.mjs",
     "build:glaze": "node scripts/glaze-build.mjs",
     "release:glaze": "node scripts/glaze-release.mjs",

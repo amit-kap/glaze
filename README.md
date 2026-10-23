@@ -6,7 +6,9 @@
 <br />
 <br />
 
-Glaze is a React component library built on [shadcn/ui](https://ui.shadcn.com) and [Base UI](https://base-ui.com), themed entirely through design tokens. A single theme applies across every component, with no per-component overrides.
+Glaze is a React component library built on [shadcn/ui](https://ui.shadcn.com) and [Base UI](https://base-ui.com), themed entirely through CSS custom properties. One set of shared settings applies across every component; a component only diverges through a named adjustment.
+
+Glaze Studio edits a theme against Nova, previews it on the real components and exports CSS.
 
 This repository is a Vite monorepo containing the library, a web app, a showcase and Storybook.
 
@@ -25,8 +27,8 @@ This repository is a Vite monorepo containing the library, a web app, a showcase
 ## Features
 
 - **Accessible primitives.** Components are built on Base UI and follow shadcn/ui conventions.
-- **Token-based theming.** Every visual decision flows from one token contract, so components never need overrides.
-- **Eight built-in themes.** Each theme ships with its own typography, shape and elevation.
+- **Shared theming.** One set of settings changes every component; exceptions are named and visible.
+- **Nine built-in themes.** Each theme ships with its own typography, shape and elevation.
 - **Mode and density.** Light and dark modes, plus comfortable and compact density, combine freely with any theme.
 - **Scoped theming.** Apply a different theme to a single section of the page.
 
@@ -169,10 +171,16 @@ It generates `<name>.css` and wires it in; `npx glaze theme glaze.config.json` r
 To write a theme by hand:
 
 1. Create `<name>.css`, either in `packages/ui/src/styles/themes/` or in your project.
-2. Under `[data-theme="<name>"]`, set the required inputs (`--canvas`, `--surface`, `--ink`, `--brand`, `--radius`, …) for both light and dark mode.
+2. Under `[data-theme="<name>"]`, set the shared inputs (`--background`, `--surface`, `--ink`, `--ink-muted`, `--line`, `--brand`, `--brand-ink`, `--radius`, …) for both light and dark mode.
 3. Import the file and set `data-theme="<name>"`.
 
-The full list of inputs and a template are in the "Writing a theme" section of the architecture specification.
+`--primary` follows `--brand` and `--primary-foreground` follows `--brand-ink`
+until the theme sets them itself. Setting `--primary` is how a theme separates
+action color from identity; resetting it means removing the declaration.
+
+The full list of settings, with descriptions and the components that use each
+one, is `packages/ui/src/theme/catalog.ts`. The specification is
+`glaze-architecture.md`.
 
 ## Development
 
@@ -187,7 +195,15 @@ The full list of inputs and a template are in the "Writing a theme" section of t
 
 ### Architecture
 
-Layers, the token contract, theming and component rules are defined in the architecture specification (`comp-lib-architecture.md`, maintained at `/Users/amitka/Personal/SharedContext/workflow/`). Read it before changing components, tokens or themes.
+Layers, the theme model, the settings and component rules are defined in
+`glaze-architecture.md`. Read it before changing components, tokens or themes.
+Earlier proposals are in `archive/`; do not implement them.
+
+The settings catalog is `packages/ui/src/theme/catalog.ts`. Storybook and the
+CSS export read it, so a new setting or a renamed one is added there first.
+`npm run check:catalog` verifies that every catalog entry exists in the CSS,
+that everything Nova sets is editable, and that `theme/consumers.ts` matches
+what the components actually use (`--write` regenerates it).
 
 ### Adding components
 

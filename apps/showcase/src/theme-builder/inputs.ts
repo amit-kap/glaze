@@ -79,15 +79,9 @@ export const brandRows = [
     derives: ["--primary-foreground", "--sidebar-primary-foreground"],
   },
   {
-    key: "canvas",
-    label: "Canvas",
-    derives: [
-      "--background",
-      "--muted",
-      "--subtle-foreground",
-      "--sidebar",
-      "--ring",
-    ],
+    key: "background",
+    label: "Page",
+    derives: ["--muted", "--subtle-foreground", "--sidebar", "--ring"],
   },
   {
     key: "surface",

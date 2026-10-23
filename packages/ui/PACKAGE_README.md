@@ -130,7 +130,9 @@ The quickest way is a config: start from a built-in theme and change only what y
 
 Then `npx @amit-kap/glaze init --config glaze.config.json` generates `my-theme.css` beside your main CSS file and wires it in. To regenerate only the CSS: `npx glaze theme glaze.config.json`.
 
-Beyond the input groups (`color`, `shape`, `space`, `type`, `elevation`, `motion`) a config can pin derived values directly: `"system": { "light": { "secondary": "#eee" }, "dark": { … } }` overrides a system token for one mode, and `"components": { "input-fill": "#f5f5f5" }` sets a component token. Pins win over the derivation, so a pinned token stops following the inputs that derived it.
+Beyond the input groups (`color`, `shape`, `space`, `type`, `elevation`, `motion`) a config can override derived values directly: `"system": { "light": { "secondary": "#eee" }, "dark": { … } }` overrides a system token for one mode, and `"components": { "input-fill": "#f5f5f5" }` sets a component token. An override wins over the derivation, so that token stops following the inputs that produced it.
+
+Generated CSS starts with a comment naming the theme format and the Glaze baseline it was written against, for example `/* Glaze theme v1 · baseline @amit-kap/glaze 0.3.0 */`.
 
 ### Writing one by hand
 
@@ -139,12 +141,12 @@ A theme is a CSS file that sets the required inputs for light and dark. Everythi
 ```css
 /* my-theme.css */
 [data-theme="my-theme"] {
-  --canvas: …;      /* app background */
+  --background: …;  /* page background; also tints quiet fills */
   --surface: …;     /* cards, popovers, inputs */
   --ink: …;         /* primary text */
   --ink-muted: …;   /* secondary text */
   --line: …;        /* borders */
-  --brand: …;       /* primary actions, focus */
+  --brand: …;       /* identity colour; Primary follows it */
   --brand-ink: …;   /* text on brand */
   --danger: …;
   --warning: …;

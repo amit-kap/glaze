@@ -11,8 +11,8 @@ export type Custom = {
   dark: Record<string, string>
   /** Every other input, as the CSS value it is written with. */
   shared: Record<string, string>
-  /** Tier-2 token pins, per mode: token name (no "--") → CSS colour. Once
-      pinned, a token stops following the input that derived it. */
+  /** Tier-2 token overrides, per mode: token name (no "--") → CSS colour. An
+      override stops the token following the input that derived it. */
   system?: {
     light: Record<string, string>
     dark: Record<string, string>
