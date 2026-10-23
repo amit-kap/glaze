@@ -72,12 +72,12 @@ export const brandRows = [
   {
     key: "background",
     label: "Background",
-    derives: ["--muted", "--sidebar", "--sidebar-accent"],
+    derives: [],
   },
   {
     key: "card",
     label: "Card",
-    derives: ["--popover", "--secondary", "--accent"],
+    derives: ["--popover"],
   },
   {
     key: "foreground",

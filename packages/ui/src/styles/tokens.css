@@ -25,26 +25,9 @@
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-inline: max(var(--safe-left), var(--safe-right));
 
-  /*
-   * Mode tints: how much of the foreground goes into the quiet fills. The
-   * percentages differ per mode because dark surfaces need more tint to read
-   * as raised. These recipes reproduce shadcn's neutral values from the
-   * theme's inputs: foreground 0.145 at 3.5% over a 1.0 page is secondary
-   * 0.97, at 1.75% over the page is sidebar 0.985.
-   */
-  --mix-fill: 3.5%;
-  --mix-muted: 3.5%;
-  --mix-sidebar: 1.75%;
-
   /* icon beside text: 1lh - 4px is 16px on a 20px line, 12px on 16px;
      rounded to whole pixels so strokes stay crisp */
   --icon-size: round(1lh - 0.25rem, 1px);
-}
-
-:where(.dark) {
-  --mix-fill: 8%;
-  --mix-muted: 15%;
-  --mix-sidebar: 7%;
 }
 
 [data-density="comfortable"] {
@@ -83,45 +66,19 @@
 }
 
 :where(:root, [data-theme], .dark) {
-  /* colour: slices shadcn writes as their own values, kept as aliases where
-     the result is identical. Nova sets the inputs directly. */
+  /* colour: shadcn's plain aliases. Nova writes the rest as values. */
   --popover: var(--card);
   --card-foreground: var(--foreground);
   --popover-foreground: var(--foreground);
-  --muted: color-mix(
-    in oklab,
-    var(--foreground) var(--mix-muted),
-    var(--background)
-  );
-
-  /* colour: quiet fills, derived from the foreground */
-  --secondary: color-mix(
-    in oklab,
-    var(--foreground) var(--mix-fill),
-    var(--card)
-  );
   --secondary-foreground: var(--foreground);
-  --accent: color-mix(in oklab, var(--foreground) var(--mix-fill), var(--card));
   --accent-foreground: var(--foreground);
 
-  /* colour: lines */
+  /* colour: lines and sidebar slices that always match their source */
   --input: var(--border);
   --ring: var(--primary);
-
-  /* colour: sidebar */
-  --sidebar: color-mix(
-    in oklab,
-    var(--foreground) var(--mix-sidebar),
-    var(--background)
-  );
   --sidebar-foreground: var(--foreground);
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: color-mix(
-    in oklab,
-    var(--foreground) var(--mix-fill),
-    var(--sidebar)
-  );
   --sidebar-accent-foreground: var(--foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
