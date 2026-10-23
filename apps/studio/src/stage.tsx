@@ -1,5 +1,12 @@
 import * as React from "react"
 
+import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@amit-kap/glaze/components/tabs"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Dashboard } from "./dashboard"
@@ -29,8 +36,6 @@ export function Stage({
   const [density, setDensity] = React.useState<Density>("comfortable")
   const [width, setWidth] = React.useState<Width>("fit")
 
-  const current = screens.find((item) => item.id === screen)!
-
   return (
     <section
       data-theme="nova"
@@ -39,132 +44,92 @@ export function Stage({
       {/* Dark mode is scoped to the preview: the studio itself stays light. */}
       <div
         className={cn(
-          "flex h-full min-h-0 flex-col gap-4 bg-background p-4",
-          mode === "dark" && "dark",
+          "flex h-full min-h-0 flex-col bg-background p-4",
+          mode === "dark" && "dark"
         )}
         style={cssVars(theme[mode])}
       >
-        <div className="flex h-12 shrink-0 items-center gap-3">
-          <nav aria-label="Preview screens" className="flex items-center">
-            {screens.map((item) => {
-              const active = item.id === screen
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  aria-current={active ? "page" : undefined}
-                  onClick={() => setScreen(item.id)}
-                  className={cn(
-                    "flex h-12 items-center border-b-2 px-2.5 text-caption transition-colors",
-                    active
-                      ? "border-foreground text-foreground"
-                      : "border-transparent text-muted-foreground hover:text-foreground",
-                  )}
-                >
+        <Tabs
+          value={screen}
+          onValueChange={(value) => setScreen(value as Screen)}
+          className="h-full gap-4"
+        >
+          <div className="flex min-h-10 shrink-0 flex-wrap items-center gap-x-3 gap-y-2">
+            <TabsList variant="line" className="bg-transparent p-0">
+              {screens.map((item) => (
+                <TabsTrigger key={item.id} value={item.id} className="px-2.5">
                   {item.label}
-                </button>
-              )
-            })}
-          </nav>
+                </TabsTrigger>
+              ))}
+            </TabsList>
 
-          <div className="ms-auto flex items-center gap-3">
-            <Segment
-              label="Mode"
-              value={mode}
-              onChange={onModeChange}
-              options={[
-                { value: "light", label: "Light" },
-                { value: "dark", label: "Dark" },
-              ]}
-            />
-            <Segment
-              label="Density"
-              value={density}
-              onChange={setDensity}
-              options={[
-                { value: "comfortable", label: "Comfortable" },
-                { value: "compact", label: "Compact" },
-              ]}
-            />
-            <Segment
-              label="Preview width"
-              value={width}
-              onChange={setWidth}
-              options={[
-                { value: "fit", label: "Fit" },
-                { value: "768", label: "768" },
-                { value: "390", label: "390" },
-              ]}
-            />
-          </div>
-        </div>
-
-        <div className="flex min-h-0 flex-1 justify-center">
-          <div
-            className={cn(
-              "@container h-full",
-              width === "fit" && "w-full",
-              width === "768" && "w-[768px] max-w-full",
-              width === "390" && "w-[390px] max-w-full",
-            )}
-          >
-            <div
-              data-density={density}
-              className="h-full overflow-hidden rounded-lg border border-border bg-background"
-            >
-              {screen === "dashboard" ? (
-                <Dashboard />
-              ) : (
-                <div className="flex h-full items-center justify-center px-6 text-center">
-                  <p className="text-caption text-muted-foreground">
-                    The {current.label} screen will live here.
-                  </p>
-                </div>
-              )}
+            <div className="ms-auto flex items-center gap-3">
+              <SegmentedControl
+                label="Mode"
+                value={mode}
+                onValueChange={onModeChange}
+                options={[
+                  { value: "light", label: "Light" },
+                  { value: "dark", label: "Dark" },
+                ]}
+              />
+              <SegmentedControl
+                label="Density"
+                value={density}
+                onValueChange={setDensity}
+                options={[
+                  { value: "comfortable", label: "Comfortable" },
+                  { value: "compact", label: "Compact" },
+                ]}
+              />
+              <SegmentedControl
+                label="Preview width"
+                value={width}
+                onValueChange={setWidth}
+                options={[
+                  { value: "fit", label: "Fit" },
+                  { value: "768", label: "768" },
+                  { value: "390", label: "390" },
+                ]}
+              />
             </div>
           </div>
-        </div>
+
+          <div className="flex min-h-0 flex-1 justify-center">
+            <div
+              data-density={density}
+              className={cn(
+                "@container h-full",
+                width === "fit" && "w-full",
+                width === "768" && "w-[768px] max-w-full",
+                width === "390" && "w-[390px] max-w-full"
+              )}
+            >
+              <TabsContent
+                value="dashboard"
+                className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
+              >
+                <Dashboard />
+              </TabsContent>
+              {screens
+                .filter((item) => item.id !== "dashboard")
+                .map((item) => (
+                  <TabsContent
+                    key={item.id}
+                    value={item.id}
+                    className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
+                  >
+                    <div className="flex h-full items-center justify-center p-6 text-center">
+                      <p className="text-caption text-muted-foreground">
+                        The {item.label} screen will live here.
+                      </p>
+                    </div>
+                  </TabsContent>
+                ))}
+            </div>
+          </div>
+        </Tabs>
       </div>
     </section>
-  )
-}
-
-function Segment<T extends string>({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string
-  value: T
-  onChange: (value: T) => void
-  options: { value: T; label: string }[]
-}) {
-  return (
-    <div
-      role="group"
-      aria-label={label}
-      className="flex items-center gap-0.5 rounded-control bg-muted p-0.5"
-    >
-      {options.map((option) => {
-        const active = option.value === value
-        return (
-          <button
-            key={option.value}
-            type="button"
-            aria-pressed={active}
-            onClick={() => onChange(option.value)}
-            className={cn(
-              "h-6 rounded-item-sm px-2 text-caption transition-colors",
-              active
-                ? "bg-card text-foreground shadow-raised ring-1 ring-border"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {option.label}
-          </button>
-        )
-      })}
-    </div>
   )
 }

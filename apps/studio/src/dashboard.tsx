@@ -13,8 +13,40 @@ import {
 } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "@amit-kap/glaze/components/avatar"
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@amit-kap/glaze/components/chart"
+import { Badge } from "@amit-kap/glaze/components/badge"
 import { Button } from "@amit-kap/glaze/components/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@amit-kap/glaze/components/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@amit-kap/glaze/components/table"
 import { cn } from "@amit-kap/glaze/lib/utils"
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 type NavItem = {
   label: string
@@ -32,11 +64,11 @@ const nav: NavItem[] = [
 ]
 
 const months = [
-  { label: "Jan", online: 11200, retail: 7400 },
-  { label: "Feb", online: 8800, retail: 10900 },
-  { label: "Mar", online: 6200, retail: 9600 },
-  { label: "Apr", online: 12300, retail: 7100 },
-  { label: "May", online: 10400, retail: 11900 },
+  { month: "Jan", online: 11200, retail: 7400 },
+  { month: "Feb", online: 8800, retail: 10900 },
+  { month: "Mar", online: 6200, retail: 9600 },
+  { month: "Apr", online: 12300, retail: 7100 },
+  { month: "May", online: 10400, retail: 11900 },
 ]
 
 type Status = "Paid" | "Pending" | "Refunded"
@@ -49,13 +81,13 @@ const orders: { customer: string; status: Status; total: string }[] = [
   { customer: "William Kim", status: "Refunded", total: "$99" },
 ]
 
-const statusColor: Record<Status, string> = {
-  Paid: "var(--severity-low)",
-  Pending: "var(--severity-medium)",
-  Refunded: "var(--muted-foreground)",
-}
+const statusVariant = {
+  Paid: "low",
+  Pending: "medium",
+  Refunded: "secondary",
+} as const
 
-/** A miniature product, built from Glaze tokens, so the theme shows through. */
+/** A miniature product, built from Glaze components, so the theme shows through. */
 export function Dashboard() {
   return (
     <div className="flex h-full min-h-0 bg-background text-foreground">
@@ -84,21 +116,20 @@ export function Dashboard() {
 
         <nav aria-label="Sections" className="flex flex-col gap-0.5">
           {nav.map(({ label, icon: Icon, active, badge }) => (
-            <div
+            <Button
               key={label}
+              variant={active ? "secondary" : "ghost"}
+              size="sm"
+              aria-current={active ? "page" : undefined}
               className={cn(
-                "flex h-8 items-center gap-2.5 rounded-control px-2.5 text-caption",
-                active ? "bg-muted text-foreground" : "text-muted-foreground",
+                "w-full justify-start gap-2.5 px-2.5",
+                !active && "text-muted-foreground",
               )}
             >
-              <Icon className="size-4 shrink-0" />
-              <span className="truncate">{label}</span>
-              {badge && (
-                <span className="ms-auto flex h-5 min-w-5 items-center justify-center rounded-pill bg-primary px-1 text-micro text-primary-foreground tabular-nums">
-                  {badge}
-                </span>
-              )}
-            </div>
+              <Icon />
+              {label}
+              {badge && <Badge className="ms-auto">{badge}</Badge>}
+            </Button>
           ))}
         </nav>
 
@@ -146,7 +177,7 @@ export function Dashboard() {
             </Stat>
           </div>
 
-          <div className="grid min-h-[280px] flex-1 grid-cols-1 gap-3 @min-[720px]:grid-cols-[minmax(0,1fr)_286px]">
+          <div className="grid grid-cols-1 gap-3 @min-[720px]:grid-cols-[minmax(0,1fr)_300px]">
             <RevenueChart />
             <RecentOrders />
           </div>
@@ -166,13 +197,15 @@ function Stat({
   children: ReactNode
 }) {
   return (
-    <div className="rounded-container border border-border bg-card p-3.5">
-      <p className="text-caption text-muted-foreground">{label}</p>
-      <p className="mt-1.5 text-heading leading-none font-medium tabular-nums">
-        {value}
-      </p>
-      <p className="mt-2.5 truncate text-micro">{children}</p>
-    </div>
+    <Card size="sm" className="gap-0 py-3">
+      <CardContent>
+        <p className="text-caption text-muted-foreground">{label}</p>
+        <p className="mt-1.5 text-heading leading-none font-medium tabular-nums">
+          {value}
+        </p>
+        <p className="mt-2.5 truncate text-micro">{children}</p>
+      </CardContent>
+    </Card>
   )
 }
 
@@ -188,128 +221,126 @@ function Delta({ tone, children }: { tone: "up" | "down"; children: ReactNode })
   )
 }
 
-const gridlines = ["$15k", "$10k", "$5k", "0"]
-const chartMax = 15000
+const chartConfig = {
+  online: { label: "Online", color: "var(--chart-2)" },
+  retail: { label: "Retail", color: "var(--chart-1)" },
+} satisfies ChartConfig
 
 function RevenueChart() {
   return (
-    <section className="flex min-h-0 flex-col rounded-container border border-border bg-card p-4">
-      <h2 className="text-caption font-medium">Revenue by month</h2>
-      <p className="mt-1 text-micro text-muted-foreground">
-        Gross, before refunds
-      </p>
+    <Card size="sm">
+      <CardHeader>
+        <CardTitle className="text-caption">Revenue by month</CardTitle>
+        <CardDescription className="text-micro">
+          Gross, before refunds
+        </CardDescription>
+      </CardHeader>
 
-      <div className="mt-4 flex min-h-0 flex-1 flex-col">
-        <div className="flex min-h-0 flex-1 gap-2">
-          <div className="flex w-9 shrink-0 flex-col justify-between text-right text-micro text-muted-foreground tabular-nums">
-            {gridlines.map((label) => (
-              <span key={label}>{label}</span>
-            ))}
-          </div>
+      <CardContent>
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[240px] w-full"
+        >
+          <BarChart
+            accessibilityLayer
+            data={months}
+            barGap={4}
+            margin={{ top: 8, right: 4 }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+            />
+            <YAxis
+              width={40}
+              domain={[0, 15000]}
+              ticks={[0, 5000, 10000, 15000]}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value: number) =>
+                value === 0 ? "0" : `$${value / 1000}k`
+              }
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Bar
+              dataKey="online"
+              fill="var(--color-online)"
+              radius={2}
+              maxBarSize={26}
+              isAnimationActive={false}
+            />
+            <Bar
+              dataKey="retail"
+              fill="var(--color-retail)"
+              radius={2}
+              maxBarSize={26}
+              isAnimationActive={false}
+            />
+            <ChartLegend content={<ChartLegendContent />} />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
 
-          <div className="relative min-w-0 flex-1">
-            <div className="absolute inset-0 flex flex-col justify-between">
-              {gridlines.map((label) => (
-                <span key={label} className="border-t border-border" />
-              ))}
-            </div>
-            <div className="absolute inset-0 grid grid-cols-5">
-              {months.map((month) => (
-                <div
-                  key={month.label}
-                  className="flex h-full items-end justify-center gap-1.5"
-                >
-                  <span
-                    className="w-5 rounded-t-[2px] bg-chart-2"
-                    style={{ height: `${(month.online / chartMax) * 100}%` }}
-                    title={`Online · $${month.online.toLocaleString()}`}
-                  />
-                  <span
-                    className="w-5 rounded-t-[2px] bg-chart-1"
-                    style={{ height: `${(month.retail / chartMax) * 100}%` }}
-                    title={`Retail · $${month.retail.toLocaleString()}`}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-2 flex gap-2">
-          <span className="w-9 shrink-0" />
-          <div className="grid flex-1 grid-cols-5 border-b border-border pb-2 text-center text-micro text-muted-foreground">
-            {months.map((month) => (
-              <span key={month.label}>{month.label}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-2.5 flex items-center justify-center gap-4 text-micro text-muted-foreground">
-        <Legend className="bg-chart-2">Online</Legend>
-        <Legend className="bg-chart-1">Retail</Legend>
-      </div>
-
-      <p className="mt-2.5 border-t border-border pt-2.5 text-micro">
+      <CardFooter className="py-2.5 text-micro">
         Online up 18% since January
-      </p>
-    </section>
-  )
-}
-
-function Legend({
-  className,
-  children,
-}: {
-  className: string
-  children: ReactNode
-}) {
-  return (
-    <span className="flex items-center gap-1.5">
-      <span className={cn("size-2 rounded-[2px]", className)} />
-      {children}
-    </span>
+      </CardFooter>
+    </Card>
   )
 }
 
 function RecentOrders() {
   return (
-    <section className="flex min-h-0 flex-col rounded-container border border-border bg-card p-4">
-      <h2 className="text-caption font-medium">Recent orders</h2>
-      <p className="mt-1 text-micro text-muted-foreground">
-        5 of 1,284 this period
-      </p>
+    <Card size="sm">
+      <CardHeader>
+        <CardTitle className="text-caption">Recent orders</CardTitle>
+        <CardDescription className="text-micro">
+          5 of 1,284 this period
+        </CardDescription>
+      </CardHeader>
 
-      <table className="mt-3 w-full text-caption">
-        <thead>
-          <tr className="border-b border-border text-left text-micro text-muted-foreground">
-            <th className="pb-2 font-normal">Customer</th>
-            <th className="pb-2 font-normal">Status</th>
-            <th className="pb-2 text-right font-normal">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.customer} className="border-b border-border/70">
-              <td className="py-2 pe-2">{order.customer}</td>
-              <td className="py-2">
-                <span className="inline-flex items-center gap-1.5 rounded-pill border border-border px-1.5 py-0.5 text-micro">
-                  <span
-                    className="size-1.5 rounded-pill"
-                    style={{ background: statusColor[order.status] }}
-                  />
-                  {order.status}
-                </span>
-              </td>
-              <td className="py-2 text-right tabular-nums">{order.total}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="h-8 px-0 text-micro font-normal">
+                Customer
+              </TableHead>
+              <TableHead className="h-8 px-0 text-micro font-normal">
+                Status
+              </TableHead>
+              <TableHead className="h-8 px-0 text-right text-micro font-normal">
+                Total
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders.map((order) => (
+              <TableRow key={order.customer} className="border-border/70">
+                <TableCell className="px-0 py-2 text-caption">
+                  {order.customer}
+                </TableCell>
+                <TableCell className="px-0 py-2">
+                  <Badge variant={statusVariant[order.status]}>
+                    {order.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="px-0 py-2 text-right text-caption">
+                  {order.total}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
 
-      <p className="mt-auto border-t border-border pt-3 text-micro text-muted-foreground">
-        View all orders
-      </p>
-    </section>
+      <CardFooter className="mt-auto py-2">
+        <Button variant="link" size="sm" className="px-0">
+          View all orders
+        </Button>
+      </CardFooter>
+    </Card>
   )
 }

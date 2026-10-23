@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback } from "@amit-kap/glaze/components/avatar"
 import { Button } from "@amit-kap/glaze/components/button"
 import { Input } from "@amit-kap/glaze/components/input"
 import { Kbd } from "@amit-kap/glaze/components/kbd"
+import { Separator } from "@amit-kap/glaze/components/separator"
 
 import { Logo } from "./logo"
 
@@ -55,7 +56,9 @@ export function TopBar({
           <DownloadIcon />
           {copied ? "Copied" : "Export"}
         </Button>
-        <span aria-hidden="true" className="mx-0.5 h-4 w-px bg-border" />
+        <div className="mx-0.5 flex h-4 items-center">
+          <Separator orientation="vertical" />
+        </div>
       </div>
 
       <Avatar>

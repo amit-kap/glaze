@@ -1,5 +1,6 @@
 import { PaletteIcon, ShapesIcon, TypeIcon, WavesIcon } from "lucide-react"
 
+import { Button } from "@amit-kap/glaze/components/button"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 const items = [
@@ -21,26 +22,24 @@ export function Rail({
   return (
     <nav
       aria-label="Tools"
-      className="flex w-[52px] shrink-0 flex-col items-stretch gap-2"
+      className="flex w-13 shrink-0 flex-col items-stretch gap-2"
     >
       {items.map(({ id, label, icon: Icon }) => {
         const current = id === value
         return (
-          <button
+          <Button
             key={id}
-            type="button"
+            variant={current ? "default" : "ghost"}
             aria-current={current ? "page" : undefined}
             onClick={() => onChange(id)}
             className={cn(
-              "flex h-[50px] flex-col items-center justify-center gap-2 rounded-lg p-2 transition-colors",
-              current
-                ? "bg-primary text-primary-foreground"
-                : "bg-background text-muted-foreground hover:bg-muted",
+              "h-12.5 w-13 flex-col gap-2 rounded-lg p-2",
+              !current && "bg-background text-muted-foreground hover:bg-muted",
             )}
           >
             <Icon className={cn("size-4", !current && "text-foreground")} />
             <span className="text-micro leading-none font-medium">{label}</span>
-          </button>
+          </Button>
         )
       })}
     </nav>
