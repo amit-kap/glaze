@@ -114,7 +114,7 @@ function round(value: number, digits: number) {
 
 /**
  * The colour a token actually paints, read from a real element. Custom
- * properties keep color-mix() as text (or are pinned to a literal by a theme),
+ * properties keep color-mix() as text (or are set to a literal by a theme),
  * so reading the variable gives two different kinds of answer. Painting the
  * token settles both into one used colour, which is what a value column should
  * show. The paint is asked for in oklch so every row reads in the same space as

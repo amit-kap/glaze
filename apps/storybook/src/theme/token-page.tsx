@@ -31,7 +31,8 @@ function useThemeOverrides() {
           )
             continue
           if (rule instanceof CSSStyleRule) {
-            // Named theme selectors and Nova's pinned root values outrank derivations.
+            // A theme's own block (including its light-only :not() rule)
+            // outranks the shared derivation.
             if (
               /\[data-theme\s*=|:root:not\(/.test(rule.selectorText) &&
               root.matches(rule.selectorText)
@@ -199,11 +200,13 @@ function TokenRow({
       ? "Fixed"
       : item.setting
         ? "Setting"
-        : item.follows?.length
-          ? `Follows ${followsLabels(item.follows).join(" + ")}`
-          : nested
-            ? "Derived"
-            : ""
+        : item.input && !nested
+          ? "Input"
+          : item.follows?.length
+            ? `Follows ${followsLabels(item.follows).join(" + ")}`
+            : nested
+              ? "Derived"
+              : ""
   return (
     <div className="min-w-0 border-b border-border/60 py-4 last:border-0">
       {probes}

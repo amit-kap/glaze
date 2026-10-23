@@ -27,6 +27,7 @@ export type TokenDoc = {
   consumers?: string[]
   setting?: boolean
   fixed?: boolean
+  input?: boolean
 }
 
 export type TokenGroup = {
@@ -65,6 +66,7 @@ function toDoc(token: string, withAffects: boolean): TokenDoc | undefined {
     consumers: settingConsumers[setting.token],
     setting: setting.source === "setting",
     fixed: setting.source === "fixed",
+    input: setting.source === "input",
     affects: withAffects
       ? dependentsOf(setting.token).flatMap((entry) => {
           const doc = toDoc(entry.token, false)
