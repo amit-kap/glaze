@@ -3,14 +3,14 @@ import { TooltipProvider } from "@amit-kap/glaze/components/tooltip"
 
 import "@amit-kap/glaze/globals.css"
 import "./preview.css"
-import { themes } from "./themes"
 
-// Applies the three Glaze switches to the preview's <html>, as a project would.
+// Applies the Glaze switches to the preview's <html>, as a project would.
+// Nova is the only built-in theme, so the theme attribute is fixed.
 const withGlaze: Decorator = (Story, context) => {
-  const { theme, mode, density } = context.globals
+  const { mode, density } = context.globals
   const root = document.documentElement
 
-  root.setAttribute("data-theme", theme || "nova")
+  root.setAttribute("data-theme", "nova")
 
   root.classList.toggle("dark", mode === "dark")
 
@@ -52,15 +52,6 @@ const preview: Preview = {
     a11y: { test: "todo" },
   },
   globalTypes: {
-    theme: {
-      description: "Glaze theme",
-      toolbar: {
-        title: "Theme",
-        icon: "paintbrush",
-        items: themes,
-        dynamicTitle: true,
-      },
-    },
     mode: {
       description: "Light or dark mode",
       toolbar: {
@@ -87,7 +78,6 @@ const preview: Preview = {
     },
   },
   initialGlobals: {
-    theme: "nova",
     mode: "light",
     density: "comfortable",
   },

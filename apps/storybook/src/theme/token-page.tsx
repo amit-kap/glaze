@@ -200,10 +200,10 @@ function TokenRow({
       ? "Fixed"
       : item.setting
         ? "Setting"
-        : item.input && !nested
-          ? "Input"
-          : item.follows?.length
-            ? `Follows ${followsLabels(item.follows).join(" + ")}`
+        : item.follows?.length
+          ? `Follows ${followsLabels(item.follows).join(" + ")}`
+          : item.input && !nested
+            ? "Input"
             : nested
               ? "Derived"
               : ""

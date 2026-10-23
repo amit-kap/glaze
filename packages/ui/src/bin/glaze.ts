@@ -134,6 +134,8 @@ function packageManager() {
 }
 
 async function askTheme(): Promise<string> {
+  // Nova is the only built-in theme, so there is nothing to ask.
+  if (builtInThemes.length === 1) return builtInThemes[0]
   if (!process.stdin.isTTY) return "nova"
   const rl = createInterface({ input: process.stdin, output: process.stdout })
   try {

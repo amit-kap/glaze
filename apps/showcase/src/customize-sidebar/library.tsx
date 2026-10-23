@@ -70,7 +70,7 @@ const relativeDate = (at: number) => {
 }
 
 // Shown on each row so a saved theme is recognisable before it is loaded.
-const dotKeys = ["brand", "background", "ink"] as const
+const dotKeys = ["brand", "background", "foreground"] as const
 
 // The Library dialog: saved themes, import from a file or paste, share link.
 // Opens from `trigger`, which is rendered as the DialogTrigger.

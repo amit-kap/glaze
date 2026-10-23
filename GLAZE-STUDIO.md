@@ -3,7 +3,7 @@
 Status: plan, 2026-10-23. Written against V2 and updated for **V4**
 (`glaze-architecture.md`). V4 is the only specification to implement against.
 
-The showcase app becomes **Glaze Studio**: one place to pick a look, tune every Glaze input on real screens, and keep the result as a theme you can load again, share, or install. Mockups: Paper file `glaze`, page **studio** (artboards *Studio · Colors / Dashboard*, *Studio · Shape / Dashboard*, *Studio · Start*).
+The showcase app becomes **Glaze Studio**: one place to pick a look, tune every Glaze input on real screens, and keep the result as a theme you can load again, share, or install. Mockups: Paper file `glaze`, page **studio** (artboards _Studio · Colors / Dashboard_, _Studio · Shape / Dashboard_, _Studio · Start_).
 
 ## What V4 changes for this plan
 
@@ -15,7 +15,7 @@ here. It changes the model underneath them:
   Studio renders the catalog; it does not keep its own copy of names or order.
 - **No `--canvas`.** The page colour is `--background`, and it is a setting, not
   a derived value. Palette rows read Brand, On brand, Primary, On primary,
-  Background, Surface, Ink, Secondary text, Border, Overlay.
+  Background, Card, Foreground, Muted foreground, Border, Overlay.
 - **Primary follows Brand.** `--primary` and `--primary-foreground` are editable
   settings whose defaults are Brand and On brand. "Separate actions from
   identity" sets `--primary`; "Follow brand" removes the declaration. It is one
@@ -50,7 +50,7 @@ Studio keeps every piece of logic built so far (`theme-builder/`, `control-panel
 1. **Editor layout, not a drawer.** Tools left, canvas right, identity on top. The panel is a sibling of the canvas; nothing floats over the preview.
 2. **Judge on screens.** The default preview is a composed page (dashboard, settings, login, chat). The component grid is one view among them.
 3. **Controls look like what they change.** Corners as corners, shadows as shadows, fonts in their own face, easing as curves, colours as swatches.
-4. **Always know where you are.** Name, base theme, change count, saved state, and undo are one glance away.
+4. **Always know where you are.** Name, Nova base, change count, saved state, and undo are one glance away.
 5. **Nothing is lost.** Every edit is undoable, every state is saveable, every saved theme round-trips through config.
 6. **Same contract.** Studio writes only settings that are in the catalog, plus explicit overrides and component tokens, through `GlazeConfig`. It never edits components.
 
@@ -79,7 +79,7 @@ Entry when there is no draft in storage, and reachable from the Glaze mark in th
 - Headline "Start from a look." with the one-line explanation that every theme is Nova underneath.
 - **Gallery**: the 9 built-in themes as 304px cards. Each card is a miniature in its own character (button pair, text card, input + switch) rendered with that theme's real tokens, plus name, one-line hint and brand/background/ink dots. Clicking opens Studio on that base with no changes.
 - **Your themes**: saved themes from the library (dots, name, `base · N changes · age`, Open), plus a dashed drop zone for `glaze.config.json` or a generated `.css`.
-- Actions: *Import config…* (file picker), *Paste share link*.
+- Actions: _Import config…_ (file picker), _Paste share link_.
 
 Implementation: the miniatures are real Glaze components inside a `[data-theme]` subtree per card. This is the first use of subtree theming; the cascade machinery already supports it.
 
@@ -87,19 +87,19 @@ Implementation: the miniatures are real Glaze components inside a `[data-theme]`
 
 Left to right:
 
-| Element | Behaviour |
-|---|---|
-| Glaze mark | Back to Start (confirms if unsaved changes) |
-| Theme name | Inline-editable text; placeholder "Untitled theme" |
-| `based on <Base>` chip | Click opens the base picker (popover with the 9 themes and hints); switching with changes pending confirms and clears, as today |
-| `· N changes` | Click jumps to the Changes section; hidden at 0 |
-| Light · Dark · Split | Segmented; Split renders the stage twice (light left, dark right) |
-| Comfortable · Compact | Segmented density |
-| Undo · Redo | History of `Custom` snapshots; ⌘Z / ⇧⌘Z; disabled at ends |
-| Library | Opens the Library sheet |
-| Share | Copies the share link, shows a toast; opens the Share tab if nothing is customised |
-| **Save** ⌘S | Primary. Saves/updates in the library; label becomes *Saved* for 1.5s |
-| Export | Opens the Export sheet |
+| Element               | Behaviour                                                                          |
+| --------------------- | ---------------------------------------------------------------------------------- |
+| Glaze mark            | Back to Start (confirms if unsaved changes)                                        |
+| Theme name            | Inline-editable text; placeholder "Untitled theme"                                 |
+| `Nova` chip           | Static: Nova is the only built-in theme; everything else is a saved theme          |
+| `· N changes`         | Click jumps to the Changes section; hidden at 0                                    |
+| Light · Dark · Split  | Segmented; Split renders the stage twice (light left, dark right)                  |
+| Comfortable · Compact | Segmented density                                                                  |
+| Undo · Redo           | History of `Custom` snapshots; ⌘Z / ⇧⌘Z; disabled at ends                          |
+| Library               | Opens the Library sheet                                                            |
+| Share                 | Copies the share link, shows a toast; opens the Share tab if nothing is customised |
+| **Save** ⌘S           | Primary. Saves/updates in the library; label becomes _Saved_ for 1.5s              |
+| Export                | Opens the Export sheet                                                             |
 
 The floating bottom bar is removed.
 
@@ -113,8 +113,8 @@ Each section has a title row (18px semibold) with a right-aligned context captio
 
 #### Colors
 
-- **Palette list**: one row per colour setting, in catalog order: Brand, On brand, Primary, On primary, Background, Surface, Ink, Secondary text, Border, Overlay. Collapsed row = 24px swatch · name · hex. One row is expanded at a time (accordion) into a card:
-  - 36px swatch, name, description of what it drives, hex, contrast badge against its pair (Brand↔On brand, Primary↔On primary, Background↔Ink, Surface↔Ink): AA / AAA / fail with the ratio in the tooltip.
+- **Palette list**: one row per colour setting, in catalog order: Brand, On brand, Primary, On primary, Background, Card, Foreground, Muted foreground, Border, Overlay. Collapsed row = 24px swatch · name · hex. One row is expanded at a time (accordion) into a card:
+  - 36px swatch, name, description of what it drives, hex, contrast badge against its pair (Brand↔On brand, Primary↔On primary, Background↔Foreground, Card↔Foreground): AA / AAA / fail with the ratio in the tooltip.
   - Inline picker: saturation/value plane, hue strip, HEX | OKLCH toggle, text field, theme swatches. No popover.
   - **Feeds N tokens**: the drill-down built in `tabs/colors.tsx`, restyled as 26px rows: swatch, `--token` in mono, value or mix percent, and an `override` badge + reset when the theme sets the value itself. Header shows the count and "N overrides". Primary and On primary show "Follows Brand" until set.
 - **Status** and **Charts** as collapsed dot rows that expand to the same row/card pattern.
@@ -130,8 +130,8 @@ Each section has a title row (18px semibold) with a right-aligned context captio
 #### Shape
 
 - **Radius**: corner chips `0 · 4 · 8 · 10 · 14 · Pill` drawn as actual corners, with a fine slider beneath; the value in mono on the right. "Derived per family" shows Item/Control/Floating/Container corners with their resolved px.
-- **Controls**: two tactile cards, *Follow radius* and *Pill*.
-- **Spacing**: a growing block scale (4 → 40px) for `space-base`, plus a segmented *Control height* (28 · 32 · 36 · 40) that sets `control-height`.
+- **Controls**: two tactile cards, _Follow radius_ and _Pill_.
+- **Spacing**: a growing block scale (4 → 40px) for `space-base`, plus a segmented _Control height_ (28 · 32 · 36 · 40) that sets `control-height`.
 - **Elevation**: three cards wearing their shadows (Raised / Floating / Modal). Selecting a card opens the preset list (None · Subtle · Raised · Floating · Lifted · Deep · Deepest), each preset drawn as a shadow chip.
 
 #### Motion
@@ -144,31 +144,31 @@ Each section has a title row (18px semibold) with a right-aligned context captio
 
 Grouped by component, each group with a one-line hint and a live miniature of the part:
 
-| Group | Token(s) | Control |
-|---|---|---|
-| Inputs | `input-fill` | Transparent · Filled · Muted, shown on a live input |
-| Buttons | `button-radius-xs`, `button-radius-sm` | Item radius · Pill · Square, shown on xs/sm buttons |
-| Cards | `card-shadow` | shadow chips, shown on a card |
-| Checkbox | `checkbox-radius` | Item · Round · Square · Soft, shown on a checkbox |
-| Textarea | `textarea-radius` | Control · Pill · Square |
-| Toast | `toast-radius` | Follow · Pill · Square · Match container |
+| Group    | Token(s)                               | Control                                             |
+| -------- | -------------------------------------- | --------------------------------------------------- |
+| Inputs   | `input-fill`                           | Transparent · Filled · Muted, shown on a live input |
+| Buttons  | `button-radius-xs`, `button-radius-sm` | Item radius · Pill · Square, shown on xs/sm buttons |
+| Cards    | `card-shadow`                          | shadow chips, shown on a card                       |
+| Checkbox | `checkbox-radius`                      | Item · Round · Square · Soft, shown on a checkbox   |
+| Textarea | `textarea-radius`                      | Control · Pill · Square                             |
+| Toast    | `toast-radius`                         | Follow · Pill · Square · Match container            |
 
-Overridden rows show a *Custom* badge and a reset.
+Overridden rows show a _Custom_ badge and a reset.
 
 #### Changes
 
-The diff built in `tabs/changes.tsx`, kept as is: header "N changes on Base" + Reset all, groups (Colours light/dark, Overrides, Shape/type/motion, Options, Component tokens) with per-row reset, and the Config JSON collapsible. Adds an *Undo last* link at the top.
+The diff built in `tabs/changes.tsx`, kept as is: header "N changes on Base" + Reset all, groups (Colours light/dark, Overrides, Shape/type/motion, Options, Component tokens) with per-row reset, and the Config JSON collapsible. Adds an _Undo last_ link at the top.
 
 ### 4.5 Canvas
 
 - **Canvas bar**: screen tabs **Dashboard · Settings · Login · Chat · All components**; an inspect hint on the right ("Highlighting what Brand touches" while a colour row is expanded); a width toggle **390 · 768 · Fit**.
-- **Stage**: the chosen screen inside a 12px-radius frame on a muted background. *Fit* fills the stage; 390/768 centre a fixed-width frame. Split renders two frames side by side, the right one inside `.dark`.
+- **Stage**: the chosen screen inside a 12px-radius frame on a muted background. _Fit_ fills the stage; 390/768 centre a fixed-width frame. Split renders two frames side by side, the right one inside `.dark`.
 - **Screens** are composed from Glaze components, each ~150 lines:
-  - *Dashboard*: app sidebar, page header with primary action, four stat cards, bar chart card, recent-orders table with a selected row.
-  - *Settings*: a form page — profile fields, notification switches, danger zone, save bar.
-  - *Login*: centred card with inputs, checkbox, primary button, link, OAuth buttons.
-  - *Chat*: message scroller with bubbles, attachments, composer.
-  - *All components*: the existing tile grid, with category chips (Actions, Inputs, Navigation, Overlays, Feedback, Data, Chat) to filter.
+  - _Dashboard_: app sidebar, page header with primary action, four stat cards, bar chart card, recent-orders table with a selected row.
+  - _Settings_: a form page — profile fields, notification switches, danger zone, save bar.
+  - _Login_: centred card with inputs, checkbox, primary button, link, OAuth buttons.
+  - _Chat_: message scroller with bubbles, attachments, composer.
+  - _All components_: the existing tile grid, with category chips (Actions, Inputs, Navigation, Overlays, Feedback, Data, Chat) to filter.
 - **Inspect**: when a colour row is expanded, every element whose computed colour resolves from that input's derived tokens gets a 1.5px ring. Implementation: the screens mark elements with `data-tokens="primary ring"` where they use a token; the stage sets `data-inspect="brand"` and a stylesheet rings the matching elements (`[data-inspect="brand"] [data-tokens~="primary"]`). The `derives` map in `inputs.ts` gives input → tokens.
 
 ### 4.6 Library sheet
@@ -183,15 +183,15 @@ Replaces the Install dialog: theme name, **Download** (`<name>.css` + `glaze.con
 
 Everything already exists in `apps/showcase/src/theme-builder` and `control-panel`; Studio adds history and routing.
 
-| Concern | Where | Change |
-|---|---|---|
-| Draft (`base`, `custom`, `savedId`) | `control-panel/index.tsx`, store v3 | Add `history: Custom[]`, `cursor` for undo/redo; snapshot on every committed edit (not per keystroke: debounce text/slider by 300ms) |
-| Config ↔ state | `theme-builder/config.ts` (`toConfig`, `fromConfig`) | None |
-| Library | `custom-theme-store.ts` | None |
-| Share | `theme-builder/share.ts` | None |
-| Actions | `control-panel/actions.ts` (`StudioActions`) | Add `undo`, `redo`, `canUndo`, `canRedo`, `section`, `setSection`, `screen`, `setScreen`, `inspect`, `setInspect`, `split`, `setSplit`, `width`, `setWidth` |
-| Resolved token probe | `customize-sidebar/index.tsx` | Move to a hook `useResolvedTokens(names, deps)`; in Split, probe inside both frames |
-| Route | new `studio/route.ts` | Hash read/write; `#t=` keeps working |
+| Concern                             | Where                                                | Change                                                                                                                                                      |
+| ----------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Draft (`base`, `custom`, `savedId`) | `control-panel/index.tsx`, store v3                  | Add `history: Custom[]`, `cursor` for undo/redo; snapshot on every committed edit (not per keystroke: debounce text/slider by 300ms)                        |
+| Config ↔ state                      | `theme-builder/config.ts` (`toConfig`, `fromConfig`) | None                                                                                                                                                        |
+| Library                             | `custom-theme-store.ts`                              | None                                                                                                                                                        |
+| Share                               | `theme-builder/share.ts`                             | None                                                                                                                                                        |
+| Actions                             | `control-panel/actions.ts` (`StudioActions`)         | Add `undo`, `redo`, `canUndo`, `canRedo`, `section`, `setSection`, `screen`, `setScreen`, `inspect`, `setInspect`, `split`, `setSplit`, `width`, `setWidth` |
+| Resolved token probe                | `customize-sidebar/index.tsx`                        | Move to a hook `useResolvedTokens(names, deps)`; in Split, probe inside both frames                                                                         |
+| Route                               | new `studio/route.ts`                                | Hash read/write; `#t=` keeps working                                                                                                                        |
 
 Persistence keys: draft `glaze-showcase-custom-v3`, library `glaze-showcase-library-v1`, UI prefs (section, screen, width, split, panel width) in `glaze-studio-ui-v1`.
 
@@ -211,36 +211,45 @@ All of this is expressed with Glaze token utilities; `check:tokens` runs on `app
 
 Each phase ships behind the existing app, is screenshot-reviewed (headless Chrome via `.shot.mjs`), passes `turbo typecheck`, `check:tokens`, eslint, and is committed separately. Work is delegated to subagents by file ownership; the coordinator wires integration points and reviews.
 
-### Phase 1 — Shell  ⏭
+### Phase 1 — Shell ⏭
+
 Files: `apps/showcase/src/studio/{shell.tsx, top-bar.tsx, rail.tsx, panel.tsx, canvas.tsx, route.ts}`, `app.tsx`.
+
 - New layout with top bar, rail, panel, canvas; remove the floating bar and drawer.
 - Mount existing tabs into the panel by section; existing tile grid as the "All components" screen.
 - Undo/redo history in `control-panel/index.tsx`; `StudioActions` extended.
 - Hash routing; `#t=` share links still open the loaded theme.
-Exit: feature parity with today in the new frame.
+  Exit: feature parity with today in the new frame.
 
-### Phase 2 — Screens and inspect  ⏭
+### Phase 2 — Screens and inspect ⏭
+
 Files: `apps/showcase/src/screens/{dashboard,settings,login,chat}.tsx`, `studio/stage.tsx`, `studio/inspect.css`.
+
 - Four composed screens with `data-tokens` annotations.
 - Width toggle, Split (nested `.dark`), inspect rings driven by the expanded colour row.
-Exit: Dashboard default; Split and inspect working in all screens.
+  Exit: Dashboard default; Split and inspect working in all screens.
 
-### Phase 3 — Visual controls  ⏭
+### Phase 3 — Visual controls ⏭
+
 Files: `customize-sidebar/tabs/{colors,typography,shape,motion,components}.tsx`, `fields.tsx`, new `fields/{corner-chips,shadow-chips,curve,font-list,specimen}.tsx`.
+
 - Colors: accordion rows with inline picker, contrast badge, restyled drill-down.
 - Shape: corner chips, control cards, block scale, elevation cards.
 - Type: font list in own face, scale specimens, weight specimens.
 - Motion: duration dots, curve thumbnails.
 - Parts: live miniatures per group.
-Exit: no `SelectRow` left in the panel except where a list is genuinely the right control (font families).
+  Exit: no `SelectRow` left in the panel except where a list is genuinely the right control (font families).
 
-### Phase 4 — Start, Library sheet, Export sheet  ⏭
+### Phase 4 — Start, Library sheet, Export sheet ⏭
+
 Files: `studio/start.tsx`, `customize-sidebar/library.tsx` (sheet), `studio/export.tsx`.
+
 - Start with gallery (subtree-themed miniatures), Your themes, import/drop/paste.
 - Library as a sheet; Export sheet replaces Install.
-Exit: full loop — Start → tune → Save → reopen from Start; share link → Studio.
+  Exit: full loop — Start → tune → Save → reopen from Start; share link → Studio.
 
-### Phase 5 — Polish  ⏭
+### Phase 5 — Polish ⏭
+
 - Keyboard: ⌘Z/⇧⌘Z, ⌘S, `1`–`6`, `Esc` closes sheets.
 - Reduced motion, focus order, aria labels on all icon buttons, contrast of tool chrome in dark.
 - Mobile: rail becomes a bottom bar, panel becomes a bottom sheet, canvas full width.

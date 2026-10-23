@@ -5,8 +5,11 @@ import { z } from "zod"
 // Keys are input names without the leading "--", so each one maps 1:1 onto a
 // CSS custom property and a new input only needs adding to a list below.
 
-export const builtInThemes = [
-  "nova",
+/** Nova is the only built-in theme; everything else is a saved theme. */
+export const builtInThemes = ["nova"] as const
+
+/** Themes that used to ship with Glaze; configs naming one start from Nova. */
+const retiredThemes = [
   "vega",
   "maia",
   "lyra",
@@ -15,7 +18,7 @@ export const builtInThemes = [
   "sera",
   "rhea",
   "gr8r",
-] as const
+]
 
 /**
  * Glaze release this config format and its generated CSS are written against.
@@ -26,13 +29,15 @@ export const glazeBaseline = "0.3.0"
 // Inputs that take a value per mode.
 const colorInputs = [
   "background",
-  "surface",
-  "ink",
-  "ink-muted",
-  "line",
+  "card",
+  "foreground",
+  "muted-foreground",
+  "border",
   "brand",
   "brand-ink",
-  "danger",
+  "primary",
+  "primary-foreground",
+  "destructive",
   "warning",
   "success",
   "info",
@@ -195,7 +200,7 @@ export type GlazeConfig = z.output<typeof glazeConfigSchema>
 
 /** Parses and validates a config; throws a readable error listing every problem. */
 export function parseConfig(value: unknown): GlazeConfig {
-  const result = glazeConfigSchema.safeParse(legacyCanvas(value))
+  const result = glazeConfigSchema.safeParse(migrateNames(value))
   if (result.success) return result.data
   const problems = result.error.issues.map(
     (i) => `  ${i.path.join(".") || "(root)"}: ${i.message}`
@@ -204,27 +209,58 @@ export function parseConfig(value: unknown): GlazeConfig {
 }
 
 /**
- * Configs written before V4 call the page colour `canvas`. It is `background`
- * now, so move it rather than reject the file.
+ * Older configs use the library's own input names. They are shadcn's names
+ * now, so move them rather than reject the file. A new name wins if a file
+ * somehow carries both.
  */
-function legacyCanvas(value: unknown): unknown {
+const legacyNames: Record<string, string> = {
+  canvas: "background",
+  surface: "card",
+  ink: "foreground",
+  "ink-muted": "muted-foreground",
+  line: "border",
+  danger: "destructive",
+}
+
+function migrateNames(value: unknown): unknown {
   if (!value || typeof value !== "object") return value
   const config = value as Record<string, unknown>
-  const color = config.color
-  if (!color || typeof color !== "object") return value
-  const nextColor = { ...(color as Record<string, unknown>) }
   let changed = false
-  for (const mode of ["light", "dark"]) {
-    const block = nextColor[mode]
-    if (!block || typeof block !== "object") continue
-    const values = { ...(block as Record<string, unknown>) }
-    if (!("canvas" in values)) continue
-    if (values.background === undefined) values.background = values.canvas
-    delete values.canvas
-    nextColor[mode] = values
+  const next = { ...config }
+  if (
+    typeof config.extends === "string" &&
+    retiredThemes.includes(config.extends)
+  ) {
+    next.extends = "nova"
     changed = true
   }
-  return changed ? { ...config, color: nextColor } : value
+  for (const group of ["color", "system"] as const) {
+    const blocks = config[group]
+    if (!blocks || typeof blocks !== "object") continue
+    const nextBlocks = { ...(blocks as Record<string, unknown>) }
+    let groupChanged = false
+    for (const mode of ["light", "dark"]) {
+      const block = nextBlocks[mode]
+      if (!block || typeof block !== "object") continue
+      const values = { ...(block as Record<string, unknown>) }
+      let moved = false
+      for (const [oldName, newName] of Object.entries(legacyNames)) {
+        if (!(oldName in values)) continue
+        if (values[newName] === undefined) values[newName] = values[oldName]
+        delete values[oldName]
+        moved = true
+      }
+      if (moved) {
+        nextBlocks[mode] = values
+        groupChanged = true
+      }
+    }
+    if (groupChanged) {
+      next[group] = nextBlocks
+      changed = true
+    }
+  }
+  return changed ? next : value
 }
 
 /** Identity helper for typed configs written in TypeScript. */

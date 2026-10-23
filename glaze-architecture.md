@@ -18,7 +18,7 @@ This is an incremental refactor of the existing project, not a new project or a 
 
 - The Glaze component package and its public component APIs.
 - Amit's component edits, additions and interaction improvements.
-- Nova as the default appearance.
+- Nova as the only built-in theme, and the default appearance.
 - Storybook as the component documentation and verification environment.
 - Existing Studio implementation and design work that supports this model.
 - Existing runtime features, including mode and density, until explicitly changed through a compatibility plan.
@@ -27,15 +27,15 @@ Do not replace Glaze components with stock shadcn components to simplify theming
 
 ## Responsibilities
 
-| Part | Responsibility |
-| --- | --- |
-| Glaze components | Structure, behavior, variants and custom component features. |
-| Nova defaults | The default appearance of the Glaze library in light and dark. |
-| Theme variables | The supported appearance values consumed by Glaze. |
-| Settings catalog | Editable variables, allowed values, defaults, short explanations and verified consumers. |
-| Glaze Studio | Editing, live preview, theme save/open and CSS export. |
-| Storybook | Examples, documentation and checks for the actual Glaze components. |
-| Consuming application | Uses Glaze and optionally applies an exported theme. |
+| Part                  | Responsibility                                                                           |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| Glaze components      | Structure, behavior, variants and custom component features.                             |
+| Nova defaults         | The default appearance of the Glaze library in light and dark.                           |
+| Theme variables       | The supported appearance values consumed by Glaze.                                       |
+| Settings catalog      | Editable variables, allowed values, defaults, short explanations and verified consumers. |
+| Glaze Studio          | Editing, live preview, theme save/open and CSS export.                                   |
+| Storybook             | Examples, documentation and checks for the actual Glaze components.                      |
+| Consuming application | Uses Glaze and optionally applies an exported theme.                                     |
 
 shadcn and Base UI remain the foundations where already used. Glaze owns the modifications and additions maintained in this repository.
 
@@ -51,27 +51,29 @@ A saved theme contains changes relative to Glaze's Nova defaults. It does not co
 
 Prefer the existing shadcn variable names where they already express the property:
 
-| Variable | Short explanation |
-| --- | --- |
-| `--background` | Page background. |
-| `--foreground` | Main text and icons. |
-| `--card`, `--card-foreground` | Card fill and content color. |
-| `--popover`, `--popover-foreground` | Floating-panel fill and content color. |
-| `--primary`, `--primary-foreground` | Primary action fill and content color. |
-| `--secondary`, `--secondary-foreground` | Secondary action fill and content color. |
-| `--muted`, `--muted-foreground` | Quiet surfaces and supporting text. |
-| `--accent`, `--accent-foreground` | Item highlights and their content color. |
-| `--border` | Shared borders and dividers. |
-| `--input` | Input outline color. |
-| `--ring` | Keyboard-focus color. |
-| `--destructive` | Destructive action color. |
-| `--chart-1` through `--chart-5` | Chart series colors. |
-| `--sidebar` and supported `--sidebar-*` variables | Sidebar appearance. |
-| `--radius` | Base corner roundness. |
+| Variable                                          | Short explanation                        |
+| ------------------------------------------------- | ---------------------------------------- |
+| `--background`                                    | Page background.                         |
+| `--foreground`                                    | Main text and icons.                     |
+| `--card`, `--card-foreground`                     | Card fill and content color.             |
+| `--popover`, `--popover-foreground`               | Floating-panel fill and content color.   |
+| `--primary`, `--primary-foreground`               | Primary action fill and content color.   |
+| `--secondary`, `--secondary-foreground`           | Secondary action fill and content color. |
+| `--muted`, `--muted-foreground`                   | Quiet surfaces and supporting text.      |
+| `--accent`, `--accent-foreground`                 | Item highlights and their content color. |
+| `--border`                                        | Shared borders and dividers.             |
+| `--input`                                         | Input outline color.                     |
+| `--ring`                                          | Keyboard-focus color.                    |
+| `--destructive`                                   | Destructive action color.                |
+| `--chart-1` through `--chart-5`                   | Chart series colors.                     |
+| `--sidebar` and supported `--sidebar-*` variables | Sidebar appearance.                      |
+| `--radius`                                        | Base corner roundness.                   |
 
 The catalog must reflect Glaze's actual usage, including differences from stock shadcn. The table is a starting point, not a claim that it covers every Glaze property.
 
-Remove unnecessary duplicate inputs such as an editor-facing `--canvas` that exists only to feed `--background`. The editor should change the meaningful variable directly.
+A theme sets this layer directly. Everything else a component reads is derived from it: `--popover` follows `--card`, `--card-foreground` and `--popover-foreground` follow `--foreground`, and the mixing recipes produce `--muted`, `--secondary`, `--accent`, `--border-strong`, `--input`, `--ring` and the sidebar fills. The only extra inputs are the ones shadcn has no name for: Brand and On brand, Overlay, Warning, Success, Info, High severity, Sidebar brand, and the mix percentages in Advanced mixing.
+
+Remove unnecessary duplicate inputs such as an editor-facing `--canvas` that exists only to feed `--background`, or a private `--ink` that only aliases `--foreground`. The editor should change the meaningful variable directly.
 
 Do not remove useful Glaze variables merely because they are not standard shadcn variables. Typography, spacing, control sizing, shadows, motion and custom components already have needs that the standard color variables do not cover.
 
@@ -81,7 +83,7 @@ Independent settings stay independent. Editing Primary must not silently recolor
 
 Keep useful shared rules, such as a radius scale or density-adjusted control sizing. Give each rule one documented meaning across themes. Do not select alternate derivation formulas based on a theme's name.
 
-Shared recipes are kept. Where Nova already mixes two colors to produce a third — quiet fills from the page and main text, focus from Primary and the page, sidebar from the page — the recipe stays, is documented once, and applies in both modes. Editing Page then moves the quiet fills too, by the same rule in every theme.
+Shared recipes are kept. Where Nova already mixes two colors to produce a third — quiet fills from the background and foreground, focus from Primary and the background, sidebar from the background — the recipe stays, is documented once, and applies in both modes. Editing Background then moves the quiet fills too, by the same rule in every theme.
 
 A derived value is shown as following its sources, with its current result, and can be overridden like any other setting.
 
@@ -111,15 +113,15 @@ Preserve existing variable names where practical. If the foreground name changes
 
 ## Studio editing sections
 
-| Section | Purpose |
-| --- | --- |
-| Colors | Page, surface, text, action, status, chart and sidebar colors. |
-| Typography | Supported font families, sizes, line spacing and weights. |
-| Spacing & size | Supported spacing and control dimensions. |
-| Corners | Shared and specifically supported corner settings. |
-| Shadows | Supported surface shadows. |
-| Motion | Supported timings and easing choices. |
-| Component details | Necessary adjustments that affect a specific component. |
+| Section           | Purpose                                                        |
+| ----------------- | -------------------------------------------------------------- |
+| Colors            | Page, surface, text, action, status, chart and sidebar colors. |
+| Typography        | Supported font families, sizes, line spacing and weights.      |
+| Spacing & size    | Supported spacing and control dimensions.                      |
+| Corners           | Shared and specifically supported corner settings.             |
+| Shadows           | Supported surface shadows.                                     |
+| Motion            | Supported timings and easing choices.                          |
+| Component details | Necessary adjustments that affect a specific component.        |
 
 Expose a setting only when its effect is supported by the actual Glaze components and exported theme. Existing Glaze capabilities are the starting inventory; this is not a mandate to invent missing controls.
 
@@ -158,15 +160,15 @@ A saved theme contains:
 
 The baseline reference identifies the library defaults the theme expects. It is not a record of which preset a value came from.
 
-| Action | Behavior |
-| --- | --- |
-| Save | Store the current changes in the browser's theme library. |
-| Open | Validate a theme JSON file and apply its changes to the supported Glaze Nova baseline. |
-| Export JSON | Download the current theme as a JSON file. |
-| Save a copy | Duplicate the theme in the library without changing the original. |
-| Export CSS | Generate CSS representing the same changes. |
-| Reset field | Remove the selected override and use its remaining shared source or Nova default. |
-| Reset all | Clear theme changes and return to Nova. |
+| Action      | Behavior                                                                               |
+| ----------- | -------------------------------------------------------------------------------------- |
+| Save        | Store the current changes in the browser's theme library.                              |
+| Open        | Validate a theme JSON file and apply its changes to the supported Glaze Nova baseline. |
+| Export JSON | Download the current theme as a JSON file.                                             |
+| Save a copy | Duplicate the theme in the library without changing the original.                      |
+| Export CSS  | Generate CSS representing the same changes.                                            |
+| Reset field | Remove the selected override and use its remaining shared source or Nova default.      |
+| Reset all   | Clear theme changes and return to Nova.                                                |
 
 An omitted setting inherits its default. A custom value remains explicit even if it happens to equal today's default.
 
@@ -249,7 +251,7 @@ Keep the current repository and package structure. Refactor in small, reviewable
 5. Implement or adapt Studio's validated theme state, JSON save/open and CSS generation using that catalog.
 6. Connect Studio previews and Storybook documentation to the same settings and actual Glaze components.
 7. Verify exported CSS in a small application that imports Glaze. Compare it with Studio's preview.
-8. Convert existing saved themes and named themes with explicit mappings. Report unsupported values and provide a transition for renamed or retired variables.
+8. Retire the named themes. Nova is the only built-in theme; a saved theme that named another one opens against Nova, with its values kept, and renamed or unsupported variables report what changed.
 
 Do not restart the project, replace the library with stock shadcn, remove custom components, or retire the Glaze package as part of this refactor.
 

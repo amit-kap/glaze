@@ -28,9 +28,9 @@ This repository is a Vite monorepo containing the library, a web app, a showcase
 
 - **Accessible primitives.** Components are built on Base UI and follow shadcn/ui conventions.
 - **Shared theming.** One set of settings changes every component; exceptions are named and visible.
-- **Nine built-in themes.** Each theme ships with its own typography, shape and elevation.
-- **Mode and density.** Light and dark modes, plus comfortable and compact density, combine freely with any theme.
-- **Scoped theming.** Apply a different theme to a single section of the page.
+- **Nova, one theme.** A shadcn-based default look; change it in Studio or by hand and save your own theme.
+- **Mode and density.** Light and dark modes, plus comfortable and compact density, combine freely.
+- **Scoped theming.** Apply a custom theme to a single section of the page.
 
 ## Requirements
 
@@ -44,10 +44,10 @@ Both are peer dependencies supplied by your project.
 In your project's folder, run:
 
 ```bash
-npx @amit-kap/glaze init --theme maia
+npx @amit-kap/glaze init
 ```
 
-This installs the package, imports Glaze's styles and the theme into your main CSS file (the one with `@import "tailwindcss"`), and wraps your app in `ThemeProvider`. Leave out `--theme` to choose from a list. Other options: `--mode light|dark|system`, `--density comfortable|compact`, `--config glaze.config.json` (your own theme, see below), and `--css` / `--entry` to point at the files yourself. Running it again switches the theme.
+This installs the package, imports Glaze's styles into your main CSS file (the one with `@import "tailwindcss"`), and wraps your app in `ThemeProvider`. Other options: `--mode light|dark|system`, `--density comfortable|compact`, `--config glaze.config.json` (your own theme, see below), and `--css` / `--entry` to point at the files yourself. Running it again updates the wiring.
 
 If your entry file isn't the usual `createRoot(…).render(<App />)` shape, it prints the lines to add instead.
 
@@ -65,18 +65,17 @@ npm install github:amit-kap/glaze#v<version>
 
 ## Getting started
 
-### 1. Import the styles and a theme
+### 1. Import the styles
 
 Add the following to your project's main CSS file:
 
 ```css
 @import "@amit-kap/glaze/globals.css";
-@import "@amit-kap/glaze/themes/maia.css";
 ```
 
-- `globals.css` includes Tailwind, the tokens and the default theme (Nova). Use it in place of your own `@import "tailwindcss"`.
-- Import only the themes you use. Each theme loads its own font.
+- `globals.css` includes Tailwind, the tokens and Nova. Use it in place of your own `@import "tailwindcss"`.
 - Tailwind detects the classes used inside Glaze components automatically. Your project's files are detected as usual.
+- A custom theme is a second `@import`, after this one.
 
 ### 2. Enable the theme
 
@@ -85,14 +84,14 @@ Wrap the application in `ThemeProvider`:
 ```tsx
 import { ThemeProvider } from "@amit-kap/glaze/theme"
 
-<ThemeProvider defaultTheme="maia" defaultMode="system">
+;<ThemeProvider defaultMode="system">
   <App />
 </ThemeProvider>
 ```
 
-`defaultTheme` defaults to `"nova"`. The viewer's choice is persisted in `localStorage` under `storageKey` (default `"glaze"`); pass `false` to disable persistence.
+The viewer's choice is persisted in `localStorage` under `storageKey` (default `"glaze"`); pass `false` to disable persistence.
 
-Outside React, set the attribute directly: `<html data-theme="maia">`.
+Outside React, set the attribute directly: `<html data-theme="nova">`.
 
 ### 3. Use components
 
@@ -106,61 +105,52 @@ import { Button } from "@amit-kap/glaze/components/button"
 
 Theme, mode and density are controlled by attributes on `<html>` and can be combined freely:
 
-| Setting | Attribute | Values |
-|---|---|---|
-| Theme | `data-theme` | none or `nova` (default), `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, `gr8r`, or a custom theme |
-| Mode | `class="dark"` | none (light), `dark` |
-| Density | `data-density` | none or `comfortable`, `compact` |
+| Setting | Attribute      | Values                                                             |
+| ------- | -------------- | ------------------------------------------------------------------ |
+| Theme   | `data-theme`   | none or `nova` (default), or the name of a custom theme you import |
+| Mode    | `class="dark"` | none (light), `dark`                                               |
+| Density | `data-density` | none or `comfortable`, `compact`                                   |
 
 ```html
-<html data-theme="maia" class="dark" data-density="compact">
+<html data-theme="nova" class="dark" data-density="compact"></html>
 ```
 
 `ThemeProvider` manages these attributes for you. The same attributes can be applied to any element to theme only that part of the page:
 
 ```html
-<section data-theme="sera">…</section>
+<section data-theme="my-theme">…</section>
 ```
 
-### Built-in themes
+### One theme: Nova
 
-| Theme | Characteristics |
-|---|---|
-| `nova` (default) | Geist, 32px controls, 10px corners |
-| `vega` | Inter, taller controls, tighter corners |
-| `maia` | Figtree, pill controls, round menus, deep shadows |
-| `lyra` | JetBrains Mono, square corners, small type |
-| `mira` | Inter, compact controls, small type |
-| `luma` | Inter, pill controls, very round cards, lifted shadows |
-| `sera` | Taupe, Noto Sans with Playfair Display headings, square corners, tall controls |
-| `rhea` | Inter, soft rounded controls and cards |
-| `gr8r` | Geist, warm neutrals, indigo brand, small type, 6px controls |
+Nova is the only built-in theme. It is a shadcn-based appearance with Geist, 32px controls and 10px corners, in light and dark. Everything you change is a saved theme on top of it — made in Studio or written by hand.
 
 ### Switching at runtime
 
 ```tsx
 import { useTheme } from "@amit-kap/glaze/theme"
 
-const { theme, setTheme, mode, setMode, resolvedMode, density, setDensity } = useTheme()
+const { mode, setMode, resolvedMode, density, setDensity } = useTheme()
 
-setTheme("lyra")
-setMode("dark")        // "light" | "dark" | "system"
-setDensity("compact")  // "comfortable" | "compact"
+setMode("dark") // "light" | "dark" | "system"
+setDensity("compact") // "comfortable" | "compact"
 ```
+
+`setTheme("my-theme")` switches to a custom theme you have imported.
 
 ### Preventing a flash on load
 
-Add the inline script to `<head>` so the saved theme is applied before the first paint. Pass the same options as the provider:
+Add the inline script to `<head>` so the saved mode is applied before the first paint. Pass the same options as the provider:
 
 ```tsx
 import { themeScript } from "@amit-kap/glaze/theme"
 
-<script dangerouslySetInnerHTML={{ __html: themeScript({ defaultTheme: "maia" }) }} />
+;<script dangerouslySetInnerHTML={{ __html: themeScript() }} />
 ```
 
 ### Custom themes
 
-The quickest way is a config (`glaze.config.json`): a built-in theme to start from plus the inputs to change. Build one in the showcase's Customize panel, or see `packages/ui/glaze.config.example.json`. Then:
+The quickest way is a config (`glaze.config.json`): the inputs to change, starting from Nova. Build one in the showcase's Customize panel, or see `packages/ui/glaze.config.example.json`. Then:
 
 ```bash
 npx @amit-kap/glaze init --config glaze.config.json
@@ -168,10 +158,10 @@ npx @amit-kap/glaze init --config glaze.config.json
 
 It generates `<name>.css` and wires it in; `npx glaze theme glaze.config.json` regenerates just the CSS. In this repository, `npm run theme -- <config.json>` does the same.
 
-To write a theme by hand:
+To write a theme by hand, copy `packages/ui/src/styles/themes/nova.css` and change the values you need:
 
-1. Create `<name>.css`, either in `packages/ui/src/styles/themes/` or in your project.
-2. Under `[data-theme="<name>"]`, set the shared inputs (`--background`, `--surface`, `--ink`, `--ink-muted`, `--line`, `--brand`, `--brand-ink`, `--radius`, …) for both light and dark mode.
+1. Create `<name>.css` in your project.
+2. Under `[data-theme="<name>"]`, set the shared inputs (`--background`, `--card`, `--foreground`, `--muted-foreground`, `--border`, `--brand`, `--brand-ink`, `--radius`, …) for both light and dark mode.
 3. Import the file and set `data-theme="<name>"`.
 
 `--primary` follows `--brand` and `--primary-foreground` follows `--brand-ink`
@@ -186,12 +176,12 @@ one, is `packages/ui/src/theme/catalog.ts`. The specification is
 
 ### Repository structure
 
-| Path | Contents |
-|---|---|
-| `packages/ui` | The Glaze library: components, tokens and themes |
-| `apps/web` | Web app (the target for `shadcn add`) |
-| `apps/showcase` | One-page demo of the components |
-| `apps/storybook` | Storybook with a story for every component |
+| Path             | Contents                                         |
+| ---------------- | ------------------------------------------------ |
+| `packages/ui`    | The Glaze library: components, tokens and themes |
+| `apps/web`       | Web app (the target for `shadcn add`)            |
+| `apps/showcase`  | One-page demo of the components                  |
+| `apps/storybook` | Storybook with a story for every component       |
 
 ### Architecture
 
@@ -224,14 +214,14 @@ Anything the converter cannot map becomes a component token (see "Converting sto
 
 Every duration and easing comes from a motion token; `check:tokens` rejects literal timings and `transition-all`. Pick the token by what moves:
 
-| Motion | Duration | Easing | Used by |
-|---|---|---|---|
-| Hover, focus and colour changes | default (`--duration-base`) | `ease-standard` | buttons, toggles, inputs, tab labels |
-| A highlight or indicator travelling between targets | `--duration-fast` (highlight, hover pill), `--duration-moderate` (tab indicator) | `ease-spring` | menu highlight (`highlight-scope`), tab hover pill (`highlight-scope` following the pointer), tab indicator |
-| A popup or overlay fading in | `--duration-fade-*` | tw-animate default | menus, select, combobox, popover, tooltip, hover card, dialogs, sheet overlay |
-| The same popup leaving | `--duration-exit-*` on `data-closed` | tw-animate default | as above |
-| A panel resizing | `--duration-moderate` | `ease-standard` | collapsible, accordion |
-| A large surface sliding | component tokens (`--drawer-duration`, …) | `ease-enter` | drawer, sheet |
+| Motion                                              | Duration                                                                         | Easing             | Used by                                                                                                     |
+| --------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Hover, focus and colour changes                     | default (`--duration-base`)                                                      | `ease-standard`    | buttons, toggles, inputs, tab labels                                                                        |
+| A highlight or indicator travelling between targets | `--duration-fast` (highlight, hover pill), `--duration-moderate` (tab indicator) | `ease-spring`      | menu highlight (`highlight-scope`), tab hover pill (`highlight-scope` following the pointer), tab indicator |
+| A popup or overlay fading in                        | `--duration-fade-*`                                                              | tw-animate default | menus, select, combobox, popover, tooltip, hover card, dialogs, sheet overlay                               |
+| The same popup leaving                              | `--duration-exit-*` on `data-closed`                                             | tw-animate default | as above                                                                                                    |
+| A panel resizing                                    | `--duration-moderate`                                                            | `ease-standard`    | collapsible, accordion                                                                                      |
+| A large surface sliding                             | component tokens (`--drawer-duration`, …)                                        | `ease-enter`       | drawer, sheet                                                                                               |
 
 Rules:
 
@@ -259,7 +249,7 @@ npm run dev -w storybook    # http://localhost:6006
 npm run build -w storybook  # static build in apps/storybook/dist
 ```
 
-The toolbar provides the **Theme**, **Mode** and **Density** switches. Link to a specific state with `&globals=theme:maia;mode:dark;density:compact`. Test themes that should not ship belong in `apps/storybook/src/themes`; they appear in the Theme switch but are not part of the package.
+The toolbar provides the **Mode** and **Density** switches. Link to a specific state with `&globals=mode:dark;density:compact`.
 
 Both are deployed to GitHub Pages on every push to `main` (`.github/workflows/pages.yml`).
 

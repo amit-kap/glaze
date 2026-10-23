@@ -75,24 +75,23 @@ export const brandRows = [
   },
   {
     key: "brand-ink",
-    label: "Brand ink",
+    label: "On brand",
     derives: ["--primary-foreground", "--sidebar-primary-foreground"],
   },
   {
     key: "background",
-    label: "Page",
+    label: "Background",
     derives: ["--muted", "--subtle-foreground", "--sidebar", "--ring"],
   },
   {
-    key: "surface",
-    label: "Surface",
-    derives: ["--card", "--popover", "--secondary", "--accent"],
+    key: "card",
+    label: "Card",
+    derives: ["--popover", "--secondary", "--accent"],
   },
   {
-    key: "ink",
-    label: "Ink",
+    key: "foreground",
+    label: "Foreground",
     derives: [
-      "--foreground",
       "--card-foreground",
       "--popover-foreground",
       "--secondary",
@@ -107,31 +106,27 @@ export const brandRows = [
       "--sidebar",
       "--sidebar-foreground",
       "--sidebar-accent",
+      "--sidebar-accent-foreground",
     ],
   },
   {
-    key: "ink-muted",
-    label: "Ink muted",
-    derives: ["--muted-foreground", "--subtle-foreground"],
+    key: "muted-foreground",
+    label: "Muted foreground",
+    derives: ["--subtle-foreground"],
   },
   {
-    key: "line",
-    label: "Line",
-    derives: ["--border", "--border-strong", "--input", "--sidebar-border"],
+    key: "border",
+    label: "Border",
+    derives: ["--border-strong", "--input", "--sidebar-border"],
   },
   { key: "overlay", label: "Overlay", derives: ["--overlay"] },
 ]
 
 export const statusRows = [
   {
-    key: "danger",
-    label: "Danger",
-    derives: [
-      "--destructive",
-      "--danger-subtle",
-      "--severity-critical",
-      "--severity-high",
-    ],
+    key: "destructive",
+    label: "Destructive",
+    derives: ["--destructive-subtle", "--severity-critical", "--severity-high"],
   },
   {
     key: "warning",

@@ -59,7 +59,7 @@ export const settingSections: SettingSection[] = [
   {
     id: "colors",
     title: "Colors",
-    note: "Backgrounds, text, borders, actions and status colors.",
+    note: "The colour values a theme sets, in shadcn's names. Everything else is derived.",
   },
   {
     id: "typography",
@@ -304,15 +304,15 @@ export const settingGroups: SettingGroup[] = [
 export const settings: Setting[] = [
   {
     token: "--background",
-    label: "Page",
+    label: "Background",
     note: "Main page background; also the base of quiet fills and focus.",
     kind: "color",
     group: "colors.surfaces",
     source: "input",
   },
   {
-    token: "--surface",
-    label: "Surface",
+    token: "--card",
+    label: "Card",
     note: "Cards and floating panels; also the base of neutral highlights.",
     kind: "color",
     group: "colors.surfaces",
@@ -327,23 +327,23 @@ export const settings: Setting[] = [
     source: "input",
   },
   {
-    token: "--ink",
-    label: "Main text",
+    token: "--foreground",
+    label: "Foreground",
     note: "Main text and icons; also tints neutral fills and outlines.",
     kind: "color",
     group: "colors.text",
     source: "input",
   },
   {
-    token: "--ink-muted",
-    label: "Secondary text",
+    token: "--muted-foreground",
+    label: "Muted foreground",
     note: "Helper text, metadata and quieter labels.",
     kind: "color",
     group: "colors.text",
     source: "input",
   },
   {
-    token: "--line",
+    token: "--border",
     label: "Border",
     note: "Default outlines and the base of stronger field borders.",
     kind: "color",
@@ -385,8 +385,8 @@ export const settings: Setting[] = [
     follows: ["--brand-ink"],
   },
   {
-    token: "--danger",
-    label: "Danger",
+    token: "--destructive",
+    label: "Destructive",
     note: "Errors and destructive actions.",
     kind: "color",
     group: "colors.status",
@@ -459,7 +459,7 @@ export const settings: Setting[] = [
   {
     token: "--mix-fill",
     label: "Fill tint",
-    note: "Amount of ink in secondary and item-highlight fills.",
+    note: "Amount of foreground in secondary and item-highlight fills.",
     kind: "number",
     group: "colors.advanced-mixing",
     source: "input",
@@ -467,7 +467,7 @@ export const settings: Setting[] = [
   {
     token: "--mix-muted",
     label: "Quiet tint",
-    note: "Amount of ink in the quiet background.",
+    note: "Amount of foreground in the quiet background.",
     kind: "number",
     group: "colors.advanced-mixing",
     source: "input",
@@ -475,7 +475,7 @@ export const settings: Setting[] = [
   {
     token: "--mix-sidebar",
     label: "Sidebar tint",
-    note: "Amount of ink in the sidebar background.",
+    note: "Amount of foreground in the sidebar background.",
     kind: "number",
     group: "colors.advanced-mixing",
     source: "input",
@@ -483,7 +483,7 @@ export const settings: Setting[] = [
   {
     token: "--mix-strong",
     label: "Border tint",
-    note: "Amount of ink added to stronger outlines.",
+    note: "Amount of foreground added to stronger outlines.",
     kind: "number",
     group: "colors.advanced-mixing",
     source: "input",
@@ -517,11 +517,11 @@ export const settings: Setting[] = [
   {
     token: "--caution",
     label: "High severity",
-    note: "Separate high-severity color; defaults to danger mixed with warning.",
+    note: "Separate high-severity color; defaults to destructive mixed with warning.",
     kind: "color",
     group: "colors.advanced-mixing",
     source: "input",
-    fallback: "color-mix(in oklab, var(--danger) 50%, var(--warning))",
+    fallback: "color-mix(in oklab, var(--destructive) 50%, var(--warning))",
   },
   {
     token: "--typeface-sans",
@@ -1149,7 +1149,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--background", "--ink", "--mix-muted"],
+    follows: ["--background", "--foreground", "--mix-muted"],
   },
   {
     token: "--subtle-foreground",
@@ -1158,7 +1158,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--background", "--ink-muted"],
+    follows: ["--background", "--muted-foreground"],
   },
   {
     token: "--sidebar",
@@ -1167,7 +1167,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--background", "--ink", "--mix-sidebar"],
+    follows: ["--background", "--foreground", "--mix-sidebar"],
   },
   {
     token: "--sidebar-accent",
@@ -1176,7 +1176,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--background", "--ink", "--mix-fill", "--mix-sidebar"],
+    follows: ["--background", "--foreground", "--mix-fill", "--mix-sidebar"],
   },
   {
     token: "--ring",
@@ -1197,22 +1197,13 @@ export const settings: Setting[] = [
     follows: ["--background", "--mix-ring", "--primary"],
   },
   {
-    token: "--card",
-    label: "card",
-    note: "Card fill.",
-    kind: "color",
-    group: null,
-    source: "derived",
-    follows: ["--surface"],
-  },
-  {
     token: "--popover",
     label: "popover",
     note: "Floating panel fill.",
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--surface"],
+    follows: ["--card"],
   },
   {
     token: "--secondary",
@@ -1221,7 +1212,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink", "--mix-fill", "--surface"],
+    follows: ["--foreground", "--mix-fill", "--card"],
   },
   {
     token: "--accent",
@@ -1230,16 +1221,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink", "--mix-fill", "--surface"],
-  },
-  {
-    token: "--foreground",
-    label: "foreground",
-    note: "Main text and icons.",
-    kind: "color",
-    group: null,
-    source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground", "--mix-fill", "--card"],
   },
   {
     token: "--card-foreground",
@@ -1248,7 +1230,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground"],
   },
   {
     token: "--popover-foreground",
@@ -1257,7 +1239,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground"],
   },
   {
     token: "--secondary-foreground",
@@ -1266,7 +1248,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground"],
   },
   {
     token: "--accent-foreground",
@@ -1275,7 +1257,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground"],
   },
   {
     token: "--sidebar-foreground",
@@ -1284,7 +1266,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground"],
   },
   {
     token: "--sidebar-accent-foreground",
@@ -1293,7 +1275,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground"],
   },
   {
     token: "--hover",
@@ -1302,7 +1284,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground"],
   },
   {
     token: "--active",
@@ -1311,7 +1293,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink"],
+    follows: ["--foreground"],
   },
   {
     token: "--border-strong",
@@ -1320,7 +1302,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink", "--line", "--mix-strong"],
+    follows: ["--foreground", "--border", "--mix-strong"],
   },
   {
     token: "--input",
@@ -1329,25 +1311,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--ink", "--line", "--mix-strong"],
-  },
-  {
-    token: "--muted-foreground",
-    label: "muted-foreground",
-    note: "Secondary text.",
-    kind: "color",
-    group: null,
-    source: "derived",
-    follows: ["--ink-muted"],
-  },
-  {
-    token: "--border",
-    label: "border",
-    note: "Default dividers and outlines.",
-    kind: "color",
-    group: null,
-    source: "derived",
-    follows: ["--line"],
+    follows: ["--foreground", "--border", "--mix-strong"],
   },
   {
     token: "--sidebar-border",
@@ -1356,7 +1320,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--line"],
+    follows: ["--border"],
   },
   {
     token: "--primary-subtle",
@@ -1404,22 +1368,13 @@ export const settings: Setting[] = [
     follows: ["--brand-ink", "--sidebar-brand-ink"],
   },
   {
-    token: "--destructive",
-    label: "destructive",
-    note: "Destructive action color.",
-    kind: "color",
-    group: null,
-    source: "derived",
-    follows: ["--danger"],
-  },
-  {
-    token: "--danger-subtle",
-    label: "danger-subtle",
+    token: "--destructive-subtle",
+    label: "destructive-subtle",
     note: "Soft error tint.",
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--danger"],
+    follows: ["--destructive"],
   },
   {
     token: "--severity-critical",
@@ -1428,7 +1383,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--danger"],
+    follows: ["--destructive"],
   },
   {
     token: "--severity-high",
@@ -1437,7 +1392,7 @@ export const settings: Setting[] = [
     kind: "color",
     group: null,
     source: "derived",
-    follows: ["--caution", "--danger", "--warning"],
+    follows: ["--caution", "--destructive", "--warning"],
   },
   {
     token: "--warning-subtle",

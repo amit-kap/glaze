@@ -1,7 +1,7 @@
 {
   "version": 1,
   "name": "acme",
-  "extends": "maia",
+  "extends": "nova",
   "defaults": { "mode": "system", "density": "compact" },
   "fonts": ["@fontsource-variable/inter"],
   "color": {

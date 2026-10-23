@@ -32,9 +32,11 @@ export function decodeShare(
     )
     const payload = JSON.parse(json) as Partial<Payload> | null
     if (!payload || typeof payload !== "object") return null
-    if (typeof payload.b !== "string" || !isBaseTheme(payload.b)) return null
+    if (typeof payload.b !== "string") return null
     if (!payload.c || typeof payload.c !== "object") return null
-    return { base: payload.b, custom: { ...emptyCustom, ...payload.c } }
+    // Links made before the other themes were retired open as Nova.
+    const base = isBaseTheme(payload.b) ? payload.b : "nova"
+    return { base, custom: { ...emptyCustom, ...payload.c } }
   } catch {
     return null
   }
