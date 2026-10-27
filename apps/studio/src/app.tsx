@@ -1,6 +1,5 @@
 import * as React from "react"
 
-import { cn } from "@amit-kap/glaze/lib/utils"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -75,13 +74,8 @@ export function App() {
   }
 
   return (
-    <div
-      className={cn(
-        "flex h-full flex-col bg-background text-foreground",
-        // The tool is themed by Glaze too: editing dark means seeing dark.
-        mode === "dark" && "dark"
-      )}
-    >
+    // Dark mode applies to the stage preview only; the studio stays light.
+    <div className="flex h-full flex-col bg-background text-foreground">
       <TopBar
         name={name}
         onNameChange={(value) => {
