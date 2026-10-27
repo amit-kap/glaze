@@ -265,14 +265,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Body text takes the theme's normal weight, so `--weight-normal` reaches
+     every element that doesn't set its own, not only `font-normal` ones. */
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background font-normal text-foreground;
   }
-  /* A themed subtree re-applies its own font and text colour; otherwise it
-     inherits the values computed on <body> by the outer theme. */
+  /* A themed subtree re-applies its own font, weight and text colour;
+     otherwise it inherits the values computed on <body> by the outer theme. */
   [data-theme],
   .dark {
-    @apply font-sans text-foreground;
+    @apply font-sans font-normal text-foreground;
   }
   /* Anything a click acts on shows the pointer; disabled controls do not.
      Zero specificity, so a component's own cursor-* class still wins. */

@@ -51,6 +51,12 @@ export const Sizes: Story = {
       <div className="flex flex-col items-center gap-3">
         <SegmentedControl
           {...args}
+          size="mini"
+          value={value}
+          onValueChange={setValue}
+        />
+        <SegmentedControl
+          {...args}
           size="sm"
           value={value}
           onValueChange={setValue}

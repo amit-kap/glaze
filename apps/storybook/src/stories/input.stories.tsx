@@ -38,6 +38,9 @@ const meta = {
     },
   },
   args: { placeholder: "Enter text" },
+  argTypes: {
+    size: { control: "select", options: ["default", "sm", "mini"] },
+  },
   decorators: [
     (Story) => (
       <div className="w-sm">
@@ -53,6 +56,14 @@ type Story = StoryObj<typeof meta>
 // --- Basic ----------------------------------------------------------------
 
 export const Default: Story = {}
+
+// --- Sizes ----------------------------------------------------------------
+
+// Glaze-only: `sm` matches the small button, `mini` the extra-small one (and
+// the mini Select) for toolbars and panel rows.
+export const Small: Story = { args: { size: "sm" } }
+
+export const Mini: Story = { args: { size: "mini" } }
 
 // --- States ---------------------------------------------------------------
 

@@ -26,7 +26,7 @@ function SegmentedControl<T extends string>({
   className?: string
   /** Names the choice for assistive tech; not drawn. */
   label: string
-  size?: "sm" | "default"
+  size?: "mini" | "sm" | "default"
   value: T
   onValueChange: (value: T) => void
   options: SegmentedControlOption<T>[]
