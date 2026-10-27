@@ -10,7 +10,7 @@ import {
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Dashboard } from "./dashboard"
-import { cssVars, type Color, type Mode, type Token } from "./theme"
+import { cssVars, type Mode, type Theme } from "./theme"
 
 type Density = "comfortable" | "compact"
 type Width = "fit" | "768" | "390"
@@ -23,15 +23,7 @@ const screens: { id: Screen; label: string }[] = [
   { id: "chat", label: "Chat" },
 ]
 
-export function Stage({
-  mode,
-  onModeChange,
-  theme,
-}: {
-  mode: Mode
-  onModeChange: (mode: Mode) => void
-  theme: Record<Mode, Record<Token, Color>>
-}) {
+export function Stage({ mode, theme }: { mode: Mode; theme: Theme }) {
   const [screen, setScreen] = React.useState<Screen>("dashboard")
   const [density, setDensity] = React.useState<Density>("comfortable")
   const [width, setWidth] = React.useState<Width>("fit")
@@ -64,15 +56,6 @@ export function Stage({
             </TabsList>
 
             <div className="ms-auto flex items-center gap-3">
-              <SegmentedControl
-                label="Mode"
-                value={mode}
-                onValueChange={onModeChange}
-                options={[
-                  { value: "light", label: "Light" },
-                  { value: "dark", label: "Dark" },
-                ]}
-              />
               <SegmentedControl
                 label="Density"
                 value={density}

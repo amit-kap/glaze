@@ -22,7 +22,7 @@ export function Rail({
   return (
     <nav
       aria-label="Tools"
-      className="flex w-13 shrink-0 flex-col items-stretch gap-2"
+      className="flex w-11 shrink-0 flex-col items-stretch gap-2"
     >
       {items.map(({ id, label, icon: Icon }) => {
         const current = id === value
@@ -31,14 +31,15 @@ export function Rail({
             key={id}
             variant={current ? "default" : "ghost"}
             aria-current={current ? "page" : undefined}
+            aria-label={label}
+            title={label}
             onClick={() => onChange(id)}
             className={cn(
-              "h-12.5 w-13 flex-col gap-2 rounded-lg p-2",
-              !current && "bg-background text-muted-foreground hover:bg-muted",
+              "size-11 rounded-lg p-2",
+              !current && "bg-transparent text-muted-foreground hover:bg-muted"
             )}
           >
-            <Icon className={cn("size-4", !current && "text-foreground")} />
-            <span className="text-micro leading-none font-medium">{label}</span>
+            <Icon className="size-5" />
           </Button>
         )
       })}

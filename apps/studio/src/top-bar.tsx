@@ -1,6 +1,7 @@
 import { DownloadIcon } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "@amit-kap/glaze/components/avatar"
+import { Badge } from "@amit-kap/glaze/components/badge"
 import { Button } from "@amit-kap/glaze/components/button"
 import { Input } from "@amit-kap/glaze/components/input"
 import { Kbd } from "@amit-kap/glaze/components/kbd"
@@ -12,6 +13,7 @@ export function TopBar({
   name,
   onNameChange,
   changes,
+  onResetAll,
   saved,
   copied,
   onSave,
@@ -20,6 +22,7 @@ export function TopBar({
   name: string
   onNameChange: (value: string) => void
   changes: number
+  onResetAll: () => void
   saved: boolean
   copied: boolean
   onSave: () => void
@@ -39,14 +42,18 @@ export function TopBar({
       </div>
 
       <div className="ms-auto flex min-w-0 flex-1 items-center justify-end gap-2">
-        {changes > 0 && (
-          <span
-            title={`${changes} ${changes === 1 ? "setting" : "settings"} changed from Nova`}
-            className="me-1 flex h-5 min-w-5 items-center justify-center rounded-pill bg-muted px-2 text-caption font-medium text-muted-foreground tabular-nums"
-          >
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={changes === 0}
+          title={`${changes} ${changes === 1 ? "setting" : "settings"} changed from Nova`}
+          onClick={onResetAll}
+        >
+          Reset all
+          <Badge variant="secondary" className="tabular-nums">
             {changes}
-          </span>
-        )}
+          </Badge>
+        </Button>
 
         <Button variant="outline" size="sm" onClick={onSave}>
           {saved ? "Saved" : "Save"}
