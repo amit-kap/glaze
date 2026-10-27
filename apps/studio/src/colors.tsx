@@ -1,12 +1,5 @@
 import * as React from "react"
-import { ChevronDownIcon } from "lucide-react"
 
-import { cn } from "@amit-kap/glaze/lib/utils"
-import { Button } from "@amit-kap/glaze/components/button"
-import {
-  Collapsible,
-  CollapsibleContent,
-} from "@amit-kap/glaze/components/collapsible"
 import { ColorSelector } from "@amit-kap/glaze/components/color-selector"
 import {
   Select,
@@ -18,6 +11,7 @@ import {
 import type { ColorFormat } from "@amit-kap/glaze/lib/color"
 
 import type { Draft } from "./draft"
+import { PanelSection } from "./section"
 import {
   groups,
   rowOf,
@@ -168,80 +162,44 @@ function GroupSection({
   setColor: Draft["setColor"]
   resetColor: Draft["resetColor"]
 }) {
-  const [expanded, setExpanded] = React.useState(defaultOpen)
   const colors = theme[mode]
 
   return (
-    <Collapsible open={expanded} onOpenChange={setExpanded}>
-      <section className="flex flex-col gap-1 border-b border-border">
-        {/* The section opens as a whole; the note explains it when it's open. */}
-        <Button
-          variant="ghost"
-          aria-expanded={expanded}
-          onClick={() => setExpanded(!expanded)}
-          className="h-auto w-full flex-col items-stretch gap-0 border-0 px-0 py-2.5 whitespace-normal hover:bg-transparent aria-expanded:bg-transparent"
-        >
-          <span className="flex w-full items-center justify-between">
-            <span className="text-body font-medium text-foreground">
-              {group.title}
-            </span>
-            <ChevronDownIcon
-              className={cn(
-                "mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform duration-(--duration-fast)",
-                expanded && "rotate-180"
-              )}
-            />
-          </span>
-          {group.note && (
-            <span
-              aria-hidden={!expanded}
-              className="grid w-full text-left transition-[grid-template-rows] duration-(--duration-moderate) ease-standard"
-              style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
-            >
-              <span className="min-h-0 overflow-clip text-caption text-muted-foreground">
-                {group.note}
-              </span>
-            </span>
-          )}
-        </Button>
-
-        <CollapsibleContent>
-          <div className="mb-2 flex flex-col gap-1">
-            {group.rows.map((row) => {
-              const pair = pairs[row.token]
-              return (
-                <ColorSelector
-                  key={row.token}
-                  label={row.label}
-                  value={colors[row.token]}
-                  description={row.note}
-                  contrast={
-                    pair
-                      ? {
-                          foreground: colors[pair[0]],
-                          background: colors[pair[1]],
-                        }
-                      : undefined
+    <PanelSection
+      title={group.title}
+      note={group.note}
+      defaultOpen={defaultOpen}
+    >
+      {group.rows.map((row) => {
+        const pair = pairs[row.token]
+        return (
+          <ColorSelector
+            key={row.token}
+            label={row.label}
+            value={colors[row.token]}
+            description={row.note}
+            contrast={
+              pair
+                ? {
+                    foreground: colors[pair[0]],
+                    background: colors[pair[1]],
                   }
-                  dependents={row.feeds.map((token) => ({
-                    label: rowOf[token]?.label ?? token,
-                    value: colors[token] ?? colors[row.token],
-                  }))}
-                  format={format}
-                  onFormatChange={onFormatChange}
-                  edited={overridden(mode, row.token)}
-                  onReset={() => resetColor(mode, row.token)}
-                  open={open === row.token}
-                  onOpenChange={(next) => setOpen(next ? row.token : null)}
-                  onValueChange={(value: Color) =>
-                    setColor(mode, row.token, value)
-                  }
-                />
-              )
-            })}
-          </div>
-        </CollapsibleContent>
-      </section>
-    </Collapsible>
+                : undefined
+            }
+            dependents={row.feeds.map((token) => ({
+              label: rowOf[token]?.label ?? token,
+              value: colors[token] ?? colors[row.token],
+            }))}
+            format={format}
+            onFormatChange={onFormatChange}
+            edited={overridden(mode, row.token)}
+            onReset={() => resetColor(mode, row.token)}
+            open={open === row.token}
+            onOpenChange={(next) => setOpen(next ? row.token : null)}
+            onValueChange={(value: Color) => setColor(mode, row.token, value)}
+          />
+        )
+      })}
+    </PanelSection>
   )
 }

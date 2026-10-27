@@ -11,6 +11,7 @@ import { Stage } from "./stage"
 import { TopBar } from "./top-bar"
 import { useThemeDraft } from "./draft"
 import { changed, tokens, type Mode } from "./theme"
+import { typeChanged, typeTokens } from "./typography"
 
 const storageKey = "glaze-studio-theme"
 
@@ -54,7 +55,13 @@ export function App() {
         .map((token) => `  --${token}: ${draft.theme[mode][token]};`)
         .join("\n")
 
-    const light = block("light")
+    // Type is shared by both modes, so it exports with the light block.
+    const typeBlock = typeTokens
+      .filter((token) => typeChanged(token, draft.type[token]))
+      .map((token) => `  --${token}: ${draft.type[token]};`)
+      .join("\n")
+
+    const light = [block("light"), typeBlock].filter(Boolean).join("\n")
     const dark = block("dark")
     const css = [
       `/* ${name || "Untitled theme"} — Glaze theme, based on Nova */`,
@@ -123,7 +130,7 @@ export function App() {
           />
 
           <ResizablePanel minSize={360} className="flex min-h-0 flex-col">
-            <Stage mode={mode} theme={draft.theme} />
+            <Stage mode={mode} theme={draft.theme} type={draft.type} />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

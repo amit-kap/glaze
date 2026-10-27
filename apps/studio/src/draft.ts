@@ -13,6 +13,12 @@ import {
   type Mode,
   type Theme,
 } from "./theme"
+import {
+  countTypeChanges,
+  typeDefaults,
+  typeTokens,
+  type TypeValues,
+} from "./typography"
 
 const storageKey = "glaze-studio-draft-v1"
 
@@ -28,13 +34,22 @@ const onlyTokens = (
     tokens.map((token) => [token, colors?.[token] ?? fallback[token]])
   )
 
-function read(): { theme: Theme; unlinked: Unlinked } {
+type Stored = { theme: Theme; unlinked: Unlinked; type: TypeValues }
+
+const onlyTypeTokens = (values: TypeValues | undefined): TypeValues =>
+  Object.fromEntries(
+    typeTokens.map((token) => [token, values?.[token] ?? typeDefaults[token]])
+  )
+
+function read(): Stored {
   try {
     const stored = JSON.parse(localStorage.getItem(storageKey) ?? "null") as {
       theme?: { light?: Record<string, Color>; dark?: Record<string, Color> }
       unlinked?: Unlinked
+      type?: TypeValues
     } | null
-    if (!stored?.theme) return { theme: defaults, unlinked: noLinks }
+    if (!stored?.theme)
+      return { theme: defaults, unlinked: noLinks, type: typeDefaults }
     // Only tokens the panel still offers, so an old draft can't resurrect a
     // colour Studio no longer edits.
     return {
@@ -46,9 +61,10 @@ function read(): { theme: Theme; unlinked: Unlinked } {
         light: stored.unlinked?.light ?? [],
         dark: stored.unlinked?.dark ?? [],
       },
+      type: onlyTypeTokens(stored.type),
     }
   } catch {
-    return { theme: defaults, unlinked: noLinks }
+    return { theme: defaults, unlinked: noLinks, type: typeDefaults }
   }
 }
 
@@ -84,7 +100,7 @@ const without = (list: string[], token: string) =>
  */
 export function useThemeDraft() {
   const [draft, setDraft] = React.useState(read)
-  const { theme, unlinked } = draft
+  const { theme, unlinked, type } = draft
 
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(draft))
@@ -121,6 +137,7 @@ export function useThemeDraft() {
             ? [...current.unlinked[mode], token]
             : current.unlinked[mode]
         return {
+          ...current,
           theme: {
             ...current.theme,
             [mode]: settle(
@@ -141,6 +158,7 @@ export function useThemeDraft() {
     setDraft((current) => {
       const nextUnlinked = without(current.unlinked[mode], token)
       return {
+        ...current,
         theme: {
           ...current.theme,
           [mode]: settle(
@@ -160,6 +178,7 @@ export function useThemeDraft() {
         (token) => !groupTokens.includes(token)
       )
       return {
+        ...current,
         theme: {
           ...current.theme,
           [mode]: settle(
@@ -178,16 +197,39 @@ export function useThemeDraft() {
     })
   }, [])
 
-  /** Back to Nova everywhere: both modes, and every rule re-linked. */
-  const resetAll = React.useCallback(() => {
-    setDraft({ theme: defaults, unlinked: noLinks })
+  const setType = React.useCallback((token: string, value: string) => {
+    setDraft((current) => ({
+      ...current,
+      type: { ...current.type, [token]: value },
+    }))
   }, [])
 
-  /** Number of edits, across both modes: what the top bar's counter shows. */
-  const changes = React.useMemo(() => countChanges(theme), [theme])
+  const resetType = React.useCallback((tokens: string[]) => {
+    setDraft((current) => ({
+      ...current,
+      type: {
+        ...current.type,
+        ...Object.fromEntries(tokens.map((t) => [t, typeDefaults[t]])),
+      },
+    }))
+  }, [])
+
+  /** Back to Nova everywhere: both modes, type, and every rule re-linked. */
+  const resetAll = React.useCallback(() => {
+    setDraft({ theme: defaults, unlinked: noLinks, type: typeDefaults })
+  }, [])
+
+  /** Number of edits, across both modes and type: the top bar's counter. */
+  const changes = React.useMemo(
+    () => countChanges(theme) + countTypeChanges(type),
+    [theme, type]
+  )
 
   return {
     theme,
+    type,
+    setType,
+    resetType,
     overridden,
     following,
     setColor,

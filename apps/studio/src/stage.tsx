@@ -11,6 +11,7 @@ import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Dashboard } from "./dashboard"
 import { cssVars, type Mode, type Theme } from "./theme"
+import { typeVars, type TypeValues } from "./typography"
 
 type Density = "comfortable" | "compact"
 type Width = "fit" | "768" | "390"
@@ -23,7 +24,15 @@ const screens: { id: Screen; label: string }[] = [
   { id: "chat", label: "Chat" },
 ]
 
-export function Stage({ mode, theme }: { mode: Mode; theme: Theme }) {
+export function Stage({
+  mode,
+  theme,
+  type,
+}: {
+  mode: Mode
+  theme: Theme
+  type: TypeValues
+}) {
   const [screen, setScreen] = React.useState<Screen>("dashboard")
   const [density, setDensity] = React.useState<Density>("comfortable")
   const [width, setWidth] = React.useState<Width>("fit")
@@ -36,10 +45,10 @@ export function Stage({ mode, theme }: { mode: Mode; theme: Theme }) {
       {/* Dark mode is scoped to the preview: the studio itself stays light. */}
       <div
         className={cn(
-          "flex h-full min-h-0 flex-col bg-background p-4",
+          "flex h-full min-h-0 flex-col bg-background p-4 font-sans font-normal text-foreground",
           mode === "dark" && "dark"
         )}
-        style={cssVars(theme[mode])}
+        style={{ ...cssVars(theme[mode]), ...typeVars(type) }}
       >
         <Tabs
           value={screen}

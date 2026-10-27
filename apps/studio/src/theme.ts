@@ -40,6 +40,9 @@ const nova = {
   dark: declarations(novaCss, novaCss.indexOf(":where(.dark)")),
 }
 
+/** Nova's `:root` declarations, for the sections that read non-colour defaults. */
+export const novaRoot = nova.light
+
 /** Any colour, written the one way Studio stores and exports them. */
 export function canonical(css: string | undefined): Color {
   const parsed = css ? parseColor(css) : null
