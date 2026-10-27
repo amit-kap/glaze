@@ -113,7 +113,7 @@ export const weightOptions = [
 const REM = 16
 
 /** A CSS number as the panel shows it: px for sizes, a plain number else. */
-export function toNumber(token: string, css: string | undefined): number {
+export function toNumber(css: string | undefined): number {
   const text = (css ?? "").trim()
   // Nova writes leading as `calc(a / b)`.
   const ratio = text.match(/^calc\(\s*([\d.]+)\s*\/\s*([\d.]+)\s*\)$/)
@@ -135,7 +135,7 @@ export function toCss(token: string, value: number): string {
 export function sameType(token: string, a: string, b: string) {
   if (kindOf[token] === "font") return a.trim() === b.trim()
   const tolerance = kindOf[token] === "text" ? 0.01 : 0.001
-  return Math.abs(toNumber(token, a) - toNumber(token, b)) < tolerance
+  return Math.abs(toNumber(a) - toNumber(b)) < tolerance
 }
 
 export const typeChanged = (token: string, value: string) =>

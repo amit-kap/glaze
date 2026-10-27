@@ -11,9 +11,9 @@ import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Dashboard } from "./dashboard"
 import { cssVars, type Mode, type Theme } from "./theme"
+import { shapeVars, type Density, type ShapeValues } from "./shape"
 import { typeVars, type TypeValues } from "./typography"
 
-type Density = "comfortable" | "compact"
 type Width = "fit" | "768" | "390"
 type Screen = "dashboard" | "settings" | "login" | "chat"
 
@@ -28,19 +28,25 @@ export function Stage({
   mode,
   theme,
   type,
+  shape,
+  density,
 }: {
   mode: Mode
   theme: Theme
   type: TypeValues
+  shape: ShapeValues
+  density: Density
 }) {
   const [screen, setScreen] = React.useState<Screen>("dashboard")
-  const [density, setDensity] = React.useState<Density>("comfortable")
   const [width, setWidth] = React.useState<Width>("fit")
 
   return (
     <section
       data-theme="nova"
       className="flex min-w-0 flex-1 flex-col overflow-hidden"
+      // Shape sits on the themed section, not the wrapper below: the kit
+      // derives its corner and size tokens here, so they follow these values.
+      style={shapeVars(shape)}
     >
       {/* Dark mode is scoped to the preview: the studio itself stays light. */}
       <div
@@ -65,15 +71,6 @@ export function Stage({
             </TabsList>
 
             <div className="ms-auto flex items-center gap-3">
-              <SegmentedControl
-                label="Density"
-                value={density}
-                onValueChange={setDensity}
-                options={[
-                  { value: "comfortable", label: "Comfortable" },
-                  { value: "compact", label: "Compact" },
-                ]}
-              />
               <SegmentedControl
                 label="Preview width"
                 value={width}

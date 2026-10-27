@@ -11,6 +11,7 @@ import { Stage } from "./stage"
 import { TopBar } from "./top-bar"
 import { useThemeDraft } from "./draft"
 import { changed, tokens, type Mode } from "./theme"
+import { shapeChanged, shapeTokens, type Density } from "./shape"
 import { typeChanged, typeTokens } from "./typography"
 
 const storageKey = "glaze-studio-theme"
@@ -19,6 +20,7 @@ export function App() {
   const draft = useThemeDraft()
   const [tool, setTool] = React.useState<Tool>("colors")
   const [mode, setMode] = React.useState<Mode>("light")
+  const [density, setDensity] = React.useState<Density>("comfortable")
   const [name, setName] = React.useState("")
   const [saved, setSaved] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
@@ -55,13 +57,20 @@ export function App() {
         .map((token) => `  --${token}: ${draft.theme[mode][token]};`)
         .join("\n")
 
-    // Type is shared by both modes, so it exports with the light block.
+    // Type and shape are shared by both modes, so they export with the light
+    // block.
     const typeBlock = typeTokens
       .filter((token) => typeChanged(token, draft.type[token]))
       .map((token) => `  --${token}: ${draft.type[token]};`)
       .join("\n")
+    const shapeBlock = shapeTokens
+      .filter((token) => shapeChanged(token, draft.shape[token]))
+      .map((token) => `  --${token}: ${draft.shape[token]};`)
+      .join("\n")
 
-    const light = [block("light"), typeBlock].filter(Boolean).join("\n")
+    const light = [block("light"), typeBlock, shapeBlock]
+      .filter(Boolean)
+      .join("\n")
     const dark = block("dark")
     const css = [
       `/* ${name || "Untitled theme"} — Glaze theme, based on Nova */`,
@@ -119,6 +128,8 @@ export function App() {
                   draft={draft}
                   mode={mode}
                   onModeChange={setMode}
+                  density={density}
+                  onDensityChange={setDensity}
                 />
               </div>
             </div>
@@ -130,7 +141,13 @@ export function App() {
           />
 
           <ResizablePanel minSize={360} className="flex min-h-0 flex-col">
-            <Stage mode={mode} theme={draft.theme} type={draft.type} />
+            <Stage
+              mode={mode}
+              theme={draft.theme}
+              type={draft.type}
+              shape={draft.shape}
+              density={density}
+            />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

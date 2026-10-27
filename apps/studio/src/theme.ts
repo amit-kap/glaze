@@ -24,7 +24,7 @@ export type Theme = Record<Mode, Record<string, Color>>
 
 // The two blocks that carry colour: `:where(:root)` and `.dark`. Nova writes
 // every value twice rather than deriving one mode from the other.
-function declarations(source: string, start: number) {
+export function declarations(source: string, start: number) {
   const open = source.indexOf("{", start)
   const close = source.indexOf("}", open)
   const body = source.slice(open + 1, close)

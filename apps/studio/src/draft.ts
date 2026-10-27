@@ -14,6 +14,12 @@ import {
   type Theme,
 } from "./theme"
 import {
+  countShapeChanges,
+  shapeDefaults,
+  shapeTokens,
+  type ShapeValues,
+} from "./shape"
+import {
   countTypeChanges,
   typeDefaults,
   typeTokens,
@@ -34,11 +40,21 @@ const onlyTokens = (
     tokens.map((token) => [token, colors?.[token] ?? fallback[token]])
   )
 
-type Stored = { theme: Theme; unlinked: Unlinked; type: TypeValues }
+type Stored = {
+  theme: Theme
+  unlinked: Unlinked
+  type: TypeValues
+  shape: ShapeValues
+}
 
 const onlyTypeTokens = (values: TypeValues | undefined): TypeValues =>
   Object.fromEntries(
     typeTokens.map((token) => [token, values?.[token] ?? typeDefaults[token]])
+  )
+
+const onlyShapeTokens = (values: ShapeValues | undefined): ShapeValues =>
+  Object.fromEntries(
+    shapeTokens.map((token) => [token, values?.[token] ?? shapeDefaults[token]])
   )
 
 function read(): Stored {
@@ -47,9 +63,15 @@ function read(): Stored {
       theme?: { light?: Record<string, Color>; dark?: Record<string, Color> }
       unlinked?: Unlinked
       type?: TypeValues
+      shape?: ShapeValues
     } | null
     if (!stored?.theme)
-      return { theme: defaults, unlinked: noLinks, type: typeDefaults }
+      return {
+        theme: defaults,
+        unlinked: noLinks,
+        type: typeDefaults,
+        shape: shapeDefaults,
+      }
     // Only tokens the panel still offers, so an old draft can't resurrect a
     // colour Studio no longer edits.
     return {
@@ -62,9 +84,15 @@ function read(): Stored {
         dark: stored.unlinked?.dark ?? [],
       },
       type: onlyTypeTokens(stored.type),
+      shape: onlyShapeTokens(stored.shape),
     }
   } catch {
-    return { theme: defaults, unlinked: noLinks, type: typeDefaults }
+    return {
+      theme: defaults,
+      unlinked: noLinks,
+      type: typeDefaults,
+      shape: shapeDefaults,
+    }
   }
 }
 
@@ -73,8 +101,8 @@ function followed(child: string, source: Color): Color {
   return child === "brand-ink" ? autoInk(source) : source
 }
 
-/** Apply the follow rules to one mode, in a pass per level of the chain. */
-function settle(mode: Mode, colors: Record<string, Color>, unlinked: string[]) {
+/** Apply the follow rules to one mode's colours, a pass per level of the chain. */
+function settle(colors: Record<string, Color>, unlinked: string[]) {
   for (let pass = 0; pass < 4; pass++) {
     let moved = false
     for (const [child, parent] of Object.entries(follows)) {
@@ -100,7 +128,7 @@ const without = (list: string[], token: string) =>
  */
 export function useThemeDraft() {
   const [draft, setDraft] = React.useState(read)
-  const { theme, unlinked, type } = draft
+  const { theme, unlinked, type, shape } = draft
 
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(draft))
@@ -141,7 +169,6 @@ export function useThemeDraft() {
           theme: {
             ...current.theme,
             [mode]: settle(
-              mode,
               { ...current.theme[mode], [token]: color },
               nextUnlinked
             ),
@@ -162,7 +189,6 @@ export function useThemeDraft() {
         theme: {
           ...current.theme,
           [mode]: settle(
-            mode,
             { ...current.theme[mode], [token]: defaults[mode][token] },
             nextUnlinked
           ),
@@ -182,7 +208,6 @@ export function useThemeDraft() {
         theme: {
           ...current.theme,
           [mode]: settle(
-            mode,
             {
               ...current.theme[mode],
               ...Object.fromEntries(
@@ -214,15 +239,38 @@ export function useThemeDraft() {
     }))
   }, [])
 
-  /** Back to Nova everywhere: both modes, type, and every rule re-linked. */
-  const resetAll = React.useCallback(() => {
-    setDraft({ theme: defaults, unlinked: noLinks, type: typeDefaults })
+  const setShape = React.useCallback((token: string, value: string) => {
+    setDraft((current) => ({
+      ...current,
+      shape: { ...current.shape, [token]: value },
+    }))
   }, [])
 
-  /** Number of edits, across both modes and type: the top bar's counter. */
+  const resetShape = React.useCallback((tokens: string[]) => {
+    setDraft((current) => ({
+      ...current,
+      shape: {
+        ...current.shape,
+        ...Object.fromEntries(tokens.map((t) => [t, shapeDefaults[t]])),
+      },
+    }))
+  }, [])
+
+  /** Back to Nova everywhere: both modes, type, shape, every rule re-linked. */
+  const resetAll = React.useCallback(() => {
+    setDraft({
+      theme: defaults,
+      unlinked: noLinks,
+      type: typeDefaults,
+      shape: shapeDefaults,
+    })
+  }, [])
+
+  /** Number of edits, across modes, type and shape: the top bar's counter. */
   const changes = React.useMemo(
-    () => countChanges(theme) + countTypeChanges(type),
-    [theme, type]
+    () =>
+      countChanges(theme) + countTypeChanges(type) + countShapeChanges(shape),
+    [theme, type, shape]
   )
 
   return {
@@ -230,6 +278,9 @@ export function useThemeDraft() {
     type,
     setType,
     resetType,
+    shape,
+    setShape,
+    resetShape,
     overridden,
     following,
     setColor,
