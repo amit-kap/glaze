@@ -14,6 +14,12 @@ import {
   type Theme,
 } from "./theme"
 import {
+  countMotionChanges,
+  motionDefaults,
+  motionTokens,
+  type MotionValues,
+} from "./motion"
+import {
   countShapeChanges,
   shapeDefaults,
   shapeTokens,
@@ -45,11 +51,20 @@ type Stored = {
   unlinked: Unlinked
   type: TypeValues
   shape: ShapeValues
+  motion: MotionValues
 }
 
 const onlyTypeTokens = (values: TypeValues | undefined): TypeValues =>
   Object.fromEntries(
     typeTokens.map((token) => [token, values?.[token] ?? typeDefaults[token]])
+  )
+
+const onlyMotionTokens = (values: MotionValues | undefined): MotionValues =>
+  Object.fromEntries(
+    motionTokens.map((token) => [
+      token,
+      values?.[token] ?? motionDefaults[token],
+    ])
   )
 
 const onlyShapeTokens = (values: ShapeValues | undefined): ShapeValues =>
@@ -64,6 +79,7 @@ function read(): Stored {
       unlinked?: Unlinked
       type?: TypeValues
       shape?: ShapeValues
+      motion?: MotionValues
     } | null
     if (!stored?.theme)
       return {
@@ -71,6 +87,7 @@ function read(): Stored {
         unlinked: noLinks,
         type: typeDefaults,
         shape: shapeDefaults,
+        motion: motionDefaults,
       }
     // Only tokens the panel still offers, so an old draft can't resurrect a
     // colour Studio no longer edits.
@@ -85,6 +102,7 @@ function read(): Stored {
       },
       type: onlyTypeTokens(stored.type),
       shape: onlyShapeTokens(stored.shape),
+      motion: onlyMotionTokens(stored.motion),
     }
   } catch {
     return {
@@ -92,6 +110,7 @@ function read(): Stored {
       unlinked: noLinks,
       type: typeDefaults,
       shape: shapeDefaults,
+      motion: motionDefaults,
     }
   }
 }
@@ -128,7 +147,7 @@ const without = (list: string[], token: string) =>
  */
 export function useThemeDraft() {
   const [draft, setDraft] = React.useState(read)
-  const { theme, unlinked, type, shape } = draft
+  const { theme, unlinked, type, shape, motion } = draft
 
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(draft))
@@ -256,21 +275,42 @@ export function useThemeDraft() {
     }))
   }, [])
 
-  /** Back to Nova everywhere: both modes, type, shape, every rule re-linked. */
+  const setMotion = React.useCallback((token: string, value: string) => {
+    setDraft((current) => ({
+      ...current,
+      motion: { ...current.motion, [token]: value },
+    }))
+  }, [])
+
+  const resetMotion = React.useCallback((tokens: string[]) => {
+    setDraft((current) => ({
+      ...current,
+      motion: {
+        ...current.motion,
+        ...Object.fromEntries(tokens.map((t) => [t, motionDefaults[t]])),
+      },
+    }))
+  }, [])
+
+  /** Back to Nova everywhere: both modes, type, shape, motion, every rule. */
   const resetAll = React.useCallback(() => {
     setDraft({
       theme: defaults,
       unlinked: noLinks,
       type: typeDefaults,
       shape: shapeDefaults,
+      motion: motionDefaults,
     })
   }, [])
 
-  /** Number of edits, across modes, type and shape: the top bar's counter. */
+  /** Number of edits, across modes, type, shape and motion: the counter. */
   const changes = React.useMemo(
     () =>
-      countChanges(theme) + countTypeChanges(type) + countShapeChanges(shape),
-    [theme, type, shape]
+      countChanges(theme) +
+      countTypeChanges(type) +
+      countShapeChanges(shape) +
+      countMotionChanges(motion),
+    [theme, type, shape, motion]
   )
 
   return {
@@ -281,6 +321,9 @@ export function useThemeDraft() {
     shape,
     setShape,
     resetShape,
+    motion,
+    setMotion,
+    resetMotion,
     overridden,
     following,
     setColor,

@@ -11,6 +11,7 @@ import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Dashboard } from "./dashboard"
 import { cssVars, type Mode, type Theme } from "./theme"
+import { motionVars, type MotionValues } from "./motion"
 import { shapeVars, type Density, type ShapeValues } from "./shape"
 import { typeVars, type TypeValues } from "./typography"
 
@@ -30,12 +31,16 @@ export function Stage({
   type,
   shape,
   density,
+  motion,
+  reduceMotion,
 }: {
   mode: Mode
   theme: Theme
   type: TypeValues
   shape: ShapeValues
   density: Density
+  motion: MotionValues
+  reduceMotion: boolean
 }) {
   const [screen, setScreen] = React.useState<Screen>("dashboard")
   const [width, setWidth] = React.useState<Width>("fit")
@@ -44,9 +49,17 @@ export function Stage({
     <section
       data-theme="nova"
       className="flex min-w-0 flex-1 flex-col overflow-hidden"
-      // Shape sits on the themed section, not the wrapper below: the kit
-      // derives its corner and size tokens here, so they follow these values.
-      style={shapeVars(shape)}
+      // Shape and motion sit on the themed section, not the wrapper below: the
+      // kit derives its corner, size and duration tokens here, so they follow
+      // these values. Reduced motion zeroes the movement scale, as the
+      // system setting does.
+      style={
+        {
+          ...shapeVars(shape),
+          ...motionVars(motion),
+          ...(reduceMotion && { "--motion-scale": "0" }),
+        } as React.CSSProperties
+      }
     >
       {/* Dark mode is scoped to the preview: the studio itself stays light. */}
       <div

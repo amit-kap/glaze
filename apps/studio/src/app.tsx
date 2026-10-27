@@ -11,6 +11,7 @@ import { Stage } from "./stage"
 import { TopBar } from "./top-bar"
 import { useThemeDraft } from "./draft"
 import { changed, tokens, type Mode } from "./theme"
+import { motionChanged, motionTokens } from "./motion"
 import { shapeChanged, shapeTokens, type Density } from "./shape"
 import { typeChanged, typeTokens } from "./typography"
 
@@ -21,6 +22,7 @@ export function App() {
   const [tool, setTool] = React.useState<Tool>("colors")
   const [mode, setMode] = React.useState<Mode>("light")
   const [density, setDensity] = React.useState<Density>("comfortable")
+  const [reduceMotion, setReduceMotion] = React.useState(false)
   const [name, setName] = React.useState("")
   const [saved, setSaved] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
@@ -57,8 +59,8 @@ export function App() {
         .map((token) => `  --${token}: ${draft.theme[mode][token]};`)
         .join("\n")
 
-    // Type and shape are shared by both modes, so they export with the light
-    // block.
+    // Type, shape and motion are shared by both modes, so they export with the
+    // light block.
     const typeBlock = typeTokens
       .filter((token) => typeChanged(token, draft.type[token]))
       .map((token) => `  --${token}: ${draft.type[token]};`)
@@ -68,7 +70,12 @@ export function App() {
       .map((token) => `  --${token}: ${draft.shape[token]};`)
       .join("\n")
 
-    const light = [block("light"), typeBlock, shapeBlock]
+    const motionBlock = motionTokens
+      .filter((token) => motionChanged(token, draft.motion[token]))
+      .map((token) => `  --${token}: ${draft.motion[token]};`)
+      .join("\n")
+
+    const light = [block("light"), typeBlock, shapeBlock, motionBlock]
       .filter(Boolean)
       .join("\n")
     const dark = block("dark")
@@ -130,6 +137,8 @@ export function App() {
                   onModeChange={setMode}
                   density={density}
                   onDensityChange={setDensity}
+                  reduceMotion={reduceMotion}
+                  onReduceMotionChange={setReduceMotion}
                 />
               </div>
             </div>
@@ -147,6 +156,8 @@ export function App() {
               type={draft.type}
               shape={draft.shape}
               density={density}
+              motion={draft.motion}
+              reduceMotion={reduceMotion}
             />
           </ResizablePanel>
         </ResizablePanelGroup>

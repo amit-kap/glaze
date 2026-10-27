@@ -1,20 +1,11 @@
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-} from "@amit-kap/glaze/components/empty"
-
 import { Colors } from "./colors"
+import { Motion } from "./motion-panel"
 import { Shape } from "./shape-panel"
 import { Type } from "./type"
 import type { Draft } from "./draft"
 import type { Tool } from "./rail"
 import type { Density } from "./shape"
 import type { Mode } from "./theme"
-
-const notes: Record<Exclude<Tool, "colors" | "type" | "shape">, string> = {
-  motion: "Motion settings will live here.",
-}
 
 /** The content column: the active tool's controls. */
 export function Panel({
@@ -24,6 +15,8 @@ export function Panel({
   onModeChange,
   density,
   onDensityChange,
+  reduceMotion,
+  onReduceMotionChange,
 }: {
   tool: Tool
   draft: Draft
@@ -31,6 +24,8 @@ export function Panel({
   onModeChange: (mode: Mode) => void
   density: Density
   onDensityChange: (density: Density) => void
+  reduceMotion: boolean
+  onReduceMotionChange: (reduce: boolean) => void
 }) {
   if (tool === "colors")
     return <Colors draft={draft} mode={mode} onModeChange={onModeChange} />
@@ -46,12 +41,10 @@ export function Panel({
     )
 
   return (
-    <Empty className="border-0">
-      <EmptyHeader>
-        <EmptyDescription className="text-caption">
-          {notes[tool]}
-        </EmptyDescription>
-      </EmptyHeader>
-    </Empty>
+    <Motion
+      draft={draft}
+      reduceMotion={reduceMotion}
+      onReduceMotionChange={onReduceMotionChange}
+    />
   )
 }
