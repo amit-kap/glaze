@@ -83,7 +83,11 @@ export function Colors({
             value={format}
             onValueChange={(value) => value && setFormat(value as ColorFormat)}
           >
-            <SelectTrigger size="mini" aria-label="Colour format">
+            <SelectTrigger
+              size="mini"
+              aria-label="Colour format"
+              className="bg-background"
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>
@@ -100,7 +104,11 @@ export function Colors({
             value={mode}
             onValueChange={(value) => value && onModeChange(value as Mode)}
           >
-            <SelectTrigger size="mini" aria-label="Mode being edited">
+            <SelectTrigger
+              size="mini"
+              aria-label="Mode being edited"
+              className="bg-background"
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>
