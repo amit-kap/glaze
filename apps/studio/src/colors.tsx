@@ -83,14 +83,10 @@ export function Colors({
             value={format}
             onValueChange={(value) => value && setFormat(value as ColorFormat)}
           >
-            <SelectTrigger
-              aria-label="Colour format"
-              className="rounded-lg px-2.5 py-0 pe-2 text-caption"
-              style={{ height: 18 }}
-            >
+            <SelectTrigger size="mini" aria-label="Colour format">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent alignItemWithTrigger={false}>
               {formats.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
@@ -104,14 +100,10 @@ export function Colors({
             value={mode}
             onValueChange={(value) => value && onModeChange(value as Mode)}
           >
-            <SelectTrigger
-              aria-label="Mode being edited"
-              className="rounded-lg px-2.5 py-0 pe-2 text-caption"
-              style={{ height: 18 }}
-            >
+            <SelectTrigger size="mini" aria-label="Mode being edited">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent alignItemWithTrigger={false}>
               {modes.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}

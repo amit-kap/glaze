@@ -42,7 +42,7 @@ const meta = {
     },
   },
   argTypes: {
-    size: { control: "select", options: ["default", "sm"] },
+    size: { control: "select", options: ["default", "sm", "mini"] },
   },
   decorators: [
     (Story) => (
@@ -105,6 +105,12 @@ export const Default: Story = {
 // Glaze-only: upstream supports `size="sm"` but has no example for it.
 export const Small: Story = {
   args: { size: "sm" },
+  render: Default.render,
+}
+
+// Glaze-only: the compact trigger for toolbars and panel headers.
+export const Mini: Story = {
+  args: { size: "mini" },
   render: Default.render,
 }
 
@@ -256,6 +262,24 @@ export const Invalid: Story = {
 }
 
 // --- Compositions ---------------------------------------------------------
+
+// Items straight in SelectContent, no SelectGroup: the popup supplies the inset.
+export const WithoutGroup: Story = {
+  render: () => (
+    <Select items={fruits.slice(1, 4)} defaultValue="apple">
+      <SelectTrigger aria-label="Fruit" className="w-full max-w-48">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {fruits.slice(1, 4).map((item) => (
+          <SelectItem key={item.value} value={item.value}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  ),
+}
 
 const groupFruits = [
   { label: "Apple", value: "apple" },
