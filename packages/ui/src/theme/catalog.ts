@@ -593,7 +593,7 @@ export const settings: Setting[] = [
   {
     token: "--density",
     label: "Density",
-    note: "Multiplies spacing and control sizes; use the toolbar to compare.",
+    note: "Multiplies spacing and control sizes; compare it in the preview.",
     kind: "number",
     group: "spacing.density",
     source: "setting",

@@ -51,6 +51,7 @@
   },
   "exports": {
     "./globals.css": "./src/styles/globals.css",
+    "./tokens.css": "./src/styles/tokens.css",
     "./themes/*": "./src/styles/themes/*",
     "./theme": "./src/lib/theme.tsx",
     "./theme/catalog": "./src/theme/catalog.ts",
