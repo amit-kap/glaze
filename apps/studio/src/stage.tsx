@@ -12,9 +12,9 @@ import { PortalContainer } from "@amit-kap/glaze/components/portal-container"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Chat } from "./chat"
+import { Checkout } from "./checkout"
 import { Dashboard } from "./dashboard"
 import { Landing } from "./landing"
-import { Login } from "./login"
 import { Settings } from "./settings"
 import { cssVars, type Mode, type Theme } from "./theme"
 import { motionVars, type MotionValues } from "./motion"
@@ -22,12 +22,12 @@ import { shapeVars, type Density, type ShapeValues } from "./shape"
 import { typeVars, type TypeValues } from "./typography"
 
 type Width = "fit" | "768" | "390"
-type Screen = "dashboard" | "settings" | "login" | "chat" | "landing"
+type Screen = "dashboard" | "settings" | "checkout" | "chat" | "landing"
 
 const screens: { id: Screen; label: string }[] = [
   { id: "dashboard", label: "Dashboard" },
   { id: "settings", label: "Settings" },
-  { id: "login", label: "Login" },
+  { id: "checkout", label: "Checkout" },
   { id: "chat", label: "Chat" },
   { id: "landing", label: "Landing" },
 ]
@@ -35,7 +35,7 @@ const screens: { id: Screen; label: string }[] = [
 const preview: Record<Screen, React.ReactNode> = {
   dashboard: <Dashboard />,
   settings: <Settings />,
-  login: <Login />,
+  checkout: <Checkout />,
   chat: <Chat />,
   landing: <Landing />,
 }
