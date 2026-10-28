@@ -83,6 +83,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+  useSidebar,
 } from "@amit-kap/glaze/components/sidebar"
 import { Tabs, TabsList, TabsTrigger } from "@amit-kap/glaze/components/tabs"
 
@@ -138,28 +141,77 @@ const earlier: ["me" | "agent", string][] = [
   ["agent", "It opens a dialog with the total and a Keep shopping button."],
 ]
 
-/** A three-column harness mock: sessions, a conversation and a browser pane. */
+/** The width of an element, kept up to date as it resizes. */
+function useElementWidth(element: HTMLElement | null) {
+  const [width, setWidth] = React.useState(0)
+  React.useEffect(() => {
+    if (!element) return
+    const observer = new ResizeObserver(([entry]) =>
+      setWidth(entry.contentRect.width)
+    )
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [element])
+  return width
+}
+
+// Room the conversation and the pane need to sit side by side.
+const PANE_INLINE_WIDTH = 640
+
+/**
+ * A harness mock: sessions, a conversation and a browser pane. It follows the
+ * width it is given. Wide, all three sit in a row. At laptop width the pane
+ * opens over the conversation from its toolbar button, and below the kit
+ * 640px the sessions become a drawer too.
+ */
 export function Harness() {
   // One session is always open: the list selects it and the header names it.
   const [session, setSession] = React.useState(projects[0].sessions[0])
+  const [paneOpen, setPaneOpen] = React.useState<boolean | null>(null)
+  const [body, setBody] = React.useState<HTMLElement | null>(null)
+  const inline = useElementWidth(body) >= PANE_INLINE_WIDTH
+  // Until it's toggled, the pane is open exactly when there's room beside it.
+  const open = paneOpen ?? inline
 
   return (
-    <ResizablePanelGroup
-      orientation="horizontal"
+    <SidebarProvider
+      contained
+      containedBreakpoint={640}
+      style={{ "--sidebar-width": "15rem" } as React.CSSProperties}
       className="h-full bg-background"
     >
-      <ResizablePanel defaultSize="19%" minSize="14%" maxSize="30%">
-        <Sessions session={session} onSessionChange={setSession} />
-      </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel defaultSize="41%" minSize="28%">
-        <Conversation title={session} />
-      </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel defaultSize="40%" minSize="22%">
-        <Pane />
-      </ResizablePanel>
-    </ResizablePanelGroup>
+      <Sessions session={session} onSessionChange={setSession} />
+      <SidebarInset className="min-w-0">
+        <div ref={setBody} className="relative flex min-h-0 flex-1">
+          {inline && open ? (
+            <ResizablePanelGroup orientation="horizontal">
+              <ResizablePanel defaultSize="58%" minSize="36%">
+                <Conversation
+                  title={session}
+                  paneOpen={open}
+                  onTogglePane={() => setPaneOpen(!open)}
+                />
+              </ResizablePanel>
+              <ResizableHandle />
+              <ResizablePanel defaultSize="42%" minSize="26%">
+                <Pane />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          ) : (
+            <Conversation
+              title={session}
+              paneOpen={open}
+              onTogglePane={() => setPaneOpen(!open)}
+            />
+          )}
+          {!inline && open && (
+            <div className="absolute inset-y-0 end-0 z-20 w-full max-w-md bg-background shadow-modal">
+              <Pane onClose={() => setPaneOpen(false)} />
+            </div>
+          )}
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
 
@@ -170,74 +222,73 @@ function Sessions({
   session: string
   onSessionChange: (session: string) => void
 }) {
+  const { setOpenMobile } = useSidebar()
+
   return (
-    <SidebarProvider
-      contained
-      style={{ "--sidebar-width": "100%" } as React.CSSProperties}
-      className="h-full"
-    >
-      <Sidebar collapsible="none" className="border-0">
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {nav.map(({ label, icon: Icon }) => (
-                  <SidebarMenuItem key={label}>
-                    <SidebarMenuButton>
-                      <Icon />
-                      <span>{label}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+    <Sidebar collapsible="offcanvas">
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {nav.map(({ label, icon: Icon }) => (
+                <SidebarMenuItem key={label}>
+                  <SidebarMenuButton>
+                    <Icon />
+                    <span>{label}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-          {projects.map((project) => (
-            <Collapsible
-              key={project.name}
-              defaultOpen={project.open}
-              render={<SidebarGroup />}
+        {projects.map((project) => (
+          <Collapsible
+            key={project.name}
+            defaultOpen={project.open}
+            render={<SidebarGroup />}
+          >
+            <SidebarGroupLabel
+              render={<CollapsibleTrigger />}
+              className="cursor-pointer gap-1"
             >
-              <SidebarGroupLabel
-                render={<CollapsibleTrigger />}
-                className="cursor-pointer gap-1"
-              >
-                {project.name}
-                <ChevronRightIcon className="size-3 transition-transform in-data-[panel-open]:rotate-90" />
-              </SidebarGroupLabel>
-              <CollapsibleContent>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {project.sessions.map((session) => (
-                      <SidebarMenuItem key={session}>
-                        <SidebarMenuButton
-                          isActive={session === active}
-                          onClick={() => onSessionChange(session)}
-                        >
-                          <span>{session}</span>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </CollapsibleContent>
-            </Collapsible>
-          ))}
-        </SidebarContent>
+              {project.name}
+              <ChevronRightIcon className="size-3 transition-transform in-data-[panel-open]:rotate-90" />
+            </SidebarGroupLabel>
+            <CollapsibleContent>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {project.sessions.map((session) => (
+                    <SidebarMenuItem key={session}>
+                      <SidebarMenuButton
+                        isActive={session === active}
+                        onClick={() => {
+                          onSessionChange(session)
+                          setOpenMobile(false)
+                        }}
+                      >
+                        <span>{session}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </Collapsible>
+        ))}
+      </SidebarContent>
 
-        <SidebarFooter>
-          <div className="flex items-center gap-2 p-1">
-            <Avatar size="sm">
-              <AvatarFallback className="text-micro">MC</AvatarFallback>
-            </Avatar>
-            <span className="text-caption">Maya Chen</span>
-            <span className="text-micro text-muted-foreground">Pro</span>
-            <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-          </div>
-        </SidebarFooter>
-      </Sidebar>
-    </SidebarProvider>
+      <SidebarFooter>
+        <div className="flex items-center gap-2 p-1">
+          <Avatar size="sm">
+            <AvatarFallback className="text-micro">MC</AvatarFallback>
+          </Avatar>
+          <span className="text-caption">Maya Chen</span>
+          <span className="text-micro text-muted-foreground">Pro</span>
+          <ChevronDownIcon className="size-3.5 text-muted-foreground" />
+        </div>
+      </SidebarFooter>
+    </Sidebar>
   )
 }
 
@@ -265,25 +316,49 @@ function CopyButton() {
   )
 }
 
-function Conversation({ title }: { title: string }) {
+function Conversation({
+  title,
+  paneOpen,
+  onTogglePane,
+}: {
+  title: string
+  paneOpen: boolean
+  onTogglePane: () => void
+}) {
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <header className="flex h-12 shrink-0 items-center gap-1 px-4">
-        <Button variant="ghost" size="sm" className="-ms-2 gap-1">
-          {title}
+      <header className="flex h-12 shrink-0 items-center gap-1 px-3">
+        <SidebarTrigger aria-label="Toggle sessions" />
+        <Button variant="ghost" size="sm" className="min-w-0 gap-1">
+          <span className="truncate">{title}</span>
           <ChevronDownIcon />
         </Button>
         <div className="ms-auto flex items-center gap-0.5 text-muted-foreground">
-          {[SquareTerminalIcon, GlobeIcon, FolderIcon].map((Icon, index) => (
-            <Button
-              key={index}
-              variant="ghost"
-              size="icon-sm"
-              aria-label={["Terminal", "Browser", "Files"][index]}
-            >
-              <Icon />
-            </Button>
-          ))}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label="Terminal"
+            className="hidden @min-[480px]:inline-flex"
+          >
+            <SquareTerminalIcon />
+          </Button>
+          <Button
+            variant={paneOpen ? "secondary" : "ghost"}
+            size="icon-sm"
+            aria-label="Browser"
+            aria-pressed={paneOpen}
+            onClick={onTogglePane}
+          >
+            <GlobeIcon />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label="Files"
+            className="hidden @min-[480px]:inline-flex"
+          >
+            <FolderIcon />
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -452,7 +527,7 @@ function Conversation({ title }: { title: string }) {
   )
 }
 
-function Pane() {
+function Pane({ onClose }: { onClose?: () => void }) {
   const [tab, setTab] = React.useState(browserTabs[2])
 
   return (
@@ -472,6 +547,16 @@ function Pane() {
         <Button variant="ghost" size="icon-sm" aria-label="New tab">
           <PlusIcon />
         </Button>
+        {onClose && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label="Close browser"
+            onClick={onClose}
+          >
+            <XIcon />
+          </Button>
+        )}
       </div>
 
       <div className="flex shrink-0 items-center gap-1 px-2 pb-2">
