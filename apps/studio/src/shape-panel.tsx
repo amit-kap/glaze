@@ -23,11 +23,11 @@ const ranges: Record<string, [number, number, number]> = {
   "control-height": [24, 56, 1],
 }
 
-// What each group's numbers are measured in, shown beside its title.
+// What each group's numbers are measured in, said under its title.
 const units: Record<string, string> = {
-  corners: "px",
-  spacing: "px",
-  shadows: "px",
+  corners: "Values in px.",
+  spacing: "Values in px.",
+  shadows: "Values in px.",
 }
 
 /**
@@ -54,12 +54,8 @@ export function Shape({
       {shapeGroups.map((group, index) => (
         <PanelSection
           key={group.id}
-          title={
-            units[group.id]
-              ? `${group.title} (${units[group.id]})`
-              : group.title
-          }
-          note={group.note}
+          title={group.title}
+          note={[group.note, units[group.id]].filter(Boolean).join(" ")}
           defaultOpen={index === 0}
         >
           {group.rows.map((row) => {

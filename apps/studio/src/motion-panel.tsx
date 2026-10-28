@@ -12,11 +12,11 @@ import {
 } from "./motion"
 import { PanelSection } from "./section"
 
-// What each group's numbers are measured in, shown beside its title.
+// What each group's numbers are measured in, said under its title.
 const units: Record<string, string> = {
-  "motion.duration": "ms",
-  "motion.easing": "progress over time",
-  "motion.exit-timing": "× entrance",
+  "motion.duration": "Values in ms.",
+  "motion.easing": "Curves show progress over time.",
+  "motion.exit-timing": "Values are a multiple of the entrance duration.",
 }
 
 /**
@@ -43,12 +43,8 @@ export function Motion({
       {motionGroups.map((group, index) => (
         <PanelSection
           key={group.id}
-          title={
-            units[group.id]
-              ? `${group.title} (${units[group.id]})`
-              : group.title
-          }
-          note={group.note}
+          title={group.title}
+          note={[group.note, units[group.id]].filter(Boolean).join(" ")}
           defaultOpen={index === 0}
         >
           {group.rows.map((row) => {

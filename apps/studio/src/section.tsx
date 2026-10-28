@@ -48,7 +48,10 @@ export function PanelSection({
           {note && (
             <span
               aria-hidden={!expanded}
-              className="grid w-full text-left transition-[grid-template-rows] duration-(--duration-moderate) ease-standard"
+              className={cn(
+                "grid w-full text-left transition-[grid-template-rows,margin-top] duration-(--duration-moderate) ease-standard",
+                expanded && "mt-1"
+              )}
               style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
             >
               <span className="min-h-0 overflow-clip text-caption text-muted-foreground">
