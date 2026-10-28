@@ -29,7 +29,7 @@ const tabsListVariants = cva(
     variants: {
       variant: {
         default: "bg-muted",
-        line: "gap-1 bg-transparent",
+        line: "gap-3 bg-transparent",
       },
       // sm and mini shrink the list and its padding so it lines up with sm and
       // mini controls.
@@ -39,6 +39,8 @@ const tabsListVariants = cva(
         mini: "p-0.5 group-data-horizontal/tabs:h-control-xs",
       },
     },
+    // A line list has no track to pad: the tabs sit on the baseline.
+    compoundVariants: [{ variant: "line", class: "p-0" }],
     defaultVariants: {
       variant: "default",
       size: "default",
@@ -79,7 +81,7 @@ function TabsIndicator({ className, ...props }: TabsPrimitive.Indicator.Props) {
       className={cn(
         "pointer-events-none absolute inset-s-0 top-0 transition-[translate,width,height] duration-(--duration-moderate) ease-spring",
         "group-data-[variant=default]/tabs-list:h-(--active-tab-height) group-data-[variant=default]/tabs-list:w-(--active-tab-width) group-data-[variant=default]/tabs-list:translate-x-(--active-tab-left) group-data-[variant=default]/tabs-list:translate-y-(--active-tab-top) group-data-[variant=default]/tabs-list:rounded-item group-data-[variant=default]/tabs-list:border group-data-[variant=default]/tabs-list:border-transparent group-data-[variant=default]/tabs-list:bg-background group-data-[variant=default]/tabs-list:shadow-raised rtl:group-data-[variant=default]/tabs-list:-translate-x-(--active-tab-right) dark:group-data-[variant=default]/tabs-list:bg-input",
-        "group-data-[variant=line]/tabs-list:bg-foreground group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:h-0.75 group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:w-(--active-tab-width) group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:translate-x-(--active-tab-left) group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:translate-y-[calc(var(--active-tab-top)+var(--active-tab-height)+3px)] group-data-vertical/tabs:group-data-[variant=line]/tabs-list:h-(--active-tab-height) group-data-vertical/tabs:group-data-[variant=line]/tabs-list:w-0.75 group-data-vertical/tabs:group-data-[variant=line]/tabs-list:translate-x-[calc(var(--active-tab-left)+var(--active-tab-width)+2px)] group-data-vertical/tabs:group-data-[variant=line]/tabs-list:translate-y-(--active-tab-top) rtl:group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:-translate-x-(--active-tab-right) rtl:group-data-vertical/tabs:group-data-[variant=line]/tabs-list:translate-x-[calc(-1*(var(--active-tab-right)+var(--active-tab-width)+2px))]",
+        "group-data-[variant=line]/tabs-list:rounded-pill group-data-[variant=line]/tabs-list:bg-foreground group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:top-auto group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:bottom-0 group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:h-[2px] group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:w-(--active-tab-width) group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:translate-x-(--active-tab-left) group-data-vertical/tabs:group-data-[variant=line]/tabs-list:h-(--active-tab-height) group-data-vertical/tabs:group-data-[variant=line]/tabs-list:w-[2px] group-data-vertical/tabs:group-data-[variant=line]/tabs-list:translate-x-[calc(var(--active-tab-left)+var(--active-tab-width)+2px)] group-data-vertical/tabs:group-data-[variant=line]/tabs-list:translate-y-(--active-tab-top) rtl:group-data-horizontal/tabs:group-data-[variant=line]/tabs-list:-translate-x-(--active-tab-right) rtl:group-data-vertical/tabs:group-data-[variant=line]/tabs-list:translate-x-[calc(-1*(var(--active-tab-right)+var(--active-tab-width)+2px))]",
         className
       )}
       {...props}
@@ -96,7 +98,7 @@ function TabsTrigger({
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex h-control-sm flex-1 items-center justify-center-safe gap-2 rounded-item border border-transparent px-3 text-body font-medium whitespace-nowrap text-foreground/60 transition-[color,border-color,box-shadow,outline-color,font-weight] group-data-[size=mini]/tabs-list:h-full group-data-[size=mini]/tabs-list:px-2 group-data-[size=mini]/tabs-list:text-caption group-data-[size=sm]/tabs-list:h-full group-data-vertical/tabs:w-full group-data-vertical/tabs:flex-none group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/25 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-(--icon-size)",
+        "relative inline-flex h-control-sm flex-1 items-center justify-center-safe gap-2 rounded-item border border-transparent px-3 text-body font-medium whitespace-nowrap text-foreground/60 transition-[color,border-color,box-shadow,outline-color,font-weight] group-data-[size=mini]/tabs-list:h-full group-data-[size=mini]/tabs-list:px-2 group-data-[size=mini]/tabs-list:text-caption group-data-[size=sm]/tabs-list:h-full group-data-[variant=line]/tabs-list:px-0! group-data-vertical/tabs:w-full group-data-vertical/tabs:flex-none group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/25 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-(--icon-size)",
         "data-active:font-strong data-active:text-foreground dark:data-active:text-foreground",
         className
       )}
