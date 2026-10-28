@@ -32,7 +32,7 @@ export function PanelSection({
           variant="ghost"
           aria-expanded={expanded}
           onClick={() => setExpanded(!expanded)}
-          className="h-auto w-full flex-col items-stretch gap-0 border-0 px-0 py-2.5 whitespace-normal hover:bg-transparent aria-expanded:bg-transparent"
+          className="h-auto w-full flex-col items-stretch gap-0 border-0 px-0 py-2.5 whitespace-normal hover:bg-transparent focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring focus-visible:outline-solid aria-expanded:bg-transparent"
         >
           <span className="flex w-full items-center justify-between">
             <span className="text-body font-medium text-foreground">
