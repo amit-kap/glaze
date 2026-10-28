@@ -10,21 +10,34 @@ import {
 } from "@amit-kap/glaze/components/tabs"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
+import { Chat } from "./chat"
 import { Dashboard } from "./dashboard"
+import { Landing } from "./landing"
+import { Login } from "./login"
+import { Settings } from "./settings"
 import { cssVars, type Mode, type Theme } from "./theme"
 import { motionVars, type MotionValues } from "./motion"
 import { shapeVars, type Density, type ShapeValues } from "./shape"
 import { typeVars, type TypeValues } from "./typography"
 
 type Width = "fit" | "768" | "390"
-type Screen = "dashboard" | "settings" | "login" | "chat"
+type Screen = "dashboard" | "settings" | "login" | "chat" | "landing"
 
 const screens: { id: Screen; label: string }[] = [
   { id: "dashboard", label: "Dashboard" },
   { id: "settings", label: "Settings" },
   { id: "login", label: "Login" },
   { id: "chat", label: "Chat" },
+  { id: "landing", label: "Landing" },
 ]
+
+const preview: Record<Screen, React.ReactNode> = {
+  dashboard: <Dashboard />,
+  settings: <Settings />,
+  login: <Login />,
+  chat: <Chat />,
+  landing: <Landing />,
+}
 
 /** A preview width as an icon, named for the pointer and for assistive tech. */
 function WidthIcon({
@@ -145,27 +158,15 @@ export function Stage({
                 width === "390" && "w-[390px] max-w-full"
               )}
             >
-              <TabsContent
-                value="dashboard"
-                className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
-              >
-                <Dashboard />
-              </TabsContent>
-              {screens
-                .filter((item) => item.id !== "dashboard")
-                .map((item) => (
-                  <TabsContent
-                    key={item.id}
-                    value={item.id}
-                    className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
-                  >
-                    <div className="flex h-full items-center justify-center p-6 text-center">
-                      <p className="text-caption text-muted-foreground">
-                        The {item.label} screen will live here.
-                      </p>
-                    </div>
-                  </TabsContent>
-                ))}
+              {screens.map((item) => (
+                <TabsContent
+                  key={item.id}
+                  value={item.id}
+                  className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
+                >
+                  {preview[item.id]}
+                </TabsContent>
+              ))}
             </div>
           </div>
         </Tabs>
