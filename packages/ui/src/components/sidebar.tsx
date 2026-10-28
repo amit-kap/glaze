@@ -60,6 +60,7 @@ const CONTAINED_MOBILE_WIDTH = 768
 
 function SidebarProvider({
   contained = false,
+  containedBreakpoint = CONTAINED_MOBILE_WIDTH,
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
@@ -74,6 +75,8 @@ function SidebarProvider({
    * the window. For previews, frames and embedded apps.
    */
   contained?: boolean
+  /** The parent width, in px, below which a contained sidebar is a drawer. */
+  containedBreakpoint?: number
   defaultOpen?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
@@ -85,11 +88,11 @@ function SidebarProvider({
     const wrapper = wrapperRef.current
     if (!contained || !wrapper) return
     const observer = new ResizeObserver(([entry]) =>
-      setNarrow(entry.contentRect.width < CONTAINED_MOBILE_WIDTH)
+      setNarrow(entry.contentRect.width < containedBreakpoint)
     )
     observer.observe(wrapper)
     return () => observer.disconnect()
-  }, [contained])
+  }, [contained, containedBreakpoint])
   const isMobile = contained ? narrow : viewportMobile
   const [openMobile, setOpenMobile] = React.useState(false)
 
