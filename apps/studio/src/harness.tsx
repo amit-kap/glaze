@@ -194,9 +194,9 @@ function Sessions({
         <SidebarFooter>
           <div className="flex items-center gap-2 p-1">
             <Avatar size="sm">
-              <AvatarFallback className="text-micro">A</AvatarFallback>
+              <AvatarFallback className="text-micro">MC</AvatarFallback>
             </Avatar>
-            <span className="text-caption">Amit</span>
+            <span className="text-caption">Maya Chen</span>
             <span className="text-micro text-muted-foreground">Pro</span>
             <ChevronDownIcon className="size-3.5 text-muted-foreground" />
           </div>
