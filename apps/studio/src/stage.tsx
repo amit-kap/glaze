@@ -8,6 +8,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@amit-kap/glaze/components/tabs"
+import { PortalContainer } from "@amit-kap/glaze/components/portal-container"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Chat } from "./chat"
@@ -76,6 +77,9 @@ export function Stage({
 }) {
   const [screen, setScreen] = React.useState<Screen>("dashboard")
   const [width, setWidth] = React.useState<Width>("fit")
+  // Popups mount inside the preview frame, so they wear the draft theme, and
+  // the frame (a size container, so a containing block) keeps dialogs in it.
+  const [frame, setFrame] = React.useState<HTMLElement | null>(null)
 
   return (
     <section
@@ -150,23 +154,26 @@ export function Stage({
 
           <div className="flex min-h-0 flex-1 justify-center">
             <div
+              ref={setFrame}
               data-density={density}
               className={cn(
-                "@container h-full",
+                "@container h-full [contain:layout]",
                 width === "fit" && "w-full",
                 width === "768" && "w-[768px] max-w-full",
                 width === "390" && "w-[390px] max-w-full"
               )}
             >
-              {screens.map((item) => (
-                <TabsContent
-                  key={item.id}
-                  value={item.id}
-                  className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
-                >
-                  {preview[item.id]}
-                </TabsContent>
-              ))}
+              <PortalContainer container={frame}>
+                {screens.map((item) => (
+                  <TabsContent
+                    key={item.id}
+                    value={item.id}
+                    className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
+                  >
+                    {preview[item.id]}
+                  </TabsContent>
+                ))}
+              </PortalContainer>
             </div>
           </div>
         </Tabs>
