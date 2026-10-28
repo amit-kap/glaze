@@ -1,18 +1,53 @@
-import type { ReactNode } from "react"
+import * as React from "react"
 import {
+  ArrowDownIcon,
+  ArrowUpDownIcon,
+  ArrowUpIcon,
   ArrowUpRightIcon,
-  InboxIcon,
+  BellIcon,
+  ChevronDownIcon,
+  CircleHelpIcon,
+  CreditCardIcon,
+  DownloadIcon,
+  FilterIcon,
+  GlobeIcon,
   LayoutDashboardIcon,
-  MenuIcon,
+  MessageSquareIcon,
   PackageIcon,
-  PlusIcon,
-  SettingsIcon,
+  RotateCcwIcon,
+  SearchIcon,
   ShoppingCartIcon,
+  TruckIcon,
   UsersIcon,
+  BarChart3Icon,
   type LucideIcon,
 } from "lucide-react"
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Pie,
+  PieChart,
+  PolarAngleAxis,
+  PolarGrid,
+  Radar,
+  RadarChart,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 import { Avatar, AvatarFallback } from "@amit-kap/glaze/components/avatar"
+import { Badge } from "@amit-kap/glaze/components/badge"
+import { Button } from "@amit-kap/glaze/components/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@amit-kap/glaze/components/card"
 import {
   type ChartConfig,
   ChartContainer,
@@ -21,16 +56,47 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@amit-kap/glaze/components/chart"
-import { Badge } from "@amit-kap/glaze/components/badge"
-import { Button } from "@amit-kap/glaze/components/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@amit-kap/glaze/components/card"
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@amit-kap/glaze/components/collapsible"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@amit-kap/glaze/components/input-group"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+} from "@amit-kap/glaze/components/pagination"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@amit-kap/glaze/components/sidebar"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@amit-kap/glaze/components/select"
 import {
   Table,
   TableBody,
@@ -39,162 +105,240 @@ import {
   TableHeader,
   TableRow,
 } from "@amit-kap/glaze/components/table"
-import { cn } from "@amit-kap/glaze/lib/utils"
+
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts"
+  categories,
+  invoices,
+  orderStatus,
+  pipeline,
+  stats,
+  traffic,
+  week,
+  type Invoice,
+} from "./dashboard-data"
 
 type NavItem = {
   label: string
   icon: LucideIcon
   active?: boolean
-  badge?: string
+  children?: string[]
 }
 
-const nav: NavItem[] = [
-  { label: "Overview", icon: LayoutDashboardIcon, active: true },
-  { label: "Customers", icon: UsersIcon },
-  { label: "Orders", icon: ShoppingCartIcon, badge: "12" },
-  { label: "Products", icon: PackageIcon },
-  { label: "Settings", icon: SettingsIcon },
+const navGroups: { label: string; items: NavItem[] }[] = [
+  {
+    label: "Main",
+    items: [
+      { label: "Dashboard", icon: LayoutDashboardIcon, active: true },
+      { label: "Orders", icon: ShoppingCartIcon },
+      { label: "Returns", icon: RotateCcwIcon },
+    ],
+  },
+  {
+    label: "Catalog",
+    items: [
+      {
+        label: "Products",
+        icon: PackageIcon,
+        children: ["All Products", "Categories", "Inventory"],
+      },
+      { label: "Shipping", icon: TruckIcon },
+    ],
+  },
+  {
+    label: "Customers",
+    items: [
+      { label: "All Customers", icon: UsersIcon },
+      { label: "Messages", icon: MessageSquareIcon },
+    ],
+  },
+  {
+    label: "Analytics",
+    items: [
+      { label: "Overview", icon: GlobeIcon },
+      { label: "Reports", icon: BarChart3Icon },
+      { label: "Finances", icon: CreditCardIcon },
+    ],
+  },
 ]
 
-const months = [
-  { month: "Jan", online: 11200, retail: 7400 },
-  { month: "Feb", online: 8800, retail: 10900 },
-  { month: "Mar", online: 6200, retail: 9600 },
-  { month: "Apr", online: 12300, retail: 7100 },
-  { month: "May", online: 10400, retail: 11900 },
-]
-
-type Status = "Paid" | "Pending" | "Refunded"
-
-const orders: { customer: string; status: Status; total: string }[] = [
-  { customer: "Olivia Martin", status: "Paid", total: "$1,999" },
-  { customer: "Jackson Lee", status: "Pending", total: "$39" },
-  { customer: "Isabella Nguyen", status: "Paid", total: "$299" },
-  { customer: "Sofia Davis", status: "Paid", total: "$39" },
-  { customer: "William Kim", status: "Refunded", total: "$99" },
-]
-
-const statusVariant = {
-  Paid: "low",
-  Pending: "medium",
-  Refunded: "secondary",
-} as const
-
-/** A miniature product, built from Glaze components, so the theme shows through. */
+/** A miniature sales product, built from Glaze components, so the theme shows through. */
 export function Dashboard() {
   return (
-    <div className="flex h-full min-h-0 bg-background text-foreground">
-      <aside className="hidden w-[216px] shrink-0 flex-col gap-4 border-r border-border bg-sidebar p-3.5 @min-[600px]:flex">
+    <SidebarProvider
+      contained
+      style={{ "--sidebar-width": "13.5rem" } as React.CSSProperties}
+      className="bg-background text-foreground"
+    >
+      <AppSidebar />
+
+      <SidebarInset className="min-w-0">
+        <Header />
+        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-auto bg-muted/40 p-4">
+          <div className="grid grid-cols-2 gap-3 @min-[900px]:grid-cols-4">
+            {stats.map((stat) => (
+              <Stat key={stat.label} {...stat} />
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 @min-[900px]:grid-cols-[3fr_2fr]">
+            <RevenueChart />
+            <PipelineChart />
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 @min-[900px]:grid-cols-3">
+            <CategoryRadar />
+            <TrafficHeatmap />
+            <OrderStatus />
+          </div>
+
+          <RecentInvoices />
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  )
+}
+
+function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarHeader>
         <div className="flex items-center gap-2.5">
           <div className="flex size-8 items-center justify-center rounded-control bg-brand text-caption font-medium text-brand-ink">
             A
           </div>
           <div className="min-w-0">
             <p className="truncate text-caption leading-tight font-medium">
-              Acme Inc.
+              Acme Store
             </p>
-            <p className="truncate text-micro text-muted-foreground">Pro plan</p>
+            <p className="truncate text-micro text-muted-foreground">
+              Ecommerce
+            </p>
           </div>
         </div>
+      </SidebarHeader>
 
-        <div className="flex items-center gap-1.5">
-          <Button size="sm" className="h-8 flex-1 justify-start">
-            <PlusIcon />
-            Quick create
-          </Button>
-          <Button variant="outline" size="icon-sm" aria-label="Inbox">
-            <InboxIcon />
-          </Button>
-        </div>
+      <SidebarContent>
+        {navGroups.map((group) => (
+          <SidebarGroup key={group.label}>
+            <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {group.items.map((item) => (
+                  <NavItemRow key={item.label} item={item} />
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
+      </SidebarContent>
 
-        <nav aria-label="Sections" className="flex flex-col gap-0.5">
-          {nav.map(({ label, icon: Icon, active, badge }) => (
-            <Button
-              key={label}
-              variant={active ? "secondary" : "ghost"}
-              size="sm"
-              aria-current={active ? "page" : undefined}
-              className={cn(
-                "w-full justify-start gap-2.5 px-2.5",
-                !active && "text-muted-foreground",
-              )}
-            >
-              <Icon />
-              {label}
-              {badge && <Badge className="ms-auto">{badge}</Badge>}
-            </Button>
-          ))}
-        </nav>
-
-        <div className="mt-auto flex items-center gap-2.5">
+      <SidebarFooter>
+        <div className="flex items-center gap-2.5 p-1">
           <Avatar size="sm">
-            <AvatarFallback className="text-micro">MC</AvatarFallback>
+            <AvatarFallback className="text-micro">JW</AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <p className="truncate text-caption leading-tight">Maya Chen</p>
+            <p className="truncate text-caption leading-tight">Jack Walsh</p>
             <p className="truncate text-micro text-muted-foreground">
-              maya@acme.co
+              jack@acme.co
             </p>
           </div>
+          <ChevronDownIcon className="ms-auto size-4 text-muted-foreground" />
         </div>
-      </aside>
+      </SidebarFooter>
+    </Sidebar>
+  )
+}
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-border px-5">
-          <MenuIcon className="size-4 text-muted-foreground" />
-          <span className="text-caption font-medium">Dashboard</span>
-          <span className="ms-auto flex items-center gap-1 text-micro text-muted-foreground">
-            GitHub
-            <ArrowUpRightIcon className="size-3" />
-          </span>
-        </header>
+function NavItemRow({ item }: { item: NavItem }) {
+  const { label, icon: Icon, active, children } = item
 
-        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-auto p-4">
-          <div className="grid grid-cols-2 gap-3 @min-[720px]:grid-cols-4">
-            <Stat label="Revenue" value="$48,210">
-              <Delta tone="up">+12.4%</Delta>
-              <span className="text-muted-foreground"> vs last period</span>
-            </Stat>
-            <Stat label="Orders" value="1,284">
-              <Delta tone="up">+3.1%</Delta>
-              <span className="text-muted-foreground"> vs last period</span>
-            </Stat>
-            <Stat label="Refunds" value="$1,090">
-              <Delta tone="down">−0.8%</Delta>
-              <span className="text-muted-foreground"> vs last period</span>
-            </Stat>
-            <Stat label="Active now" value="312">
-              <span className="text-muted-foreground">
-                18 joined in the last hour
-              </span>
-            </Stat>
-          </div>
+  if (!children)
+    return (
+      <SidebarMenuItem>
+        <SidebarMenuButton isActive={active}>
+          <Icon />
+          <span>{label}</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    )
 
-          <div className="grid grid-cols-1 gap-3 @min-[720px]:grid-cols-[minmax(0,1fr)_300px]">
-            <RevenueChart />
-            <RecentOrders />
-          </div>
-        </div>
+  return (
+    <Collapsible defaultOpen render={<SidebarMenuItem />}>
+      <CollapsibleTrigger render={<SidebarMenuButton />}>
+        <Icon />
+        <span>{label}</span>
+        <ChevronDownIcon className="ms-auto" />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <SidebarMenuSub>
+          {children.map((child) => (
+            <SidebarMenuSubItem key={child}>
+              <SidebarMenuSubButton render={<button type="button" />}>
+                <span>{child}</span>
+              </SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+          ))}
+        </SidebarMenuSub>
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+
+function Header() {
+  return (
+    <header className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border px-4 py-3">
+      <SidebarTrigger aria-label="Toggle sidebar" />
+      <div className="min-w-0">
+        <h2 className="text-body leading-tight font-medium">
+          Dashboard Overview
+        </h2>
+        <p className="text-micro text-muted-foreground">
+          A summary for all the purchases, sales etc.
+        </p>
       </div>
-    </div>
+      <div className="ms-auto flex items-center gap-1.5">
+        <span className="hidden text-micro text-muted-foreground @min-[1000px]:block">
+          Jan 1 – 31, 2025
+        </span>
+        <Button variant="outline" size="sm">
+          <GlobeIcon />
+          All Platforms
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="hidden @min-[1000px]:inline-flex"
+        >
+          All Products
+        </Button>
+        <Button variant="outline" size="sm">
+          <DownloadIcon />
+          Export
+        </Button>
+        <Button variant="outline" size="icon-sm" aria-label="Notifications">
+          <BellIcon />
+        </Button>
+        <Button variant="outline" size="icon-sm" aria-label="Help">
+          <CircleHelpIcon />
+        </Button>
+      </div>
+    </header>
   )
 }
 
 function Stat({
   label,
   value,
-  children,
+  delta,
+  tone,
+  base,
 }: {
   label: string
   value: string
-  children: ReactNode
+  delta: string
+  tone: "up" | "down"
+  base: string
 }) {
   return (
     <Card size="sm" className="gap-0 py-3">
@@ -203,61 +347,65 @@ function Stat({
         <p className="mt-1.5 text-heading leading-none font-medium tabular-nums">
           {value}
         </p>
-        <p className="mt-2.5 truncate text-micro">{children}</p>
+        <p
+          className="mt-3 flex items-center gap-1 text-micro"
+          style={{
+            color: tone === "up" ? "var(--severity-low)" : "var(--destructive)",
+          }}
+        >
+          {delta} vs last month
+          {tone === "up" ? (
+            <ArrowUpRightIcon className="size-3" />
+          ) : (
+            <ArrowDownIcon className="size-3" />
+          )}
+        </p>
+        <p className="mt-0.5 truncate text-micro text-muted-foreground">
+          {base}
+        </p>
       </CardContent>
     </Card>
   )
 }
 
-function Delta({ tone, children }: { tone: "up" | "down"; children: ReactNode }) {
-  return (
-    <span
-      style={{
-        color: tone === "up" ? "var(--severity-low)" : "var(--destructive)",
-      }}
-    >
-      {children}
-    </span>
-  )
-}
-
-const chartConfig = {
-  online: { label: "Online", color: "var(--chart-2)" },
-  retail: { label: "Retail", color: "var(--chart-1)" },
+const revenueConfig = {
+  revenue: { label: "Revenue", color: "var(--chart-1)" },
+  expenses: { label: "Expenses", color: "var(--chart-2)" },
 } satisfies ChartConfig
 
 function RevenueChart() {
   return (
     <Card size="sm">
       <CardHeader>
-        <CardTitle className="text-caption">Revenue by month</CardTitle>
+        <CardTitle className="text-caption">Revenue</CardTitle>
         <CardDescription className="text-micro">
-          Gross, before refunds
+          This week vs last week
         </CardDescription>
       </CardHeader>
-
       <CardContent>
+        <p className="mb-2 text-heading leading-none font-medium tabular-nums">
+          $8,900.00
+        </p>
         <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[240px] w-full"
+          config={revenueConfig}
+          className="aspect-auto h-[200px] w-full"
         >
           <BarChart
             accessibilityLayer
-            data={months}
-            barGap={4}
+            data={week}
             margin={{ top: 8, right: 4 }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="day"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
             <YAxis
-              width={40}
-              domain={[0, 15000]}
-              ticks={[0, 5000, 10000, 15000]}
+              width={36}
+              domain={[0, 4000]}
+              ticks={[0, 1000, 2000, 3000]}
               tickLine={false}
               axisLine={false}
               tickFormatter={(value: number) =>
@@ -266,81 +414,487 @@ function RevenueChart() {
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Bar
-              dataKey="online"
-              fill="var(--color-online)"
-              radius={2}
-              maxBarSize={26}
+              dataKey="expenses"
+              stackId="week"
+              fill="var(--color-expenses)"
+              maxBarSize={32}
               isAnimationActive={false}
             />
             <Bar
-              dataKey="retail"
-              fill="var(--color-retail)"
-              radius={2}
-              maxBarSize={26}
+              dataKey="revenue"
+              stackId="week"
+              fill="var(--color-revenue)"
+              radius={[2, 2, 0, 0]}
+              maxBarSize={32}
               isAnimationActive={false}
             />
             <ChartLegend content={<ChartLegendContent />} />
           </BarChart>
         </ChartContainer>
       </CardContent>
-
-      <CardFooter className="py-2.5 text-micro">
-        Online up 18% since January
-      </CardFooter>
     </Card>
   )
 }
 
-function RecentOrders() {
+const quarters = [
+  { value: "q3", label: "Quarter 3" },
+  { value: "q2", label: "Quarter 2" },
+  { value: "q1", label: "Quarter 1" },
+]
+
+const pipelineConfig = {
+  orders: { label: "Orders", color: "var(--chart-1)" },
+  sales: { label: "Sales", color: "var(--chart-2)" },
+} satisfies ChartConfig
+
+function PipelineChart() {
+  return (
+    <Card size="sm">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-caption">Sales pipeline</CardTitle>
+        <Select items={quarters} defaultValue="q3">
+          <SelectTrigger size="sm" aria-label="Quarter">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent alignItemWithTrigger={false} align="end">
+            {quarters.map((quarter) => (
+              <SelectItem key={quarter.value} value={quarter.value}>
+                {quarter.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </CardHeader>
+      <CardContent className="grid grid-cols-2 gap-4">
+        {(["orders", "sales"] as const).map((key) => (
+          <div key={key} className="min-w-0">
+            <p className="text-heading leading-none font-medium tabular-nums">
+              {key === "orders" ? "3,980" : "$94.7K"}
+            </p>
+            <p className="mt-1 text-micro text-muted-foreground uppercase">
+              Total {key}
+            </p>
+            <ChartContainer
+              config={pipelineConfig}
+              className="mt-3 aspect-auto h-[140px] w-full"
+            >
+              <AreaChart accessibilityLayer data={pipeline}>
+                <XAxis
+                  dataKey="month"
+                  padding={{ left: 12, right: 12 }}
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Area
+                  dataKey={key}
+                  type="monotone"
+                  stroke={`var(--color-${key})`}
+                  fill={`var(--color-${key})`}
+                  fillOpacity={0.15}
+                  isAnimationActive={false}
+                />
+              </AreaChart>
+            </ChartContainer>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  )
+}
+
+const categoryConfig = {
+  sales: { label: "Sales", color: "var(--chart-1)" },
+} satisfies ChartConfig
+
+function CategoryRadar() {
   return (
     <Card size="sm">
       <CardHeader>
-        <CardTitle className="text-caption">Recent orders</CardTitle>
+        <CardTitle className="text-caption">Sales by category</CardTitle>
         <CardDescription className="text-micro">
-          5 of 1,284 this period
+          Income by product group
         </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer
+          config={categoryConfig}
+          className="mx-auto aspect-square h-[200px]"
+        >
+          <RadarChart data={categories} outerRadius="62%">
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <PolarGrid />
+            <PolarAngleAxis dataKey="category" />
+            <Radar
+              dataKey="sales"
+              stroke="var(--color-sales)"
+              fill="var(--color-sales)"
+              fillOpacity={0.3}
+              isAnimationActive={false}
+            />
+          </RadarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  )
+}
+
+function TrafficHeatmap() {
+  return (
+    <Card size="sm">
+      <CardHeader className="flex flex-row items-center gap-2">
+        <CardTitle className="text-caption">Traffic sources</CardTitle>
+        <Badge variant="low">+30%</Badge>
+      </CardHeader>
+      <CardContent>
+        <div className="mb-3 flex items-center gap-3 text-micro text-muted-foreground">
+          {[
+            ["High", 1],
+            ["Medium", 0.55],
+            ["Low", 0.2],
+          ].map(([name, level]) => (
+            <span key={name} className="flex items-center gap-1">
+              <span
+                className="size-2 rounded-pill bg-foreground"
+                style={{ opacity: Number(level) }}
+              />
+              {name}
+            </span>
+          ))}
+        </div>
+        <div className="grid grid-cols-[auto_repeat(4,1fr)] items-center gap-1">
+          {traffic.map((row) => (
+            <React.Fragment key={row.level}>
+              <span className="pe-1 text-micro text-muted-foreground tabular-nums">
+                {row.level}
+              </span>
+              {row.weeks.map((value, week) => (
+                <span
+                  key={week}
+                  className="h-5 rounded-item bg-foreground"
+                  style={{ opacity: 0.12 + value * 0.88 }}
+                />
+              ))}
+            </React.Fragment>
+          ))}
+          <span />
+          {[1, 2, 3, 4].map((week) => (
+            <span
+              key={week}
+              className="pt-1 text-center text-micro text-muted-foreground"
+            >
+              Week {week}
+            </span>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+const statusConfig = {
+  fulfilled: { label: "Fulfilled", color: "var(--chart-1)" },
+  pending: { label: "Pending", color: "var(--chart-2)" },
+} satisfies ChartConfig
+
+function OrderStatus() {
+  const total = orderStatus.reduce((sum, item) => sum + item.orders, 0)
+
+  return (
+    <Card size="sm">
+      <CardHeader>
+        <CardTitle className="text-caption">Order status</CardTitle>
+        <CardDescription className="text-micro">
+          Fulfilled against pending
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer
+          config={statusConfig}
+          className="mx-auto aspect-square h-[200px]"
+        >
+          <PieChart>
+            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <Pie
+              data={orderStatus.map((item) => ({
+                ...item,
+                fill: `var(--color-${item.status})`,
+              }))}
+              dataKey="orders"
+              nameKey="status"
+              innerRadius={58}
+              strokeWidth={2}
+              isAnimationActive={false}
+            />
+            <ChartLegend content={<ChartLegendContent nameKey="status" />} />
+          </PieChart>
+        </ChartContainer>
+        <p className="-mt-[132px] mb-[88px] text-center">
+          <span className="block text-micro text-muted-foreground">ORDERS</span>
+          <span className="text-heading font-medium tabular-nums">
+            {total.toLocaleString()}
+          </span>
+        </p>
+      </CardContent>
+    </Card>
+  )
+}
+
+type SortKey = "customer" | "id" | "date" | "amount"
+
+const priorityVariant = {
+  High: "high",
+  Medium: "medium",
+  Low: "secondary",
+} as const
+
+const invoiceVariant = {
+  Paid: "low",
+  Pending: "medium",
+  Overdue: "destructive",
+  Draft: "secondary",
+} as const
+
+const money = (amount: number) =>
+  amount.toLocaleString("en-US", { style: "currency", currency: "USD" })
+
+const sizes = [
+  { value: "5", label: "5" },
+  { value: "10", label: "10" },
+]
+
+function RecentInvoices() {
+  const [query, setQuery] = React.useState("")
+  const [sort, setSort] = React.useState<{ key: SortKey; dir: 1 | -1 } | null>(
+    null
+  )
+  const [page, setPage] = React.useState(1)
+  const [size, setSize] = React.useState("5")
+
+  const rows = invoices
+    .filter((invoice) =>
+      `${invoice.customer} ${invoice.id}`
+        .toLowerCase()
+        .includes(query.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (!sort) return 0
+      const x = a[sort.key]
+      const y = b[sort.key]
+      return (x < y ? -1 : x > y ? 1 : 0) * sort.dir
+    })
+
+  const pageSize = Number(size)
+  const pages = Math.max(1, Math.ceil(rows.length / pageSize))
+  const current = Math.min(page, pages)
+  const visible = rows.slice((current - 1) * pageSize, current * pageSize)
+
+  const toggle = (key: SortKey) => {
+    setSort((now) =>
+      now?.key === key ? { key, dir: now.dir === 1 ? -1 : 1 } : { key, dir: 1 }
+    )
+  }
+
+  return (
+    <Card size="sm">
+      <CardHeader className="flex flex-row flex-wrap items-center gap-2">
+        <div className="me-auto min-w-0">
+          <CardTitle className="flex items-center gap-2 text-caption">
+            Recent invoices <Badge variant="secondary">{invoices.length}</Badge>
+          </CardTitle>
+          <CardDescription className="text-micro">
+            The latest invoices across every platform.
+          </CardDescription>
+        </div>
+        <InputGroup className="w-48">
+          <InputGroupAddon>
+            <SearchIcon />
+          </InputGroupAddon>
+          <InputGroupInput
+            aria-label="Search invoices"
+            placeholder="Search invoices..."
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value)
+              setPage(1)
+            }}
+          />
+        </InputGroup>
+        <Button variant="outline" size="sm">
+          <FilterIcon />
+          Filter
+        </Button>
+        <Button variant="outline" size="sm">
+          See All
+        </Button>
       </CardHeader>
 
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="h-8 px-0 text-micro font-normal">
+              <SortHead sort={sort} name="customer" onSort={toggle}>
                 Customer
-              </TableHead>
-              <TableHead className="h-8 px-0 text-micro font-normal">
-                Status
-              </TableHead>
-              <TableHead className="h-8 px-0 text-right text-micro font-normal">
-                Total
-              </TableHead>
+              </SortHead>
+              <SortHead sort={sort} name="id" onSort={toggle}>
+                Invoice ID
+              </SortHead>
+              <SortHead sort={sort} name="date" onSort={toggle}>
+                Date
+              </SortHead>
+              <SortHead sort={sort} name="amount" onSort={toggle}>
+                Amount
+              </SortHead>
+              <TableHead className="text-micro font-normal">Priority</TableHead>
+              <TableHead className="text-micro font-normal">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order.customer} className="border-border/70">
-                <TableCell className="px-0 py-2 text-caption">
-                  {order.customer}
-                </TableCell>
-                <TableCell className="px-0 py-2">
-                  <Badge variant={statusVariant[order.status]}>
-                    {order.status}
-                  </Badge>
-                </TableCell>
-                <TableCell className="px-0 py-2 text-right text-caption">
-                  {order.total}
+            {visible.map((invoice) => (
+              <InvoiceRow key={invoice.id} invoice={invoice} />
+            ))}
+            {visible.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={6}
+                  className="py-6 text-center text-caption text-muted-foreground"
+                >
+                  No invoices match &ldquo;{query}&rdquo;.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
-      </CardContent>
 
-      <CardFooter className="mt-auto py-2">
-        <Button variant="link" size="sm" className="px-0">
-          View all orders
-        </Button>
-      </CardFooter>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-micro text-muted-foreground">
+          <div className="flex items-center gap-2">
+            Rows per page
+            <Select
+              items={sizes}
+              value={size}
+              onValueChange={(next) => {
+                if (next) {
+                  setSize(next)
+                  setPage(1)
+                }
+              }}
+            >
+              <SelectTrigger size="sm" aria-label="Rows per page">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent alignItemWithTrigger={false}>
+                {sizes.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {rows.length === 0
+              ? "0 of 0"
+              : `${(current - 1) * pageSize + 1}-${Math.min(
+                  current * pageSize,
+                  rows.length
+                )} of ${rows.length}`}
+          </div>
+          <Pagination className="mx-0 w-auto">
+            <PaginationContent>
+              {Array.from({ length: pages }, (_, index) => (
+                <PaginationItem key={index}>
+                  <PaginationLink
+                    href="#"
+                    isActive={current === index + 1}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      setPage(index + 1)
+                    }}
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </CardContent>
     </Card>
+  )
+}
+
+function SortHead({
+  sort,
+  name,
+  onSort,
+  children,
+}: {
+  sort: { key: SortKey; dir: 1 | -1 } | null
+  name: SortKey
+  onSort: (key: SortKey) => void
+  children: React.ReactNode
+}) {
+  const active = sort?.key === name
+  const Icon = !active
+    ? ArrowUpDownIcon
+    : sort.dir === 1
+      ? ArrowUpIcon
+      : ArrowDownIcon
+
+  return (
+    <TableHead
+      aria-sort={
+        active ? (sort.dir === 1 ? "ascending" : "descending") : "none"
+      }
+      className="text-micro font-normal"
+    >
+      <Button
+        variant="ghost"
+        size="xs"
+        className="-ms-2 text-micro font-normal"
+        onClick={() => onSort(name)}
+      >
+        {children}
+        <Icon />
+      </Button>
+    </TableHead>
+  )
+}
+
+function InvoiceRow({ invoice }: { invoice: Invoice }) {
+  return (
+    <TableRow>
+      <TableCell>
+        <span className="flex items-center gap-2 text-caption font-medium">
+          <Avatar size="sm">
+            <AvatarFallback className="text-micro">
+              {invoice.initials}
+            </AvatarFallback>
+          </Avatar>
+          {invoice.customer}
+        </span>
+      </TableCell>
+      <TableCell className="text-caption text-muted-foreground">
+        {invoice.id}
+      </TableCell>
+      <TableCell className="text-caption text-muted-foreground">
+        {new Date(invoice.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          timeZone: "UTC",
+        })}
+      </TableCell>
+      <TableCell className="text-caption font-medium tabular-nums">
+        {money(invoice.amount)}
+      </TableCell>
+      <TableCell>
+        <Badge variant={priorityVariant[invoice.priority]}>
+          {invoice.priority}
+        </Badge>
+      </TableCell>
+      <TableCell>
+        <Badge variant={invoiceVariant[invoice.status]}>{invoice.status}</Badge>
+      </TableCell>
+    </TableRow>
   )
 }
