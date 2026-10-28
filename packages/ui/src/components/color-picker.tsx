@@ -350,7 +350,7 @@ function ColorPicker({
             <SelectTrigger
               size="sm"
               aria-label="Colour format"
-              className="w-full min-w-0 flex-1 rounded-md"
+              className="w-full min-w-0 flex-1 rounded-item"
             >
               <SelectValue />
             </SelectTrigger>
@@ -372,7 +372,7 @@ function ColorPicker({
                     variant="outline"
                     size="icon-sm"
                     aria-label="Pick a colour from the screen"
-                    className="w-16 shrink-0 rounded-md"
+                    className="w-16 shrink-0 rounded-item"
                     onClick={eyedrop}
                   />
                 }

@@ -55,10 +55,10 @@ export const OnAFill: Story = {
           background="oklch(20.5% 0 0)"
         />
       </div>
-      <div className="flex items-center gap-2 rounded-control bg-destructive px-3 py-2 text-white">
+      <div className="flex items-center gap-2 rounded-control bg-destructive px-3 py-2 text-primary-foreground">
         <span>Destructive</span>
         <ContrastBadge
-          foreground="oklch(100% 0 0)"
+          foreground="oklch(98.5% 0 0)"
           background="oklch(57.7% 0.245 27.325)"
         />
       </div>

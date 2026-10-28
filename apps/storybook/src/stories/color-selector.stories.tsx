@@ -193,7 +193,7 @@ export const Narrow: Story = {
 // special case.
 export const Dark: Story = {
   render: () => (
-    <div className="dark rounded-lg bg-background p-3">
+    <div className="dark rounded-container bg-background p-3">
       <div className="flex flex-col gap-1">
         <ColorSelector
           label="Brand"

@@ -378,7 +378,7 @@ function ColorSelector({
       <div
         data-slot="color-selector"
         className={cn(
-          "flex w-full flex-col rounded-lg border border-border bg-background px-2 py-1 transition-colors",
+          "flex w-full flex-col rounded-control border border-border bg-background px-2 py-1 transition-colors",
           // Hover reads as a border, not a fill: the card stays one surface.
           "has-[[data-slot=color-selector-header]:hover]:border-ring",
           className

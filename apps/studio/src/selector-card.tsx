@@ -40,7 +40,7 @@ export function SelectorCard({
     <Collapsible open={open} onOpenChange={setOpen}>
       <div
         data-slot="selector-card"
-        className="flex w-full flex-col rounded-lg border border-border bg-background px-2 py-1 transition-colors has-[[data-slot=selector-card-header]:hover]:border-ring"
+        className="flex w-full flex-col rounded-control border border-border bg-background px-2 py-1 transition-colors has-[[data-slot=selector-card-header]:hover]:border-ring"
       >
         <div
           data-slot="selector-card-header"

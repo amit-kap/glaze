@@ -477,7 +477,7 @@ export const Offcanvas: Story = { args: { collapsible: "offcanvas" } }
 // drawer; open it with the trigger.
 export const Contained: Story = {
   render: () => (
-    <div className="m-6 h-[420px] w-[420px] overflow-hidden rounded-lg border border-border">
+    <div className="m-6 h-[420px] w-[420px] overflow-hidden rounded-container border border-border">
       <SidebarProvider contained>
         <Sidebar collapsible="offcanvas">
           <SidebarHeader>

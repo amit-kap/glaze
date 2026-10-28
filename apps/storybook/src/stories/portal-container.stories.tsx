@@ -44,7 +44,7 @@ export const InsideADarkRegion: Story = {
     return (
       <div
         ref={setRegion}
-        className="dark relative flex h-72 items-center justify-center gap-3 overflow-hidden rounded-lg bg-background text-foreground [contain:layout]"
+        className="dark relative flex h-72 items-center justify-center gap-3 overflow-hidden rounded-container bg-background text-foreground [contain:layout]"
       >
         <PortalContainer container={region}>
           <Select items={[{ value: "a", label: "Option A" }]} defaultValue="a">
