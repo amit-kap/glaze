@@ -65,12 +65,16 @@ export const traffic = [
   { level: "1k", weeks: [0.4, 0.75, 0.9, 0.35] },
 ]
 
+// Orders by channel: five slices, so all five chart colours are in use.
 export const orderStatus = [
-  { status: "fulfilled", orders: 3080 },
-  { status: "pending", orders: 970 },
+  { status: "online", orders: 1620 },
+  { status: "retail", orders: 980 },
+  { status: "wholesale", orders: 640 },
+  { status: "marketplace", orders: 520 },
+  { status: "social", orders: 290 },
 ]
 
-export type Priority = "High" | "Medium" | "Low"
+export type Priority = "Critical" | "High" | "Medium" | "Low"
 export type InvoiceStatus = "Paid" | "Pending" | "Overdue" | "Draft"
 
 export type Invoice = {
@@ -117,7 +121,7 @@ export const invoices: Invoice[] = [
     id: "INV-00004",
     date: "2025-01-15",
     amount: 4750,
-    priority: "High",
+    priority: "Critical",
     status: "Overdue",
   },
   {

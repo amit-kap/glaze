@@ -312,7 +312,7 @@ function Header() {
         >
           All Products
         </Button>
-        <Button variant="outline" size="sm">
+        <Button size="sm">
           <DownloadIcon />
           Export
         </Button>
@@ -594,8 +594,11 @@ function TrafficHeatmap() {
 }
 
 const statusConfig = {
-  fulfilled: { label: "Fulfilled", color: "var(--chart-1)" },
-  pending: { label: "Pending", color: "var(--chart-2)" },
+  online: { label: "Online", color: "var(--chart-1)" },
+  retail: { label: "Retail", color: "var(--chart-2)" },
+  wholesale: { label: "Wholesale", color: "var(--chart-3)" },
+  marketplace: { label: "Marketplace", color: "var(--chart-4)" },
+  social: { label: "Social", color: "var(--chart-5)" },
 } satisfies ChartConfig
 
 function OrderStatus() {
@@ -604,9 +607,9 @@ function OrderStatus() {
   return (
     <Card size="sm">
       <CardHeader>
-        <CardTitle className="text-caption">Order status</CardTitle>
+        <CardTitle className="text-caption">Orders by channel</CardTitle>
         <CardDescription className="text-micro">
-          Fulfilled against pending
+          Orders by channel
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -644,6 +647,7 @@ function OrderStatus() {
 type SortKey = "customer" | "id" | "date" | "amount"
 
 const priorityVariant = {
+  Critical: "critical",
   High: "high",
   Medium: "medium",
   Low: "secondary",
@@ -725,7 +729,7 @@ function RecentInvoices() {
           <FilterIcon />
           Filter
         </Button>
-        <Button variant="outline" size="sm">
+        <Button variant="link" size="sm">
           See All
         </Button>
       </CardHeader>

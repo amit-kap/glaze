@@ -2,6 +2,7 @@ import * as React from "react"
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  ArrowUpIcon,
   BriefcaseIcon,
   ChevronDownIcon,
   ChevronRightIcon,
@@ -329,6 +330,13 @@ function Conversation({ title }: { title: string }) {
           <InputGroupAddon align="inline-end">
             <InputGroupButton size="icon-xs" aria-label="Dictate">
               <MicIcon />
+            </InputGroupButton>
+            <InputGroupButton
+              size="icon-xs"
+              variant="default"
+              aria-label="Send"
+            >
+              <ArrowUpIcon />
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>

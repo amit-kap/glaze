@@ -10,7 +10,7 @@ import { Rail, type Tool } from "./rail"
 import { Stage } from "./stage"
 import { TopBar } from "./top-bar"
 import { useThemeDraft } from "./draft"
-import { changed, tokens, type Mode } from "./theme"
+import { changed, followVars, tokens, type Mode } from "./theme"
 import { motionChanged, motionTokens } from "./motion"
 import { shapeChanged, shapeTokens, type Density } from "./shape"
 import { typeChanged, typeTokens } from "./typography"
@@ -53,11 +53,17 @@ export function App() {
   }, [saved])
 
   const exportCss = async () => {
-    const block = (mode: Mode) =>
-      tokens
-        .filter((token) => changed(mode, token, draft.theme[mode][token]))
-        .map((token) => `  --${token}: ${draft.theme[mode][token]};`)
-        .join("\n")
+    // A changed colour also carries the derived colours Nova writes as
+    // literals, so the exported theme follows it as the preview does.
+    const block = (mode: Mode) => {
+      const edited = tokens.filter((token) =>
+        changed(mode, token, draft.theme[mode][token])
+      )
+      return [
+        ...edited.map((token) => `  --${token}: ${draft.theme[mode][token]};`),
+        ...followVars(edited).map(([token, value]) => `  ${token}: ${value};`),
+      ].join("\n")
+    }
 
     // Type, shape and motion are shared by both modes, so they export with the
     // light block.

@@ -215,10 +215,36 @@ export function countChanges(theme: Theme) {
 }
 
 /** The values a preview scopes to itself. */
+// Nova writes some derived colours as literals (`--sidebar-foreground` is the
+// same oklch as `--foreground`), which beats the kit's own `var(--foreground)`
+// derivation. So an edit to the source would not reach them. A follower is a
+// derived colour Nova sets to exactly its source's value in both modes: while
+// the source is edited, the follower is pointed back at it.
+const followerOf: Record<string, string> = {}
+for (const setting of settings) {
+  if (setting.kind !== "color" || setting.source !== "derived") continue
+  if (setting.follows?.length !== 1) continue
+  const token = tokenOf(setting.token)
+  const source = tokenOf(setting.follows[0])
+  if (!tokens.includes(source) || !nova.light.has(token)) continue
+  const same = (mode: Mode) =>
+    canonical(nova[mode].get(token) ?? nova.light.get(token)) ===
+    canonical(nova[mode].get(source) ?? nova.light.get(source))
+  if (same("light") && same("dark")) followerOf[token] = source
+}
+
+/** The followers of the colours in `sources`, as `--token: var(--source)`. */
+export function followVars(sources: string[]) {
+  return Object.entries(followerOf)
+    .filter(([, source]) => sources.includes(source))
+    .map(([token, source]) => [`--${token}`, `var(--${source})`] as const)
+}
+
 export function cssVars(colors: Record<string, Color>) {
-  return Object.fromEntries(
-    tokens.map((token) => [`--${token}`, colors[token]])
-  ) as Record<string, string>
+  return Object.fromEntries([
+    ...tokens.map((token) => [`--${token}`, colors[token]] as const),
+    ...followVars(tokens),
+  ]) as Record<string, string>
 }
 
 export type { Rgba }

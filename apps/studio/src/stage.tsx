@@ -89,27 +89,27 @@ export function Stage({
   return (
     <section
       data-theme="nova"
-      className="flex min-w-0 flex-1 flex-col overflow-hidden"
-      // Shape and motion sit on the themed section, not the wrapper below: the
-      // kit derives its corner, size and duration tokens here, so they follow
-      // these values. Reduced motion zeroes the movement scale, as the
-      // system setting does.
+      className={cn(
+        "flex min-w-0 flex-1 flex-col overflow-hidden",
+        // Dark mode is scoped to the preview: the studio itself stays light.
+        mode === "dark" && "dark"
+      )}
+      // Every theme value sits on the themed section, not the wrapper below:
+      // the kit derives tokens at `[data-theme]` (card-foreground follows
+      // foreground, corners follow the radius), and a derived token reads its
+      // source where it is declared. Reduced motion zeroes the movement scale,
+      // as the system setting does.
       style={
         {
+          ...cssVars(theme[mode]),
+          ...typeVars(type),
           ...shapeVars(shape),
           ...motionVars(motion),
           ...(reduceMotion && { "--motion-scale": "0" }),
         } as React.CSSProperties
       }
     >
-      {/* Dark mode is scoped to the preview: the studio itself stays light. */}
-      <div
-        className={cn(
-          "flex h-full min-h-0 flex-col bg-background p-4 font-sans font-normal text-foreground",
-          mode === "dark" && "dark"
-        )}
-        style={{ ...cssVars(theme[mode]), ...typeVars(type) }}
-      >
+      <div className="flex h-full min-h-0 flex-col bg-background p-4 font-sans font-normal text-foreground">
         <Tabs
           value={screen}
           onValueChange={(value) => setScreen(value as Screen)}
