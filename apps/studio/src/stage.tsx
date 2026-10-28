@@ -1,4 +1,5 @@
 import * as React from "react"
+import { LaptopIcon, Maximize2Icon, SmartphoneIcon } from "lucide-react"
 
 import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
 import {
@@ -24,6 +25,24 @@ const screens: { id: Screen; label: string }[] = [
   { id: "login", label: "Login" },
   { id: "chat", label: "Chat" },
 ]
+
+/** A preview width as an icon, named for the pointer and for assistive tech. */
+function WidthIcon({
+  name,
+  icon: Icon,
+  className,
+}: {
+  name: string
+  icon: React.ComponentType<{ className?: string }>
+  className?: string
+}) {
+  return (
+    <span title={name} className="inline-flex">
+      <Icon className={className} />
+      <span className="sr-only">{name}</span>
+    </span>
+  )
+}
 
 export function Stage({
   mode,
@@ -75,9 +94,9 @@ export function Stage({
           className="h-full gap-4"
         >
           <div className="flex min-h-10 shrink-0 flex-wrap items-center gap-x-3 gap-y-2">
-            <TabsList variant="line" className="bg-transparent p-0">
+            <TabsList variant="line">
               {screens.map((item) => (
-                <TabsTrigger key={item.id} value={item.id} className="px-2.5">
+                <TabsTrigger key={item.id} value={item.id}>
                   {item.label}
                 </TabsTrigger>
               ))}
@@ -86,12 +105,31 @@ export function Stage({
             <div className="ms-auto flex items-center gap-3">
               <SegmentedControl
                 label="Preview width"
+                className="**:data-[slot=tabs-trigger]:w-8 **:data-[slot=tabs-trigger]:flex-none **:data-[slot=tabs-trigger]:px-0"
                 value={width}
                 onValueChange={setWidth}
                 options={[
-                  { value: "fit", label: "Fit" },
-                  { value: "768", label: "768" },
-                  { value: "390", label: "390" },
+                  {
+                    value: "fit",
+                    label: (
+                      <WidthIcon name="Fit to the stage" icon={Maximize2Icon} />
+                    ),
+                  },
+                  {
+                    value: "768",
+                    label: (
+                      <WidthIcon name="Narrow, 768 px wide" icon={LaptopIcon} />
+                    ),
+                  },
+                  {
+                    value: "390",
+                    label: (
+                      <WidthIcon
+                        name="Phone, 390 px wide"
+                        icon={SmartphoneIcon}
+                      />
+                    ),
+                  },
                 ]}
               />
             </div>
