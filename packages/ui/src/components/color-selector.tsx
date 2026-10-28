@@ -9,6 +9,7 @@ import {
   rgbaToHsl,
   rgbaToOklch,
   type ColorFormat,
+  type Rgba,
 } from "@amit-kap/glaze/lib/color"
 import { cn } from "@amit-kap/glaze/lib/utils"
 import { Button } from "@amit-kap/glaze/components/button"
@@ -18,6 +19,7 @@ import {
 } from "@amit-kap/glaze/components/collapsible"
 import { ColorPicker } from "@amit-kap/glaze/components/color-picker"
 import { ColorSwatch } from "@amit-kap/glaze/components/color-swatch"
+import { Input } from "@amit-kap/glaze/components/input"
 import { ContrastBadge } from "@amit-kap/glaze/components/contrast-badge"
 
 /** A token this colour writes, shown under the picker with its own values. */
@@ -110,6 +112,194 @@ function Channels({
           >
             {text}
           </span>
+        </React.Fragment>
+      ))}
+    </span>
+  )
+}
+
+const channelNames: Record<Exclude<ColorFormat, "hex">, string[]> = {
+  oklch: ["Lightness", "Chroma", "Hue"],
+  rgb: ["Red", "Green", "Blue"],
+  hsl: ["Hue", "Saturation", "Lightness"],
+}
+
+/** What each editable cell holds for a colour, in the card's notation. */
+function cellsOf(color: Rgba, format: ColorFormat): string[] {
+  if (format === "hex") return [formatColor(color, "hex")]
+  if (format === "rgb")
+    return [color.r, color.g, color.b].map((n) => String(round(n, 0)))
+  if (format === "hsl") {
+    const { h, s, l } = rgbaToHsl(color)
+    return [h, s, l].map((n) => String(round(n, 1)))
+  }
+  const { l, c, h } = rgbaToOklch(color)
+  return [String(round(l, 1)), String(round(c, 3)), String(round(h, 1))]
+}
+
+// A cell may carry its unit: "20.5%" and "355°" are as good as "20.5", "355".
+const bare = (text: string) => text.trim().replace(/[%°]$/, "")
+
+/** The colour the cells spell, or null when any cell is not a number. */
+function colorOf(cells: string[], format: ColorFormat, alpha: number) {
+  if (format === "hex") {
+    const hex = parseColor(cells[0])
+    return hex && cells[0].trim().replace("#", "").length < 8
+      ? { ...hex, a: alpha }
+      : hex
+  }
+  const numbers = cells.map((cell) =>
+    bare(cell) === "" ? Number.NaN : Number(bare(cell))
+  )
+  if (numbers.some((n) => !Number.isFinite(n))) return null
+  const [x, y, z] = numbers
+  return parseColor(
+    format === "rgb"
+      ? `rgb(${x} ${y} ${z} / ${alpha})`
+      : format === "hsl"
+        ? `hsl(${x} ${y}% ${z}% / ${alpha})`
+        : `oklch(${x}% ${y} ${z} / ${alpha})`
+  )
+}
+
+/**
+ * Anything CSS reads as a colour, including names like `red`, which the
+ * kit's own parser doesn't know: the browser resolves it.
+ */
+function resolveColor(text: string): Rgba | null {
+  const direct = parseColor(text)
+  if (direct) return direct
+  if (typeof document === "undefined" || !CSS.supports("color", text.trim()))
+    return null
+  const probe = document.createElement("span")
+  probe.style.color = text.trim()
+  document.body.appendChild(probe)
+  const resolved = getComputedStyle(probe).color
+  probe.remove()
+  return parseColor(resolved)
+}
+
+/**
+ * The header's readout. With a way to change the colour it is a button; click
+ * it and each channel becomes a field in the card's notation: lightness,
+ * chroma and hue for OKLCH, red, green and blue for RGB, hue, saturation and
+ * lightness for HSL, one field for hex. Tab moves between them; Enter, or
+ * leaving the group, applies; Escape, or an unreadable number, puts the old
+ * colour back. Pasting a whole colour in any notation into any field applies
+ * it at once.
+ */
+function EditableChannels({
+  label,
+  value,
+  format,
+  onValueChange,
+}: {
+  label: string
+  value: string
+  format: ColorFormat
+  onValueChange: (value: string) => void
+}) {
+  const [cells, setCells] = React.useState<string[] | null>(null)
+  const [invalid, setInvalid] = React.useState(false)
+  const parsed = parseColor(value)
+
+  if (cells === null) {
+    return (
+      <Button
+        variant="ghost"
+        size="sm"
+        aria-label={`Edit ${label} value`}
+        title="Click to type or paste a colour"
+        className="h-control-sm shrink-0 px-0 hover:bg-transparent"
+        onClick={(event) => {
+          event.stopPropagation()
+          setInvalid(false)
+          setCells(
+            parsed
+              ? cellsOf(parsed, format)
+              : cellsOf({ r: 0, g: 0, b: 0, a: 1 }, format)
+          )
+        }}
+      >
+        <Channels value={value} format={format} />
+      </Button>
+    )
+  }
+
+  const apply = (color: Rgba) => {
+    // Write what the picker would, and say nothing when nothing changed.
+    const next = formatColor(color, format)
+    if (!parsed || next !== formatColor(parsed, format)) onValueChange(next)
+    setCells(null)
+  }
+  const commit = () => {
+    const color = colorOf(cells, format, parsed?.a ?? 1)
+    if (!color) return false
+    apply(color)
+    return true
+  }
+
+  return (
+    <span
+      role="group"
+      aria-label={`${label} value`}
+      className="flex h-control-sm shrink-0 items-center gap-1"
+      onClick={(event) => event.stopPropagation()}
+      onBlur={(event) => {
+        // Moving between the fields isn't leaving the group.
+        if (event.currentTarget.contains(event.relatedTarget as Node | null))
+          return
+        if (!commit()) setCells(null)
+      }}
+    >
+      {cells.map((text, index) => (
+        <React.Fragment key={index}>
+          {format !== "hex" && (
+            <span aria-hidden="true" className="h-4 w-px shrink-0 bg-border" />
+          )}
+          <Input
+            autoFocus={index === 0}
+            size="mini"
+            spellCheck={false}
+            aria-label={
+              format === "hex"
+                ? `${label} hex`
+                : `${label} ${channelNames[format][index].toLowerCase()}`
+            }
+            aria-invalid={invalid || undefined}
+            value={text}
+            className={cn(
+              "text-center font-mono data-[size=mini]:px-1",
+              format === "hex" ? "w-[131px]" : "w-11"
+            )}
+            onFocus={(event) => event.currentTarget.select()}
+            onChange={(event) => {
+              setCells(
+                cells.map((cell, i) =>
+                  i === index ? event.target.value : cell
+                )
+              )
+              setInvalid(false)
+            }}
+            onPaste={(event) => {
+              // A whole colour, in any notation, replaces all the fields.
+              const pasted = event.clipboardData.getData("text").trim()
+              if (!/[#(a-z]/i.test(pasted)) return
+              const color = resolveColor(pasted)
+              if (!color) return
+              event.preventDefault()
+              apply(color)
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault()
+                if (!commit()) setInvalid(true)
+              } else if (event.key === "Escape") {
+                event.preventDefault()
+                setCells(null)
+              }
+            }}
+          />
         </React.Fragment>
       ))}
     </span>
@@ -226,23 +416,35 @@ function ColorSelector({
             </Button>
           )}
 
-          <Button
-            variant="ghost"
-            size="sm"
-            aria-expanded={isOpen}
-            aria-controls={contentId}
-            aria-label={`${isOpen ? "Collapse" : "Expand"} ${label}`}
-            title={colorReadout(value)}
-            className="ms-auto h-control-sm shrink-0 gap-2 px-0 hover:bg-transparent aria-expanded:bg-transparent"
-          >
-            <Channels value={value} format={format} />
-            <ChevronDownIcon
-              className={cn(
-                "size-4 shrink-0 text-muted-foreground transition-transform duration-(--duration-fast)",
-                isOpen && "rotate-180"
-              )}
-            />
-          </Button>
+          <span className="ms-auto flex shrink-0 items-center gap-2">
+            {onValueChange ? (
+              <EditableChannels
+                label={label}
+                value={value}
+                format={format}
+                onValueChange={onValueChange}
+              />
+            ) : (
+              <span title={colorReadout(value)}>
+                <Channels value={value} format={format} />
+              </span>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-expanded={isOpen}
+              aria-controls={contentId}
+              aria-label={`${isOpen ? "Collapse" : "Expand"} ${label}`}
+              className="h-control-sm shrink-0 px-0 hover:bg-transparent aria-expanded:bg-transparent"
+            >
+              <ChevronDownIcon
+                className={cn(
+                  "size-4 shrink-0 text-muted-foreground transition-transform duration-(--duration-fast)",
+                  isOpen && "rotate-180"
+                )}
+              />
+            </Button>
+          </span>
         </div>
 
         <CollapsibleContent id={contentId}>

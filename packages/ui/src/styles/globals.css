@@ -159,13 +159,13 @@
     width: var(--highlight-w, 0);
     height: var(--highlight-h, 0);
     translate: var(--highlight-x, 0) var(--highlight-y, 0);
-    border-radius: var(--radius-item);
+    border-radius: var(--shape-item);
     background-color: var(--accent);
     opacity: 0;
     pointer-events: none;
     transition-property: translate, width, height, opacity;
     transition-duration: var(--duration-fast);
-    transition-timing-function: var(--ease-spring);
+    transition-timing-function: var(--motion-ease-spring);
   }
 
   &[data-highlight]::after {
@@ -241,7 +241,7 @@
     grid-area: 1 / 1;
     transition-property: opacity, scale, filter;
     transition-duration: var(--duration-fade-fast);
-    transition-timing-function: var(--ease-enter);
+    transition-timing-function: var(--motion-ease-enter);
   }
 
   &:not([data-swapped]) > :last-child,
@@ -250,7 +250,7 @@
     scale: 0.6;
     filter: blur(4px);
     transition-duration: var(--duration-exit-fast);
-    transition-timing-function: var(--ease-exit);
+    transition-timing-function: var(--motion-ease-exit);
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -101,6 +101,29 @@ export const NoDependents: Story = {
   render: () => <Playground label="Brand" defaultOpen dependents={[]} />,
 }
 
+// --- Typing a value -------------------------------------------------------
+
+// Click the readout and each channel becomes a field in the card's notation:
+// lightness, chroma and hue for OKLCH, red, green and blue for RGB, hue,
+// saturation and lightness for HSL, one field for hex. Tab moves between them
+// and Enter applies. Units are optional ("20.5%", "255°"). Pasting a whole
+// colour in any notation, or a CSS name like `tomato`, into any field applies
+// it at once. Escape, or a value that isn't a number, keeps the old colour.
+export const TypingAValue: Story = {
+  render: () => (
+    <div className="flex flex-col gap-1">
+      {(["oklch", "rgb", "hsl", "hex"] as const).map((format) => (
+        <Playground
+          key={format}
+          label={format.toUpperCase()}
+          start="oklch(62.4% 0.206 255.5)"
+          defaultFormat={format}
+        />
+      ))}
+    </div>
+  ),
+}
+
 // --- Contrast -------------------------------------------------------------
 
 // Readability is judged on the pair that meets in the interface, not the colour
