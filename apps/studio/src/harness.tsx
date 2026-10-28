@@ -4,7 +4,9 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   BriefcaseIcon,
+  CheckIcon,
   ChevronDownIcon,
+  CopyIcon,
   ChevronRightIcon,
   ClockIcon,
   EllipsisIcon,
@@ -36,6 +38,16 @@ import {
   CollapsibleTrigger,
 } from "@amit-kap/glaze/components/collapsible"
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@amit-kap/glaze/components/dropdown-menu"
+import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
@@ -44,6 +56,7 @@ import {
 import {
   Message,
   MessageContent,
+  MessageFooter,
   MessageGroup,
 } from "@amit-kap/glaze/components/message"
 import {
@@ -103,6 +116,27 @@ const projects: { name: string; open: boolean; sessions: string[] }[] = [
 ]
 
 const browserTabs = ["Atlas Studio", "Components / Message", "New tab"]
+
+// Earlier turns, so the thread is long enough to scroll.
+const earlier: ["me" | "agent", string][] = [
+  ["me", "Start with the order summary: quantities, remove, and live totals."],
+  [
+    "agent",
+    "Done. The totals update as you change quantities or pick a shipping method.",
+  ],
+  ["me", "Add the shipping method as radio choices with delivery notes."],
+  [
+    "agent",
+    "Added Standard, Express and Overnight, with the price on the right.",
+  ],
+  ["me", "The payment fields only show for a card, right?"],
+  [
+    "agent",
+    "Yes. PayPal and bank transfer hide the card number, expiry and CVC.",
+  ],
+  ["me", "Now make the place-order button confirm the purchase."],
+  ["agent", "It opens a dialog with the total and a Keep shopping button."],
+]
 
 /** A three-column harness mock: sessions, a conversation and a browser pane. */
 export function Harness() {
@@ -207,6 +241,30 @@ function Sessions({
   )
 }
 
+function CopyButton() {
+  const [copied, setCopied] = React.useState(false)
+  React.useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(false), 1600)
+    return () => clearTimeout(timer)
+  }, [copied])
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon-xs"
+      aria-label={copied ? "Copied" : "Copy"}
+      className="text-muted-foreground"
+      onClick={() => setCopied(true)}
+    >
+      <span className="icon-swap" data-swapped={copied || undefined}>
+        <CopyIcon />
+        <CheckIcon />
+      </span>
+    </Button>
+  )
+}
+
 function Conversation({ title }: { title: string }) {
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -216,18 +274,42 @@ function Conversation({ title }: { title: string }) {
           <ChevronDownIcon />
         </Button>
         <div className="ms-auto flex items-center gap-0.5 text-muted-foreground">
-          {[SquareTerminalIcon, GlobeIcon, FolderIcon, EllipsisIcon].map(
-            (Icon, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                size="icon-sm"
-                aria-label={["Terminal", "Browser", "Files", "More"][index]}
-              >
-                <Icon />
-              </Button>
-            )
-          )}
+          {[SquareTerminalIcon, GlobeIcon, FolderIcon].map((Icon, index) => (
+            <Button
+              key={index}
+              variant="ghost"
+              size="icon-sm"
+              aria-label={["Terminal", "Browser", "Files"][index]}
+            >
+              <Icon />
+            </Button>
+          ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="ghost" size="icon-sm" aria-label="More" />
+              }
+            >
+              <EllipsisIcon />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Rename session</DropdownMenuItem>
+              <DropdownMenuItem>Pin to top</DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>Move to project</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  {projects.map((project) => (
+                    <DropdownMenuItem key={project.name}>
+                      {project.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuItem>Export transcript</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">Archive</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
@@ -236,6 +318,24 @@ function Conversation({ title }: { title: string }) {
           <MessageScroller>
             <MessageScrollerViewport>
               <MessageScrollerContent className="gap-5 px-5 pb-4">
+                {earlier.map(([from, text], index) => (
+                  <MessageScrollerItem key={index}>
+                    <MessageGroup>
+                      <Message align={from === "me" ? "end" : "start"}>
+                        <MessageContent>
+                          <Bubble
+                            variant={from === "me" ? "secondary" : "ghost"}
+                            align={from === "me" ? "end" : "start"}
+                          >
+                            <BubbleContent className="text-body">
+                              {text}
+                            </BubbleContent>
+                          </Bubble>
+                        </MessageContent>
+                      </Message>
+                    </MessageGroup>
+                  </MessageScrollerItem>
+                ))}
                 <MessageScrollerItem>
                   <MessageGroup>
                     <Message>
@@ -305,6 +405,9 @@ function Conversation({ title }: { title: string }) {
                             </p>
                           </BubbleContent>
                         </Bubble>
+                        <MessageFooter>
+                          <CopyButton />
+                        </MessageFooter>
                       </MessageContent>
                     </Message>
                   </MessageGroup>

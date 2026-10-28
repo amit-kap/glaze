@@ -28,6 +28,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Label,
   Pie,
   PieChart,
   PolarAngleAxis,
@@ -615,7 +616,7 @@ function OrderStatus() {
       <CardContent>
         <ChartContainer
           config={statusConfig}
-          className="mx-auto aspect-square h-[200px]"
+          className="mx-auto aspect-auto h-[240px] w-full"
         >
           <PieChart>
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
@@ -626,19 +627,46 @@ function OrderStatus() {
               }))}
               dataKey="orders"
               nameKey="status"
-              innerRadius={58}
+              innerRadius="62%"
               strokeWidth={2}
               isAnimationActive={false}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (!viewBox || !("cx" in viewBox)) return null
+                  return (
+                    <text
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                    >
+                      <tspan
+                        x={viewBox.cx}
+                        dy="-0.6em"
+                        className="fill-muted-foreground text-micro"
+                      >
+                        ORDERS
+                      </tspan>
+                      <tspan
+                        x={viewBox.cx}
+                        dy="1.5em"
+                        className="fill-foreground text-heading font-medium"
+                      >
+                        {total.toLocaleString()}
+                      </tspan>
+                    </text>
+                  )
+                }}
+              />
+            </Pie>
+            <ChartLegend
+              content={
+                <ChartLegendContent nameKey="status" className="flex-wrap" />
+              }
             />
-            <ChartLegend content={<ChartLegendContent nameKey="status" />} />
           </PieChart>
         </ChartContainer>
-        <p className="-mt-[132px] mb-[88px] text-center">
-          <span className="block text-micro text-muted-foreground">ORDERS</span>
-          <span className="text-heading font-medium tabular-nums">
-            {total.toLocaleString()}
-          </span>
-        </p>
       </CardContent>
     </Card>
   )

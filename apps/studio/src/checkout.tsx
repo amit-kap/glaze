@@ -24,6 +24,16 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@amit-kap/glaze/components/field"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@amit-kap/glaze/components/dialog"
 import { Input } from "@amit-kap/glaze/components/input"
 import {
   RadioGroup,
@@ -403,9 +413,27 @@ export function Checkout() {
                 </span>
               </div>
 
-              <Button size="lg" disabled={cart.length === 0}>
-                Place order
-              </Button>
+              <Dialog>
+                <DialogTrigger
+                  render={<Button size="lg" disabled={cart.length === 0} />}
+                >
+                  Place order
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Order placed</DialogTitle>
+                    <DialogDescription>
+                      Thanks! We sent a receipt for {money(total)} to your
+                      email, and the order ships in 5–7 business days.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose render={<Button variant="outline" />}>
+                      Keep shopping
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
         </div>
