@@ -11,9 +11,9 @@ import {
 import { PortalContainer } from "@amit-kap/glaze/components/portal-container"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
-import { Chat } from "./chat"
 import { Checkout } from "./checkout"
 import { Dashboard } from "./dashboard"
+import { Harness } from "./harness"
 import { Landing } from "./landing"
 import { cssVars, type Mode, type Theme } from "./theme"
 import { motionVars, type MotionValues } from "./motion"
@@ -21,13 +21,13 @@ import { shapeVars, type Density, type ShapeValues } from "./shape"
 import { typeVars, type TypeValues } from "./typography"
 
 type Width = "fit" | "768" | "390"
-type Screen = "dashboard" | "table" | "checkout" | "chat" | "landing"
+type Screen = "dashboard" | "table" | "checkout" | "harness" | "landing"
 
 const screens: { id: Screen; label: string }[] = [
   { id: "dashboard", label: "Dashboard" },
   { id: "table", label: "Data table" },
   { id: "checkout", label: "Checkout" },
-  { id: "chat", label: "Chat" },
+  { id: "harness", label: "Harness" },
   { id: "landing", label: "Landing" },
 ]
 
@@ -41,7 +41,7 @@ const preview: Record<Screen, React.ReactNode> = {
     </div>
   ),
   checkout: <Checkout />,
-  chat: <Chat />,
+  harness: <Harness />,
   landing: <Landing />,
 }
 
