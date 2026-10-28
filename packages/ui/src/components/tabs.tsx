@@ -98,7 +98,7 @@ function TabsTrigger({
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex h-control-sm flex-1 items-center justify-center-safe gap-2 rounded-item border border-transparent px-3 text-body font-medium whitespace-nowrap text-foreground/60 transition-[color,border-color,box-shadow,outline-color,font-weight] group-data-[size=mini]/tabs-list:h-full group-data-[size=mini]/tabs-list:px-2 group-data-[size=mini]/tabs-list:text-caption group-data-[size=sm]/tabs-list:h-full group-data-[variant=line]/tabs-list:px-0! group-data-vertical/tabs:w-full group-data-vertical/tabs:flex-none group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/25 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-(--icon-size)",
+        "relative inline-flex h-control-sm flex-1 items-center justify-center-safe gap-2 rounded-item border border-transparent px-3 text-body font-medium whitespace-nowrap text-foreground/60 transition-[color,border-color,box-shadow,outline-color,font-weight] group-data-[size=mini]/tabs-list:h-full group-data-[size=mini]/tabs-list:px-2 group-data-[size=mini]/tabs-list:text-caption group-data-[size=sm]/tabs-list:h-full group-data-[variant=line]/tabs-list:px-0! group-data-vertical/tabs:w-full group-data-vertical/tabs:flex-none group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-ring disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-(--icon-size)",
         "data-active:font-strong data-active:text-foreground dark:data-active:text-foreground",
         className
       )}
@@ -113,7 +113,10 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   return (
     <TabsPrimitive.Panel
       data-slot="tabs-content"
-      className={cn("flex-1 text-body outline-none", className)}
+      className={cn(
+        "flex-1 text-body outline-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring",
+        className
+      )}
       {...props}
     />
   )

@@ -270,7 +270,7 @@ function ColorPicker({
         aria-label="Saturation and brightness"
         tabIndex={0}
         className={cn(
-          "relative w-full cursor-crosshair touch-none rounded-control outline-none select-none focus-visible:ring-3 focus-visible:ring-ring/25",
+          "relative w-full cursor-crosshair touch-none rounded-control outline-none select-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring",
           compact ? "h-15" : "h-36"
         )}
         style={{
@@ -446,7 +446,7 @@ function ColorPicker({
                 aria-label={swatch}
                 aria-pressed={active}
                 onClick={() => commitRgba(parsed)}
-                className="size-6 cursor-pointer rounded-item border border-border outline-none focus-visible:ring-3 focus-visible:ring-ring/25 aria-pressed:ring-2 aria-pressed:ring-ring"
+                className="size-6 cursor-pointer rounded-item border border-border outline-none aria-pressed:ring-2 aria-pressed:ring-ring"
                 style={{
                   background: `linear-gradient(${css(parsed)}, ${css(parsed)}), ${checker}`,
                 }}

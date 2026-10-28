@@ -243,7 +243,7 @@ function EditableChannels({
     <span
       role="group"
       aria-label={`${label} value`}
-      className="flex h-control-sm shrink-0 items-center gap-1"
+      className="mx-px flex h-control-sm shrink-0 items-center gap-1"
       onClick={(event) => event.stopPropagation()}
       onBlur={(event) => {
         // Moving between the fields isn't leaving the group.
@@ -269,8 +269,12 @@ function EditableChannels({
             aria-invalid={invalid || undefined}
             value={text}
             className={cn(
-              "text-center font-mono data-[size=mini]:px-1",
-              format === "hex" ? "w-[131px]" : "w-11"
+              "text-center font-mono",
+              // Same width as the readout it replaces, so opening it moves
+              // nothing: a channel cell is 36px, so its text is a size down.
+              format === "hex"
+                ? "w-[131px]"
+                : "w-9 data-[size=mini]:px-0 data-[size=mini]:text-micro md:data-[size=mini]:text-micro"
             )}
             onFocus={(event) => event.currentTarget.select()}
             onChange={(event) => {

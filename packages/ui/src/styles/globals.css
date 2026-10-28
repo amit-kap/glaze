@@ -263,7 +263,13 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
+  }
+  /* Anything focusable that a component doesn't style itself gets the same
+     1px edge in the ring colour that components draw as a border. */
+  :focus-visible {
+    outline-style: solid;
+    outline-width: 1px;
   }
   /* Body text takes the theme's normal weight, so `--weight-normal` reaches
      every element that doesn't set its own, not only `font-normal` ones. */
