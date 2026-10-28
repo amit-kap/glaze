@@ -11,6 +11,7 @@ import {
   InputGroupInput,
 } from "@amit-kap/glaze/components/input-group"
 import { ChevronDownIcon, XIcon, CheckIcon } from "lucide-react"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 const Combobox = ComboboxPrimitive.Root
 
@@ -96,8 +97,9 @@ function ComboboxContent({
     ComboboxPrimitive.Positioner.Props,
     "side" | "align" | "sideOffset" | "alignOffset" | "anchor"
   >) {
+  const container = usePortalContainer()
   return (
-    <ComboboxPrimitive.Portal>
+    <ComboboxPrimitive.Portal container={container}>
       <ComboboxPrimitive.Positioner
         side={side}
         sideOffset={sideOffset}

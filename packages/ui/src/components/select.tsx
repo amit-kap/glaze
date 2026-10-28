@@ -5,6 +5,7 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { cn } from "@amit-kap/glaze/lib/utils"
 import { useHighlightLayer } from "@amit-kap/glaze/hooks/use-highlight-layer"
 import { ChevronDownIcon, CheckIcon, ChevronUpIcon } from "lucide-react"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 const Select = SelectPrimitive.Root
 
@@ -73,8 +74,9 @@ function SelectContent({
   const layerRef = useHighlightLayer(
     (props as { ref?: React.Ref<HTMLDivElement> }).ref
   )
+  const container = usePortalContainer()
   return (
-    <SelectPrimitive.Portal>
+    <SelectPrimitive.Portal container={container}>
       <SelectPrimitive.Positioner
         side={side}
         sideOffset={sideOffset}

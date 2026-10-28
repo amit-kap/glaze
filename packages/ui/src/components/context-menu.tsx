@@ -5,14 +5,16 @@ import { ContextMenu as ContextMenuPrimitive } from "@base-ui/react/context-menu
 import { cn } from "@amit-kap/glaze/lib/utils"
 import { useHighlightLayer } from "@amit-kap/glaze/hooks/use-highlight-layer"
 import { ChevronRightIcon, CheckIcon } from "lucide-react"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 function ContextMenu({ ...props }: ContextMenuPrimitive.Root.Props) {
   return <ContextMenuPrimitive.Root data-slot="context-menu" {...props} />
 }
 
 function ContextMenuPortal({ ...props }: ContextMenuPrimitive.Portal.Props) {
+  const container = usePortalContainer()
   return (
-    <ContextMenuPrimitive.Portal data-slot="context-menu-portal" {...props} />
+    <ContextMenuPrimitive.Portal container={container} data-slot="context-menu-portal" {...props} />
   )
 }
 
@@ -45,8 +47,9 @@ function ContextMenuContent({
   const layerRef = useHighlightLayer(
     (props as { ref?: React.Ref<HTMLDivElement> }).ref
   )
+  const container = usePortalContainer()
   return (
-    <ContextMenuPrimitive.Portal>
+    <ContextMenuPrimitive.Portal container={container}>
       <ContextMenuPrimitive.Positioner
         className="isolate z-50 outline-none"
         align={align}

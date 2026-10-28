@@ -6,6 +6,7 @@ import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Button } from "@amit-kap/glaze/components/button"
 import { XIcon, CircleCheckIcon, InfoIcon, TriangleAlertIcon, OctagonXIcon, Loader2Icon } from "lucide-react"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 const toast = ToastPrimitive.createToastManager()
 
@@ -14,7 +15,8 @@ function ToastProvider({ ...props }: ToastPrimitive.Provider.Props) {
 }
 
 function ToastPortal({ ...props }: ToastPrimitive.Portal.Props) {
-  return <ToastPrimitive.Portal data-slot="toast-portal" {...props} />
+  const container = usePortalContainer()
+  return <ToastPrimitive.Portal container={container} data-slot="toast-portal" {...props} />
 }
 
 function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
