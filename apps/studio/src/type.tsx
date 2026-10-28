@@ -53,7 +53,7 @@ export function Type({ draft }: { draft: Draft }) {
                   />
                 ) : (
                   <SegmentedControl
-                    size="mini"
+                    size="sm"
                     label={row.label}
                     options={weightOptions}
                     value={String(toNumber(type[row.token]))}

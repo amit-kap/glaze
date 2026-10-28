@@ -230,6 +230,17 @@ export const withAlpha = (color: string, a: number) =>
 const near = (a: number, b: number, tolerance: number) =>
   Math.abs(a - b) < tolerance
 
+function sameColor(a: string, b: string) {
+  const x = parseColor(a) ?? black
+  const y = parseColor(b) ?? black
+  return (
+    near(x.r, y.r, 0.5) &&
+    near(x.g, y.g, 0.5) &&
+    near(x.b, y.b, 0.5) &&
+    near(x.a, y.a, 0.005)
+  )
+}
+
 function sameShadow(a: string, b: string) {
   const first = parseShadow(a)
   const second = parseShadow(b)
@@ -243,7 +254,7 @@ function sameShadow(a: string, b: string) {
         near(layer.y, other.y, 0.01) &&
         near(layer.blur, other.blur, 0.01) &&
         near(layer.spread, other.spread, 0.01) &&
-        near(shadowAlpha(layer.color), shadowAlpha(other.color), 0.005)
+        sameColor(layer.color, other.color)
       )
     })
   )

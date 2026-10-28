@@ -3,6 +3,7 @@ import { RotateCcwIcon } from "lucide-react"
 
 import { Button } from "@amit-kap/glaze/components/button"
 import { Input } from "@amit-kap/glaze/components/input"
+import { Slider } from "@amit-kap/glaze/components/slider"
 import { cn } from "@amit-kap/glaze/lib/utils"
 import {
   Item,
@@ -18,7 +19,7 @@ import {
   SelectValue,
 } from "@amit-kap/glaze/components/select"
 
-// The rows every tool panel is made of: a label with its reset, and a mini
+// The rows every tool panel is made of: a label with its reset, and a small
 // control on the right.
 
 /** One setting: its label, a reset once edited, and the control, no card. */
@@ -76,7 +77,7 @@ export function ChoiceSelect({
       value={value}
       onValueChange={(next) => next && onChange(next)}
     >
-      <SelectTrigger size="mini" aria-label={label} className="bg-background">
+      <SelectTrigger size="sm" aria-label={label} className="bg-background">
         <SelectValue />
       </SelectTrigger>
       <SelectContent alignItemWithTrigger={false} align="end">
@@ -125,7 +126,7 @@ export function NumberField({
       min={min}
       max={max}
       step={step}
-      size="mini"
+      size="sm"
       className={cn(
         "w-20 [appearance:textfield] bg-background tabular-nums [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
         className
@@ -137,5 +138,53 @@ export function NumberField({
       }}
       onBlur={() => setTyped(null)}
     />
+  )
+}
+
+/** A label, a slider and the number it sets, on one line. */
+export function SliderField({
+  name,
+  label,
+  hint,
+  value,
+  min,
+  max,
+  step,
+  onCommit,
+}: {
+  /** What the setting is, so the controls are told apart by a screen reader. */
+  name: string
+  label: string
+  hint: string
+  value: number
+  min: number
+  max: number
+  step: number
+  onCommit: (value: number) => void
+}) {
+  return (
+    <div className="grid grid-cols-[5.25rem_1fr_4rem] items-center gap-2">
+      <span className="truncate text-caption text-muted-foreground">
+        {label}
+      </span>
+      <Slider
+        aria-label={`${name} ${label}`}
+        value={[Math.min(max, Math.max(min, value))]}
+        min={min}
+        max={max}
+        step={step}
+        onValueChange={(next) => onCommit(Array.isArray(next) ? next[0] : next)}
+      />
+      <NumberField
+        label={`${name} ${label}`}
+        hint={hint}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        className="w-full"
+        onCommit={onCommit}
+      />
+    </div>
   )
 }

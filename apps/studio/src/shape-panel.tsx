@@ -23,6 +23,13 @@ const ranges: Record<string, [number, number, number]> = {
   "control-height": [24, 56, 1],
 }
 
+// What each group's numbers are measured in, shown beside its title.
+const units: Record<string, string> = {
+  corners: "px",
+  spacing: "px",
+  shadows: "px",
+}
+
 /**
  * The Shape tool: corner radii, the spacing unit and control height, and
  * shadow depth. Shared by light and dark, so there is no mode switch here.
@@ -47,7 +54,11 @@ export function Shape({
       {shapeGroups.map((group, index) => (
         <PanelSection
           key={group.id}
-          title={group.title}
+          title={
+            units[group.id]
+              ? `${group.title} (${units[group.id]})`
+              : group.title
+          }
           note={group.note}
           defaultOpen={index === 0}
         >

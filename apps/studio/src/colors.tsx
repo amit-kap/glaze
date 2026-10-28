@@ -78,7 +78,7 @@ export function Colors({
             onValueChange={(value) => value && setFormat(value as ColorFormat)}
           >
             <SelectTrigger
-              size="mini"
+              size="sm"
               aria-label="Colour format"
               className="bg-background"
             >
@@ -99,7 +99,7 @@ export function Colors({
             onValueChange={(value) => value && onModeChange(value as Mode)}
           >
             <SelectTrigger
-              size="mini"
+              size="sm"
               aria-label="Mode being edited"
               className="bg-background"
             >

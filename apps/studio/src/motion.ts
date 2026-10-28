@@ -101,6 +101,13 @@ export type Easing =
 export function parseEasing(css: string): Easing {
   const text = squash(css)
   if (text === "linear") return { kind: "bezier", p: [0, 0, 1, 1] }
+  const keyword: Record<string, Bezier> = {
+    ease: [0.25, 0.1, 0.25, 1],
+    "ease-in": [0.42, 0, 1, 1],
+    "ease-out": [0, 0, 0.58, 1],
+    "ease-in-out": [0.42, 0, 0.58, 1],
+  }
+  if (keyword[text]) return { kind: "bezier", p: keyword[text] }
 
   const bezier = text.match(/^cubic-bezier\(([^)]*)\)$/)
   if (bezier) {

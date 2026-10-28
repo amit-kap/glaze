@@ -12,6 +12,13 @@ import {
 } from "./motion"
 import { PanelSection } from "./section"
 
+// What each group's numbers are measured in, shown beside its title.
+const units: Record<string, string> = {
+  "motion.duration": "ms",
+  "motion.easing": "progress over time",
+  "motion.exit-timing": "× entrance",
+}
+
 /**
  * The Motion tool: durations, easing curves and the exit ratio. Shared by
  * light and dark, so there is no mode switch here.
@@ -36,7 +43,11 @@ export function Motion({
       {motionGroups.map((group, index) => (
         <PanelSection
           key={group.id}
-          title={group.title}
+          title={
+            units[group.id]
+              ? `${group.title} (${units[group.id]})`
+              : group.title
+          }
           note={group.note}
           defaultOpen={index === 0}
         >
