@@ -114,6 +114,20 @@ export const Line: Story = {
   ),
 }
 
+// The line variant has no track and no horizontal padding: the underline is
+// as wide as the label, and tabs sit 12px apart. It takes the sizes too.
+export const LineSmall: Story = {
+  render: () => (
+    <Tabs defaultValue="overview">
+      <TabsList variant="line" size="sm">
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  ),
+}
+
 // --- States ---------------------------------------------------------------
 
 export const Disabled: Story = {

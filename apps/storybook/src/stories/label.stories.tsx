@@ -80,7 +80,7 @@ export const WithTooltip: Story = {
           Brand
         </TooltipTrigger>
         <TooltipContent side="inline-start" className="font-mono">
-          --primary --primary-subtle --primary-border --ring
+          --primary --primary-foreground --ring
         </TooltipContent>
       </Tooltip>
       <Input id="token-brand" placeholder="oklch(0.55 0.2 264)" />

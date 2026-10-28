@@ -9,7 +9,12 @@ import {
   usePaintedColors,
   formatOklch,
 } from "./docs"
-import { themeSections, type TokenDoc, type TokenGroup } from "./tokens"
+import {
+  themeSections,
+  followsLabels,
+  type TokenDoc,
+  type TokenGroup,
+} from "./tokens"
 
 /** Identify explicit theme declarations, not the default derivation rules. */
 function useThemeOverrides() {
@@ -26,7 +31,8 @@ function useThemeOverrides() {
           )
             continue
           if (rule instanceof CSSStyleRule) {
-            // Named theme selectors and Nova's pinned root values outrank derivations.
+            // A theme's own block (including its light-only :not() rule)
+            // outranks the shared derivation.
             if (
               /\[data-theme\s*=|:root:not\(/.test(rule.selectorText) &&
               root.matches(rule.selectorText)
@@ -190,15 +196,17 @@ function TokenRow({
   const override = nested && overrides.has(item.token)
   const relation = override
     ? "Theme override"
-    : nested
-      ? "Derived"
-      : item.fixed
-        ? "Fixed"
-        : item.setting
-          ? "Setting"
-          : item.affects
+    : item.fixed
+      ? "Fixed"
+      : item.setting
+        ? "Setting"
+        : item.follows?.length
+          ? `Follows ${followsLabels(item.follows).join(" + ")}`
+          : item.input && !nested
             ? "Input"
-            : "Direct"
+            : nested
+              ? "Derived"
+              : ""
   return (
     <div className="min-w-0 border-b border-border/60 py-4 last:border-0">
       {probes}
@@ -215,16 +223,21 @@ function TokenRow({
             <code className="font-mono text-caption break-all">
               {item.token}
             </code>
-            <span className="text-caption text-muted-foreground">
-              {relation}
-            </span>
+            {relation && (
+              <span className="text-caption text-muted-foreground">
+                {relation}
+              </span>
+            )}
           </div>
           <p className="mt-1 text-caption text-muted-foreground">{item.note}</p>
-          {item.source && (
+          {item.consumers?.length ? (
             <p className="mt-1 text-caption text-muted-foreground">
-              Default: {item.source}.
+              Used by {item.consumers.slice(0, 8).join(", ")}
+              {item.consumers.length > 8
+                ? ` +${item.consumers.length - 8} more`
+                : ""}
             </p>
-          )}
+          ) : null}
         </div>
         <div className="flex min-w-0 flex-col gap-2">
           {value && value.length > 160 ? (
@@ -286,7 +299,7 @@ function TokenRow({
           )}
         </div>
       </div>
-      {item.affects && (
+      {item.affects?.length ? (
         <details className="mt-3">
           <summary className="w-fit cursor-pointer text-caption text-muted-foreground">
             Affects {item.affects.length}{" "}
@@ -303,7 +316,7 @@ function TokenRow({
             ))}
           </div>
         </details>
-      )}
+      ) : null}
     </div>
   )
 }
@@ -342,9 +355,9 @@ export function TokenPage({ sectionId }: { sectionId: string }) {
     <Page title={section.title} lead={section.note}>
       <style>{`@keyframes glaze-token-travel { from { transform: translateX(0); } to { transform: translateX(96px); } }`}</style>
       <p className="max-w-[72ch] text-caption text-muted-foreground">
-        Values follow the toolbar. Expand “Affects” to see the layer below.
-        Derived values follow inputs; a theme override replaces that default.
-        Direct values are used as-is.
+        Values follow the toolbar. A row shows where its value comes from;
+        expand “Affects” to see what it changes. A theme that sets a value
+        itself replaces the default recipe.
       </p>
       {section.groups.map((group) => (
         <Group key={group.title} group={group} overrides={overrides} />

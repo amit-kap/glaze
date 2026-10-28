@@ -26,6 +26,9 @@ jobs:
       - name: Token contract
         run: npm run check:tokens
 
+      - name: Settings catalog
+        run: npm run check:catalog
+
       - name: Restore Turborepo cache
         uses: actions/cache@v6
         with:

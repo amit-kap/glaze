@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 import { cn } from "@amit-kap/glaze/lib/utils"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 type DrawerContextProps = {
   hasSnapPoints: boolean
@@ -56,7 +57,8 @@ function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
 }
 
 function DrawerPortal({ ...props }: DrawerPrimitive.Portal.Props) {
-  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />
+  const container = usePortalContainer()
+  return <DrawerPrimitive.Portal container={container} data-slot="drawer-portal" {...props} />
 }
 
 function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
@@ -125,7 +127,7 @@ function DrawerContent({
             // Nested.
             "data-nested-drawer-open:overflow-hidden data-nested-drawer-open:brightness-95",
             // Bleed.
-            "after:pointer-events-none after:absolute after:bg-(--drawer-bleed-background,var(--color-popover)) data-[swipe-axis=x]:after:inset-y-0 data-[swipe-axis=x]:after:w-(--bleed) data-[swipe-axis=y]:after:inset-x-0 data-[swipe-axis=y]:after:h-(--bleed) data-[swipe-direction=down]:after:top-full data-[swipe-direction=left]:after:right-full data-[swipe-direction=right]:after:left-full data-[swipe-direction=up]:after:bottom-full",
+            "after:pointer-events-none after:absolute after:bg-(--drawer-bleed-background,var(--popover)) data-[swipe-axis=x]:after:inset-y-0 data-[swipe-axis=x]:after:w-(--bleed) data-[swipe-axis=y]:after:inset-x-0 data-[swipe-axis=y]:after:h-(--bleed) data-[swipe-direction=down]:after:top-full data-[swipe-direction=left]:after:right-full data-[swipe-direction=right]:after:left-full data-[swipe-direction=up]:after:bottom-full",
             // Safe areas: keep content clear of notches and home indicators.
             "data-[swipe-direction=down]:pb-(--safe-bottom) data-[swipe-direction=up]:pt-(--safe-top) data-[swipe-axis=y]:px-(--safe-inline) data-[swipe-axis=x]:pt-(--safe-top) data-[swipe-axis=x]:pb-(--safe-bottom) data-[swipe-direction=left]:pl-(--safe-left) data-[swipe-direction=right]:pr-(--safe-right)",
             // Sizing.

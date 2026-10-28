@@ -42,13 +42,51 @@ const write = (key: string, value: unknown) => {
   }
 }
 
+/** Older drafts use the library's own input names; themes use shadcn's. */
+const legacyNames: Record<string, string> = {
+  canvas: "background",
+  surface: "card",
+  ink: "foreground",
+  "ink-muted": "muted-foreground",
+  line: "border",
+  danger: "destructive",
+}
+
+const renameLegacy = (
+  values: Record<string, string> | undefined
+): Record<string, string> | undefined => {
+  if (!values) return values
+  let changed = false
+  const next = { ...values }
+  for (const [oldName, newName] of Object.entries(legacyNames)) {
+    if (!(oldName in next)) continue
+    if (next[newName] === undefined) next[newName] = next[oldName]
+    delete next[oldName]
+    changed = true
+  }
+  return changed ? next : values
+}
+
 const toState = (stored: unknown): CustomThemeState | null => {
   if (!stored || typeof stored !== "object") return null
   const { base, custom, savedId } = stored as Record<string, unknown>
-  if (typeof base !== "string" || !isBaseTheme(base)) return null
+  const values = (custom as Partial<Custom> | undefined) ?? {}
   return {
-    base,
-    custom: { ...emptyCustom, ...(custom as Partial<Custom> | undefined) },
+    // Themes saved against one of the retired themes reopen as Nova, with
+    // their values intact.
+    base: typeof base === "string" && isBaseTheme(base) ? base : "nova",
+    custom: {
+      ...emptyCustom,
+      ...values,
+      light: renameLegacy(values.light) ?? {},
+      dark: renameLegacy(values.dark) ?? {},
+      system: values.system
+        ? {
+            light: renameLegacy(values.system.light) ?? {},
+            dark: renameLegacy(values.system.dark) ?? {},
+          }
+        : undefined,
+    },
     savedId: typeof savedId === "string" ? savedId : undefined,
   }
 }

@@ -33,7 +33,7 @@ export function AvatarDemo() {
             alt="@evilrabbit"
           />
           <AvatarFallback>ER</AvatarFallback>
-          <AvatarBadge className="bg-success" />
+          <AvatarBadge className="bg-severity-low" />
         </Avatar>
         <AvatarGroup className="grayscale">
           {people.map((person) => (

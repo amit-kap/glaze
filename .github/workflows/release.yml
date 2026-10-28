@@ -55,6 +55,7 @@ jobs:
         if: steps.version.outputs.release == 'true'
         run: |
           npm run check:tokens
+          npm run check:catalog
           npx turbo lint typecheck
 
       - name: Build, publish to npm, push the release tag

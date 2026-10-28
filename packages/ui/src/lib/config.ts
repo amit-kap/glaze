@@ -5,8 +5,11 @@ import { z } from "zod"
 // Keys are input names without the leading "--", so each one maps 1:1 onto a
 // CSS custom property and a new input only needs adding to a list below.
 
-export const builtInThemes = [
-  "nova",
+/** Nova is the only built-in theme; everything else is a saved theme. */
+export const builtInThemes = ["nova"] as const
+
+/** Themes that used to ship with Glaze; configs naming one start from Nova. */
+const retiredThemes = [
   "vega",
   "maia",
   "lyra",
@@ -15,31 +18,56 @@ export const builtInThemes = [
   "sera",
   "rhea",
   "gr8r",
-] as const
+]
+
+/**
+ * Glaze release this config format and its generated CSS are written against.
+ * Keep in step with `packages/ui/package.json`; `npm run check:catalog` does.
+ */
+export const glazeBaseline = "0.3.0"
 
 // Inputs that take a value per mode.
 const colorInputs = [
-  "canvas",
-  "surface",
-  "ink",
-  "ink-muted",
-  "line",
-  "brand",
-  "brand-ink",
-  "danger",
-  "warning",
-  "success",
-  "info",
+  // shadcn's variables
+  "background",
+  "foreground",
+  "card",
+  "card-foreground",
+  "popover",
+  "popover-foreground",
+  "primary",
+  "primary-foreground",
+  "secondary",
+  "secondary-foreground",
+  "muted",
+  "muted-foreground",
+  "accent",
+  "accent-foreground",
+  "destructive",
+  "border",
+  "input",
+  "ring",
   "chart-1",
   "chart-2",
   "chart-3",
   "chart-4",
   "chart-5",
+  "sidebar",
+  "sidebar-foreground",
+  "sidebar-primary",
+  "sidebar-primary-foreground",
+  "sidebar-accent",
+  "sidebar-accent-foreground",
+  "sidebar-border",
+  "sidebar-ring",
+  // Glaze extras
+  "brand",
+  "brand-ink",
   "overlay",
-  // optional, with fallbacks in tokens.css
-  "caution",
-  "sidebar-brand",
-  "sidebar-brand-ink",
+  "severity-critical",
+  "severity-high",
+  "severity-medium",
+  "severity-low",
 ] as const
 
 // Inputs that take one value for both modes, by group.
@@ -189,12 +217,80 @@ export type GlazeConfig = z.output<typeof glazeConfigSchema>
 
 /** Parses and validates a config; throws a readable error listing every problem. */
 export function parseConfig(value: unknown): GlazeConfig {
-  const result = glazeConfigSchema.safeParse(value)
+  const result = glazeConfigSchema.safeParse(migrateNames(value))
   if (result.success) return result.data
   const problems = result.error.issues.map(
     (i) => `  ${i.path.join(".") || "(root)"}: ${i.message}`
   )
   throw new Error(`Invalid Glaze config:\n${problems.join("\n")}`)
+}
+
+/**
+ * Older configs use the library's own input names. They are shadcn's names
+ * now, so move them rather than reject the file. A new name wins if a file
+ * somehow carries both.
+ */
+const legacyNames: Record<string, string> = {
+  canvas: "background",
+  surface: "card",
+  ink: "foreground",
+  "ink-muted": "muted-foreground",
+  line: "border",
+  danger: "destructive",
+  warning: "severity-medium",
+  success: "severity-low",
+  caution: "severity-high",
+  "sidebar-brand": "brand",
+  "sidebar-brand-ink": "brand-ink",
+}
+
+/** Colour names that no longer have a value to move to. */
+const retiredNames = ["info"]
+
+function migrateNames(value: unknown): unknown {
+  if (!value || typeof value !== "object") return value
+  const config = value as Record<string, unknown>
+  let changed = false
+  const next = { ...config }
+  if (
+    typeof config.extends === "string" &&
+    retiredThemes.includes(config.extends)
+  ) {
+    next.extends = "nova"
+    changed = true
+  }
+  for (const group of ["color", "system"] as const) {
+    const blocks = config[group]
+    if (!blocks || typeof blocks !== "object") continue
+    const nextBlocks = { ...(blocks as Record<string, unknown>) }
+    let groupChanged = false
+    for (const mode of ["light", "dark"]) {
+      const block = nextBlocks[mode]
+      if (!block || typeof block !== "object") continue
+      const values = { ...(block as Record<string, unknown>) }
+      let moved = false
+      for (const [oldName, newName] of Object.entries(legacyNames)) {
+        if (!(oldName in values)) continue
+        if (values[newName] === undefined) values[newName] = values[oldName]
+        delete values[oldName]
+        moved = true
+      }
+      for (const name of retiredNames) {
+        if (!(name in values)) continue
+        delete values[name]
+        moved = true
+      }
+      if (moved) {
+        nextBlocks[mode] = values
+        groupChanged = true
+      }
+    }
+    if (groupChanged) {
+      next[group] = nextBlocks
+      changed = true
+    }
+  }
+  return changed ? next : value
 }
 
 /** Identity helper for typed configs written in TypeScript. */

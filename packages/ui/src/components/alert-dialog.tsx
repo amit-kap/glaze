@@ -3,6 +3,7 @@ import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Button } from "@amit-kap/glaze/components/button"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 function AlertDialog({ ...props }: AlertDialogPrimitive.Root.Props) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />
@@ -15,8 +16,9 @@ function AlertDialogTrigger({ ...props }: AlertDialogPrimitive.Trigger.Props) {
 }
 
 function AlertDialogPortal({ ...props }: AlertDialogPrimitive.Portal.Props) {
+  const container = usePortalContainer()
   return (
-    <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />
+    <AlertDialogPrimitive.Portal container={container} data-slot="alert-dialog-portal" {...props} />
   )
 }
 

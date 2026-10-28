@@ -5,6 +5,7 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { cn } from "@amit-kap/glaze/lib/utils"
 import { useHighlightLayer } from "@amit-kap/glaze/hooks/use-highlight-layer"
 import { ChevronDownIcon, CheckIcon, ChevronUpIcon } from "lucide-react"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 const Select = SelectPrimitive.Root
 
@@ -12,7 +13,7 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   return (
     <SelectPrimitive.Group
       data-slot="select-group"
-      className={cn("scroll-my-1 p-1", className)}
+      className={cn("scroll-my-1", className)}
       {...props}
     />
   )
@@ -34,14 +35,14 @@ function SelectTrigger({
   children,
   ...props
 }: SelectPrimitive.Trigger.Props & {
-  size?: "sm" | "default"
+  size?: "mini" | "sm" | "default"
 }) {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex w-fit items-center justify-between gap-1.5 rounded-control border border-input bg-(--input-fill) py-2 pe-2 ps-2.5 text-body whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/25 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-control-md data-[size=sm]:h-control-sm data-[size=sm]:rounded-(--button-radius-xs) *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-(--icon-size)",
+        "flex w-fit items-center justify-between gap-1.5 rounded-control border border-input bg-(--input-fill) py-2 pe-2 ps-2.5 text-body whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-control-md data-[size=sm]:h-control-sm data-[size=sm]:rounded-(--button-radius-xs) data-[size=mini]:h-control-xs data-[size=mini]:gap-1 data-[size=mini]:rounded-(--button-radius-xs) data-[size=mini]:py-0 data-[size=mini]:pe-1.5 data-[size=mini]:ps-2 data-[size=mini]:text-caption *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-(--icon-size)",
         className
       )}
       {...props}
@@ -49,7 +50,7 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon
         render={
-          <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
+          <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground in-data-[size=mini]:size-3.5" />
         }
       />
     </SelectPrimitive.Trigger>
@@ -73,8 +74,9 @@ function SelectContent({
   const layerRef = useHighlightLayer(
     (props as { ref?: React.Ref<HTMLDivElement> }).ref
   )
+  const container = usePortalContainer()
   return (
-    <SelectPrimitive.Portal>
+    <SelectPrimitive.Portal container={container}>
       <SelectPrimitive.Positioner
         side={side}
         sideOffset={sideOffset}
@@ -91,7 +93,7 @@ function SelectContent({
           ref={layerRef}
         >
           <SelectScrollUpButton />
-          <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          <SelectPrimitive.List className="p-1">{children}</SelectPrimitive.List>
           <SelectScrollDownButton />
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>

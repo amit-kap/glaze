@@ -74,6 +74,14 @@ type ColorPickerProps = {
   hideEyedropper?: boolean
   /** Draw the picker in a card; the popover turns this off. */
   card?: boolean
+  /** Hide the swatch beside the sliders, for callers that already show it. */
+  hidePreview?: boolean
+  /** Draw the saturation field short, for pickers that sit inside a row. */
+  compact?: boolean
+  /** Hide the numeric channel row; sliders and the format carry editing. */
+  showFields?: boolean
+  /** Sits after the eyedropper: a verdict on the colour, not a control. */
+  accessory?: React.ReactNode
   className?: string
 }
 
@@ -101,6 +109,10 @@ function ColorPicker({
   swatches,
   hideEyedropper = false,
   card = true,
+  hidePreview = false,
+  compact = false,
+  showFields = true,
+  accessory,
   className,
 }: ColorPickerProps) {
   const [hsva, setHsva, setSeen] = useHsva(value, defaultValue)
@@ -257,7 +269,10 @@ function ColorPicker({
         role="group"
         aria-label="Saturation and brightness"
         tabIndex={0}
-        className="relative h-36 w-full cursor-crosshair touch-none rounded-control outline-none select-none focus-visible:ring-3 focus-visible:ring-ring/25"
+        className={cn(
+          "relative w-full cursor-crosshair touch-none rounded-control outline-none select-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring",
+          compact ? "h-15" : "h-36"
+        )}
         style={{
           background: `linear-gradient(to top, black, transparent), linear-gradient(to right, white, ${hueColor})`,
         }}
@@ -313,97 +328,105 @@ function ColorPicker({
             className="**:data-[slot=slider-range]:bg-transparent! **:data-[slot=slider-track]:h-2.5! **:data-[slot=slider-track]:[background:var(--alpha-track)]!"
           />
         </div>
-        <span
-          data-slot="color-picker-preview"
-          aria-hidden="true"
-          className="size-9 shrink-0 rounded-control border border-border"
-          style={{
-            background: `linear-gradient(${css(rgba)}, ${css(rgba)}), ${checker}`,
-          }}
-        />
-      </div>
-
-      <div
-        className={cn(
-          "grid items-end gap-1.5",
-          format === "hex"
-            ? "grid-cols-[minmax(0,1fr)_4rem]"
-            : "grid-cols-[repeat(3,minmax(0,1fr))_4rem]"
-        )}
-      >
-        <Select
-          items={formats}
-          value={format}
-          onValueChange={(v) => v && changeFormat(v as ColorFormat)}
-        >
-          <SelectTrigger
-            size="sm"
-            aria-label="Colour format"
-            className={cn("w-full", format !== "hex" && "col-span-3")}
-          >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {formats.map((f) => (
-                <SelectItem key={f.value} value={f.value}>
-                  {f.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        {canPick ? (
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  variant="outline"
-                  size="icon-sm"
-                  aria-label="Pick a colour from the screen"
-                  className="w-full"
-                  onClick={eyedrop}
-                />
-              }
-            >
-              <PipetteIcon />
-            </TooltipTrigger>
-            <TooltipContent>Eyedropper</TooltipContent>
-          </Tooltip>
-        ) : (
-          <span />
-        )}
-
-        {format === "hex" ? (
-          <ChannelField
-            ariaLabel="Hex"
-            text={formatColor({ ...rgba, a: 1 }, "hex")}
-            onCommit={(text) => {
-              const parsed = parseColor(text)
-              if (parsed) commitRgba({ ...parsed, a: hsva.a })
+        {!hidePreview && (
+          <span
+            data-slot="color-picker-preview"
+            aria-hidden="true"
+            className="size-9 shrink-0 rounded-control border border-border"
+            style={{
+              background: `linear-gradient(${css(rgba)}, ${css(rgba)}), ${checker}`,
             }}
           />
-        ) : (
-          fields.map((f) => (
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center gap-1.5">
+          <Select
+            items={formats}
+            value={format}
+            onValueChange={(v) => v && changeFormat(v as ColorFormat)}
+          >
+            <SelectTrigger
+              size="sm"
+              aria-label="Colour format"
+              className="w-full min-w-0 flex-1 rounded-item"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {formats.map((f) => (
+                  <SelectItem key={f.value} value={f.value}>
+                    {f.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {canPick && (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon-sm"
+                    aria-label="Pick a colour from the screen"
+                    className="w-16 shrink-0 rounded-item"
+                    onClick={eyedrop}
+                  />
+                }
+              >
+                <PipetteIcon />
+              </TooltipTrigger>
+              <TooltipContent>Eyedropper</TooltipContent>
+            </Tooltip>
+          )}
+          {accessory}
+        </div>
+
+        {showFields && (
+          <div
+            className={cn(
+              "grid items-end gap-1.5",
+              format === "hex"
+                ? "grid-cols-[minmax(0,1fr)_4rem]"
+                : "grid-cols-[repeat(3,minmax(0,1fr))_4rem]"
+            )}
+          >
+            {format === "hex" ? (
+              <ChannelField
+                ariaLabel="Hex"
+                text={formatColor({ ...rgba, a: 1 }, "hex")}
+                onCommit={(text) => {
+                  const parsed = parseColor(text)
+                  if (parsed) commitRgba({ ...parsed, a: hsva.a })
+                }}
+              />
+            ) : (
+              fields.map((f) => (
+                <ChannelField
+                  key={f.label}
+                  label={f.label}
+                  text={String(Number(f.value.toFixed(f.digits ?? 0)))}
+                  onCommit={(text) => {
+                    const n = Number.parseFloat(text)
+                    if (!Number.isNaN(n)) f.set(clamp(n, f.min, f.max))
+                  }}
+                />
+              ))
+            )}
             <ChannelField
-              key={f.label}
-              label={f.label}
-              text={String(Number(f.value.toFixed(f.digits ?? 0)))}
+              ariaLabel="Opacity"
+              text={`${Math.round(hsva.a * 100)}%`}
               onCommit={(text) => {
                 const n = Number.parseFloat(text)
-                if (!Number.isNaN(n)) f.set(clamp(n, f.min, f.max))
+                if (!Number.isNaN(n))
+                  commit({ ...hsva, a: clamp(n, 0, 100) / 100 })
               }}
             />
-          ))
+          </div>
         )}
-        <ChannelField
-          ariaLabel="Opacity"
-          text={`${Math.round(hsva.a * 100)}%`}
-          onCommit={(text) => {
-            const n = Number.parseFloat(text)
-            if (!Number.isNaN(n)) commit({ ...hsva, a: clamp(n, 0, 100) / 100 })
-          }}
-        />
       </div>
 
       {swatches && swatches.length > 0 && (
@@ -423,7 +446,7 @@ function ColorPicker({
                 aria-label={swatch}
                 aria-pressed={active}
                 onClick={() => commitRgba(parsed)}
-                className="size-6 cursor-pointer rounded-item border border-border outline-none focus-visible:ring-3 focus-visible:ring-ring/25 aria-pressed:ring-2 aria-pressed:ring-ring"
+                className="size-6 cursor-pointer rounded-item border border-border outline-none aria-pressed:ring-2 aria-pressed:ring-ring"
                 style={{
                   background: `linear-gradient(${css(parsed)}, ${css(parsed)}), ${checker}`,
                 }}

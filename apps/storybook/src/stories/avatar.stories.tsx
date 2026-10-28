@@ -84,7 +84,7 @@ export const Default: Story = {
           alt="@evilrabbit"
         />
         <AvatarFallback>ER</AvatarFallback>
-        <AvatarBadge className="bg-success" />
+        <AvatarBadge className="bg-severity-low" />
       </Avatar>
       <AvatarGroup className="grayscale">
         {people.map((person) => (
@@ -131,7 +131,7 @@ export const Badge: Story = {
     <Avatar>
       <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
       <AvatarFallback>CN</AvatarFallback>
-      <AvatarBadge className="bg-success" />
+      <AvatarBadge className="bg-severity-low" />
     </Avatar>
   ),
 }

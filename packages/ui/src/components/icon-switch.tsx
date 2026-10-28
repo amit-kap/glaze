@@ -42,7 +42,7 @@ function IconSwitch({
     <SwitchPrimitive.Root
       data-slot="icon-switch"
       className={cn(
-        "group/icon-switch relative inline-flex shrink-0 items-center rounded-pill border bg-secondary transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/25 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+        "group/icon-switch relative inline-flex shrink-0 items-center rounded-pill border bg-secondary transition-colors outline-none focus-visible:border-ring data-disabled:cursor-not-allowed data-disabled:opacity-50",
         sizes[size].root,
         className
       )}

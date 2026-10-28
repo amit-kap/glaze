@@ -3,7 +3,7 @@ import * as React from "react"
 /*
  * Shared chrome for the Theme stories. These pages document the token
  * contract rather than a component, so they read values from the live
- * cascade (whatever data-theme / .dark / data-density the toolbar set)
+ * cascade (the Nova theme and whatever .dark / data-density the toolbar set)
  * instead of restating them. Switching a toolbar global re-reads every
  * value, which is the point of the section.
  */
@@ -114,7 +114,7 @@ function round(value: number, digits: number) {
 
 /**
  * The colour a token actually paints, read from a real element. Custom
- * properties keep color-mix() as text (or are pinned to a literal by a theme),
+ * properties keep color-mix() as text (or are set to a literal by a theme),
  * so reading the variable gives two different kinds of answer. Painting the
  * token settles both into one used colour, which is what a value column should
  * show. The paint is asked for in oklch so every row reads in the same space as

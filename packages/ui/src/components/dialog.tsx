@@ -6,6 +6,7 @@ import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Button } from "@amit-kap/glaze/components/button"
 import { XIcon } from "lucide-react"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
@@ -16,7 +17,8 @@ function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
 }
 
 function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
-  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+  const container = usePortalContainer()
+  return <DialogPrimitive.Portal container={container} data-slot="dialog-portal" {...props} />
 }
 
 function DialogClose({ ...props }: DialogPrimitive.Close.Props) {

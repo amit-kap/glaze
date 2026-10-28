@@ -58,98 +58,49 @@ export const controlShapes = [
   { value: "pill", label: "Pill" },
 ]
 
-// `derives` lists the tier-2 tokens an input feeds (tokens.css), for the
-// label tooltips in the sidebar.
+// `derives` lists the tokens an input feeds (tokens.css), for the label
+// tooltips in the sidebar.
 export const brandRows = [
+  { key: "brand", label: "Brand", derives: [] },
+  { key: "brand-ink", label: "On brand", derives: [] },
+  { key: "primary", label: "Primary", derives: ["--sidebar-primary"] },
   {
-    key: "brand",
-    label: "Brand",
+    key: "primary-foreground",
+    label: "On primary",
+    derives: ["--sidebar-primary-foreground"],
+  },
+  {
+    key: "background",
+    label: "Background",
+    derives: [],
+  },
+  {
+    key: "card",
+    label: "Card",
+    derives: ["--popover"],
+  },
+  {
+    key: "foreground",
+    label: "Foreground",
     derives: [
-      "--primary",
-      "--primary-subtle",
-      "--primary-border",
-      "--ring",
-      "--selected",
-      "--sidebar-primary",
-    ],
-  },
-  {
-    key: "brand-ink",
-    label: "Brand ink",
-    derives: ["--primary-foreground", "--sidebar-primary-foreground"],
-  },
-  {
-    key: "canvas",
-    label: "Canvas",
-    derives: [
-      "--background",
-      "--muted",
-      "--subtle-foreground",
-      "--sidebar",
-      "--ring",
-    ],
-  },
-  {
-    key: "surface",
-    label: "Surface",
-    derives: ["--card", "--popover", "--secondary", "--accent"],
-  },
-  {
-    key: "ink",
-    label: "Ink",
-    derives: [
-      "--foreground",
       "--card-foreground",
       "--popover-foreground",
-      "--secondary",
-      "--secondary-foreground",
-      "--accent",
-      "--accent-foreground",
-      "--muted",
-      "--hover",
-      "--active",
-      "--border-strong",
-      "--subtle-foreground",
-      "--sidebar",
       "--sidebar-foreground",
-      "--sidebar-accent",
     ],
   },
-  {
-    key: "ink-muted",
-    label: "Ink muted",
-    derives: ["--muted-foreground", "--subtle-foreground"],
-  },
-  {
-    key: "line",
-    label: "Line",
-    derives: ["--border", "--border-strong", "--input", "--sidebar-border"],
-  },
-  { key: "overlay", label: "Overlay", derives: ["--overlay"] },
+  { key: "muted-foreground", label: "Muted foreground", derives: [] },
+  { key: "border", label: "Border", derives: ["--sidebar-border"] },
+  { key: "input", label: "Input", derives: [] },
+  { key: "ring", label: "Ring", derives: ["--sidebar-ring"] },
+  { key: "overlay", label: "Overlay", derives: [] },
 ]
 
 export const statusRows = [
-  {
-    key: "danger",
-    label: "Danger",
-    derives: [
-      "--destructive",
-      "--danger-subtle",
-      "--severity-critical",
-      "--severity-high",
-    ],
-  },
-  {
-    key: "warning",
-    label: "Warning",
-    derives: ["--warning-subtle", "--severity-medium", "--severity-high"],
-  },
-  {
-    key: "success",
-    label: "Success",
-    derives: ["--success-subtle", "--severity-low"],
-  },
-  { key: "info", label: "Info", derives: ["--info-subtle"] },
+  { key: "destructive", label: "Destructive", derives: [] },
+  { key: "severity-critical", label: "Critical", derives: [] },
+  { key: "severity-high", label: "High", derives: [] },
+  { key: "severity-medium", label: "Medium", derives: [] },
+  { key: "severity-low", label: "Low", derives: [] },
 ]
 
 export const chartRows = [1, 2, 3, 4, 5].map((n) => ({

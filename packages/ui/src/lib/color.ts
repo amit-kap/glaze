@@ -136,7 +136,11 @@ function colorFunctionToRgba(
   if (space === "srgb-linear")
     return { r: fromLinear(r), g: fromLinear(g), b: fromLinear(b), a }
   if (space === "display-p3") {
-    const lin = p3LinearToSrgb(toLinear(r * 255), toLinear(g * 255), toLinear(b * 255))
+    const lin = p3LinearToSrgb(
+      toLinear(r * 255),
+      toLinear(g * 255),
+      toLinear(b * 255)
+    )
     return {
       r: fromLinear(lin.r),
       g: fromLinear(lin.g),
@@ -247,4 +251,23 @@ export function formatColor(color: Rgba, format: ColorFormat): string {
       return `oklch(${round(l, 1)}% ${round(c, 3)} ${round(h, 1)}${alpha})`
     }
   }
+}
+
+// --- Contrast -------------------------------------------------------------
+
+/** WCAG relative luminance, 0–1. Alpha is ignored: judge the colour, not the
+    composite, so pills and overlays keep a stable reading. */
+export function relativeLuminance({ r, g, b }: Rgba): number {
+  const linear = (channel: number) => {
+    const c = channel / 255
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+  }
+  return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b)
+}
+
+/** WCAG contrast ratio between two colours: 1 (none) to 21 (black on white). */
+export function contrastRatio(a: Rgba, b: Rgba): number {
+  const first = relativeLuminance(a)
+  const second = relativeLuminance(b)
+  return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05)
 }

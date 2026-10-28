@@ -25,6 +25,7 @@ const meta = {
       options: ["hex", "rgb", "hsl", "oklch"],
     },
     hideEyedropper: { control: "boolean" },
+    hidePreview: { control: "boolean" },
   },
   decorators: [
     (Story) => (
@@ -72,6 +73,11 @@ export const Swatches: Story = {
       "#6B97FF",
     ],
   },
+}
+
+// For a caller that already shows the colour beside the picker.
+export const WithoutPreview: Story = {
+  args: { defaultValue: "oklch(55% 0.2 260)", hidePreview: true },
 }
 
 export const Popover: Story = {

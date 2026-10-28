@@ -3,13 +3,15 @@ import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import { cn } from "@amit-kap/glaze/lib/utils"
 import { useHighlightLayer } from "@amit-kap/glaze/hooks/use-highlight-layer"
 import { ChevronRightIcon, CheckIcon } from "lucide-react"
+import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
   return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />
 }
 
 function DropdownMenuPortal({ ...props }: MenuPrimitive.Portal.Props) {
-  return <MenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />
+  const container = usePortalContainer()
+  return <MenuPrimitive.Portal container={container} data-slot="dropdown-menu-portal" {...props} />
 }
 
 function DropdownMenuTrigger({ ...props }: MenuPrimitive.Trigger.Props) {
@@ -32,8 +34,9 @@ function DropdownMenuContent({
   const layerRef = useHighlightLayer(
     (props as { ref?: React.Ref<HTMLDivElement> }).ref
   )
+  const container = usePortalContainer()
   return (
-    <MenuPrimitive.Portal>
+    <MenuPrimitive.Portal container={container}>
       <MenuPrimitive.Positioner
         className="isolate z-50 outline-none"
         align={align}
