@@ -468,3 +468,34 @@ export const Inset: Story = { args: { variant: "inset" } }
 export const Right: Story = { args: { side: "right" } }
 
 export const Offcanvas: Story = { args: { collapsible: "offcanvas" } }
+
+// --- Contained ------------------------------------------------------------
+
+// `contained` on the provider lays the sidebar out inside its parent instead of
+// the window, and turns it into a drawer when the parent is narrow. Use it for
+// previews and embedded apps. The frame below is 420px wide, so it shows the
+// drawer; open it with the trigger.
+export const Contained: Story = {
+  render: () => (
+    <div className="m-6 h-[420px] w-[420px] overflow-hidden rounded-lg border border-border">
+      <SidebarProvider contained>
+        <Sidebar collapsible="offcanvas">
+          <SidebarHeader>
+            <TeamSwitcher teams={data.teams} />
+          </SidebarHeader>
+          <SidebarContent>
+            <NavMain items={data.navMain} />
+          </SidebarContent>
+          <SidebarFooter>
+            <NavUser user={data.user} />
+          </SidebarFooter>
+        </Sidebar>
+        <SidebarInset>
+          <header className="flex h-12 shrink-0 items-center gap-2 px-3">
+            <SidebarTrigger />
+          </header>
+        </SidebarInset>
+      </SidebarProvider>
+    </div>
+  ),
+}

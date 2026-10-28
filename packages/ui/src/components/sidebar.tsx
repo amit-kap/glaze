@@ -39,6 +39,8 @@ type SidebarContextProps = {
   openMobile: boolean
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
+  /** True when the sidebar lives inside a frame, not the window. */
+  contained: boolean
   toggleSidebar: () => void
 }
 
@@ -53,7 +55,11 @@ function useSidebar() {
   return context
 }
 
+// A contained sidebar is "mobile" below the same width the window uses.
+const CONTAINED_MOBILE_WIDTH = 768
+
 function SidebarProvider({
+  contained = false,
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
@@ -62,11 +68,29 @@ function SidebarProvider({
   children,
   ...props
 }: React.ComponentProps<"div"> & {
+  /**
+   * Lay the sidebar out inside its parent instead of the window: it takes the
+   * parent's height, and turns into a drawer when the parent is narrow, not
+   * the window. For previews, frames and embedded apps.
+   */
+  contained?: boolean
   defaultOpen?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) {
-  const isMobile = useIsMobile()
+  const viewportMobile = useIsMobile()
+  const wrapperRef = React.useRef<HTMLDivElement>(null)
+  const [narrow, setNarrow] = React.useState(false)
+  React.useEffect(() => {
+    const wrapper = wrapperRef.current
+    if (!contained || !wrapper) return
+    const observer = new ResizeObserver(([entry]) =>
+      setNarrow(entry.contentRect.width < CONTAINED_MOBILE_WIDTH)
+    )
+    observer.observe(wrapper)
+    return () => observer.disconnect()
+  }, [contained])
+  const isMobile = contained ? narrow : viewportMobile
   const [openMobile, setOpenMobile] = React.useState(false)
 
   // This is the internal state of the sidebar.
@@ -119,16 +143,27 @@ function SidebarProvider({
       open,
       setOpen,
       isMobile,
+      contained,
       openMobile,
       setOpenMobile,
       toggleSidebar,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+    [
+      state,
+      open,
+      setOpen,
+      isMobile,
+      contained,
+      openMobile,
+      setOpenMobile,
+      toggleSidebar,
+    ]
   )
 
   return (
     <SidebarContext.Provider value={contextValue}>
       <div
+        ref={wrapperRef}
         data-slot="sidebar-wrapper"
         style={
           {
@@ -138,7 +173,8 @@ function SidebarProvider({
           } as React.CSSProperties
         }
         className={cn(
-          "group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar",
+          "group/sidebar-wrapper flex w-full has-data-[variant=inset]:bg-sidebar",
+          contained ? "relative h-full min-h-0 overflow-hidden" : "min-h-svh",
           className
         )}
         {...props}
@@ -162,7 +198,7 @@ function Sidebar({
   variant?: "sidebar" | "floating" | "inset"
   collapsible?: "offcanvas" | "icon" | "none"
 }) {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const { isMobile, contained, state, openMobile, setOpenMobile } = useSidebar()
 
   if (collapsible === "none") {
     return (
@@ -175,6 +211,42 @@ function Sidebar({
         {...props}
       >
         {children}
+      </div>
+    )
+  }
+
+  // Inside a frame a Sheet would escape to the window, so the drawer is drawn
+  // over the frame itself.
+  if (isMobile && contained) {
+    if (!openMobile) return null
+    return (
+      <div
+        data-slot="sidebar"
+        data-mobile="true"
+        className="absolute inset-0 z-30 flex"
+      >
+        <div
+          role="dialog"
+          aria-label="Sidebar"
+          data-sidebar="sidebar"
+          className={cn(
+            "flex h-full w-(--sidebar-width-mobile) max-w-[85%] flex-col bg-sidebar text-sidebar-foreground shadow-modal",
+            className
+          )}
+          style={
+            {
+              "--sidebar-width-mobile": SIDEBAR_WIDTH_MOBILE,
+            } as React.CSSProperties
+          }
+        >
+          {children}
+        </div>
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          className="flex-1 bg-foreground/30"
+          onClick={() => setOpenMobile(false)}
+        />
       </div>
     )
   }
@@ -207,7 +279,10 @@ function Sidebar({
 
   return (
     <div
-      className="group peer hidden text-sidebar-foreground md:block"
+      className={cn(
+        "group peer text-sidebar-foreground",
+        contained ? "block" : "hidden md:block"
+      )}
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -230,7 +305,10 @@ function Sidebar({
         data-slot="sidebar-container"
         data-side={side}
         className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-(--duration-moderate) ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] md:flex",
+          contained
+            ? "absolute inset-y-0 z-10 flex h-full"
+            : "fixed inset-y-0 z-10 hidden h-svh md:flex",
+          "w-(--sidebar-width) transition-[left,right,width] duration-(--duration-moderate) ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
           // Adjust the padding for floating and inset variants.
           variant === "floating" || variant === "inset"
             ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
@@ -424,7 +502,7 @@ function SidebarGroupAction({
     props: mergeProps<"button">(
       {
         className: cn(
-          "absolute top-3.5 inset-e-3 flex aspect-square w-5 items-center justify-center rounded-item p-0 text-sidebar-foreground ring-sidebar-ring/25 outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0",
+          "absolute inset-e-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-item p-0 text-sidebar-foreground ring-sidebar-ring/25 outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0",
           className
         ),
       },
@@ -564,7 +642,7 @@ function SidebarMenuAction({
     props: mergeProps<"button">(
       {
         className: cn(
-          "absolute top-1.5 inset-e-1 flex aspect-square w-5 items-center justify-center rounded-item p-0 text-sidebar-foreground ring-sidebar-ring/25 outline-hidden transition-transform group-data-[collapsible=icon]:hidden peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0",
+          "absolute inset-e-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-item p-0 text-sidebar-foreground ring-sidebar-ring/25 outline-hidden transition-transform group-data-[collapsible=icon]:hidden peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0",
           showOnHover &&
             "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-sidebar-accent-foreground aria-expanded:opacity-100 md:opacity-0",
           className
@@ -641,7 +719,7 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        "mx-3.5 flex min-w-0 flex-col gap-1 border-s ltr:translate-x-px rtl:-translate-x-px border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden",
+        "mx-3.5 flex min-w-0 flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden ltr:translate-x-px rtl:-translate-x-px",
         className
       )}
       {...props}
