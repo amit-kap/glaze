@@ -32,9 +32,13 @@ function PortalContainer({
   )
 }
 
-/** The element popups mount into, or `null` for the document body. */
+/**
+ * The element popups mount into, or `undefined` for the document body. Not
+ * `null`: Base UI reads an explicit `null` container as "nowhere" and renders
+ * nothing, so an unwrapped popup would never open.
+ */
 function usePortalContainer() {
-  return React.useContext(PortalContainerContext)
+  return React.useContext(PortalContainerContext) ?? undefined
 }
 
 export { PortalContainer, usePortalContainer }
