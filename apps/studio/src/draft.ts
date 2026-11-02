@@ -1,5 +1,6 @@
 import * as React from "react"
 
+import { dialDefaults, neutralFor, neutralTokens, type Dials } from "./dials"
 import {
   autoInk,
   canonical,
@@ -52,6 +53,7 @@ type Stored = {
   type: TypeValues
   shape: ShapeValues
   motion: MotionValues
+  dials: Dials
 }
 
 const onlyTypeTokens = (values: TypeValues | undefined): TypeValues =>
@@ -80,6 +82,7 @@ function read(): Stored {
       type?: TypeValues
       shape?: ShapeValues
       motion?: MotionValues
+      dials?: Dials
     } | null
     if (!stored?.theme)
       return {
@@ -88,6 +91,7 @@ function read(): Stored {
         type: typeDefaults,
         shape: shapeDefaults,
         motion: motionDefaults,
+        dials: dialDefaults,
       }
     // Only tokens the panel still offers, so an old draft can't resurrect a
     // colour Studio no longer edits.
@@ -103,6 +107,9 @@ function read(): Stored {
       type: onlyTypeTokens(stored.type),
       shape: onlyShapeTokens(stored.shape),
       motion: onlyMotionTokens(stored.motion),
+      dials: {
+        neutrals: stored.dials?.neutrals ?? dialDefaults.neutrals,
+      },
     }
   } catch {
     return {
@@ -111,6 +118,7 @@ function read(): Stored {
       type: typeDefaults,
       shape: shapeDefaults,
       motion: motionDefaults,
+      dials: dialDefaults,
     }
   }
 }
@@ -121,7 +129,18 @@ function followed(child: string, source: Color): Color {
 }
 
 /** Apply the follow rules to one mode's colours, a pass per level of the chain. */
-function settle(colors: Record<string, Color>, unlinked: string[]) {
+function settle(
+  colors: Record<string, Color>,
+  unlinked: string[],
+  mode: Mode,
+  dials: Dials
+) {
+  // A dial fills in only the neutrals the user has not taken over.
+  if (dials.neutrals.strength > 0)
+    for (const token of neutralTokens)
+      if (!unlinked.includes(token))
+        colors[token] = neutralFor(mode, token, dials.neutrals)
+
   for (let pass = 0; pass < 4; pass++) {
     let moved = false
     for (const [child, parent] of Object.entries(follows)) {
@@ -147,7 +166,7 @@ const without = (list: string[], token: string) =>
  */
 export function useThemeDraft() {
   const [draft, setDraft] = React.useState(read)
-  const { theme, unlinked, type, shape, motion } = draft
+  const { theme, unlinked, type, shape, motion, dials } = draft
 
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(draft))
@@ -178,18 +197,27 @@ export function useThemeDraft() {
         const staysLinked =
           parent !== undefined &&
           sameColor(color, followed(token, current.theme[mode][parent]))
-        const nextUnlinked = staysLinked
-          ? without(current.unlinked[mode], token)
-          : parent && !current.unlinked[mode].includes(token)
-            ? [...current.unlinked[mode], token]
-            : current.unlinked[mode]
+        // A neutral the dial generates is taken over the same way, unless the
+        // value lands on the one the dial would have made.
+        const generated =
+          neutralTokens.includes(token) && current.dials.neutrals.strength > 0
+            ? neutralFor(mode, token, current.dials.neutrals)
+            : null
+        const nextUnlinked =
+          staysLinked || (generated && sameColor(color, generated))
+            ? without(current.unlinked[mode], token)
+            : (parent || generated) && !current.unlinked[mode].includes(token)
+              ? [...current.unlinked[mode], token]
+              : current.unlinked[mode]
         return {
           ...current,
           theme: {
             ...current.theme,
             [mode]: settle(
               { ...current.theme[mode], [token]: color },
-              nextUnlinked
+              nextUnlinked,
+              mode,
+              current.dials
             ),
           },
           unlinked: { ...current.unlinked, [mode]: nextUnlinked },
@@ -209,7 +237,9 @@ export function useThemeDraft() {
           ...current.theme,
           [mode]: settle(
             { ...current.theme[mode], [token]: defaults[mode][token] },
-            nextUnlinked
+            nextUnlinked,
+            mode,
+            current.dials
           ),
         },
         unlinked: { ...current.unlinked, [mode]: nextUnlinked },
@@ -233,10 +263,32 @@ export function useThemeDraft() {
                 groupTokens.map((token) => [token, defaults[mode][token]])
               ),
             },
-            nextUnlinked
+            nextUnlinked,
+            mode,
+            current.dials
           ),
         },
         unlinked: { ...current.unlinked, [mode]: nextUnlinked },
+      }
+    })
+  }, [])
+
+  /** Move a dial: every neutral not taken over follows it, in both modes. */
+  const setNeutrals = React.useCallback((neutrals: Dials["neutrals"]) => {
+    setDraft((current) => {
+      const next = { ...current, dials: { ...current.dials, neutrals } }
+      const colors = (mode: Mode) => {
+        const unlinked = current.unlinked[mode]
+        const base = { ...current.theme[mode] }
+        // At strength 0 the dial hands its tokens back to Nova.
+        if (neutrals.strength <= 0)
+          for (const token of neutralTokens)
+            if (!unlinked.includes(token)) base[token] = defaults[mode][token]
+        return settle(base, unlinked, mode, next.dials)
+      }
+      return {
+        ...next,
+        theme: { light: colors("light"), dark: colors("dark") },
       }
     })
   }, [])
@@ -300,6 +352,7 @@ export function useThemeDraft() {
       type: typeDefaults,
       shape: shapeDefaults,
       motion: motionDefaults,
+      dials: dialDefaults,
     })
   }, [])
 
@@ -315,6 +368,9 @@ export function useThemeDraft() {
 
   return {
     theme,
+    dials,
+    setNeutrals,
+    unlinked,
     type,
     setType,
     resetType,

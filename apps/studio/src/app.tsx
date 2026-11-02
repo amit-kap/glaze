@@ -1,5 +1,7 @@
 import * as React from "react"
+import { ChevronLeftIcon } from "lucide-react"
 
+import { Button } from "@amit-kap/glaze/components/button"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -8,7 +10,11 @@ import {
 import { Panel } from "./panel"
 import { Rail, type Tool } from "./rail"
 import { Stage } from "./stage"
+import { neutralTokens } from "./dials"
+import { SimplePanel } from "./simple-panel"
 import { TopBar } from "./top-bar"
+
+type Level = "simple" | "advanced"
 import { useThemeDraft } from "./draft"
 import { changed, followVars, tokens, type Mode } from "./theme"
 import { motionChanged, motionTokens } from "./motion"
@@ -16,9 +22,10 @@ import { shapeChanged, shapeTokens, type Density } from "./shape"
 import { typeChanged, typeTokens } from "./typography"
 
 const storageKey = "glaze-studio-theme"
-
 export function App() {
   const draft = useThemeDraft()
+  // Simple is the front door; Advanced drills down from it and Back returns.
+  const [level, setLevel] = React.useState<Level>("simple")
   const [tool, setTool] = React.useState<Tool>("colors")
   const [mode, setMode] = React.useState<Mode>("light")
   const [density, setDensity] = React.useState<Density>("comfortable")
@@ -26,6 +33,25 @@ export function App() {
   const [name, setName] = React.useState("")
   const [saved, setSaved] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
+
+  // What the four Simple controls cover, so Simple can say what it isn't
+  // showing: brand in either mode, the radius and the sans typeface.
+  const simpleChanges =
+    Number(draft.overridden("light", "brand")) +
+    Number(draft.overridden("dark", "brand")) +
+    Number(shapeChanged("radius", draft.shape.radius)) +
+    Number(typeChanged("typeface-sans", draft.type["typeface-sans"]))
+  // Neutrals the dial generates are one change, not one per token.
+  const dialled = (["light", "dark"] as const).reduce(
+    (n, mode) =>
+      n +
+      neutralTokens.filter(
+        (token) =>
+          !draft.unlinked[mode].includes(token) && draft.overridden(mode, token)
+      ).length,
+    0
+  )
+  const advancedChanges = Math.max(0, draft.changes - simpleChanges - dialled)
 
   const save = React.useCallback(() => {
     localStorage.setItem(
@@ -117,6 +143,8 @@ export function App() {
         copied={copied}
         onSave={save}
         onExport={exportCss}
+        mode={mode}
+        onModeChange={setMode}
       />
 
       <div className="flex min-h-0 flex-1 px-4 pb-4">
@@ -132,22 +160,47 @@ export function App() {
             maxSize="50%"
             className="min-h-0"
           >
-            <div className="flex h-full min-h-0 gap-3 bg-sidebar p-2">
-              <Rail value={tool} onChange={setTool} />
-              <div className="w-px shrink-0 self-stretch bg-border" />
-              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-                <Panel
-                  tool={tool}
+            {level === "simple" ? (
+              <div className="flex h-full min-h-0 flex-col overflow-y-auto bg-sidebar p-2 px-4">
+                <SimplePanel
                   draft={draft}
                   mode={mode}
-                  onModeChange={setMode}
                   density={density}
                   onDensityChange={setDensity}
-                  reduceMotion={reduceMotion}
-                  onReduceMotionChange={setReduceMotion}
+                  advancedChanges={advancedChanges}
+                  onAdvanced={() => setLevel("advanced")}
                 />
               </div>
-            </div>
+            ) : (
+              <div className="flex h-full min-h-0 flex-col bg-sidebar">
+                <div className="flex h-12 shrink-0 items-center px-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setLevel("simple")}
+                  >
+                    <ChevronLeftIcon />
+                    Back
+                  </Button>
+                </div>
+                <div className="flex min-h-0 flex-1 gap-3 p-2 pt-0">
+                  <Rail value={tool} onChange={setTool} />
+                  <div className="w-px shrink-0 self-stretch bg-border" />
+                  <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+                    <Panel
+                      tool={tool}
+                      draft={draft}
+                      mode={mode}
+                      onModeChange={setMode}
+                      density={density}
+                      onDensityChange={setDensity}
+                      reduceMotion={reduceMotion}
+                      onReduceMotionChange={setReduceMotion}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </ResizablePanel>
 
           <ResizableHandle
