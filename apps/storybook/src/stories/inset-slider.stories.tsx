@@ -10,11 +10,17 @@ const meta = {
     docs: {
       description: {
         component:
-          "A slider whose track is a capsule that wraps the thumb. Pass an array to `defaultValue` or `value` for one thumb per entry. `ticks` draws a dot under every step, so the thumb always lands on a dot; keep it to about 20 stops. Horizontal only; use Slider for vertical.",
+          "A slider whose track is a capsule that wraps the thumb. Pass an array to `defaultValue` or `value` for one thumb per entry. `ticks` draws a dot at every step the fill hasn't reached, so the thumb always lands on a step and the dots behind it disappear; keep it to about 20 stops. Horizontal only; use Slider for vertical.",
       },
     },
   },
-  args: { defaultValue: [40], min: 0, max: 100, step: 1, "aria-label": "Volume" },
+  args: {
+    defaultValue: [40],
+    min: 0,
+    max: 100,
+    step: 1,
+    "aria-label": "Volume",
+  },
   argTypes: {
     size: { control: "inline-radio", options: ["sm", "default", "lg"] },
     ticks: { control: "boolean" },

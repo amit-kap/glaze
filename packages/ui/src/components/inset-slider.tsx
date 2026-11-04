@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { Slider as SliderPrimitive } from "@base-ui/react/slider"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
@@ -37,10 +38,18 @@ const sizes = {
   },
 }
 
+const toArray = (value: number | readonly number[] | undefined) =>
+  value === undefined
+    ? undefined
+    : typeof value === "number"
+      ? [value]
+      : [...value]
+
 function InsetSlider({
   className,
   defaultValue,
   value,
+  onValueChange,
   min = 0,
   max = 100,
   step = 1,
@@ -50,20 +59,22 @@ function InsetSlider({
   ...props
 }: Omit<SliderPrimitive.Root.Props, "orientation"> & {
   size?: keyof typeof sizes
-  /** Draw a dot inside the track at every step. Keep it to about 20 stops or fewer. */
+  /**
+   * Draw a dot inside the track at every step the fill hasn't reached; the
+   * dots under the fill and the thumb are hidden. Keep it to about 20 stops or
+   * fewer.
+   */
   ticks?: boolean
   /** Show the current value before the track and the max after it. */
   showMinMax?: boolean
 }) {
-  const _values = Array.isArray(value)
-    ? value
-    : Array.isArray(defaultValue)
-      ? defaultValue
-      : typeof value === "number"
-        ? [value]
-        : typeof defaultValue === "number"
-          ? [defaultValue]
-          : [min]
+  // Uncontrolled sliders keep their own copy of the value, so the dots can
+  // follow the thumb.
+  const [inner, setInner] = React.useState(() => toArray(defaultValue) ?? [min])
+  const _values = toArray(value) ?? inner
+  // The fill runs from the start to the thumb, or between the two thumbs.
+  const reachedFrom = _values.length > 1 ? Math.min(..._values) : min
+  const reachedTo = Math.max(..._values)
   const s = sizes[size]
   const stops = ticks ? Math.floor((max - min) / step) + 1 : 0
 
@@ -77,6 +88,10 @@ function InsetSlider({
       data-size={size}
       defaultValue={defaultValue}
       value={value}
+      onValueChange={(next, details) => {
+        setInner(toArray(next) ?? [])
+        onValueChange?.(next, details)
+      }}
       min={min}
       max={max}
       step={step}
@@ -121,12 +136,20 @@ function InsetSlider({
                 s.dots
               )}
             >
-              {Array.from({ length: stops }, (_, i) => (
-                <i
-                  key={i}
-                  className="size-0.75 rounded-pill bg-muted-foreground"
-                />
-              ))}
+              {Array.from({ length: stops }, (_, i) => {
+                const at = min + i * step
+                const covered =
+                  at >= reachedFrom - 1e-9 && at <= reachedTo + 1e-9
+                return (
+                  <i
+                    key={i}
+                    className={cn(
+                      "size-0.75 rounded-pill bg-muted-foreground",
+                      covered && "invisible"
+                    )}
+                  />
+                )
+              })}
             </div>
           ) : null}
           {Array.from({ length: _values.length }, (_, index) => (
