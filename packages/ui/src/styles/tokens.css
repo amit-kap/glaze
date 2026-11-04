@@ -117,6 +117,8 @@
   --button-radius-xs: min(var(--shape-item), 10px);
   --button-radius-sm: min(var(--shape-item), 12px);
   --badge-radius: calc(var(--radius) * 2.6);
+  --badge-fill: var(--primary);
+  --badge-ink: var(--primary-foreground);
   --checkbox-radius: calc(var(--shape-item) * 0.5);
   --textarea-radius: min(var(--shape-control), var(--shape-container));
   --toast-radius: calc(var(--radius) * 1.8);

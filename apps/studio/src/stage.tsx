@@ -70,6 +70,7 @@ export function Stage({
   shape,
   density,
   motion,
+  extraVars,
   reduceMotion,
 }: {
   mode: Mode
@@ -78,6 +79,8 @@ export function Stage({
   shape: ShapeValues
   density: Density
   motion: MotionValues
+  /** Component tokens a dial sets outright, as CSS custom properties. */
+  extraVars: Record<string, string>
   reduceMotion: boolean
 }) {
   const [screen, setScreen] = React.useState<Screen>("dashboard")
@@ -105,6 +108,7 @@ export function Stage({
           ...typeVars(type),
           ...shapeVars(shape),
           ...motionVars(motion),
+          ...extraVars,
           ...(reduceMotion && { "--motion-scale": "0" }),
         } as React.CSSProperties
       }

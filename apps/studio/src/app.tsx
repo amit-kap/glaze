@@ -10,31 +10,25 @@ import {
 import { Panel } from "./panel"
 import { Rail, type Tool } from "./rail"
 import { Stage } from "./stage"
-import { dialMotionTokens, dialTokens, toneTypeTokens } from "./dials"
+import {
+  dialMotionTokens,
+  dialTokens,
+  scaleShapeTokens,
+  scaleTypeTokens,
+  toneComponentVars,
+  toneTypeTokens,
+} from "./dials"
 import { SimplePanel } from "./simple-panel"
 import { TopBar } from "./top-bar"
 
 type Level = "simple" | "advanced"
-import { useThemeDraft, type Stored } from "./draft"
+import { useThemeDraft } from "./draft"
 import { changed, followVars, tokens, type Mode } from "./theme"
 import { motionChanged, motionTokens } from "./motion"
 import { shapeChanged, shapeTokens, type Density } from "./shape"
 import { typeChanged, typeTokens } from "./typography"
 
 const storageKey = "glaze-studio-theme"
-const presetsKey = "glaze-studio-presets"
-
-type Preset = { name: string; draft: Stored; density: Density }
-
-function readPresets(): Preset[] {
-  try {
-    const stored = JSON.parse(localStorage.getItem(presetsKey) ?? "[]")
-    return Array.isArray(stored) ? stored : []
-  } catch {
-    return []
-  }
-}
-
 export function App() {
   const draft = useThemeDraft()
   // Simple is the front door; Advanced drills down from it and Back returns.
@@ -46,8 +40,6 @@ export function App() {
   const [name, setName] = React.useState("")
   const [saved, setSaved] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
-  const [presets, setPresets] = React.useState(readPresets)
-  const [preset, setPreset] = React.useState("base")
 
   // What the Simple controls cover directly, so Simple can say what it isn't
   // showing: brand in either mode and the sans typeface.
@@ -67,10 +59,14 @@ export function App() {
         ).length,
       0
     ) +
-    (draft.dials.tone === 0
+    [
+      ...(draft.dials.tone === 0 ? [] : toneTypeTokens),
+      ...(draft.dials.scale === 0 ? [] : scaleTypeTokens),
+    ].filter((token) => typeChanged(token, draft.type[token])).length +
+    (draft.dials.scale === 0
       ? 0
-      : toneTypeTokens.filter((token) =>
-          typeChanged(token, draft.type[token])
+      : scaleShapeTokens.filter((token) =>
+          shapeChanged(token, draft.shape[token])
         ).length) +
     (draft.dials.motion === "none"
       ? 0
@@ -84,31 +80,8 @@ export function App() {
       storageKey,
       JSON.stringify({ name, theme: draft.theme })
     )
-    // A named save also keeps the whole draft as a preset to open again.
-    if (name.trim()) {
-      const next = [
-        ...presets.filter((item) => item.name !== name.trim()),
-        { name: name.trim(), draft: draft.snapshot, density },
-      ]
-      localStorage.setItem(presetsKey, JSON.stringify(next))
-      setPresets(next)
-      setPreset(name.trim())
-    }
     setSaved(true)
-  }, [name, draft.theme, draft.snapshot, density, presets])
-
-  const choosePreset = (value: string) => {
-    setPreset(value)
-    const found = presets.find((item) => item.name === value)
-    if (found) {
-      draft.load(found.draft)
-      setDensity(found.density)
-      setName(found.name)
-    } else {
-      draft.resetAll()
-      setDensity("comfortable")
-    }
-  }
+  }, [name, draft.theme])
 
   React.useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -156,7 +129,17 @@ export function App() {
       .map((token) => `  --${token}: ${draft.motion[token]};`)
       .join("\n")
 
-    const light = [block("light"), typeBlock, shapeBlock, motionBlock]
+    const dialBlock = Object.entries(toneComponentVars(draft.dials.tone))
+      .map(([token, value]) => `  ${token}: ${value};`)
+      .join("\n")
+
+    const light = [
+      block("light"),
+      typeBlock,
+      shapeBlock,
+      motionBlock,
+      dialBlock,
+    ]
       .filter(Boolean)
       .join("\n")
     const dark = block("dark")
@@ -214,17 +197,6 @@ export function App() {
                 <SimplePanel
                   draft={draft}
                   mode={mode}
-                  density={density}
-                  onDensityChange={setDensity}
-                  presets={[
-                    { label: "Base", value: "base" },
-                    ...presets.map((item) => ({
-                      label: item.name,
-                      value: item.name,
-                    })),
-                  ]}
-                  preset={preset}
-                  onPresetChange={choosePreset}
                   advancedChanges={advancedChanges}
                   onAdvanced={() => setLevel("advanced")}
                 />
@@ -274,6 +246,7 @@ export function App() {
               shape={draft.shape}
               density={density}
               motion={draft.motion}
+              extraVars={toneComponentVars(draft.dials.tone)}
               reduceMotion={reduceMotion}
             />
           </ResizablePanel>

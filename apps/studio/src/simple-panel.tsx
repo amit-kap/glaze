@@ -8,11 +8,9 @@ import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
 import { Separator } from "@amit-kap/glaze/components/separator"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
-import { ChoiceSelect } from "./controls"
 import { hues, type MotionDial } from "./dials"
 import { palette } from "./palette"
 import type { Draft } from "./draft"
-import type { Density } from "./shape"
 import { canonical, defaults, sameColor, type Color, type Mode } from "./theme"
 import { fontOptions } from "./typography"
 
@@ -118,6 +116,7 @@ function Dial({
         min={0}
         max={max}
         step={1}
+        ticks
         value={value}
         onValueChange={(next) => onChange(first(next))}
       />
@@ -137,21 +136,11 @@ function Dial({
 export function SimplePanel({
   draft,
   mode,
-  density,
-  onDensityChange,
-  presets,
-  preset,
-  onPresetChange,
   advancedChanges,
   onAdvanced,
 }: {
   draft: Draft
   mode: Mode
-  density: Density
-  onDensityChange: (density: Density) => void
-  presets: { label: string; value: string }[]
-  preset: string
-  onPresetChange: (preset: string) => void
   /** Settings changed that no Simple control covers. */
   advancedChanges: number
   onAdvanced: () => void
@@ -171,8 +160,9 @@ export function SimplePanel({
     for (const each of modes) setColor(each, "brand", value)
   }
 
-  // Primary either follows Brand or is held at Nova's own neutral.
-  const primary = sameColor(colors.primary, defaults[mode].primary)
+  // Primary follows Brand until it is held at Nova's own neutral, so an
+  // untouched theme reads "Same as Brand".
+  const primary = modes.some((each) => draft.unlinked[each].includes("primary"))
     ? "neutral"
     : "brand"
   const setPrimary = (value: string) => {
@@ -192,29 +182,18 @@ export function SimplePanel({
 
   return (
     <div className="flex flex-col gap-6 py-4">
-      <Section title="Preset">
-        <ChoiceSelect
-          label="Preset"
-          items={presets}
-          value={preset}
-          onChange={onPresetChange}
-          className="w-full"
+      <Section title="Scale">
+        <Dial
+          label="Scale, comfortable to compact"
+          low="Comfortable"
+          high="Compact"
+          max={10}
+          value={Math.round(dials.scale * 5) + 5}
+          onChange={(value) => draft.setScale((value - 5) / 5)}
         />
       </Section>
 
-      <Separator />
-
-      <Section title="Atmosphere">
-        <Dial
-          label="Density, comfortable to compact"
-          low="Comfortable"
-          high="Compact"
-          max={1}
-          value={density === "compact" ? 1 : 0}
-          onChange={(value) =>
-            onDensityChange(value ? "compact" : "comfortable")
-          }
-        />
+      <Section title="Tone">
         <Dial
           label="Tone, quiet to bold"
           low="Quiet"
@@ -242,7 +221,7 @@ export function SimplePanel({
         <div
           role="listbox"
           aria-label="Typeface"
-          className="flex flex-col gap-0.5 rounded-control border border-border p-1"
+          className="flex flex-col gap-0.5 rounded-control border border-border bg-background p-1"
         >
           {fonts.map((font) => {
             const selected = type["typeface-sans"] === font.value

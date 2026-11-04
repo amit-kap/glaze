@@ -6,6 +6,10 @@ import {
   dialMotionTokens,
   generatedFor,
   motionFor,
+  scaleShapeTokens,
+  scaleShapeValue,
+  scaleTypeTokens,
+  scaleTypeValue,
   toneTypeTokens,
   toneTypeValue,
   type Dials,
@@ -32,6 +36,7 @@ import {
 } from "./motion"
 import {
   countShapeChanges,
+  sameShape,
   shapeDefaults,
   shapeTokens,
   type ShapeValues,
@@ -113,6 +118,7 @@ function sanitize(stored: Partial<Stored> | null | undefined): Stored {
     dials: {
       neutrals: stored.dials?.neutrals ?? dialDefaults.neutrals,
       tone: stored.dials?.tone ?? 0,
+      scale: stored.dials?.scale ?? 0,
       motion: stored.dials?.motion ?? "none",
     },
   }
@@ -141,7 +147,7 @@ function settle(
   // A dial fills in only the colours the user has not taken over.
   for (const token of dialTokens) {
     if (unlinked.includes(token)) continue
-    const made = generatedFor(mode, token, dials)
+    const made = generatedFor(mode, token, dials, colors.brand)
     if (made) colors[token] = made
   }
 
@@ -167,7 +173,10 @@ const redial = (current: Stored, dials: Dials) => {
     const base = { ...current.theme[mode] }
     // A colour no dial reaches any more goes back to Nova.
     for (const token of dialTokens)
-      if (!unlinked.includes(token) && !generatedFor(mode, token, dials))
+      if (
+        !unlinked.includes(token) &&
+        !generatedFor(mode, token, dials, base.brand)
+      )
         base[token] = defaults[mode][token]
     return settle(base, unlinked, mode, dials)
   }
@@ -217,7 +226,12 @@ export function useThemeDraft() {
           sameColor(color, followed(token, current.theme[mode][parent]))
         // A colour a dial generates is taken over the same way, unless the
         // value lands on the one the dial would have made.
-        const generated = generatedFor(mode, token, current.dials)
+        const generated = generatedFor(
+          mode,
+          token,
+          current.dials,
+          current.theme[mode].brand
+        )
         const nextUnlinked =
           staysLinked || (generated && sameColor(color, generated))
             ? without(current.unlinked[mode], token)
@@ -305,10 +319,14 @@ export function useThemeDraft() {
     setDraft((current) => {
       const dials = { ...current.dials, tone }
       const made = (token: string, at: number) =>
-        at === 0 ? typeDefaults[token] : typeCss(token, toneTypeValue(token, at))
+        at === 0
+          ? typeDefaults[token]
+          : typeCss(token, toneTypeValue(token, at))
       const nextType = { ...current.type }
       for (const token of toneTypeTokens)
-        if (sameType(token, current.type[token], made(token, current.dials.tone)))
+        if (
+          sameType(token, current.type[token], made(token, current.dials.tone))
+        )
           nextType[token] = made(token, tone)
       return {
         ...current,
@@ -370,6 +388,33 @@ export function useThemeDraft() {
     }))
   }, [])
 
+  /**
+   * Move the comfortable-to-compact slider. Spacing, radius and text size
+   * follow it, except a value the user set by hand: it is theirs when it
+   * isn't what the slider last made.
+   */
+  const setScale = React.useCallback((scale: number) => {
+    setDraft((current) => {
+      const before = current.dials.scale
+      const nextShape = { ...current.shape }
+      for (const token of scaleShapeTokens)
+        if (
+          sameShape(token, current.shape[token], scaleShapeValue(token, before))
+        )
+          nextShape[token] = scaleShapeValue(token, scale)
+      const nextType = { ...current.type }
+      for (const token of scaleTypeTokens)
+        if (sameType(token, current.type[token], scaleTypeValue(token, before)))
+          nextType[token] = scaleTypeValue(token, scale)
+      return {
+        ...current,
+        dials: { ...current.dials, scale },
+        shape: nextShape,
+        type: nextType,
+      }
+    })
+  }, [])
+
   /** Pick how much character the motion has; hand-set values are kept. */
   const setMotionDial = React.useCallback((motionDial: Dials["motion"]) => {
     setDraft((current) => {
@@ -389,11 +434,6 @@ export function useThemeDraft() {
         motion: nextMotion,
       }
     })
-  }, [])
-
-  /** Replace the whole draft, as when a saved preset is opened. */
-  const load = React.useCallback((stored: Stored) => {
-    setDraft(sanitize(stored))
   }, [])
 
   /** Back to Nova everywhere: both modes, type, shape, motion, every rule. */
@@ -423,9 +463,8 @@ export function useThemeDraft() {
     dials,
     setNeutrals,
     setTone,
+    setScale,
     setMotionDial,
-    snapshot: draft,
-    load,
     unlinked,
     type,
     setType,

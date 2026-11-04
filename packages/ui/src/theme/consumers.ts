@@ -303,7 +303,6 @@ export const settingConsumers: Record<string, string[]> = {
   ],
   "--primary-foreground": [
     "avatar",
-    "badge",
     "bubble",
     "button",
     "calendar",
