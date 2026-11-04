@@ -1,8 +1,10 @@
+import * as React from "react"
 import {
   ChevronDownIcon,
   DownloadIcon,
   PlusIcon,
   Trash2Icon,
+  UploadIcon,
 } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "@amit-kap/glaze/components/avatar"
@@ -26,13 +28,14 @@ export function TopBar({
   changes,
   onResetAll,
   saved,
-  copied,
   onSave,
   onExport,
   library,
   activeId,
   onOpen,
   onCreate,
+  onImport,
+  importError,
   onDelete,
 }: {
   name: string
@@ -40,15 +43,17 @@ export function TopBar({
   changes: number
   onResetAll: () => void
   saved: boolean
-  copied: boolean
   onSave: () => void
   onExport: () => void
   library: SavedTheme[]
   activeId: string | null
   onOpen: (theme: SavedTheme) => void
   onCreate: () => void
+  onImport: (file: File) => void
+  importError: string | null
   onDelete: (id: string) => void
 }) {
+  const fileInput = React.useRef<HTMLInputElement>(null)
   return (
     <header className="flex h-15 shrink-0 items-center gap-3.5 px-8">
       <div className="flex items-center gap-4">
@@ -60,6 +65,17 @@ export function TopBar({
             placeholder="ThemeName"
             aria-label="Theme name"
             className="h-7 w-60 rounded-control border-input bg-background px-2.5"
+          />
+          <input
+            ref={fileInput}
+            type="file"
+            accept=".json,application/json"
+            hidden
+            onChange={(event) => {
+              const file = event.target.files?.[0]
+              if (file) onImport(file)
+              event.target.value = ""
+            }}
           />
           <Popover>
             <PopoverTrigger
@@ -121,6 +137,23 @@ export function TopBar({
                 <PlusIcon />
                 New theme
               </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="justify-start"
+                onClick={() => fileInput.current?.click()}
+              >
+                <UploadIcon />
+                Import theme file
+              </Button>
+              {importError && (
+                <p
+                  role="alert"
+                  className="px-2 py-1 text-caption text-destructive"
+                >
+                  {importError}
+                </p>
+              )}
             </PopoverContent>
           </Popover>
         </div>
@@ -146,7 +179,7 @@ export function TopBar({
         </Button>
         <Button size="sm" onClick={onExport}>
           <DownloadIcon />
-          {copied ? "Copied" : "Export"}
+          Export
         </Button>
         <div className="mx-0.5 flex h-4 items-center">
           <Separator orientation="vertical" />

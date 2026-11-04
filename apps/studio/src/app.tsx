@@ -15,7 +15,9 @@ import { SimplePanel } from "./simple-panel"
 import { TopBar } from "./top-bar"
 
 type Level = "simple" | "advanced"
+import { ExportDialog } from "./export-dialog"
 import { fresh, useThemeDraft } from "./draft"
+import { readThemeFile } from "./theme-file"
 import {
   countDiff,
   readSession,
@@ -23,16 +25,9 @@ import {
   writeSession,
   type SavedTheme,
 } from "./library"
-import {
-  fontCssUrl,
-  googleFamilyOf,
-  useFontLink,
-  wantedWeights,
-} from "./google-fonts"
-import { changed, followVars, tokens, type Mode } from "./theme"
-import { motionChanged, motionTokens } from "./motion"
-import { shapeChanged, shapeTokens, type Density } from "./shape"
-import { typeChanged, typeTokens } from "./typography"
+import { googleFamilyOf, useFontLink } from "./google-fonts"
+import { type Mode } from "./theme"
+import { type Density } from "./shape"
 
 export function App() {
   const draft = useThemeDraft()
@@ -49,7 +44,8 @@ export function App() {
   const setName = (value: string) =>
     setSession((current) => ({ ...current, name: value }))
   const [saved, setSaved] = React.useState(false)
-  const [copied, setCopied] = React.useState(false)
+  const [exporting, setExporting] = React.useState(false)
+  const [importError, setImportError] = React.useState<string | null>(null)
   const library = useLibrary()
 
   React.useEffect(() => writeSession(session), [session])
@@ -81,6 +77,16 @@ export function App() {
     setSession({ id: entry.id, name: entry.name })
   }
 
+  /** Add a theme file to the library and open it. */
+  const importFile = async (file: File) => {
+    const result = readThemeFile(await file.text())
+    if ("error" in result) return setImportError(result.error)
+    setImportError(null)
+    const entry = library.save(null, result.name, result.data)
+    draft.load(result.data)
+    setSession({ id: entry.id, name: entry.name })
+  }
+
   const remove = (id: string) => {
     library.remove(id)
     // The open theme lives on as an unsaved draft; its next Save is a new entry.
@@ -104,82 +110,6 @@ export function App() {
     return () => clearTimeout(timer)
   }, [saved])
 
-  const exportCss = async () => {
-    // A changed colour also carries the derived colours Nova writes as
-    // literals, so the exported theme follows it as the preview does.
-    const block = (mode: Mode) => {
-      const edited = tokens.filter((token) =>
-        changed(mode, token, draft.theme[mode][token])
-      )
-      return [
-        ...edited.map((token) => `  --${token}: ${draft.theme[mode][token]};`),
-        ...followVars(edited).map(([token, value]) => `  ${token}: ${value};`),
-      ].join("\n")
-    }
-
-    // Type, shape and motion are shared by both modes, so they export with the
-    // light block.
-    const typeBlock = typeTokens
-      .filter((token) => typeChanged(token, draft.type[token]))
-      .map((token) => `  --${token}: ${draft.type[token]};`)
-      .join("\n")
-    const shapeBlock = shapeTokens
-      .filter((token) => shapeChanged(token, draft.shape[token]))
-      .map((token) => `  --${token}: ${draft.shape[token]};`)
-      .join("\n")
-
-    const motionBlock = motionTokens
-      .filter((token) => motionChanged(token, draft.motion[token]))
-      .map((token) => `  --${token}: ${draft.motion[token]};`)
-      .join("\n")
-
-    const dialBlock = Object.entries(toneComponentVars(draft.dials.tone))
-      .map(([token, value]) => `  ${token}: ${value};`)
-      .join("\n")
-
-    const light = [
-      block("light"),
-      typeBlock,
-      shapeBlock,
-      motionBlock,
-      dialBlock,
-    ]
-      .filter(Boolean)
-      .join("\n")
-    const dark = block("dark")
-    // A Google font needs its stylesheet wherever the theme is used, so the
-    // export links it; @import comes before any rule.
-    const fontImports = [
-      ...new Set(
-        ["typeface-sans", "typeface-heading"].flatMap((token) => {
-          const family = googleFamilyOf(draft.type[token])
-          return family && typeChanged(token, draft.type[token])
-            ? [
-                `@import url("${fontCssUrl(family, draft.dials.weights ?? wantedWeights)}");`,
-              ]
-            : []
-        })
-      ),
-    ]
-
-    const css = [
-      `/* ${name || "Untitled theme"} — Glaze theme, based on Nova */`,
-      ...fontImports,
-      light && `:root {\n${light}\n}`,
-      dark && `.dark {\n${dark}\n}`,
-    ]
-      .filter(Boolean)
-      .join("\n\n")
-
-    try {
-      await navigator.clipboard.writeText(css)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
-    } catch {
-      /* Clipboard needs a secure context; the app still works without it. */
-    }
-  }
-
   return (
     // Dark mode applies to the stage preview only; the studio stays light.
     <div className="flex h-full flex-col bg-background text-foreground">
@@ -192,9 +122,10 @@ export function App() {
         changes={changes}
         onResetAll={() => draft.load(base)}
         saved={saved}
-        copied={copied}
         onSave={save}
-        onExport={exportCss}
+        onExport={() => setExporting(true)}
+        onImport={importFile}
+        importError={importError}
         library={library.themes}
         activeId={savedId}
         onOpen={open}
@@ -271,6 +202,12 @@ export function App() {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
+      <ExportDialog
+        open={exporting}
+        onOpenChange={setExporting}
+        name={name}
+        stored={draft.stored}
+      />
     </div>
   )
 }

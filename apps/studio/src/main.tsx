@@ -15,5 +15,5 @@ createRoot(document.getElementById("root")!).render(
     <TooltipProvider>
       <App />
     </TooltipProvider>
-  </StrictMode>,
+  </StrictMode>
 )
