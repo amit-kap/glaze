@@ -31,6 +31,11 @@ const screens: { id: Screen; label: string }[] = [
   { id: "landing", label: "Landing" },
 ]
 
+const modes: { value: Mode; label: string }[] = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+]
+
 const preview: Record<Screen, React.ReactNode> = {
   dashboard: <Dashboard />,
   table: (
@@ -65,6 +70,7 @@ function WidthIcon({
 
 export function Stage({
   mode,
+  onModeChange,
   theme,
   type,
   shape,
@@ -74,6 +80,7 @@ export function Stage({
   reduceMotion,
 }: {
   mode: Mode
+  onModeChange: (mode: Mode) => void
   theme: Theme
   type: TypeValues
   shape: ShapeValues
@@ -129,6 +136,13 @@ export function Stage({
             </TabsList>
 
             <div className="ms-auto flex items-center gap-3">
+              <SegmentedControl
+                size="sm"
+                label="Mode being previewed"
+                options={modes}
+                value={mode}
+                onValueChange={onModeChange}
+              />
               <SegmentedControl
                 label="Preview width"
                 className="**:data-[slot=tabs-trigger]:w-8 **:data-[slot=tabs-trigger]:flex-none **:data-[slot=tabs-trigger]:px-0"

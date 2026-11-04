@@ -158,8 +158,6 @@ export function App() {
         copied={copied}
         onSave={save}
         onExport={exportCss}
-        mode={mode}
-        onModeChange={setMode}
       />
 
       <div className="flex min-h-0 flex-1 px-4 pb-4">
@@ -219,6 +217,7 @@ export function App() {
           <ResizablePanel minSize={360} className="flex min-h-0 flex-col">
             <Stage
               mode={mode}
+              onModeChange={setMode}
               theme={draft.theme}
               type={draft.type}
               shape={draft.shape}

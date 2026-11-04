@@ -7,15 +7,7 @@ import { Input } from "@amit-kap/glaze/components/input"
 import { Kbd } from "@amit-kap/glaze/components/kbd"
 import { Separator } from "@amit-kap/glaze/components/separator"
 
-import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
-
 import { Logo } from "./logo"
-import type { Mode } from "./theme"
-
-const modes: { value: Mode; label: string }[] = [
-  { value: "light", label: "Light" },
-  { value: "dark", label: "Dark" },
-]
 
 export function TopBar({
   name,
@@ -26,8 +18,6 @@ export function TopBar({
   copied,
   onSave,
   onExport,
-  mode,
-  onModeChange,
 }: {
   name: string
   onNameChange: (value: string) => void
@@ -37,8 +27,6 @@ export function TopBar({
   copied: boolean
   onSave: () => void
   onExport: () => void
-  mode: Mode
-  onModeChange: (mode: Mode) => void
 }) {
   return (
     <header className="flex h-15 shrink-0 items-center gap-3.5 px-8">
@@ -54,13 +42,6 @@ export function TopBar({
       </div>
 
       <div className="ms-auto flex min-w-0 flex-1 items-center justify-end gap-2">
-        <SegmentedControl
-          size="sm"
-          label="Mode being previewed"
-          options={modes}
-          value={mode}
-          onValueChange={onModeChange}
-        />
         <Button
           variant="outline"
           size="sm"
