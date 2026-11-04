@@ -2,18 +2,18 @@ import * as React from "react"
 import { CheckIcon } from "lucide-react"
 
 import { Button } from "@amit-kap/glaze/components/button"
-import { ColorPicker } from "@amit-kap/glaze/components/color-picker"
+import { Card, CardContent } from "@amit-kap/glaze/components/card"
 import { InsetSlider } from "@amit-kap/glaze/components/inset-slider"
 import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
 import { Separator } from "@amit-kap/glaze/components/separator"
-import type { ColorFormat } from "@amit-kap/glaze/lib/color"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { ChoiceSelect } from "./controls"
 import { hues, type MotionDial } from "./dials"
+import { palette } from "./palette"
 import type { Draft } from "./draft"
 import type { Density } from "./shape"
-import { defaults, sameColor, type Color, type Mode } from "./theme"
+import { canonical, defaults, sameColor, type Color, type Mode } from "./theme"
 import { fontOptions } from "./typography"
 
 const modes: Mode[] = ["light", "dark"]
@@ -63,6 +63,35 @@ function Section({
       <h3 className="text-body font-medium text-foreground">{title}</h3>
       {children}
     </section>
+  )
+}
+
+/** One brand swatch: a square of the color, ringed when it is the brand. */
+function Swatch({
+  name,
+  value,
+  selected,
+  onSelect,
+}: {
+  name: string
+  value: string
+  selected: boolean
+  onSelect: () => void
+}) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={selected}
+      aria-label={name}
+      title={name}
+      onClick={onSelect}
+      style={{ backgroundColor: value }}
+      className={cn(
+        "size-5 shrink-0 rounded-item-sm ring-offset-2 ring-offset-card transition-shadow outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        selected && "ring-2 ring-foreground"
+      )}
+    />
   )
 }
 
@@ -128,8 +157,14 @@ export function SimplePanel({
   onAdvanced: () => void
 }) {
   const { theme, type, dials, setColor, resetColor } = draft
-  const [format, setFormat] = React.useState<ColorFormat>("hex")
   const colors = theme[mode]
+
+  // The first swatch is Nova's own brand; the rest are Tailwind's 500s.
+  const brandEdited =
+    draft.overridden("light", "brand") || draft.overridden("dark", "brand")
+  const resetBrand = () => {
+    for (const each of modes) resetColor(each, "brand")
+  }
 
   // One brand colour for both modes; tune the dark one in Advanced.
   const setBrand = (value: Color) => {
@@ -235,12 +270,34 @@ export function SimplePanel({
       <Separator />
 
       <Section title="Color">
-        <ColorPicker
-          value={colors.brand}
-          format={format}
-          onFormatChange={setFormat}
-          onValueChange={setBrand}
-        />
+        <Card size="sm">
+          <CardContent>
+            <div
+              role="radiogroup"
+              aria-label="Brand color"
+              className="flex flex-wrap gap-2.5"
+            >
+              <Swatch
+                name="Nova"
+                value={defaults.light.brand}
+                selected={!brandEdited}
+                onSelect={resetBrand}
+              />
+              {palette.map((color) => (
+                <Swatch
+                  key={color.name}
+                  name={color.name}
+                  value={color.value}
+                  selected={
+                    brandEdited &&
+                    sameColor(colors.brand, canonical(color.value))
+                  }
+                  onSelect={() => setBrand(color.value)}
+                />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </Section>
 
       <Section title="Primary">
