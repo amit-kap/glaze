@@ -15,7 +15,13 @@ import { SimplePanel } from "./simple-panel"
 import { TopBar } from "./top-bar"
 
 type Level = "simple" | "advanced"
-import { useThemeDraft } from "./draft"
+import { fresh, useThemeDraft } from "./draft"
+import {
+  readSession,
+  useLibrary,
+  writeSession,
+  type SavedTheme,
+} from "./library"
 import {
   fontCssUrl,
   googleFamilyOf,
@@ -27,7 +33,6 @@ import { motionChanged, motionTokens } from "./motion"
 import { shapeChanged, shapeTokens, type Density } from "./shape"
 import { typeChanged, typeTokens } from "./typography"
 
-const storageKey = "glaze-studio-theme"
 export function App() {
   const draft = useThemeDraft()
   // A Google body font is linked in so the preview can draw it.
@@ -38,17 +43,42 @@ export function App() {
   const [mode, setMode] = React.useState<Mode>("light")
   const [density, setDensity] = React.useState<Density>("comfortable")
   const [reduceMotion, setReduceMotion] = React.useState(false)
-  const [name, setName] = React.useState("")
+  const [session, setSession] = React.useState(readSession)
+  const { id: savedId, name } = session
+  const setName = (value: string) =>
+    setSession((current) => ({ ...current, name: value }))
   const [saved, setSaved] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
+  const library = useLibrary()
 
+  React.useEffect(() => writeSession(session), [session])
+
+  /** Save under the open theme's id, or as a new entry the first time. */
   const save = React.useCallback(() => {
-    localStorage.setItem(
-      storageKey,
-      JSON.stringify({ name, theme: draft.theme })
-    )
+    const entry = library.save(savedId, name, draft.stored)
+    setSession({ id: entry.id, name: entry.name })
     setSaved(true)
-  }, [name, draft.theme])
+  }, [library, savedId, name, draft.stored])
+
+  const open = (theme: SavedTheme) => {
+    draft.load(theme.data)
+    setSession({ id: theme.id, name: theme.name })
+  }
+
+  /** Keep the open theme, then add a fresh Nova one to switch to. */
+  const create = () => {
+    if (savedId) library.save(savedId, name, draft.stored)
+    const base = fresh()
+    const entry = library.save(null, "Untitled theme", base)
+    draft.load(base)
+    setSession({ id: entry.id, name: entry.name })
+  }
+
+  const remove = (id: string) => {
+    library.remove(id)
+    // The open theme lives on as an unsaved draft; its next Save is a new entry.
+    if (id === savedId) setSession((current) => ({ ...current, id: null }))
+  }
 
   React.useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -158,6 +188,11 @@ export function App() {
         copied={copied}
         onSave={save}
         onExport={exportCss}
+        library={library.themes}
+        activeId={savedId}
+        onOpen={open}
+        onCreate={create}
+        onDelete={remove}
       />
 
       <div className="flex min-h-0 flex-1 px-4 pb-4">

@@ -91,7 +91,7 @@ const onlyShapeTokens = (values: ShapeValues | undefined): ShapeValues =>
     shapeTokens.map((token) => [token, values?.[token] ?? shapeDefaults[token]])
   )
 
-const fresh = (): Stored => ({
+export const fresh = (): Stored => ({
   theme: defaults,
   unlinked: noLinks,
   type: typeDefaults,
@@ -504,6 +504,11 @@ export function useThemeDraft() {
     })
   }, [])
 
+  /** Replace the draft with a saved theme, dropping tokens no longer offered. */
+  const load = React.useCallback((stored: Stored) => {
+    setDraft(sanitize(stored))
+  }, [])
+
   /** Number of edits, across modes, type, shape and motion: the counter. */
   const changes = React.useMemo(
     () =>
@@ -515,6 +520,8 @@ export function useThemeDraft() {
   )
 
   return {
+    stored: draft,
+    load,
     theme,
     dials,
     setNeutrals,
