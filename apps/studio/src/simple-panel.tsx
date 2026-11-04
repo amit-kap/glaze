@@ -217,7 +217,7 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
 
   return (
     <div className="flex flex-col gap-8 py-6">
-      <Section title="Color" aside={brandChoice}>
+      <Section title="Brand color" aside={brandChoice}>
         <Card size="sm">
           <CardContent className="flex flex-col gap-3">
             {/* Nova and the 17 colours fill two rows; the nine neutrals the third. */}
@@ -285,7 +285,7 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
         </div>
       </Section>
 
-      <Section title="Primary">
+      <Section title="Primary action">
         <SegmentedControl
           size="sm"
           className="w-full"
