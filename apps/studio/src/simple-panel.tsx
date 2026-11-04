@@ -7,6 +7,7 @@ import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
 import { Separator } from "@amit-kap/glaze/components/separator"
 
 import type { MotionDial } from "./dials"
+import { MotionPreview } from "./motion-preview"
 import { palette } from "./palette"
 import { TypefacePicker, type FontSource } from "./typeface-picker"
 import { googleFamilyOf } from "./google-fonts"
@@ -23,7 +24,7 @@ import {
 const modes: Mode[] = ["light", "dark"]
 
 const motionOptions: { value: MotionDial; label: string }[] = [
-  { value: "none", label: "None" },
+  { value: "none", label: "Default" },
   { value: "subtle", label: "Subtle" },
   { value: "edgy", label: "Edgy" },
 ]
@@ -93,7 +94,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <section className="flex flex-col gap-2">
+    <section className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-body font-medium text-foreground">{title}</h3>
         {aside && (
@@ -213,15 +214,15 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
   const tint: Tint = dials.neutrals.strength > 0 ? "brand" : "grey"
 
   return (
-    <div className="flex flex-col gap-8 py-6">
+    <div className="flex flex-col gap-5">
       <Section title="Brand color" aside={brandChoice}>
         <Card size="sm">
-          <CardContent className="flex flex-col gap-3">
+          <CardContent className="flex flex-col gap-2">
             {/* Nova and the 17 colours fill two rows; the nine neutrals the third. */}
             <div
               role="radiogroup"
               aria-label="Brand color"
-              className="grid grid-cols-9 justify-items-center gap-y-3"
+              className="grid grid-cols-9 justify-items-center gap-y-2"
             >
               {brandOptions.map((option) => {
                 const selected = option.name === brandChoice
@@ -323,6 +324,7 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
       </Section>
 
       <Section title="Motion">
+        <MotionPreview motion={draft.motion} />
         <SegmentedControl
           size="sm"
           className="w-full"

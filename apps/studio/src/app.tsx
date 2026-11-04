@@ -147,7 +147,7 @@ export function App() {
             className="min-h-0"
           >
             {level === "simple" ? (
-              <div className="flex h-full min-h-0 flex-col overflow-y-auto bg-sidebar p-2 px-4">
+              <div className="flex h-full min-h-0 flex-col overflow-y-auto bg-sidebar p-[13px] pt-5">
                 <SimplePanel draft={draft} mode={mode} />
               </div>
             ) : (
@@ -182,10 +182,7 @@ export function App() {
             )}
           </ResizablePanel>
 
-          <ResizableHandle
-            withHandle
-            className="w-px cursor-col-resize bg-border after:w-2 [&>div]:h-8 [&>div]:w-1 [&>div]:bg-foreground/20 [&>div]:transition-colors hover:[&>div]:bg-foreground/40"
-          />
+          <ResizableHandle className="cursor-col-resize transition-colors duration-(--duration-fast) after:w-2 hover:bg-foreground/40 data-[separator=active]:bg-foreground/60" />
 
           <ResizablePanel minSize={360} className="flex min-h-0 flex-col">
             <Stage
