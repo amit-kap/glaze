@@ -97,37 +97,15 @@ export function Stage({
   const [frame, setFrame] = React.useState<HTMLElement | null>(null)
 
   return (
-    <section
-      data-theme="nova"
-      className={cn(
-        "flex min-w-0 flex-1 flex-col overflow-hidden",
-        // Dark mode is scoped to the preview: the studio itself stays light.
-        mode === "dark" && "dark"
-      )}
-      // Every theme value sits on the themed section, not the wrapper below:
-      // the kit derives tokens at `[data-theme]` (card-foreground follows
-      // foreground, corners follow the radius), and a derived token reads its
-      // source where it is declared. Reduced motion zeroes the movement scale,
-      // as the system setting does.
-      style={
-        {
-          ...cssVars(theme[mode]),
-          ...typeVars(type),
-          ...shapeVars(shape),
-          ...motionVars(motion),
-          ...extraVars,
-          ...(reduceMotion && { "--motion-scale": "0" }),
-        } as React.CSSProperties
-      }
-    >
-      <div className="flex h-full min-h-0 flex-col bg-background p-4 font-sans font-normal text-foreground">
+    <section className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex h-full min-h-0 flex-col bg-background px-5 py-3 text-foreground">
         <Tabs
           value={screen}
           onValueChange={(value) => setScreen(value as Screen)}
           className="h-full gap-4"
         >
           <div className="flex min-h-10 shrink-0 flex-wrap items-center gap-x-3 gap-y-2">
-            <TabsList variant="line">
+            <TabsList variant="line" className="gap-5">
               {screens.map((item) => (
                 <TabsTrigger key={item.id} value={item.id}>
                   {item.label}
@@ -178,9 +156,27 @@ export function Stage({
           <div className="flex min-h-0 flex-1 justify-center">
             <div
               ref={setFrame}
+              data-theme="nova"
               data-density={density}
+              // Only this frame wears the draft: the toolbar above stays the
+              // studio's own. Every theme value sits on the themed element,
+              // since the kit derives tokens at `[data-theme]` and a derived
+              // token reads its source where it is declared. Dark mode is
+              // scoped here too. Reduced motion zeroes the movement scale,
+              // as the system setting does.
+              style={
+                {
+                  ...cssVars(theme[mode]),
+                  ...typeVars(type),
+                  ...shapeVars(shape),
+                  ...motionVars(motion),
+                  ...extraVars,
+                  ...(reduceMotion && { "--motion-scale": "0" }),
+                } as React.CSSProperties
+              }
               className={cn(
-                "@container h-full [contain:layout]",
+                "@container h-full font-sans font-normal text-foreground [contain:layout]",
+                mode === "dark" && "dark",
                 width === "fit" && "w-full",
                 width === "768" && "w-[768px] max-w-full",
                 width === "390" && "w-[390px] max-w-full"

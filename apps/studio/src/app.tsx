@@ -147,7 +147,7 @@ export function App() {
             className="min-h-0"
           >
             {level === "simple" ? (
-              <div className="flex h-full min-h-0 flex-col overflow-y-auto bg-sidebar p-[13px] pt-5">
+              <div className="flex h-full min-h-0 flex-col overflow-y-auto bg-sidebar p-5">
                 <SimplePanel draft={draft} mode={mode} />
               </div>
             ) : (
