@@ -94,3 +94,15 @@ export function age(savedAt: number) {
     return `${Math.floor(elapsed / (60 * minute))}h ago`
   return `${Math.floor(elapsed / (24 * 60 * minute))}d ago`
 }
+
+/** How many settings differ between two values, counted leaf by leaf. */
+export function countDiff(a: unknown, b: unknown): number {
+  const isObject = (value: unknown): value is Record<string, unknown> =>
+    typeof value === "object" && value !== null
+  if (!isObject(a) || !isObject(b))
+    return JSON.stringify(a) === JSON.stringify(b) ? 0 : 1
+  const keys = new Set([...Object.keys(a), ...Object.keys(b)])
+  let count = 0
+  for (const key of keys) count += countDiff(a[key], b[key])
+  return count
+}

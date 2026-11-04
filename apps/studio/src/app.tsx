@@ -17,6 +17,7 @@ import { TopBar } from "./top-bar"
 type Level = "simple" | "advanced"
 import { fresh, useThemeDraft } from "./draft"
 import {
+  countDiff,
   readSession,
   useLibrary,
   writeSession,
@@ -52,6 +53,12 @@ export function App() {
   const library = useLibrary()
 
   React.useEffect(() => writeSession(session), [session])
+
+  // Edits count from the open theme's saved version, or from Nova before the
+  // first save: saving means the user keeps this look, so nothing is left to undo.
+  const baseline = library.themes.find((theme) => theme.id === savedId)?.data
+  const base = baseline ?? fresh()
+  const changes = countDiff(draft.stored, base)
 
   /** Save under the open theme's id, or as a new entry the first time. */
   const save = React.useCallback(() => {
@@ -182,8 +189,8 @@ export function App() {
           setName(value)
           setSaved(false)
         }}
-        changes={draft.changes}
-        onResetAll={draft.resetAll}
+        changes={changes}
+        onResetAll={() => draft.load(base)}
         saved={saved}
         copied={copied}
         onSave={save}

@@ -131,7 +131,7 @@ export function TopBar({
           variant="outline"
           size="sm"
           disabled={changes === 0}
-          title={`${changes} ${changes === 1 ? "setting" : "settings"} changed from Nova`}
+          title={`${changes} ${changes === 1 ? "setting" : "settings"} changed since the last save`}
           onClick={onResetAll}
         >
           Reset all
