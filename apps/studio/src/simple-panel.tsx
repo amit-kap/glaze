@@ -6,7 +6,7 @@ import { InsetSlider } from "@amit-kap/glaze/components/inset-slider"
 import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
 import { Separator } from "@amit-kap/glaze/components/separator"
 
-import { hues, type MotionDial } from "./dials"
+import type { MotionDial } from "./dials"
 import { palette } from "./palette"
 import { TypefacePicker, type FontSource } from "./typeface-picker"
 import { googleFamilyOf } from "./google-fonts"
@@ -38,12 +38,11 @@ const primaryOptions = [
   { value: "brand", label: "Brand color" },
 ]
 
-type Tint = "mono" | "warm" | "cool"
+type Tint = "grey" | "brand"
 
 const tintOptions: { value: Tint; label: string }[] = [
-  { value: "mono", label: "Mono" },
-  { value: "warm", label: "Warm" },
-  { value: "cool", label: "Cool" },
+  { value: "grey", label: "Greyscale" },
+  { value: "brand", label: "Brand color" },
 ]
 
 // A name for each of the 11 places on the scale and tone sliders. The middle
@@ -76,8 +75,9 @@ const toneNames = [
   "Loud",
 ]
 
-// How strongly Warm and Cool tint the neutrals.
-const tintStrength = 0.5
+// How strongly Brand color tints the greys: enough to read as branded, not as
+// coloured. Near white a tint needs more than a mid grey to show at all.
+const tintStrength = 1.2
 
 const first = (value: number | readonly number[]) =>
   typeof value === "number" ? value : value[0]
@@ -210,12 +210,7 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
       }
   }
 
-  const tint: Tint =
-    dials.neutrals.strength <= 0
-      ? "mono"
-      : dials.neutrals.hue === hues.cool
-        ? "cool"
-        : "warm"
+  const tint: Tint = dials.neutrals.strength > 0 ? "brand" : "grey"
 
   return (
     <div className="flex flex-col gap-8 py-6">
@@ -278,9 +273,9 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
           value={tint}
           onValueChange={(value) =>
             draft.setNeutrals(
-              value === "mono"
+              value === "grey"
                 ? { ...dials.neutrals, strength: 0 }
-                : { hue: hues[value], strength: tintStrength }
+                : { ...dials.neutrals, strength: tintStrength, brand: true }
             )
           }
         />

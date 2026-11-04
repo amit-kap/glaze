@@ -100,6 +100,17 @@ const fresh = (): Stored => ({
   dials: dialDefaults,
 })
 
+/**
+ * A stored neutrals dial. Drafts saved when it offered Warm and Cool carry a
+ * fixed hue; those now follow the brand, the only tint left.
+ */
+function migrateNeutrals(stored: Dials["neutrals"] | undefined) {
+  if (!stored) return dialDefaults.neutrals
+  return stored.strength > 0 && stored.brand === undefined
+    ? { ...stored, brand: true }
+    : stored
+}
+
 /** A stored draft as the panel can use it: only tokens it still offers. */
 function sanitize(stored: Partial<Stored> | null | undefined): Stored {
   if (!stored?.theme) return fresh()
@@ -116,7 +127,7 @@ function sanitize(stored: Partial<Stored> | null | undefined): Stored {
     shape: onlyShapeTokens(stored.shape),
     motion: onlyMotionTokens(stored.motion),
     dials: {
-      neutrals: stored.dials?.neutrals ?? dialDefaults.neutrals,
+      neutrals: migrateNeutrals(stored.dials?.neutrals),
       tone: stored.dials?.tone ?? 0,
       scale: stored.dials?.scale ?? 0,
       motion: stored.dials?.motion ?? "none",

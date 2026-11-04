@@ -14,7 +14,12 @@ import { toCss as typeCss, toNumber, typeDefaults } from "./typography"
 import { defaults, tokens, type Color, type Mode } from "./theme"
 
 /** The neutrals dial: a tint (hue in degrees) and how strongly it shows. */
-export type NeutralsDial = { hue: number; strength: number }
+export type NeutralsDial = {
+  hue: number
+  strength: number
+  /** Tint toward the brand colour's hue instead of the fixed `hue`. */
+  brand?: boolean
+}
 
 /** How much character the motion has: Nova's own, calmer, or springier. */
 export type MotionDial = "none" | "subtle" | "edgy"
@@ -159,6 +164,14 @@ export function generatedFor(
   dials: Dials,
   brand?: Color
 ): Color | null {
+  // The tint's hue: the brand's when asked, which a grey brand can't give.
+  const hue = dials.neutrals.brand
+    ? brand
+      ? hueOf(brand)
+      : null
+    : dials.neutrals.hue
+  // A grey brand still counts as tinted, with nothing to add: the greys must
+  // go back to Nova's when the brand turns grey, not keep the old tint.
   const tinted = dials.neutrals.strength > 0 && neutralTokens.includes(token)
   // Without a tint of their own, bold surfaces borrow the brand's hue.
   const lent =
@@ -166,7 +179,10 @@ export function generatedFor(
   const toned = dials.tone !== 0 && toneTokens.includes(token)
   if (!tinted && !lent && !toned) return null
   const base = tinted
-    ? neutralFor(mode, token, dials.neutrals)
+    ? neutralFor(mode, token, {
+        hue: hue ?? 0,
+        strength: hue === null ? 0 : dials.neutrals.strength,
+      })
     : (lent ?? defaults[mode][token])
   return toneColor(mode, token, base, dials.tone)
 }
@@ -183,12 +199,20 @@ function brandTint(
   tone: number
 ): Color | null {
   if (tone <= 0 || !neutralTokens.includes(token)) return null
-  const parsed = parseColor(brand)
+  const hue = hueOf(brand)
+  if (hue === null) return null
+  return neutralFor(mode, token, {
+    hue,
+    strength: tone * brandTintStrength,
+  })
+}
+
+/** The hue of a colour, or null for a grey, which has none to lend. */
+function hueOf(color: Color): number | null {
+  const parsed = parseColor(color)
   if (!parsed) return null
   const { c, h } = rgbaToOklch(parsed)
-  // A grey brand has no hue to lend.
-  if (c < 0.02) return null
-  return neutralFor(mode, token, { hue: h, strength: tone * brandTintStrength })
+  return c < 0.02 ? null : h
 }
 
 /**
