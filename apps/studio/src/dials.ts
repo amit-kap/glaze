@@ -28,6 +28,11 @@ export type Dials = {
   tone: number
   scale: number
   motion: MotionDial
+  /**
+   * The weights the body font actually has, when it is a Google font that
+   * lacks some: tone weights snap to these. Null means every weight is there.
+   */
+  weights: number[] | null
 }
 
 export const hues = { cool: 250, neutral: 0, warm: 70 } as const
@@ -37,6 +42,7 @@ export const dialDefaults: Dials = {
   tone: 0,
   scale: 0,
   motion: "none",
+  weights: null,
 }
 
 /** The surfaces, fills, borders and text a tint reaches. */
@@ -209,11 +215,23 @@ const toneType: Record<string, [number, number, number]> = {
 /** The type tokens the slider reaches. */
 export const toneTypeTokens = Object.keys(toneType)
 
-/** One weight, as a number, at a place on the tone slider. */
-export function toneTypeValue(token: string, tone: number): number {
+/**
+ * One weight, as a number, at a place on the tone slider. A font that lacks
+ * that weight gets the nearest one it has.
+ */
+export function toneTypeValue(
+  token: string,
+  tone: number,
+  available?: number[] | null
+): number {
   const [quiet, nova, bold] = toneType[token]
   const value = tone < 0 ? lerp(nova, quiet, -tone) : lerp(nova, bold, tone)
-  return Math.round(value / 50) * 50
+  const weight = Math.round(value / 50) * 50
+  return available?.length
+    ? available.reduce((best, each) =>
+        Math.abs(each - weight) < Math.abs(best - weight) ? each : best
+      )
+    : weight
 }
 
 // --- Motion: none, subtle, edgy ---------------------------------------------

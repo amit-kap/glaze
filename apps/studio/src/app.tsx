@@ -16,6 +16,12 @@ import { TopBar } from "./top-bar"
 
 type Level = "simple" | "advanced"
 import { useThemeDraft } from "./draft"
+import {
+  fontCssUrl,
+  googleFamilyOf,
+  useFontLink,
+  wantedWeights,
+} from "./google-fonts"
 import { changed, followVars, tokens, type Mode } from "./theme"
 import { motionChanged, motionTokens } from "./motion"
 import { shapeChanged, shapeTokens, type Density } from "./shape"
@@ -24,6 +30,8 @@ import { typeChanged, typeTokens } from "./typography"
 const storageKey = "glaze-studio-theme"
 export function App() {
   const draft = useThemeDraft()
+  // A Google body font is linked in so the preview can draw it.
+  useFontLink(googleFamilyOf(draft.type["typeface-sans"]), draft.dials.weights)
   // Simple is the front door; Advanced drills down from it and Back returns.
   const [level, setLevel] = React.useState<Level>("simple")
   const [tool, setTool] = React.useState<Tool>("colors")
@@ -102,8 +110,24 @@ export function App() {
       .filter(Boolean)
       .join("\n")
     const dark = block("dark")
+    // A Google font needs its stylesheet wherever the theme is used, so the
+    // export links it; @import comes before any rule.
+    const fontImports = [
+      ...new Set(
+        ["typeface-sans", "typeface-heading"].flatMap((token) => {
+          const family = googleFamilyOf(draft.type[token])
+          return family && typeChanged(token, draft.type[token])
+            ? [
+                `@import url("${fontCssUrl(family, draft.dials.weights ?? wantedWeights)}");`,
+              ]
+            : []
+        })
+      ),
+    ]
+
     const css = [
       `/* ${name || "Untitled theme"} — Glaze theme, based on Nova */`,
+      ...fontImports,
       light && `:root {\n${light}\n}`,
       dark && `.dark {\n${dark}\n}`,
     ]

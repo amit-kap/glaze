@@ -120,6 +120,7 @@ function sanitize(stored: Partial<Stored> | null | undefined): Stored {
       tone: stored.dials?.tone ?? 0,
       scale: stored.dials?.scale ?? 0,
       motion: stored.dials?.motion ?? "none",
+      weights: stored.dials?.weights ?? null,
     },
   }
 }
@@ -321,7 +322,7 @@ export function useThemeDraft() {
       const made = (token: string, at: number) =>
         at === 0
           ? typeDefaults[token]
-          : typeCss(token, toneTypeValue(token, at))
+          : typeCss(token, toneTypeValue(token, at, current.dials.weights))
       const nextType = { ...current.type }
       for (const token of toneTypeTokens)
         if (
@@ -337,12 +338,56 @@ export function useThemeDraft() {
     })
   }, [])
 
-  const setType = React.useCallback((token: string, value: string) => {
-    setDraft((current) => ({
-      ...current,
-      type: { ...current.type, [token]: value },
-    }))
-  }, [])
+  /**
+   * Set the body font. The tone weights follow the weights the font has, so a
+   * font without a 500 doesn't leave Tone asking for one; a weight set by hand
+   * is kept.
+   */
+  const setTypeface = React.useCallback(
+    (value: string, weights: number[] | null) => {
+      setDraft((current) => {
+        const made = (token: string, available: number[] | null) =>
+          current.dials.tone === 0
+            ? typeDefaults[token]
+            : typeCss(
+                token,
+                toneTypeValue(token, current.dials.tone, available)
+              )
+        const nextType: TypeValues = {
+          ...current.type,
+          "typeface-sans": value,
+        }
+        for (const token of toneTypeTokens)
+          if (
+            sameType(
+              token,
+              current.type[token],
+              made(token, current.dials.weights)
+            )
+          )
+            nextType[token] = made(token, weights)
+        return {
+          ...current,
+          dials: { ...current.dials, weights },
+          type: nextType,
+        }
+      })
+    },
+    []
+  )
+
+  const setType = React.useCallback(
+    (token: string, value: string) => {
+      // The body font carries the weights it has; any other way of setting it
+      // means every weight is there.
+      if (token === "typeface-sans") return setTypeface(value, null)
+      setDraft((current) => ({
+        ...current,
+        type: { ...current.type, [token]: value },
+      }))
+    },
+    [setTypeface]
+  )
 
   const resetType = React.useCallback((tokens: string[]) => {
     setDraft((current) => ({
@@ -468,6 +513,7 @@ export function useThemeDraft() {
     unlinked,
     type,
     setType,
+    setTypeface,
     resetType,
     shape,
     setShape,

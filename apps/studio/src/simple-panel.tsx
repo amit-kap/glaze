@@ -5,10 +5,11 @@ import { Card, CardContent } from "@amit-kap/glaze/components/card"
 import { InsetSlider } from "@amit-kap/glaze/components/inset-slider"
 import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
 import { Separator } from "@amit-kap/glaze/components/separator"
-import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { hues, type MotionDial } from "./dials"
 import { palette } from "./palette"
+import { TypefacePicker, type FontSource } from "./typeface-picker"
+import { googleFamilyOf } from "./google-fonts"
 import type { Draft } from "./draft"
 import {
   autoInk,
@@ -18,7 +19,6 @@ import {
   type Color,
   type Mode,
 } from "./theme"
-import { fontOptions } from "./typography"
 
 const modes: Mode[] = ["light", "dark"]
 
@@ -26,6 +26,11 @@ const motionOptions: { value: MotionDial; label: string }[] = [
   { value: "none", label: "None" },
   { value: "subtle", label: "Subtle" },
   { value: "edgy", label: "Edgy" },
+]
+
+const fontSources: { value: FontSource; label: string }[] = [
+  { value: "glaze", label: "Bundled" },
+  { value: "google", label: "Google" },
 ]
 
 const primaryOptions = [
@@ -74,14 +79,6 @@ const toneNames = [
 // How strongly Warm and Cool tint the neutrals.
 const tintStrength = 0.5
 
-// The faces on offer here: the sans ones Advanced has, plus a mono.
-const fonts = [
-  ...fontOptions["typeface-sans"].filter(
-    (font) => font.label !== "Playfair Display"
-  ),
-  { label: "JetBrains Mono", value: '"JetBrains Mono Variable", monospace' },
-]
-
 const first = (value: number | readonly number[]) =>
   typeof value === "number" ? value : value[0]
 
@@ -97,10 +94,10 @@ function Section({
 }) {
   return (
     <section className="flex flex-col gap-2">
-      <div className="flex items-baseline justify-between gap-2">
+      <div className="flex items-center justify-between gap-2">
         <h3 className="text-body font-medium text-foreground">{title}</h3>
         {aside && (
-          <span className="text-caption text-muted-foreground">{aside}</span>
+          <div className="text-caption text-muted-foreground">{aside}</div>
         )}
       </div>
       {children}
@@ -167,8 +164,13 @@ function Dial({
  * agree.
  */
 export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
-  const { theme, type, dials, setColor, resetColor } = draft
+  const { theme, dials, setColor, resetColor } = draft
   const colors = theme[mode]
+
+  // Start on the source the current font comes from.
+  const [fontSource, setFontSource] = React.useState<FontSource>(() =>
+    googleFamilyOf(draft.type["typeface-sans"]) ? "google" : "glaze"
+  )
 
   // The first swatch is Nova's own brand; the rest are Tailwind's 500s.
   const brandEdited =
@@ -256,33 +258,19 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
         </Card>
       </Section>
 
-      <Section title="Typography">
-        <div
-          role="listbox"
-          aria-label="Typeface"
-          className="flex flex-col gap-0.5 rounded-control border border-border bg-background p-1"
-        >
-          {fonts.map((font) => {
-            const selected = type["typeface-sans"] === font.value
-            return (
-              <button
-                key={font.label}
-                type="button"
-                role="option"
-                aria-selected={selected}
-                onClick={() => draft.setType("typeface-sans", font.value)}
-                style={{ fontFamily: font.value }}
-                className={cn(
-                  "flex h-control-sm items-center justify-between rounded-item px-2.5 text-body text-foreground outline-none hover:bg-muted focus-visible:bg-muted",
-                  selected && "bg-muted"
-                )}
-              >
-                {font.label}
-                {selected && <CheckIcon className="size-4" />}
-              </button>
-            )
-          })}
-        </div>
+      <Section
+        title="Typography"
+        aside={
+          <SegmentedControl
+            size="sm"
+            label="Font source"
+            options={fontSources}
+            value={fontSource}
+            onValueChange={setFontSource}
+          />
+        }
+      >
+        <TypefacePicker draft={draft} source={fontSource} />
       </Section>
 
       <Section title="Primary action">
