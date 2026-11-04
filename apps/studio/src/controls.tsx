@@ -65,11 +65,13 @@ export function ChoiceSelect({
   items,
   value,
   onChange,
+  className,
 }: {
   label: string
   items: { label: string; value: string }[]
   value: string
   onChange: (value: string) => void
+  className?: string
 }) {
   return (
     <Select
@@ -77,7 +79,11 @@ export function ChoiceSelect({
       value={value}
       onValueChange={(next) => next && onChange(next)}
     >
-      <SelectTrigger size="sm" aria-label={label} className="bg-background">
+      <SelectTrigger
+        size="sm"
+        aria-label={label}
+        className={cn("bg-background", className)}
+      >
         <SelectValue />
       </SelectTrigger>
       <SelectContent alignItemWithTrigger={false} align="end">

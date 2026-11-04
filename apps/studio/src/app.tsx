@@ -10,18 +10,31 @@ import {
 import { Panel } from "./panel"
 import { Rail, type Tool } from "./rail"
 import { Stage } from "./stage"
-import { neutralTokens } from "./dials"
+import { dialMotionTokens, dialTokens, toneTypeTokens } from "./dials"
 import { SimplePanel } from "./simple-panel"
 import { TopBar } from "./top-bar"
 
 type Level = "simple" | "advanced"
-import { useThemeDraft } from "./draft"
+import { useThemeDraft, type Stored } from "./draft"
 import { changed, followVars, tokens, type Mode } from "./theme"
 import { motionChanged, motionTokens } from "./motion"
 import { shapeChanged, shapeTokens, type Density } from "./shape"
 import { typeChanged, typeTokens } from "./typography"
 
 const storageKey = "glaze-studio-theme"
+const presetsKey = "glaze-studio-presets"
+
+type Preset = { name: string; draft: Stored; density: Density }
+
+function readPresets(): Preset[] {
+  try {
+    const stored = JSON.parse(localStorage.getItem(presetsKey) ?? "[]")
+    return Array.isArray(stored) ? stored : []
+  } catch {
+    return []
+  }
+}
+
 export function App() {
   const draft = useThemeDraft()
   // Simple is the front door; Advanced drills down from it and Back returns.
@@ -33,24 +46,37 @@ export function App() {
   const [name, setName] = React.useState("")
   const [saved, setSaved] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
+  const [presets, setPresets] = React.useState(readPresets)
+  const [preset, setPreset] = React.useState("base")
 
-  // What the four Simple controls cover, so Simple can say what it isn't
-  // showing: brand in either mode, the radius and the sans typeface.
+  // What the Simple controls cover directly, so Simple can say what it isn't
+  // showing: brand in either mode and the sans typeface.
   const simpleChanges =
     Number(draft.overridden("light", "brand")) +
     Number(draft.overridden("dark", "brand")) +
-    Number(shapeChanged("radius", draft.shape.radius)) +
     Number(typeChanged("typeface-sans", draft.type["typeface-sans"]))
-  // Neutrals the dial generates are one change, not one per token.
-  const dialled = (["light", "dark"] as const).reduce(
-    (n, mode) =>
-      n +
-      neutralTokens.filter(
-        (token) =>
-          !draft.unlinked[mode].includes(token) && draft.overridden(mode, token)
-      ).length,
-    0
-  )
+  // Colours and type a dial generates are one change, not one per token.
+  const dialled =
+    (["light", "dark"] as const).reduce(
+      (n, mode) =>
+        n +
+        dialTokens.filter(
+          (token) =>
+            !draft.unlinked[mode].includes(token) &&
+            draft.overridden(mode, token)
+        ).length,
+      0
+    ) +
+    (draft.dials.tone === 0
+      ? 0
+      : toneTypeTokens.filter((token) =>
+          typeChanged(token, draft.type[token])
+        ).length) +
+    (draft.dials.motion === "none"
+      ? 0
+      : dialMotionTokens.filter((token) =>
+          motionChanged(token, draft.motion[token])
+        ).length)
   const advancedChanges = Math.max(0, draft.changes - simpleChanges - dialled)
 
   const save = React.useCallback(() => {
@@ -58,8 +84,31 @@ export function App() {
       storageKey,
       JSON.stringify({ name, theme: draft.theme })
     )
+    // A named save also keeps the whole draft as a preset to open again.
+    if (name.trim()) {
+      const next = [
+        ...presets.filter((item) => item.name !== name.trim()),
+        { name: name.trim(), draft: draft.snapshot, density },
+      ]
+      localStorage.setItem(presetsKey, JSON.stringify(next))
+      setPresets(next)
+      setPreset(name.trim())
+    }
     setSaved(true)
-  }, [name, draft.theme])
+  }, [name, draft.theme, draft.snapshot, density, presets])
+
+  const choosePreset = (value: string) => {
+    setPreset(value)
+    const found = presets.find((item) => item.name === value)
+    if (found) {
+      draft.load(found.draft)
+      setDensity(found.density)
+      setName(found.name)
+    } else {
+      draft.resetAll()
+      setDensity("comfortable")
+    }
+  }
 
   React.useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -167,6 +216,15 @@ export function App() {
                   mode={mode}
                   density={density}
                   onDensityChange={setDensity}
+                  presets={[
+                    { label: "Base", value: "base" },
+                    ...presets.map((item) => ({
+                      label: item.name,
+                      value: item.name,
+                    })),
+                  ]}
+                  preset={preset}
+                  onPresetChange={choosePreset}
                   advancedChanges={advancedChanges}
                   onAdvanced={() => setLevel("advanced")}
                 />

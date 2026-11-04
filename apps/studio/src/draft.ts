@@ -1,6 +1,15 @@
 import * as React from "react"
 
-import { dialDefaults, neutralFor, neutralTokens, type Dials } from "./dials"
+import {
+  dialDefaults,
+  dialTokens,
+  dialMotionTokens,
+  generatedFor,
+  motionFor,
+  toneTypeTokens,
+  toneTypeValue,
+  type Dials,
+} from "./dials"
 import {
   autoInk,
   canonical,
@@ -17,6 +26,7 @@ import {
 import {
   countMotionChanges,
   motionDefaults,
+  sameMotion,
   motionTokens,
   type MotionValues,
 } from "./motion"
@@ -28,6 +38,8 @@ import {
 } from "./shape"
 import {
   countTypeChanges,
+  sameType,
+  toCss as typeCss,
   typeDefaults,
   typeTokens,
   type TypeValues,
@@ -47,7 +59,7 @@ const onlyTokens = (
     tokens.map((token) => [token, colors?.[token] ?? fallback[token]])
   )
 
-type Stored = {
+export type Stored = {
   theme: Theme
   unlinked: Unlinked
   type: TypeValues
@@ -74,52 +86,43 @@ const onlyShapeTokens = (values: ShapeValues | undefined): ShapeValues =>
     shapeTokens.map((token) => [token, values?.[token] ?? shapeDefaults[token]])
   )
 
+const fresh = (): Stored => ({
+  theme: defaults,
+  unlinked: noLinks,
+  type: typeDefaults,
+  shape: shapeDefaults,
+  motion: motionDefaults,
+  dials: dialDefaults,
+})
+
+/** A stored draft as the panel can use it: only tokens it still offers. */
+function sanitize(stored: Partial<Stored> | null | undefined): Stored {
+  if (!stored?.theme) return fresh()
+  return {
+    theme: {
+      light: onlyTokens(stored.theme.light, defaults.light),
+      dark: onlyTokens(stored.theme.dark, defaults.dark),
+    },
+    unlinked: {
+      light: stored.unlinked?.light ?? [],
+      dark: stored.unlinked?.dark ?? [],
+    },
+    type: onlyTypeTokens(stored.type),
+    shape: onlyShapeTokens(stored.shape),
+    motion: onlyMotionTokens(stored.motion),
+    dials: {
+      neutrals: stored.dials?.neutrals ?? dialDefaults.neutrals,
+      tone: stored.dials?.tone ?? 0,
+      motion: stored.dials?.motion ?? "none",
+    },
+  }
+}
+
 function read(): Stored {
   try {
-    const stored = JSON.parse(localStorage.getItem(storageKey) ?? "null") as {
-      theme?: { light?: Record<string, Color>; dark?: Record<string, Color> }
-      unlinked?: Unlinked
-      type?: TypeValues
-      shape?: ShapeValues
-      motion?: MotionValues
-      dials?: Dials
-    } | null
-    if (!stored?.theme)
-      return {
-        theme: defaults,
-        unlinked: noLinks,
-        type: typeDefaults,
-        shape: shapeDefaults,
-        motion: motionDefaults,
-        dials: dialDefaults,
-      }
-    // Only tokens the panel still offers, so an old draft can't resurrect a
-    // colour Studio no longer edits.
-    return {
-      theme: {
-        light: onlyTokens(stored.theme.light, defaults.light),
-        dark: onlyTokens(stored.theme.dark, defaults.dark),
-      },
-      unlinked: {
-        light: stored.unlinked?.light ?? [],
-        dark: stored.unlinked?.dark ?? [],
-      },
-      type: onlyTypeTokens(stored.type),
-      shape: onlyShapeTokens(stored.shape),
-      motion: onlyMotionTokens(stored.motion),
-      dials: {
-        neutrals: stored.dials?.neutrals ?? dialDefaults.neutrals,
-      },
-    }
+    return sanitize(JSON.parse(localStorage.getItem(storageKey) ?? "null"))
   } catch {
-    return {
-      theme: defaults,
-      unlinked: noLinks,
-      type: typeDefaults,
-      shape: shapeDefaults,
-      motion: motionDefaults,
-      dials: dialDefaults,
-    }
+    return fresh()
   }
 }
 
@@ -135,11 +138,12 @@ function settle(
   mode: Mode,
   dials: Dials
 ) {
-  // A dial fills in only the neutrals the user has not taken over.
-  if (dials.neutrals.strength > 0)
-    for (const token of neutralTokens)
-      if (!unlinked.includes(token))
-        colors[token] = neutralFor(mode, token, dials.neutrals)
+  // A dial fills in only the colours the user has not taken over.
+  for (const token of dialTokens) {
+    if (unlinked.includes(token)) continue
+    const made = generatedFor(mode, token, dials)
+    if (made) colors[token] = made
+  }
 
   for (let pass = 0; pass < 4; pass++) {
     let moved = false
@@ -154,6 +158,20 @@ function settle(
     if (!moved) break
   }
   return colors
+}
+
+/** Colours for both modes after a dial moves: untouched ones follow it. */
+const redial = (current: Stored, dials: Dials) => {
+  const colors = (mode: Mode) => {
+    const unlinked = current.unlinked[mode]
+    const base = { ...current.theme[mode] }
+    // A colour no dial reaches any more goes back to Nova.
+    for (const token of dialTokens)
+      if (!unlinked.includes(token) && !generatedFor(mode, token, dials))
+        base[token] = defaults[mode][token]
+    return settle(base, unlinked, mode, dials)
+  }
+  return { light: colors("light"), dark: colors("dark") }
 }
 
 const without = (list: string[], token: string) =>
@@ -197,12 +215,9 @@ export function useThemeDraft() {
         const staysLinked =
           parent !== undefined &&
           sameColor(color, followed(token, current.theme[mode][parent]))
-        // A neutral the dial generates is taken over the same way, unless the
+        // A colour a dial generates is taken over the same way, unless the
         // value lands on the one the dial would have made.
-        const generated =
-          neutralTokens.includes(token) && current.dials.neutrals.strength > 0
-            ? neutralFor(mode, token, current.dials.neutrals)
-            : null
+        const generated = generatedFor(mode, token, current.dials)
         const nextUnlinked =
           staysLinked || (generated && sameColor(color, generated))
             ? without(current.unlinked[mode], token)
@@ -276,19 +291,30 @@ export function useThemeDraft() {
   /** Move a dial: every neutral not taken over follows it, in both modes. */
   const setNeutrals = React.useCallback((neutrals: Dials["neutrals"]) => {
     setDraft((current) => {
-      const next = { ...current, dials: { ...current.dials, neutrals } }
-      const colors = (mode: Mode) => {
-        const unlinked = current.unlinked[mode]
-        const base = { ...current.theme[mode] }
-        // At strength 0 the dial hands its tokens back to Nova.
-        if (neutrals.strength <= 0)
-          for (const token of neutralTokens)
-            if (!unlinked.includes(token)) base[token] = defaults[mode][token]
-        return settle(base, unlinked, mode, next.dials)
-      }
+      const dials = { ...current.dials, neutrals }
+      return { ...current, dials, theme: redial(current, dials) }
+    })
+  }, [])
+
+  /**
+   * Move the quiet-to-bold slider. Colours follow like the neutrals do. Type
+   * follows too, except a value the user set by hand: it is theirs when it
+   * isn't what the slider last made.
+   */
+  const setTone = React.useCallback((tone: number) => {
+    setDraft((current) => {
+      const dials = { ...current.dials, tone }
+      const made = (token: string, at: number) =>
+        at === 0 ? typeDefaults[token] : typeCss(token, toneTypeValue(token, at))
+      const nextType = { ...current.type }
+      for (const token of toneTypeTokens)
+        if (sameType(token, current.type[token], made(token, current.dials.tone)))
+          nextType[token] = made(token, tone)
       return {
-        ...next,
-        theme: { light: colors("light"), dark: colors("dark") },
+        ...current,
+        dials,
+        type: nextType,
+        theme: redial(current, dials),
       }
     })
   }, [])
@@ -344,6 +370,32 @@ export function useThemeDraft() {
     }))
   }, [])
 
+  /** Pick how much character the motion has; hand-set values are kept. */
+  const setMotionDial = React.useCallback((motionDial: Dials["motion"]) => {
+    setDraft((current) => {
+      const nextMotion = { ...current.motion }
+      for (const token of dialMotionTokens)
+        if (
+          sameMotion(
+            token,
+            current.motion[token],
+            motionFor(token, current.dials.motion)
+          )
+        )
+          nextMotion[token] = motionFor(token, motionDial)
+      return {
+        ...current,
+        dials: { ...current.dials, motion: motionDial },
+        motion: nextMotion,
+      }
+    })
+  }, [])
+
+  /** Replace the whole draft, as when a saved preset is opened. */
+  const load = React.useCallback((stored: Stored) => {
+    setDraft(sanitize(stored))
+  }, [])
+
   /** Back to Nova everywhere: both modes, type, shape, motion, every rule. */
   const resetAll = React.useCallback(() => {
     setDraft({
@@ -370,6 +422,10 @@ export function useThemeDraft() {
     theme,
     dials,
     setNeutrals,
+    setTone,
+    setMotionDial,
+    snapshot: draft,
+    load,
     unlinked,
     type,
     setType,

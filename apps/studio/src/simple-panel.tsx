@@ -1,55 +1,118 @@
 import * as React from "react"
+import { CheckIcon } from "lucide-react"
 
-import { ColorSelector } from "@amit-kap/glaze/components/color-selector"
 import { Button } from "@amit-kap/glaze/components/button"
+import { ColorPicker } from "@amit-kap/glaze/components/color-picker"
 import { InsetSlider } from "@amit-kap/glaze/components/inset-slider"
 import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
+import { Separator } from "@amit-kap/glaze/components/separator"
 import type { ColorFormat } from "@amit-kap/glaze/lib/color"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
-import { ChoiceSelect, SettingItem } from "./controls"
+import { ChoiceSelect } from "./controls"
+import { hues, type MotionDial } from "./dials"
 import type { Draft } from "./draft"
-import {
-  densityOptions,
-  densitySetting,
-  shapeChanged,
-  toCss,
-  toPx,
-  type Density,
-} from "./shape"
-import { hues } from "./dials"
-import { fontOptions, typeChanged } from "./typography"
-import { rowOf, type Color, type Mode } from "./theme"
+import type { Density } from "./shape"
+import { defaults, sameColor, type Color, type Mode } from "./theme"
+import { fontOptions } from "./typography"
 
-const tints: { value: "cool" | "warm"; label: string }[] = [
-  { value: "cool", label: "Cool" },
+const modes: Mode[] = ["light", "dark"]
+
+const motionOptions: { value: MotionDial; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "subtle", label: "Subtle" },
+  { value: "edgy", label: "Edgy" },
+]
+
+const primaryOptions = [
+  { value: "neutral", label: "Neutral" },
+  { value: "brand", label: "Same as Brand" },
+]
+
+type Tint = "mono" | "warm" | "cool"
+
+const tintOptions: { value: Tint; label: string }[] = [
+  { value: "mono", label: "Mono" },
   { value: "warm", label: "Warm" },
+  { value: "cool", label: "Cool" },
 ]
 
-const radii = [0, 4, 8, 10, 14, 16]
+// How strongly Warm and Cool tint the neutrals.
+const tintStrength = 0.5
 
-const radiusOptions = radii.map((px) => ({
-  value: String(px),
-  label: String(px),
-}))
-
-// The family radii a user may have pinned in Advanced; while any is set, the
-// single radius here no longer describes the whole interface.
-const familyRadii = [
-  "shape-item",
-  "shape-control",
-  "shape-floating",
-  "shape-container",
+// The faces on offer here: the sans ones Advanced has, plus a mono.
+const fonts = [
+  ...fontOptions["typeface-sans"].filter(
+    (font) => font.label !== "Playfair Display"
+  ),
+  { label: "JetBrains Mono", value: '"JetBrains Mono Variable", monospace' },
 ]
+
+const first = (value: number | readonly number[]) =>
+  typeof value === "number" ? value : value[0]
+
+function Section({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <section className="flex flex-col gap-3">
+      <h3 className="text-body font-medium text-foreground">{title}</h3>
+      {children}
+    </section>
+  )
+}
+
+/** A slider with the names of its two ends under it. */
+function Dial({
+  label,
+  low,
+  high,
+  value,
+  max,
+  onChange,
+}: {
+  label: string
+  low: string
+  high: string
+  value: number
+  max: number
+  onChange: (value: number) => void
+}) {
+  return (
+    <div className="flex flex-col gap-1">
+      <InsetSlider
+        aria-label={label}
+        min={0}
+        max={max}
+        step={1}
+        value={value}
+        onValueChange={(next) => onChange(first(next))}
+      />
+      <div className="flex justify-between text-caption text-muted-foreground">
+        <span>{low}</span>
+        <span>{high}</span>
+      </div>
+    </div>
+  )
+}
 
 /**
- * The Simple level: the few settings most themes start with. It only reads and
- * writes the draft the Advanced tools use, so the two always agree.
+ * The Simple level: a handful of dials, each of which sets many tokens. It
+ * only reads and writes the draft the Advanced tools use, so the two always
+ * agree.
  */
 export function SimplePanel({
   draft,
   mode,
   density,
   onDensityChange,
+  presets,
+  preset,
+  onPresetChange,
   advancedChanges,
   onAdvanced,
 }: {
@@ -57,147 +120,158 @@ export function SimplePanel({
   mode: Mode
   density: Density
   onDensityChange: (density: Density) => void
-  /** Settings changed outside the four Simple controls. */
+  presets: { label: string; value: string }[]
+  preset: string
+  onPresetChange: (preset: string) => void
+  /** Settings changed that no Simple control covers. */
   advancedChanges: number
   onAdvanced: () => void
 }) {
-  const { theme, shape, type, setColor, resetColor, setShape, setType } = draft
-  const [format, setFormat] = React.useState<ColorFormat>("oklch")
-  const [open, setOpen] = React.useState(false)
-
-  const radiusPx = toPx(shape.radius, shape)
-  const pinned = familyRadii.some((token) => shapeChanged(token, shape[token]))
-  const radiusValue =
-    radii.includes(radiusPx) && !pinned ? String(radiusPx) : ""
-
-  const tint = draft.dials.neutrals.hue === hues.cool ? "cool" : "warm"
+  const { theme, type, dials, setColor, resetColor } = draft
+  const [format, setFormat] = React.useState<ColorFormat>("hex")
   const colors = theme[mode]
-  const brandEdited =
-    draft.overridden("light", "brand") || draft.overridden("dark", "brand")
-  const pair = {
-    foreground: colors["brand-ink"],
-    background: colors.brand,
-  }
 
   // One brand colour for both modes; tune the dark one in Advanced.
   const setBrand = (value: Color) => {
-    setColor("light", "brand", value)
-    setColor("dark", "brand", value)
+    for (const each of modes) setColor(each, "brand", value)
   }
 
-  return (
-    <div className="flex flex-col">
-      <div className="sticky top-0 z-10 flex h-12 shrink-0 items-center bg-sidebar">
-        <h2 className="text-title font-medium text-foreground">Basics</h2>
-      </div>
+  // Primary either follows Brand or is held at Nova's own neutral.
+  const primary = sameColor(colors.primary, defaults[mode].primary)
+    ? "neutral"
+    : "brand"
+  const setPrimary = (value: string) => {
+    for (const each of modes)
+      for (const token of ["primary", "primary-foreground"]) {
+        if (value === "neutral") setColor(each, token, defaults[each][token])
+        else resetColor(each, token)
+      }
+  }
 
-      <div className="flex flex-col gap-3 border-b border-border pb-3">
-        <ColorSelector
-          label="Brand"
+  const tint: Tint =
+    dials.neutrals.strength <= 0
+      ? "mono"
+      : dials.neutrals.hue === hues.cool
+        ? "cool"
+        : "warm"
+
+  return (
+    <div className="flex flex-col gap-6 py-4">
+      <Section title="Preset">
+        <ChoiceSelect
+          label="Preset"
+          items={presets}
+          value={preset}
+          onChange={onPresetChange}
+          className="w-full"
+        />
+      </Section>
+
+      <Separator />
+
+      <Section title="Atmosphere">
+        <Dial
+          label="Density, comfortable to compact"
+          low="Comfortable"
+          high="Compact"
+          max={1}
+          value={density === "compact" ? 1 : 0}
+          onChange={(value) =>
+            onDensityChange(value ? "compact" : "comfortable")
+          }
+        />
+        <Dial
+          label="Tone, quiet to bold"
+          low="Quiet"
+          high="Bold"
+          max={10}
+          value={Math.round(dials.tone * 5) + 5}
+          onChange={(value) => draft.setTone((value - 5) / 5)}
+        />
+      </Section>
+
+      <Section title="Motion">
+        <SegmentedControl
+          size="sm"
+          className="w-full"
+          label="Motion"
+          options={motionOptions}
+          value={dials.motion}
+          onValueChange={draft.setMotionDial}
+        />
+      </Section>
+
+      <Separator />
+
+      <Section title="Typography">
+        <div
+          role="listbox"
+          aria-label="Typeface"
+          className="flex flex-col gap-0.5 rounded-control border border-border p-1"
+        >
+          {fonts.map((font) => {
+            const selected = type["typeface-sans"] === font.value
+            return (
+              <button
+                key={font.label}
+                type="button"
+                role="option"
+                aria-selected={selected}
+                onClick={() => draft.setType("typeface-sans", font.value)}
+                style={{ fontFamily: font.value }}
+                className={cn(
+                  "flex h-control-sm items-center justify-between rounded-item px-2.5 text-body text-foreground outline-none hover:bg-muted focus-visible:bg-muted",
+                  selected && "bg-muted"
+                )}
+              >
+                {font.label}
+                {selected && <CheckIcon className="size-4" />}
+              </button>
+            )
+          })}
+        </div>
+      </Section>
+
+      <Separator />
+
+      <Section title="Color">
+        <ColorPicker
           value={colors.brand}
-          description={rowOf.brand?.note}
-          contrast={pair}
-          dependents={(rowOf.brand?.feeds ?? []).map((token) => ({
-            label: rowOf[token]?.label ?? token,
-            value: colors[token] ?? colors.brand,
-          }))}
           format={format}
           onFormatChange={setFormat}
-          edited={brandEdited}
-          onReset={() => {
-            resetColor("light", "brand")
-            resetColor("dark", "brand")
-          }}
-          open={open}
-          onOpenChange={setOpen}
           onValueChange={setBrand}
         />
-      </div>
+      </Section>
 
-      <div className="flex flex-col gap-1 border-b border-border py-3">
-        <SettingItem
+      <Section title="Primary">
+        <SegmentedControl
+          size="sm"
+          className="w-full"
+          label="Primary"
+          options={primaryOptions}
+          value={primary}
+          onValueChange={setPrimary}
+        />
+      </Section>
+
+      <Section title="Neutrals">
+        <SegmentedControl
+          size="sm"
+          className="w-full"
           label="Neutrals"
-          note="Tints the greys: surfaces, fills, borders and text."
-          edited={draft.dials.neutrals.strength > 0}
-          onReset={() =>
-            draft.setNeutrals({ ...draft.dials.neutrals, strength: 0 })
-          }
-        >
-          <SegmentedControl
-            size="sm"
-            label="Neutrals tint"
-            options={tints}
-            value={tint}
-            onValueChange={(value) =>
-              draft.setNeutrals({ ...draft.dials.neutrals, hue: hues[value] })
-            }
-          />
-        </SettingItem>
-        <InsetSlider
-          aria-label="Neutrals strength"
-          min={0}
-          max={10}
-          step={1}
-          ticks
-          value={Math.round(draft.dials.neutrals.strength * 10)}
+          options={tintOptions}
+          value={tint}
           onValueChange={(value) =>
-            draft.setNeutrals({
-              ...draft.dials.neutrals,
-              strength: (Array.isArray(value) ? value[0] : value) / 10,
-            })
+            draft.setNeutrals(
+              value === "mono"
+                ? { ...dials.neutrals, strength: 0 }
+                : { hue: hues[value], strength: tintStrength }
+            )
           }
         />
+      </Section>
 
-        <SettingItem
-          label="Corner radius"
-          note="How round corners are, in px. One value drives every corner."
-          edited={shapeChanged("radius", shape.radius)}
-          onReset={() => draft.resetShape(["radius"])}
-        >
-          <SegmentedControl
-            size="sm"
-            label="Corner radius in px"
-            options={radiusOptions}
-            value={radiusValue}
-            onValueChange={(value) => setShape("radius", toCss(Number(value)))}
-          />
-        </SettingItem>
-        {!radiusValue && (
-          <p className="text-caption text-muted-foreground">
-            Custom corners are set in Advanced.
-          </p>
-        )}
-
-        <SettingItem
-          label={densitySetting.label}
-          note={densitySetting.note}
-          edited={false}
-          onReset={() => {}}
-        >
-          <ChoiceSelect
-            label={densitySetting.label}
-            items={densityOptions}
-            value={density}
-            onChange={(value) => onDensityChange(value as Density)}
-          />
-        </SettingItem>
-
-        <SettingItem
-          label="Font"
-          note="The typeface for interface text."
-          edited={typeChanged("typeface-sans", type["typeface-sans"])}
-          onReset={() => draft.resetType(["typeface-sans"])}
-        >
-          <ChoiceSelect
-            label="Font"
-            items={fontOptions["typeface-sans"]}
-            value={type["typeface-sans"]}
-            onChange={(value) => setType("typeface-sans", value)}
-          />
-        </SettingItem>
-      </div>
-
-      <div className="flex flex-col items-start gap-2 py-3">
+      <div className="flex flex-col items-start gap-2 border-t border-border pt-4">
         {advancedChanges > 0 && (
           <p className="text-caption text-muted-foreground">
             {advancedChanges} more{" "}
