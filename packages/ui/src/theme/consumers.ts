@@ -53,6 +53,7 @@ export const settingConsumers: Record<string, string[]> = {
     "navigation-menu",
     "resizable",
     "scroll-area",
+    "segmented-control",
     "select",
     "separator",
   ],
@@ -422,6 +423,8 @@ export const settingConsumers: Record<string, string[]> = {
   "--sidebar-accent-foreground": ["sidebar"],
   "--sidebar-border": ["sidebar"],
   "--sidebar-foreground": ["sidebar"],
+  "--sidebar-primary": ["sidebar"],
+  "--sidebar-primary-foreground": ["sidebar"],
   "--sidebar-ring": ["sidebar"],
   "--type-body": [
     "accordion",

@@ -77,7 +77,7 @@ const toneNames = [
 
 // How strongly Brand color tints the greys: enough to read as branded, not as
 // coloured. Near white a tint needs more than a mid grey to show at all.
-const tintStrength = 1.2
+const tintStrength = 1.5
 
 const first = (value: number | readonly number[]) =>
   typeof value === "number" ? value : value[0]

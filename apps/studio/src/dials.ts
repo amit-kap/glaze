@@ -74,6 +74,14 @@ const reach = (lightness: number) =>
   Math.min(1, Math.max(0.25, 1 - Math.abs(lightness - 55) / 60))
 
 /**
+ * For a tint toward the brand: the surfaces (near white, or near black in dark
+ * mode) carry all of it, since that is where a tint reads as branded; the mid
+ * greys of text and lines carry half.
+ */
+const surfaceReach = (lightness: number) =>
+  lightness >= 85 || lightness <= 30 ? 1 : 0.5
+
+/**
  * One neutral as the dial makes it: Nova's lightness and opacity kept, the hue
  * set to the dial's and chroma added in proportion to strength. At strength 0
  * it is Nova's own value.
@@ -81,18 +89,30 @@ const reach = (lightness: number) =>
 export function neutralFor(
   mode: Mode,
   token: string,
-  { hue, strength }: NeutralsDial
+  { hue, strength, brand }: NeutralsDial
 ): Color {
   const base = defaults[mode][token]
   if (strength <= 0) return base
   const parsed = parseColor(base)
   if (!parsed) return base
   const { l, c } = rgbaToOklch(parsed)
-  // oklchToRgba already clamps each channel to the sRGB gamut.
-  return formatColor(
-    oklchToRgba(l, c + strength * maxChroma * reach(l), hue, parsed.a),
-    "oklch"
-  )
+  const want = c + strength * maxChroma * (brand ? surfaceReach(l) : reach(l))
+  return formatColor(fitChroma(l, want, hue, parsed.a), "oklch")
+}
+
+/**
+ * The colour at this lightness and hue with as much of the wanted chroma as
+ * fits in sRGB. oklchToRgba clamps each channel on its own, which drags the
+ * hue off (a blue tint turns teal), so chroma is reduced until nothing clamps.
+ */
+function fitChroma(l: number, chroma: number, hue: number, alpha: number) {
+  let c = chroma
+  for (let step = 0; step < 24; step++) {
+    const color = oklchToRgba(l, c, hue, alpha)
+    if (Math.abs(rgbaToOklch(color).c - c) < 0.0015) return color
+    c *= 0.9
+  }
+  return oklchToRgba(l, 0, hue, alpha)
 }
 
 // --- Tone: one slider from quiet to bold ------------------------------------
@@ -182,6 +202,7 @@ export function generatedFor(
     ? neutralFor(mode, token, {
         hue: hue ?? 0,
         strength: hue === null ? 0 : dials.neutrals.strength,
+        brand: dials.neutrals.brand,
       })
     : (lent ?? defaults[mode][token])
   return toneColor(mode, token, base, dials.tone)
@@ -204,6 +225,7 @@ function brandTint(
   return neutralFor(mode, token, {
     hue,
     strength: tone * brandTintStrength,
+    brand: true,
   })
 }
 
