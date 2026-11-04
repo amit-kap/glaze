@@ -143,8 +143,18 @@ function Dial({
           onValueChange={(next) => onChange(first(next))}
         />
       </div>
-      <div className="flex justify-between text-caption text-muted-foreground">
+      <div className="relative flex justify-between text-caption text-muted-foreground">
         <span>{low}</span>
+        {/* A tick at the middle marks Nova; pressing it resets the slider. */}
+        <button
+          type="button"
+          aria-label={`Reset ${label}`}
+          title="Reset"
+          onClick={() => onChange(max / 2)}
+          className="absolute inset-y-0 left-1/2 flex -translate-x-1/2 items-center px-2 outline-none focus-visible:text-foreground"
+        >
+          <span className="h-3 w-px bg-muted-foreground" />
+        </button>
         <span>{high}</span>
       </div>
     </div>
