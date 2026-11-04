@@ -424,7 +424,6 @@ export const settingConsumers: Record<string, string[]> = {
   "--sidebar-border": ["sidebar"],
   "--sidebar-foreground": ["sidebar"],
   "--sidebar-primary": ["sidebar"],
-  "--sidebar-primary-foreground": ["sidebar"],
   "--sidebar-ring": ["sidebar"],
   "--type-body": [
     "accordion",
