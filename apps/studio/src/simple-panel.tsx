@@ -41,6 +41,36 @@ const tintOptions: { value: Tint; label: string }[] = [
   { value: "cool", label: "Cool" },
 ]
 
+// A name for each of the 11 places on the scale and tone sliders. The middle
+// is Nova; the scale runs from the roomiest to the tightest.
+const scaleNames = [
+  "3XL",
+  "2XL",
+  "XL",
+  "L",
+  "M+",
+  "M",
+  "M−",
+  "S",
+  "XS",
+  "2XS",
+  "3XS",
+]
+
+const toneNames = [
+  "Whisper",
+  "Hushed",
+  "Quiet",
+  "Soft",
+  "Mellow",
+  "Even",
+  "Firm",
+  "Sturdy",
+  "Strong",
+  "Bold",
+  "Loud",
+]
+
 // How strongly Warm and Cool tint the neutrals.
 const tintStrength = 0.5
 
@@ -99,16 +129,20 @@ function Dial({
   onChange: (value: number) => void
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <InsetSlider
-        aria-label={label}
-        min={0}
-        max={max}
-        step={1}
-        ticks
-        value={value}
-        onValueChange={(next) => onChange(first(next))}
-      />
+    <div className="flex flex-col gap-1.5">
+      {/* The control is taller than its track for a bigger hit area; pull
+          that padding back so the title and the labels sit against the track. */}
+      <div className="-my-2.5">
+        <InsetSlider
+          aria-label={label}
+          min={0}
+          max={max}
+          step={1}
+          ticks
+          value={value}
+          onValueChange={(next) => onChange(first(next))}
+        />
+      </div>
       <div className="flex justify-between text-caption text-muted-foreground">
         <span>{low}</span>
         <span>{high}</span>
@@ -271,7 +305,10 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
 
       <Separator />
 
-      <Section title="Scale">
+      <Section
+        title="Scale"
+        aside={scaleNames[Math.round(dials.scale * 5) + 5]}
+      >
         <Dial
           label="Scale, comfortable to compact"
           low="Comfortable"
@@ -282,7 +319,7 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
         />
       </Section>
 
-      <Section title="Tone">
+      <Section title="Tone" aside={toneNames[Math.round(dials.tone * 5) + 5]}>
         <Dial
           label="Tone, quiet to bold"
           low="Quiet"
