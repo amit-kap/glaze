@@ -25,8 +25,9 @@
     "paths": {
       "@amit-kap/glaze/theme": ["../../packages/ui/src/lib/theme.tsx"],
       "@/*": ["./src/*"],
+      "@showcase/*": ["../showcase/src/*"],
       "@amit-kap/glaze/*": ["../../packages/ui/src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "../showcase/src/tiles.tsx", "../showcase/src/demos"]
 }

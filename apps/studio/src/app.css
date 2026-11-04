@@ -1,4 +1,7 @@
 @import "@amit-kap/glaze/globals.css";
+/* The Components tab renders the showcase tiles, whose classes live there. */
+@source "../../showcase/src/tiles.tsx";
+@source "../../showcase/src/demos";
 
 html,
 body,

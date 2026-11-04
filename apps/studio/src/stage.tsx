@@ -12,6 +12,7 @@ import { PortalContainer } from "@amit-kap/glaze/components/portal-container"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Checkout } from "./checkout"
+import { ComponentsScreen } from "./components-screen"
 import { Dashboard } from "./dashboard"
 import { DataTableScreen } from "./data-table-screen"
 import { Harness } from "./harness"
@@ -22,7 +23,8 @@ import { shapeVars, type Density, type ShapeValues } from "./shape"
 import { typeVars, type TypeValues } from "./typography"
 
 type Width = "fit" | "768" | "390"
-type Screen = "dashboard" | "table" | "checkout" | "harness" | "landing"
+type Screen =
+  "dashboard" | "table" | "checkout" | "harness" | "landing" | "components"
 
 const screens: { id: Screen; label: string }[] = [
   { id: "dashboard", label: "Dashboard" },
@@ -30,6 +32,7 @@ const screens: { id: Screen; label: string }[] = [
   { id: "checkout", label: "Checkout" },
   { id: "harness", label: "Harness" },
   { id: "landing", label: "Landing" },
+  { id: "components", label: "Components" },
 ]
 
 const modes: { value: Mode; label: string }[] = [
@@ -43,6 +46,7 @@ const preview: Record<Screen, React.ReactNode> = {
   checkout: <Checkout />,
   harness: <Harness />,
   landing: <Landing />,
+  components: <ComponentsScreen />,
 }
 
 /** A preview width as an icon, named for the pointer and for assistive tech. */

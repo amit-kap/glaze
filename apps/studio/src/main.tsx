@@ -7,6 +7,7 @@ import "@fontsource-variable/figtree"
 import "@fontsource-variable/noto-sans"
 import "@fontsource-variable/playfair-display"
 import "@fontsource-variable/jetbrains-mono"
+import { Toaster } from "@amit-kap/glaze/components/toast"
 import { TooltipProvider } from "@amit-kap/glaze/components/tooltip"
 import { App } from "./app"
 
@@ -14,6 +15,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <TooltipProvider>
       <App />
+      <Toaster />
     </TooltipProvider>
   </StrictMode>
 )
