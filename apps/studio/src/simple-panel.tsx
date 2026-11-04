@@ -1,7 +1,6 @@
 import * as React from "react"
 import { CheckIcon } from "lucide-react"
 
-import { Button } from "@amit-kap/glaze/components/button"
 import { Card, CardContent } from "@amit-kap/glaze/components/card"
 import { InsetSlider } from "@amit-kap/glaze/components/inset-slider"
 import { SegmentedControl } from "@amit-kap/glaze/components/segmented-control"
@@ -11,7 +10,14 @@ import { cn } from "@amit-kap/glaze/lib/utils"
 import { hues, type MotionDial } from "./dials"
 import { palette } from "./palette"
 import type { Draft } from "./draft"
-import { canonical, defaults, sameColor, type Color, type Mode } from "./theme"
+import {
+  autoInk,
+  canonical,
+  defaults,
+  sameColor,
+  type Color,
+  type Mode,
+} from "./theme"
 import { fontOptions } from "./typography"
 
 const modes: Mode[] = ["light", "dark"]
@@ -51,47 +57,30 @@ const first = (value: number | readonly number[]) =>
 
 function Section({
   title,
+  aside,
   children,
 }: {
   title: string
+  /** Sits on the title row, at the end: a readout of the current choice. */
+  aside?: React.ReactNode
   children: React.ReactNode
 }) {
   return (
-    <section className="flex flex-col gap-3">
-      <h3 className="text-body font-medium text-foreground">{title}</h3>
+    <section className="flex flex-col gap-2">
+      <div className="flex items-baseline justify-between gap-2">
+        <h3 className="text-body font-medium text-foreground">{title}</h3>
+        {aside && (
+          <span className="text-caption text-muted-foreground">{aside}</span>
+        )}
+      </div>
       {children}
     </section>
   )
 }
 
-/** One brand swatch: a square of the color, ringed when it is the brand. */
-function Swatch({
-  name,
-  value,
-  selected,
-  onSelect,
-}: {
-  name: string
-  value: string
-  selected: boolean
-  onSelect: () => void
-}) {
-  return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={selected}
-      aria-label={name}
-      title={name}
-      onClick={onSelect}
-      style={{ backgroundColor: value }}
-      className={cn(
-        "size-5 shrink-0 rounded-item-sm ring-offset-2 ring-offset-card transition-shadow outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        selected && "ring-2 ring-foreground"
-      )}
-    />
-  )
-}
+/** Whether the brand is an edit no palette entry matches. */
+const brandChoiceCustom = (brand: Color, edited: boolean) =>
+  edited && !palette.some((color) => sameColor(brand, canonical(color.value)))
 
 /** A slider with the names of its two ends under it. */
 function Dial({
@@ -133,18 +122,7 @@ function Dial({
  * only reads and writes the draft the Advanced tools use, so the two always
  * agree.
  */
-export function SimplePanel({
-  draft,
-  mode,
-  advancedChanges,
-  onAdvanced,
-}: {
-  draft: Draft
-  mode: Mode
-  /** Settings changed that no Simple control covers. */
-  advancedChanges: number
-  onAdvanced: () => void
-}) {
+export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
   const { theme, type, dials, setColor, resetColor } = draft
   const colors = theme[mode]
 
@@ -154,6 +132,19 @@ export function SimplePanel({
   const resetBrand = () => {
     for (const each of modes) resetColor(each, "brand")
   }
+
+  // Nova's own brand, then Tailwind's 500s. A brand set elsewhere reads Custom.
+  const brandOptions = [
+    { name: "Nova", value: defaults.light.brand },
+    ...palette,
+  ]
+  const brandChoice = !brandEdited
+    ? "Nova"
+    : brandChoiceCustom(colors.brand, brandEdited)
+      ? "Custom"
+      : palette.find((color) =>
+          sameColor(colors.brand, canonical(color.value))
+        )!.name
 
   // One brand colour for both modes; tune the dark one in Advanced.
   const setBrand = (value: Color) => {
@@ -181,7 +172,105 @@ export function SimplePanel({
         : "warm"
 
   return (
-    <div className="flex flex-col gap-6 py-4">
+    <div className="flex flex-col gap-8 py-6">
+      <Section title="Color" aside={brandChoice}>
+        <Card size="sm">
+          <CardContent className="flex flex-col gap-3">
+            {/* Nova and the 17 colours fill two rows; the nine neutrals the third. */}
+            <div
+              role="radiogroup"
+              aria-label="Brand color"
+              className="grid grid-cols-9 justify-items-center gap-y-3"
+            >
+              {brandOptions.map((option) => {
+                const selected = option.name === brandChoice
+                return (
+                  <button
+                    key={option.name}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    aria-label={option.name}
+                    title={option.name}
+                    onClick={() =>
+                      option.name === "Nova"
+                        ? resetBrand()
+                        : setBrand(option.value)
+                    }
+                    style={{
+                      backgroundColor: option.value,
+                      color: autoInk(canonical(option.value)),
+                    }}
+                    className="grid size-7 place-items-center rounded-pill shadow-[inset_0_0_0_1px_rgb(0_0_0/0.1)] transition-transform outline-none hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    {selected && <CheckIcon className="size-4" />}
+                  </button>
+                )
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <Section title="Typography">
+        <div
+          role="listbox"
+          aria-label="Typeface"
+          className="flex flex-col gap-0.5 rounded-control border border-border bg-background p-1"
+        >
+          {fonts.map((font) => {
+            const selected = type["typeface-sans"] === font.value
+            return (
+              <button
+                key={font.label}
+                type="button"
+                role="option"
+                aria-selected={selected}
+                onClick={() => draft.setType("typeface-sans", font.value)}
+                style={{ fontFamily: font.value }}
+                className={cn(
+                  "flex h-control-sm items-center justify-between rounded-item px-2.5 text-body text-foreground outline-none hover:bg-muted focus-visible:bg-muted",
+                  selected && "bg-muted"
+                )}
+              >
+                {font.label}
+                {selected && <CheckIcon className="size-4" />}
+              </button>
+            )
+          })}
+        </div>
+      </Section>
+
+      <Section title="Primary">
+        <SegmentedControl
+          size="sm"
+          className="w-full"
+          label="Primary"
+          options={primaryOptions}
+          value={primary}
+          onValueChange={setPrimary}
+        />
+      </Section>
+
+      <Section title="Neutrals">
+        <SegmentedControl
+          size="sm"
+          className="w-full"
+          label="Neutrals"
+          options={tintOptions}
+          value={tint}
+          onValueChange={(value) =>
+            draft.setNeutrals(
+              value === "mono"
+                ? { ...dials.neutrals, strength: 0 }
+                : { hue: hues[value], strength: tintStrength }
+            )
+          }
+        />
+      </Section>
+
+      <Separator />
+
       <Section title="Scale">
         <Dial
           label="Scale, comfortable to compact"
@@ -214,111 +303,6 @@ export function SimplePanel({
           onValueChange={draft.setMotionDial}
         />
       </Section>
-
-      <Separator />
-
-      <Section title="Typography">
-        <div
-          role="listbox"
-          aria-label="Typeface"
-          className="flex flex-col gap-0.5 rounded-control border border-border bg-background p-1"
-        >
-          {fonts.map((font) => {
-            const selected = type["typeface-sans"] === font.value
-            return (
-              <button
-                key={font.label}
-                type="button"
-                role="option"
-                aria-selected={selected}
-                onClick={() => draft.setType("typeface-sans", font.value)}
-                style={{ fontFamily: font.value }}
-                className={cn(
-                  "flex h-control-sm items-center justify-between rounded-item px-2.5 text-body text-foreground outline-none hover:bg-muted focus-visible:bg-muted",
-                  selected && "bg-muted"
-                )}
-              >
-                {font.label}
-                {selected && <CheckIcon className="size-4" />}
-              </button>
-            )
-          })}
-        </div>
-      </Section>
-
-      <Separator />
-
-      <Section title="Color">
-        <Card size="sm">
-          <CardContent>
-            <div
-              role="radiogroup"
-              aria-label="Brand color"
-              className="flex flex-wrap gap-2.5"
-            >
-              <Swatch
-                name="Nova"
-                value={defaults.light.brand}
-                selected={!brandEdited}
-                onSelect={resetBrand}
-              />
-              {palette.map((color) => (
-                <Swatch
-                  key={color.name}
-                  name={color.name}
-                  value={color.value}
-                  selected={
-                    brandEdited &&
-                    sameColor(colors.brand, canonical(color.value))
-                  }
-                  onSelect={() => setBrand(color.value)}
-                />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <Section title="Primary">
-        <SegmentedControl
-          size="sm"
-          className="w-full"
-          label="Primary"
-          options={primaryOptions}
-          value={primary}
-          onValueChange={setPrimary}
-        />
-      </Section>
-
-      <Section title="Neutrals">
-        <SegmentedControl
-          size="sm"
-          className="w-full"
-          label="Neutrals"
-          options={tintOptions}
-          value={tint}
-          onValueChange={(value) =>
-            draft.setNeutrals(
-              value === "mono"
-                ? { ...dials.neutrals, strength: 0 }
-                : { hue: hues[value], strength: tintStrength }
-            )
-          }
-        />
-      </Section>
-
-      <div className="flex flex-col items-start gap-2 border-t border-border pt-4">
-        {advancedChanges > 0 && (
-          <p className="text-caption text-muted-foreground">
-            {advancedChanges} more{" "}
-            {advancedChanges === 1 ? "setting" : "settings"} changed in
-            Advanced.
-          </p>
-        )}
-        <Button variant="outline" size="sm" onClick={onAdvanced}>
-          Edit all settings
-        </Button>
-      </div>
     </div>
   )
 }

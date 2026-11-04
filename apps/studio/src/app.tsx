@@ -10,14 +10,7 @@ import {
 import { Panel } from "./panel"
 import { Rail, type Tool } from "./rail"
 import { Stage } from "./stage"
-import {
-  dialMotionTokens,
-  dialTokens,
-  scaleShapeTokens,
-  scaleTypeTokens,
-  toneComponentVars,
-  toneTypeTokens,
-} from "./dials"
+import { toneComponentVars } from "./dials"
 import { SimplePanel } from "./simple-panel"
 import { TopBar } from "./top-bar"
 
@@ -40,40 +33,6 @@ export function App() {
   const [name, setName] = React.useState("")
   const [saved, setSaved] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
-
-  // What the Simple controls cover directly, so Simple can say what it isn't
-  // showing: brand in either mode and the sans typeface.
-  const simpleChanges =
-    Number(draft.overridden("light", "brand")) +
-    Number(draft.overridden("dark", "brand")) +
-    Number(typeChanged("typeface-sans", draft.type["typeface-sans"]))
-  // Colours and type a dial generates are one change, not one per token.
-  const dialled =
-    (["light", "dark"] as const).reduce(
-      (n, mode) =>
-        n +
-        dialTokens.filter(
-          (token) =>
-            !draft.unlinked[mode].includes(token) &&
-            draft.overridden(mode, token)
-        ).length,
-      0
-    ) +
-    [
-      ...(draft.dials.tone === 0 ? [] : toneTypeTokens),
-      ...(draft.dials.scale === 0 ? [] : scaleTypeTokens),
-    ].filter((token) => typeChanged(token, draft.type[token])).length +
-    (draft.dials.scale === 0
-      ? 0
-      : scaleShapeTokens.filter((token) =>
-          shapeChanged(token, draft.shape[token])
-        ).length) +
-    (draft.dials.motion === "none"
-      ? 0
-      : dialMotionTokens.filter((token) =>
-          motionChanged(token, draft.motion[token])
-        ).length)
-  const advancedChanges = Math.max(0, draft.changes - simpleChanges - dialled)
 
   const save = React.useCallback(() => {
     localStorage.setItem(
@@ -194,12 +153,7 @@ export function App() {
           >
             {level === "simple" ? (
               <div className="flex h-full min-h-0 flex-col overflow-y-auto bg-sidebar p-2 px-4">
-                <SimplePanel
-                  draft={draft}
-                  mode={mode}
-                  advancedChanges={advancedChanges}
-                  onAdvanced={() => setLevel("advanced")}
-                />
+                <SimplePanel draft={draft} mode={mode} />
               </div>
             ) : (
               <div className="flex h-full min-h-0 flex-col bg-sidebar">
