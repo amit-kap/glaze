@@ -13,7 +13,7 @@ import ts from "typescript"
 
 const root = new URL("..", import.meta.url).pathname
 const dir = join(root, "packages/ui/src/components/")
-const consumers = ["apps/storybook/src/stories", "apps/showcase/src"].map((d) => join(root, d))
+const consumers = ["apps/storybook/src/stories", "apps/showcase/src", "apps/studio/src"].map((d) => join(root, d))
 
 const ALLOWLIST = new Set([])
 

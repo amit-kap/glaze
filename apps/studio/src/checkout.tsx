@@ -141,7 +141,7 @@ export function Checkout() {
             A
           </div>
           <div>
-            <h2 className="text-heading leading-tight font-medium">Checkout</h2>
+            <h2 className="text-heading font-medium">Checkout</h2>
             <p className="text-caption text-muted-foreground">
               Complete your purchase securely
             </p>
@@ -325,15 +325,13 @@ export function Checkout() {
               )}
               {cart.map((item) => (
                 <div key={item.id} className="flex gap-3">
-                  <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground [&_svg]:size-6">
+                  <div className="flex size-14 shrink-0 items-center justify-center rounded-container bg-muted text-muted-foreground [&_svg]:size-6">
                     <item.icon />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex justify-between gap-2">
                       <div className="min-w-0">
-                        <p className="text-caption leading-snug font-medium">
-                          {item.name}
-                        </p>
+                        <p className="text-caption font-medium">{item.name}</p>
                         <p className="text-micro text-muted-foreground">
                           {item.detail}
                         </p>

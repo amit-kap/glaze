@@ -136,7 +136,7 @@ export function App() {
       <div className="flex min-h-0 flex-1 px-4 pb-4">
         <ResizablePanelGroup
           orientation="horizontal"
-          className="min-h-0 overflow-hidden rounded-lg border bg-background"
+          className="min-h-0 overflow-hidden rounded-container border bg-background"
         >
           {/* The panel keeps its shipped width as the floor, and may grow to
               half the editor — the stage always keeps the other half. */}

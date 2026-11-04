@@ -64,7 +64,7 @@ export function ShadowItem({
         />
       }
     >
-      <div className="flex h-24 items-center justify-center rounded-md bg-muted">
+      <div className="flex h-24 items-center justify-center rounded-control bg-muted">
         <div
           aria-hidden
           className="h-12 w-28 rounded-(--shape-container) bg-background"

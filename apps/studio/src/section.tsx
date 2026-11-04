@@ -49,7 +49,7 @@ export function PanelSection({
             <span
               aria-hidden={!expanded}
               className={cn(
-                "grid w-full text-left transition-[grid-template-rows,margin-top] duration-(--duration-moderate) ease-standard",
+                "grid w-full text-start transition-[grid-template-rows,margin-top] duration-(--duration-moderate) ease-standard",
                 expanded && "mt-1"
               )}
               style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}

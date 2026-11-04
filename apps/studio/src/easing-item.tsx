@@ -167,7 +167,7 @@ function CurveEditor({
       role="group"
       aria-label={`${label} curve`}
       viewBox={`0 0 ${W} ${H}`}
-      className="h-auto w-full touch-none rounded-md bg-muted text-foreground"
+      className="h-auto w-full touch-none rounded-control bg-muted text-foreground"
     >
       <Curve easing={value} width={W} height={H} lo={LO} hi={HI} pad={pad}>
         {({ x, y }) =>

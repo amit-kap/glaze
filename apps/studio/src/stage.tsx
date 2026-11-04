@@ -13,6 +13,7 @@ import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Checkout } from "./checkout"
 import { Dashboard } from "./dashboard"
+import { DataTableScreen } from "./data-table-screen"
 import { Harness } from "./harness"
 import { Landing } from "./landing"
 import { cssVars, type Mode, type Theme } from "./theme"
@@ -38,13 +39,7 @@ const modes: { value: Mode; label: string }[] = [
 
 const preview: Record<Screen, React.ReactNode> = {
   dashboard: <Dashboard />,
-  table: (
-    <div className="flex h-full items-center justify-center p-6 text-center">
-      <p className="text-caption text-muted-foreground">
-        The Data table screen will live here.
-      </p>
-    </div>
-  ),
+  table: <DataTableScreen />,
   checkout: <Checkout />,
   harness: <Harness />,
   landing: <Landing />,
@@ -187,7 +182,7 @@ export function Stage({
                   <TabsContent
                     key={item.id}
                     value={item.id}
-                    className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
+                    className="h-full min-h-0 overflow-hidden rounded-container border border-border bg-background"
                   >
                     {preview[item.id]}
                   </TabsContent>

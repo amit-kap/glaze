@@ -39,6 +39,7 @@ import {
   YAxis,
 } from "recharts"
 
+import { cn } from "@amit-kap/glaze/lib/utils"
 import { Avatar, AvatarFallback } from "@amit-kap/glaze/components/avatar"
 import { Badge } from "@amit-kap/glaze/components/badge"
 import { Button } from "@amit-kap/glaze/components/button"
@@ -62,6 +63,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@amit-kap/glaze/components/collapsible"
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@amit-kap/glaze/components/item"
 import {
   InputGroup,
   InputGroupAddon,
@@ -203,19 +211,17 @@ function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-2.5">
-          <div className="flex size-8 items-center justify-center rounded-control bg-brand text-caption font-medium text-brand-ink">
-            A
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-caption leading-tight font-medium">
-              Acme Store
-            </p>
-            <p className="truncate text-micro text-muted-foreground">
-              Ecommerce
-            </p>
-          </div>
-        </div>
+        <Item size="xs" className="p-0">
+          <ItemMedia>
+            <div className="flex size-8 items-center justify-center rounded-control bg-brand text-caption font-medium text-brand-ink">
+              A
+            </div>
+          </ItemMedia>
+          <ItemContent className="min-w-0">
+            <ItemTitle className="text-caption">Acme Store</ItemTitle>
+            <ItemDescription className="text-micro">Ecommerce</ItemDescription>
+          </ItemContent>
+        </Item>
       </SidebarHeader>
 
       <SidebarContent>
@@ -234,18 +240,22 @@ function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <div className="flex items-center gap-2.5 p-1">
-          <Avatar size="sm">
-            <AvatarFallback className="text-micro">JW</AvatarFallback>
-          </Avatar>
-          <div className="min-w-0">
-            <p className="truncate text-caption leading-tight">Jack Walsh</p>
-            <p className="truncate text-micro text-muted-foreground">
+        <Item size="xs" className="p-1">
+          <ItemMedia>
+            <Avatar size="sm">
+              <AvatarFallback className="text-micro">JW</AvatarFallback>
+            </Avatar>
+          </ItemMedia>
+          <ItemContent className="min-w-0">
+            <ItemTitle className="text-caption font-normal">
+              Jack Walsh
+            </ItemTitle>
+            <ItemDescription className="text-micro">
               jack@acme.co
-            </p>
-          </div>
+            </ItemDescription>
+          </ItemContent>
           <ChevronDownIcon className="ms-auto size-4 text-muted-foreground" />
-        </div>
+        </Item>
       </SidebarFooter>
     </Sidebar>
   )
@@ -291,9 +301,7 @@ function Header() {
     <header className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border px-4 py-3">
       <SidebarTrigger aria-label="Toggle sidebar" />
       <div className="min-w-0">
-        <h2 className="text-body leading-tight font-medium">
-          Dashboard Overview
-        </h2>
+        <h2 className="text-body font-medium">Dashboard Overview</h2>
         <p className="text-micro text-muted-foreground">
           A summary for all the purchases, sales etc.
         </p>
@@ -344,15 +352,13 @@ function Stat({
   return (
     <Card size="sm" className="gap-0 py-3">
       <CardContent>
-        <p className="text-caption text-muted-foreground">{label}</p>
-        <p className="mt-1.5 text-heading leading-none font-medium tabular-nums">
-          {value}
-        </p>
+        <CardDescription className="text-caption">{label}</CardDescription>
+        <p className="mt-1.5 text-heading font-medium tabular-nums">{value}</p>
         <p
-          className="mt-3 flex items-center gap-1 text-micro"
-          style={{
-            color: tone === "up" ? "var(--severity-low)" : "var(--destructive)",
-          }}
+          className={cn(
+            "mt-3 flex items-center gap-1 text-micro",
+            tone === "up" ? "text-severity-low" : "text-destructive"
+          )}
         >
           {delta} vs last month
           {tone === "up" ? (
@@ -384,12 +390,10 @@ function RevenueChart() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="mb-2 text-heading leading-none font-medium tabular-nums">
-          $8,900.00
-        </p>
+        <p className="mb-2 text-heading font-medium tabular-nums">$8,900.00</p>
         <ChartContainer
           config={revenueConfig}
-          className="aspect-auto h-[200px] w-full"
+          className="aspect-auto h-50 w-full"
         >
           <BarChart
             accessibilityLayer
@@ -469,7 +473,7 @@ function PipelineChart() {
       <CardContent className="grid grid-cols-2 gap-4">
         {(["orders", "sales"] as const).map((key) => (
           <div key={key} className="min-w-0">
-            <p className="text-heading leading-none font-medium tabular-nums">
+            <p className="text-heading font-medium tabular-nums">
               {key === "orders" ? "3,980" : "$94.7K"}
             </p>
             <p className="mt-1 text-micro text-muted-foreground uppercase">
@@ -477,7 +481,7 @@ function PipelineChart() {
             </p>
             <ChartContainer
               config={pipelineConfig}
-              className="mt-3 aspect-auto h-[140px] w-full"
+              className="mt-3 aspect-auto h-35 w-full"
             >
               <AreaChart accessibilityLayer data={pipeline}>
                 <XAxis
@@ -521,7 +525,7 @@ function CategoryRadar() {
       <CardContent>
         <ChartContainer
           config={categoryConfig}
-          className="mx-auto aspect-square h-[200px]"
+          className="mx-auto aspect-square h-50"
         >
           <RadarChart data={categories} outerRadius="62%">
             <ChartTooltip content={<ChartTooltipContent />} />
@@ -557,7 +561,7 @@ function TrafficHeatmap() {
           ].map(([name, level]) => (
             <span key={name} className="flex items-center gap-1">
               <span
-                className="size-2 rounded-pill bg-foreground"
+                className="size-2 rounded-pill bg-chart-1"
                 style={{ opacity: Number(level) }}
               />
               {name}
@@ -573,7 +577,7 @@ function TrafficHeatmap() {
               {row.weeks.map((value, week) => (
                 <span
                   key={week}
-                  className="h-5 rounded-item bg-foreground"
+                  className="h-5 rounded-item bg-chart-1"
                   style={{ opacity: 0.12 + value * 0.88 }}
                 />
               ))}
@@ -610,13 +614,13 @@ function OrderStatus() {
       <CardHeader>
         <CardTitle className="text-caption">Orders by channel</CardTitle>
         <CardDescription className="text-micro">
-          Orders by channel
+          Where orders come from
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer
           config={statusConfig}
-          className="mx-auto aspect-auto h-[240px] w-full"
+          className="mx-auto aspect-auto h-60 w-full"
         >
           <PieChart>
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
