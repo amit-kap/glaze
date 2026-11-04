@@ -283,19 +283,16 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
 
       <Separator />
 
-      <Section
-        title="Typography"
-        aside={
-          <SegmentedControl
-            size="sm"
-            label="Font source"
-            options={fontSources}
-            value={fontSource}
-            onValueChange={setFontSource}
-          />
-        }
-      >
+      <Section title="Typography">
         <TypefacePicker draft={draft} source={fontSource} />
+        <SegmentedControl
+          size="sm"
+          className="w-full"
+          label="Font source"
+          options={fontSources}
+          value={fontSource}
+          onValueChange={setFontSource}
+        />
       </Section>
 
       <Separator />

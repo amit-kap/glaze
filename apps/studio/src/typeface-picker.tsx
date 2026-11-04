@@ -92,8 +92,7 @@ export function TypefacePicker({
   return (
     <Card size="sm">
       <CardContent className="flex flex-col gap-2">
-        {/* The top slot is the same height in both sources. */}
-        {source === "google" ? (
+        {source === "google" && (
           <Input
             type="search"
             size="sm"
@@ -105,10 +104,6 @@ export function TypefacePicker({
               setShown(chunk)
             }}
           />
-        ) : (
-          <p className="flex h-control-sm items-center px-2.5 text-caption text-muted-foreground">
-            Bundled with Glaze. Works offline.
-          </p>
         )}
         <div
           role="listbox"
