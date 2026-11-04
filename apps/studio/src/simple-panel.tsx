@@ -34,8 +34,8 @@ const fontSources: { value: FontSource; label: string }[] = [
 ]
 
 const primaryOptions = [
-  { value: "neutral", label: "Neutral" },
-  { value: "brand", label: "Same as Brand" },
+  { value: "neutral", label: "Neutral color" },
+  { value: "brand", label: "Brand color" },
 ]
 
 type Tint = "mono" | "warm" | "cool"
@@ -198,7 +198,7 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
   }
 
   // Primary follows Brand until it is held at Nova's own neutral, so an
-  // untouched theme reads "Same as Brand".
+  // untouched theme reads "Brand color".
   const primary = modes.some((each) => draft.unlinked[each].includes("primary"))
     ? "neutral"
     : "brand"
@@ -258,21 +258,6 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
         </Card>
       </Section>
 
-      <Section
-        title="Typography"
-        aside={
-          <SegmentedControl
-            size="sm"
-            label="Font source"
-            options={fontSources}
-            value={fontSource}
-            onValueChange={setFontSource}
-          />
-        }
-      >
-        <TypefacePicker draft={draft} source={fontSource} />
-      </Section>
-
       <Section title="Primary action">
         <SegmentedControl
           size="sm"
@@ -299,6 +284,23 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
             )
           }
         />
+      </Section>
+
+      <Separator />
+
+      <Section
+        title="Typography"
+        aside={
+          <SegmentedControl
+            size="sm"
+            label="Font source"
+            options={fontSources}
+            value={fontSource}
+            onValueChange={setFontSource}
+          />
+        }
+      >
+        <TypefacePicker draft={draft} source={fontSource} />
       </Section>
 
       <Separator />
