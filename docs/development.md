@@ -126,6 +126,7 @@ Notes:
   path (like `theme/catalog`) must be added there, or consumers can't import it.
 - npm installs a Git repository from its root, so releases live on the
   `release` branch, which contains only the built package.
-- The published package has its own README (`packages/ui/PACKAGE_README.md`)
-  and `THIRD_PARTY_NOTICES.md`. Keep the package README in step with the main
-  one.
+- The published package has its own README (`packages/ui/PACKAGE_README.md`),
+  the full usage guide: setup by hand, runtime switching, theming. The repo
+  README is a short front page that links to it. The package README and
+  `THIRD_PARTY_NOTICES.md` are what npm shows.
