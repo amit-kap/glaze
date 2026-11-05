@@ -1,8 +1,8 @@
 # Glaze architecture (V4)
 
-Status: current direction, 2026-10-23. Supersedes V1–V3, which are archived in
-`archive/`. This document describes the target; the colours are migrated, the
-rest of the editor is not yet.
+Status: the specification Glaze and Glaze Studio follow (V4, 2026-10-23).
+Earlier versions (V1–V3) are in git history. Studio's panel is simpler than the
+sections described below; `docs/studio.md` says what exists today.
 
 ## Two parts, one project
 

@@ -23,7 +23,7 @@ One set of shared settings applies across every component. A component diverges 
 - Installed with `npx @amit-kap/glaze init`, or `npm install @amit-kap/glaze`.
 - Peer dependencies: React 19 and Tailwind CSS 4.
 - Monorepo apps: `web`, `showcase`, `storybook`, `studio`; the library is in `packages/ui`.
-- Live showcase and Storybook are published on GitHub Pages.
+- Glaze Studio is live at https://glaze-studio.amitkap.com (Cloudflare). The showcase and Storybook are published on GitHub Pages.
 
 ## Capabilities and Constraints
 
@@ -35,7 +35,7 @@ One set of shared settings applies across every component. A component diverges 
 
 ## Evidence on Hand
 
-- Live showcase and Storybook (links in README.md).
+- Live Studio, showcase and Storybook (links in README.md).
 - No user testimonials, adoption numbers or external case studies exist yet; do not invent them.
 
 ## Product Principles
