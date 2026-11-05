@@ -67,6 +67,8 @@ const out = {
     "./tokens.css": "./styles/tokens.css",
     "./themes/*": "./styles/themes/*",
     "./theme": { types: "./lib/theme.d.ts", default: "./lib/theme.js" },
+    "./theme/catalog": { types: "./theme/catalog.d.ts", default: "./theme/catalog.js" },
+    "./theme/consumers": { types: "./theme/consumers.d.ts", default: "./theme/consumers.js" },
     "./components/*": { types: "./components/*.d.ts", default: "./components/*.js" },
     "./lib/*": { types: "./lib/*.d.ts", default: "./lib/*.js" },
     "./hooks/*": { types: "./hooks/*.d.ts", default: "./hooks/*.js" },
