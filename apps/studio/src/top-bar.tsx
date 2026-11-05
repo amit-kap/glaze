@@ -62,7 +62,7 @@ export function TopBar({
           <Badge
             variant="outline"
             className="h-auto px-1.5 py-0.5 text-[10px] leading-none uppercase"
-            style={{ color: logoPink }}
+            style={{ color: logoPink, borderColor: logoPink }}
           >
             Alpha
           </Badge>
