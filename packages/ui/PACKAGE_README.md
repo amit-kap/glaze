@@ -105,7 +105,7 @@ Nova is the only built-in theme: a shadcn-based appearance with Geist, 32px cont
 
 ## Your own theme
 
-The quickest way is a config: start from Nova and change only what you need. Make one in the [showcase](https://amit-kap.github.io/glaze/)'s Customize panel (Config button), or write it:
+The quickest way is a config: start from Nova and change only what you need. Make one in [Glaze Studio](https://glaze-studio.amitkap.com) (Export, then Config), or write it:
 
 ```json
 {

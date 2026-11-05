@@ -1,7 +1,7 @@
 name: Pages
 
 # Publishes the docs site to GitHub Pages on every push to main:
-#   /            the showcase (theme builder)
+#   /            the showcase
 #   /storybook/  Storybook
 # Both build with relative asset paths, so they work under /glaze/.
 

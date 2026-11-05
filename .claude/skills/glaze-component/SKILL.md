@@ -5,7 +5,7 @@ description: Create a new Glaze component or refine an existing one. Researches 
 
 # Glaze component: create or refine
 
-Glaze is a shadcn Nova-based library on Base UI primitives. Themes change how it looks, never the structure. Read `glaze-architecture.md` (V4) before starting. Components carry no visual decisions: every colour, radius, size, type, shadow and motion value is a token.
+Glaze is a shadcn Nova-based library on Base UI primitives. Themes change how it looks, never the structure. Read `docs/architecture.md` (V4) before starting. Components carry no visual decisions: every colour, radius, size, type, shadow and motion value is a token.
 
 Two human checkpoints are mandatory: after research (step 2) and after the three alternatives (step 5). Do not run past them.
 

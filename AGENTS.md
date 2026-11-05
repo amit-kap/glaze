@@ -1,3 +1,32 @@
+# Glaze
+
+Glaze is a React component library (shadcn/ui on Base UI, themed through CSS
+custom properties) and Glaze Studio, its theme editor. Read `README.md` first,
+then `docs/architecture.md` before changing components, tokens or themes.
+
+## Where things are
+
+- `packages/ui`: the library. `src/theme/catalog.ts` is the settings catalog.
+- `apps/studio`: Glaze Studio (`docs/studio.md`). `apps/showcase`: component
+  tiles, shared with Studio's Components tab. `apps/storybook`: stories.
+- `scripts`: checks, package build, release, Studio deploy build.
+
+## Rules
+
+- Components carry no visual decisions. Every colour, radius, size, type,
+  shadow and motion value is a token. `npm run check:tokens` enforces this on
+  the library, stories, showcase and Studio; run it before committing.
+- A new or renamed setting goes in `packages/ui/src/theme/catalog.ts` first;
+  `npm run check:catalog` verifies it.
+- A new public import path (like `theme/catalog`) must be added to the exports
+  in `scripts/glaze-build.mjs`, or the published package can't be imported.
+- Studio's preview frame is the only themed area; its toolbar and panel are
+  not. Studio follows the published package when deployed, so it must not use
+  anything that is not in the latest release.
+- Before opening a pull request: `npx turbo lint typecheck build`.
+- Releases happen by bumping `version` in `packages/ui/package.json` and
+  merging to `main` (`docs/development.md`). Never publish by hand.
+
 <!-- BEGIN:turborepo-agent-rules -->
 
 # This is NOT the Turborepo you know
