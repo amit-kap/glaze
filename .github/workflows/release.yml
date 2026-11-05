@@ -65,6 +65,31 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           node scripts/glaze-release.mjs --npm --push
 
+      # Studio deploys from the newest published version, and only rebuilds when
+      # main changes. A release doesn't change main, so ask Cloudflare to rebuild.
+      # npm takes a few minutes to list a new version, and a rebuild before then
+      # would pick up the old one, so wait for it first.
+      - name: Rebuild Glaze Studio on Cloudflare
+        if: steps.version.outputs.release == 'true'
+        env:
+          DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "No CLOUDFLARE_DEPLOY_HOOK secret: Studio is not rebuilt."
+            exit 0
+          fi
+          for i in $(seq 1 30); do
+            if [ "$(npm view "@amit-kap/glaze@$VERSION" version 2>/dev/null)" = "$VERSION" ]; then
+              curl --fail --silent --show-error -X POST "$DEPLOY_HOOK" > /dev/null
+              echo "Asked Cloudflare to rebuild Studio on $VERSION."
+              exit 0
+            fi
+            sleep 20
+          done
+          # The release itself succeeded; a missed rebuild must not fail it.
+          echo "::warning::$VERSION was not listed on npm after 10 minutes, so Studio was not rebuilt."
+
       - name: Summary
         if: steps.version.outputs.release == 'true'
         run: |
