@@ -124,7 +124,7 @@ Then `npx @amit-kap/glaze init --config glaze.config.json` generates `my-theme.c
 
 Beyond the input groups (`color`, `shape`, `space`, `type`, `elevation`, `motion`) a config can override derived values directly: `"system": { "light": { "secondary": "#eee" }, "dark": { … } }` overrides a system token for one mode, and `"components": { "input-fill": "#f5f5f5" }` sets a component token. An override wins over the derivation, so that token stops following the inputs that produced it.
 
-Generated CSS starts with a comment naming the theme format and the Glaze baseline it was written against, for example `/* Glaze theme v1 · baseline @amit-kap/glaze 0.3.0 */`.
+Generated CSS starts with a comment naming the theme format and the Glaze baseline it was written against, for example `/* Glaze theme v1 · baseline @amit-kap/glaze 0.4.0 */`.
 
 ### Writing one by hand
 

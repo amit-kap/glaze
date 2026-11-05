@@ -24,7 +24,7 @@ const retiredThemes = [
  * Glaze release this config format and its generated CSS are written against.
  * Keep in step with `packages/ui/package.json`; `npm run check:catalog` does.
  */
-export const glazeBaseline = "0.3.0"
+export const glazeBaseline = "0.4.0"
 
 // Inputs that take a value per mode.
 const colorInputs = [
