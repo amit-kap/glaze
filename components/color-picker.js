@@ -33,7 +33,7 @@ function useHsva(value, defaultValue) {
     }
     return [hsva, setHsva, setSeen];
 }
-function ColorPicker({ value, defaultValue = "#6B97FF", onValueChange, format: formatProp, defaultFormat = "hex", onFormatChange, swatches, hideEyedropper = false, card = true, className, }) {
+function ColorPicker({ value, defaultValue = "#6B97FF", onValueChange, format: formatProp, defaultFormat = "hex", onFormatChange, swatches, hideEyedropper = false, card = true, hidePreview = false, compact = false, showFields = true, accessory, className, }) {
     const [hsva, setHsva, setSeen] = useHsva(value, defaultValue);
     const [formatState, setFormatState] = React.useState(defaultFormat);
     const format = formatProp ?? formatState;
@@ -159,7 +159,7 @@ function ColorPicker({ value, defaultValue = "#6B97FF", onValueChange, format: f
                 : [];
     const hueColor = css(hsvaToRgba({ h: hsva.h, s: 1, v: 1, a: 1 }));
     const solid = css({ ...rgba, a: 1 });
-    const content = (_jsxs(_Fragment, { children: [_jsx("div", { ref: areaRef, "data-slot": "color-picker-area", role: "group", "aria-label": "Saturation and brightness", tabIndex: 0, className: "relative h-36 w-full cursor-crosshair touch-none rounded-control outline-none select-none focus-visible:ring-3 focus-visible:ring-ring/25", style: {
+    const content = (_jsxs(_Fragment, { children: [_jsx("div", { ref: areaRef, "data-slot": "color-picker-area", role: "group", "aria-label": "Saturation and brightness", tabIndex: 0, className: cn("relative w-full cursor-crosshair touch-none rounded-control outline-none select-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring", compact ? "h-15" : "h-36"), style: {
                     background: `linear-gradient(to top, black, transparent), linear-gradient(to right, white, ${hueColor})`,
                 }, onPointerDown: (event) => {
                     event.currentTarget.setPointerCapture(event.pointerId);
@@ -176,28 +176,28 @@ function ColorPicker({ value, defaultValue = "#6B97FF", onValueChange, format: f
                         boxShadow: "0 0 0 1px rgb(0 0 0 / 0.3)",
                     } }) }), _jsxs("div", { className: "flex items-center gap-3", children: [_jsxs("div", { className: "flex min-w-0 flex-1 flex-col gap-3", children: [_jsx(Slider, { "aria-label": "Hue", min: 0, max: 360, step: 1, value: [hsva.h], onValueChange: (v) => commit({ ...hsva, h: Array.isArray(v) ? v[0] : v }), className: "**:data-[slot=slider-range]:bg-transparent! **:data-[slot=slider-track]:h-2.5! **:data-[slot=slider-track]:bg-[linear-gradient(to_right,red,#ff0,#0f0,#0ff,#00f,#f0f,red)]!" }), _jsx(Slider, { "aria-label": "Opacity", min: 0, max: 100, step: 1, value: [Math.round(hsva.a * 100)], onValueChange: (v) => commit({ ...hsva, a: (Array.isArray(v) ? v[0] : v) / 100 }), style: {
                                     ["--alpha-track"]: `linear-gradient(to right, transparent, ${solid}), ${checker}`,
-                                }, className: "**:data-[slot=slider-range]:bg-transparent! **:data-[slot=slider-track]:h-2.5! **:data-[slot=slider-track]:[background:var(--alpha-track)]!" })] }), _jsx("span", { "data-slot": "color-picker-preview", "aria-hidden": "true", className: "size-9 shrink-0 rounded-control border border-border", style: {
+                                }, className: "**:data-[slot=slider-range]:bg-transparent! **:data-[slot=slider-track]:h-2.5! **:data-[slot=slider-track]:[background:var(--alpha-track)]!" })] }), !hidePreview && (_jsx("span", { "data-slot": "color-picker-preview", "aria-hidden": "true", className: "size-9 shrink-0 rounded-control border border-border", style: {
                             background: `linear-gradient(${css(rgba)}, ${css(rgba)}), ${checker}`,
-                        } })] }), _jsxs("div", { className: cn("grid items-end gap-1.5", format === "hex"
-                    ? "grid-cols-[minmax(0,1fr)_4rem]"
-                    : "grid-cols-[repeat(3,minmax(0,1fr))_4rem]"), children: [_jsxs(Select, { items: formats, value: format, onValueChange: (v) => v && changeFormat(v), children: [_jsx(SelectTrigger, { size: "sm", "aria-label": "Colour format", className: cn("w-full", format !== "hex" && "col-span-3"), children: _jsx(SelectValue, {}) }), _jsx(SelectContent, { children: _jsx(SelectGroup, { children: formats.map((f) => (_jsx(SelectItem, { value: f.value, children: f.label }, f.value))) }) })] }), canPick ? (_jsxs(Tooltip, { children: [_jsx(TooltipTrigger, { render: _jsx(Button, { variant: "outline", size: "icon-sm", "aria-label": "Pick a colour from the screen", className: "w-full", onClick: eyedrop }), children: _jsx(PipetteIcon, {}) }), _jsx(TooltipContent, { children: "Eyedropper" })] })) : (_jsx("span", {})), format === "hex" ? (_jsx(ChannelField, { ariaLabel: "Hex", text: formatColor({ ...rgba, a: 1 }, "hex"), onCommit: (text) => {
-                            const parsed = parseColor(text);
-                            if (parsed)
-                                commitRgba({ ...parsed, a: hsva.a });
-                        } })) : (fields.map((f) => (_jsx(ChannelField, { label: f.label, text: String(Number(f.value.toFixed(f.digits ?? 0))), onCommit: (text) => {
-                            const n = Number.parseFloat(text);
-                            if (!Number.isNaN(n))
-                                f.set(clamp(n, f.min, f.max));
-                        } }, f.label)))), _jsx(ChannelField, { ariaLabel: "Opacity", text: `${Math.round(hsva.a * 100)}%`, onCommit: (text) => {
-                            const n = Number.parseFloat(text);
-                            if (!Number.isNaN(n))
-                                commit({ ...hsva, a: clamp(n, 0, 100) / 100 });
-                        } })] }), swatches && swatches.length > 0 && (_jsx("div", { "data-slot": "color-picker-swatches", className: "flex flex-wrap gap-1.5", children: swatches.map((swatch) => {
+                        } }))] }), _jsxs("div", { className: "flex flex-col gap-1.5", children: [_jsxs("div", { className: "flex items-center gap-1.5", children: [_jsxs(Select, { items: formats, value: format, onValueChange: (v) => v && changeFormat(v), children: [_jsx(SelectTrigger, { size: "sm", "aria-label": "Colour format", className: "w-full min-w-0 flex-1 rounded-item", children: _jsx(SelectValue, {}) }), _jsx(SelectContent, { children: _jsx(SelectGroup, { children: formats.map((f) => (_jsx(SelectItem, { value: f.value, children: f.label }, f.value))) }) })] }), canPick && (_jsxs(Tooltip, { children: [_jsx(TooltipTrigger, { render: _jsx(Button, { variant: "outline", size: "icon-sm", "aria-label": "Pick a colour from the screen", className: "w-16 shrink-0 rounded-item", onClick: eyedrop }), children: _jsx(PipetteIcon, {}) }), _jsx(TooltipContent, { children: "Eyedropper" })] })), accessory] }), showFields && (_jsxs("div", { className: cn("grid items-end gap-1.5", format === "hex"
+                            ? "grid-cols-[minmax(0,1fr)_4rem]"
+                            : "grid-cols-[repeat(3,minmax(0,1fr))_4rem]"), children: [format === "hex" ? (_jsx(ChannelField, { ariaLabel: "Hex", text: formatColor({ ...rgba, a: 1 }, "hex"), onCommit: (text) => {
+                                    const parsed = parseColor(text);
+                                    if (parsed)
+                                        commitRgba({ ...parsed, a: hsva.a });
+                                } })) : (fields.map((f) => (_jsx(ChannelField, { label: f.label, text: String(Number(f.value.toFixed(f.digits ?? 0))), onCommit: (text) => {
+                                    const n = Number.parseFloat(text);
+                                    if (!Number.isNaN(n))
+                                        f.set(clamp(n, f.min, f.max));
+                                } }, f.label)))), _jsx(ChannelField, { ariaLabel: "Opacity", text: `${Math.round(hsva.a * 100)}%`, onCommit: (text) => {
+                                    const n = Number.parseFloat(text);
+                                    if (!Number.isNaN(n))
+                                        commit({ ...hsva, a: clamp(n, 0, 100) / 100 });
+                                } })] }))] }), swatches && swatches.length > 0 && (_jsx("div", { "data-slot": "color-picker-swatches", className: "flex flex-wrap gap-1.5", children: swatches.map((swatch) => {
                     const parsed = parseColor(swatch);
                     if (!parsed)
                         return null;
                     const active = formatColor(parsed, "hex") === formatColor(rgba, "hex");
-                    return (_jsx("button", { type: "button", "aria-label": swatch, "aria-pressed": active, onClick: () => commitRgba(parsed), className: "size-6 cursor-pointer rounded-item border border-border outline-none focus-visible:ring-3 focus-visible:ring-ring/25 aria-pressed:ring-2 aria-pressed:ring-ring", style: {
+                    return (_jsx("button", { type: "button", "aria-label": swatch, "aria-pressed": active, onClick: () => commitRgba(parsed), className: "size-6 cursor-pointer rounded-item border border-border outline-none aria-pressed:ring-2 aria-pressed:ring-ring", style: {
                             background: `linear-gradient(${css(parsed)}, ${css(parsed)}), ${checker}`,
                         } }, swatch));
                 }) }))] }));

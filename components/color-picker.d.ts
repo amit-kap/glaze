@@ -14,9 +14,17 @@ type ColorPickerProps = {
     hideEyedropper?: boolean;
     /** Draw the picker in a card; the popover turns this off. */
     card?: boolean;
+    /** Hide the swatch beside the sliders, for callers that already show it. */
+    hidePreview?: boolean;
+    /** Draw the saturation field short, for pickers that sit inside a row. */
+    compact?: boolean;
+    /** Hide the numeric channel row; sliders and the format carry editing. */
+    showFields?: boolean;
+    /** Sits after the eyedropper: a verdict on the colour, not a control. */
+    accessory?: React.ReactNode;
     className?: string;
 };
-declare function ColorPicker({ value, defaultValue, onValueChange, format: formatProp, defaultFormat, onFormatChange, swatches, hideEyedropper, card, className, }: ColorPickerProps): React.JSX.Element;
+declare function ColorPicker({ value, defaultValue, onValueChange, format: formatProp, defaultFormat, onFormatChange, swatches, hideEyedropper, card, hidePreview, compact, showFields, accessory, className, }: ColorPickerProps): React.JSX.Element;
 declare function ColorPickerPopover({ triggerLabel, triggerClassName, value, defaultValue, onValueChange, ...props }: ColorPickerProps & {
     triggerLabel?: string;
     triggerClassName?: string;

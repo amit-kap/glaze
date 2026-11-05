@@ -4,7 +4,7 @@ declare const Select: typeof SelectPrimitive.Root;
 declare function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props): React.JSX.Element;
 declare function SelectValue({ className, ...props }: SelectPrimitive.Value.Props): React.JSX.Element;
 declare function SelectTrigger({ className, size, children, ...props }: SelectPrimitive.Trigger.Props & {
-    size?: "sm" | "default";
+    size?: "mini" | "sm" | "default";
 }): React.JSX.Element;
 declare function SelectContent({ className, children, side, sideOffset, align, alignOffset, alignItemWithTrigger, ...props }: SelectPrimitive.Popup.Props & Pick<SelectPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger">): React.JSX.Element;
 declare function SelectLabel({ className, ...props }: SelectPrimitive.GroupLabel.Props): React.JSX.Element;

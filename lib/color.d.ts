@@ -28,6 +28,14 @@ export declare function rgbaToOklch({ r, g, b }: Rgba): {
     h: number;
 };
 export declare function oklchToRgba(l: number, c: number, h: number, a?: number): Rgba;
-/** Parses #rgb, #rgba, #rrggbb, #rrggbbaa, rgb(), hsl() and oklch(). */
+/** l in 0-100, a and b roughly -0.4-0.4. */
+export declare function oklabToRgba(l: number, a: number, b: number, alpha?: number): Rgba;
+/** Parses #rgb, #rgba, #rrggbb, #rrggbbaa, rgb(), hsl(), oklch(), oklab()
+    and color() — enough to read back computed getComputedStyle colours. */
 export declare function parseColor(input: string): Rgba | null;
 export declare function formatColor(color: Rgba, format: ColorFormat): string;
+/** WCAG relative luminance, 0–1. Alpha is ignored: judge the colour, not the
+    composite, so pills and overlays keep a stable reading. */
+export declare function relativeLuminance({ r, g, b }: Rgba): number;
+/** WCAG contrast ratio between two colours: 1 (none) to 21 (black on white). */
+export declare function contrastRatio(a: Rgba, b: Rgba): number;

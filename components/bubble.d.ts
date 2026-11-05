@@ -3,7 +3,7 @@ import { useRender } from "@base-ui/react/use-render";
 import { type VariantProps } from "class-variance-authority";
 declare function BubbleGroup({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element;
 declare const bubbleVariants: (props?: ({
-    variant?: "default" | "outline" | "secondary" | "ghost" | "destructive" | "muted" | "tinted" | null | undefined;
+    variant?: "secondary" | "muted" | "destructive" | "default" | "outline" | "ghost" | "tinted" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 declare function Bubble({ variant, align, className, ...props }: React.ComponentProps<"div"> & VariantProps<typeof bubbleVariants> & {
     align?: "start" | "end";

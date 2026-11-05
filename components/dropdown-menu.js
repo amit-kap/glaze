@@ -3,18 +3,21 @@ import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { cn } from "../lib/utils.js";
 import { useHighlightLayer } from "../hooks/use-highlight-layer.js";
 import { ChevronRightIcon, CheckIcon } from "lucide-react";
+import { usePortalContainer } from "./portal-container.js";
 function DropdownMenu({ ...props }) {
     return _jsx(MenuPrimitive.Root, { "data-slot": "dropdown-menu", ...props });
 }
 function DropdownMenuPortal({ ...props }) {
-    return _jsx(MenuPrimitive.Portal, { "data-slot": "dropdown-menu-portal", ...props });
+    const container = usePortalContainer();
+    return _jsx(MenuPrimitive.Portal, { container: container, "data-slot": "dropdown-menu-portal", ...props });
 }
 function DropdownMenuTrigger({ ...props }) {
     return _jsx(MenuPrimitive.Trigger, { "data-slot": "dropdown-menu-trigger", ...props });
 }
 function DropdownMenuContent({ align = "start", alignOffset = 0, anchor, side = "bottom", sideOffset = 4, className, ...props }) {
     const layerRef = useHighlightLayer(props.ref);
-    return (_jsx(MenuPrimitive.Portal, { children: _jsx(MenuPrimitive.Positioner, { className: "isolate z-50 outline-none", align: align, alignOffset: alignOffset, anchor: anchor, side: side, sideOffset: sideOffset, children: _jsx(MenuPrimitive.Popup, { "data-slot": "dropdown-menu-content", className: cn("highlight-scope z-50 max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-floating bg-popover p-1 text-popover-foreground shadow-floating ring-1 ring-foreground/10 duration-(--duration-fade-fast) data-closed:duration-(--duration-exit-fast) outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95", className), ...props, ref: layerRef }) }) }));
+    const container = usePortalContainer();
+    return (_jsx(MenuPrimitive.Portal, { container: container, children: _jsx(MenuPrimitive.Positioner, { className: "isolate z-50 outline-none", align: align, alignOffset: alignOffset, anchor: anchor, side: side, sideOffset: sideOffset, children: _jsx(MenuPrimitive.Popup, { "data-slot": "dropdown-menu-content", className: cn("highlight-scope z-50 max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-floating bg-popover p-1 text-popover-foreground shadow-floating ring-1 ring-foreground/10 duration-(--duration-fade-fast) data-closed:duration-(--duration-exit-fast) outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95", className), ...props, ref: layerRef }) }) }));
 }
 function DropdownMenuGroup({ ...props }) {
     return _jsx(MenuPrimitive.Group, { "data-slot": "dropdown-menu-group", ...props });

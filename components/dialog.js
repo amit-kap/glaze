@@ -4,6 +4,7 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { cn } from "../lib/utils.js";
 import { Button } from "./button.js";
 import { XIcon } from "lucide-react";
+import { usePortalContainer } from "./portal-container.js";
 function Dialog({ ...props }) {
     return _jsx(DialogPrimitive.Root, { "data-slot": "dialog", ...props });
 }
@@ -11,7 +12,8 @@ function DialogTrigger({ ...props }) {
     return _jsx(DialogPrimitive.Trigger, { "data-slot": "dialog-trigger", ...props });
 }
 function DialogPortal({ ...props }) {
-    return _jsx(DialogPrimitive.Portal, { "data-slot": "dialog-portal", ...props });
+    const container = usePortalContainer();
+    return _jsx(DialogPrimitive.Portal, { container: container, "data-slot": "dialog-portal", ...props });
 }
 function DialogClose({ ...props }) {
     return _jsx(DialogPrimitive.Close, { "data-slot": "dialog-close", ...props });

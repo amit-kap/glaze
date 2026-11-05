@@ -2,6 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog";
 import { cn } from "../lib/utils.js";
 import { Button } from "./button.js";
+import { usePortalContainer } from "./portal-container.js";
 function AlertDialog({ ...props }) {
     return _jsx(AlertDialogPrimitive.Root, { "data-slot": "alert-dialog", ...props });
 }
@@ -9,7 +10,8 @@ function AlertDialogTrigger({ ...props }) {
     return (_jsx(AlertDialogPrimitive.Trigger, { "data-slot": "alert-dialog-trigger", ...props }));
 }
 function AlertDialogPortal({ ...props }) {
-    return (_jsx(AlertDialogPrimitive.Portal, { "data-slot": "alert-dialog-portal", ...props }));
+    const container = usePortalContainer();
+    return (_jsx(AlertDialogPrimitive.Portal, { container: container, "data-slot": "alert-dialog-portal", ...props }));
 }
 function AlertDialogOverlay({ className, ...props }) {
     return (_jsx(AlertDialogPrimitive.Backdrop, { "data-slot": "alert-dialog-overlay", className: cn("fixed inset-0 isolate z-50 bg-overlay duration-(--duration-fade-fast) data-closed:duration-(--duration-exit-fast) supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0", className), ...props }));

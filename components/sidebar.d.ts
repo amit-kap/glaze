@@ -12,10 +12,20 @@ type SidebarContextProps = {
     openMobile: boolean;
     setOpenMobile: (open: boolean) => void;
     isMobile: boolean;
+    /** True when the sidebar lives inside a frame, not the window. */
+    contained: boolean;
     toggleSidebar: () => void;
 };
 declare function useSidebar(): SidebarContextProps;
-declare function SidebarProvider({ defaultOpen, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }: React.ComponentProps<"div"> & {
+declare function SidebarProvider({ contained, containedBreakpoint, defaultOpen, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }: React.ComponentProps<"div"> & {
+    /**
+     * Lay the sidebar out inside its parent instead of the window: it takes the
+     * parent's height, and turns into a drawer when the parent is narrow, not
+     * the window. For previews, frames and embedded apps.
+     */
+    contained?: boolean;
+    /** The parent width, in px, below which a contained sidebar is a drawer. */
+    containedBreakpoint?: number;
     defaultOpen?: boolean;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
@@ -24,7 +34,7 @@ declare function Sidebar({ side, variant, collapsible, className, children, dir,
     side?: "left" | "right";
     variant?: "sidebar" | "floating" | "inset";
     collapsible?: "offcanvas" | "icon" | "none";
-}): React.JSX.Element;
+}): React.JSX.Element | null;
 declare function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>): React.JSX.Element;
 declare function SidebarRail({ className, ...props }: React.ComponentProps<"button">): React.JSX.Element;
 declare function SidebarInset({ className, ...props }: React.ComponentProps<"main">): React.JSX.Element;

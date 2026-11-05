@@ -1,6 +1,6 @@
 {
   "name": "@amit-kap/glaze",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Glaze: shadcn/ui on Base UI, themed entirely through tokens.",
   "license": "MIT",
   "repository": {
@@ -24,6 +24,14 @@
       "types": "./lib/theme.d.ts",
       "default": "./lib/theme.js"
     },
+    "./theme/catalog": {
+      "types": "./theme/catalog.d.ts",
+      "default": "./theme/catalog.js"
+    },
+    "./theme/consumers": {
+      "types": "./theme/consumers.d.ts",
+      "default": "./theme/consumers.js"
+    },
     "./components/*": {
       "types": "./components/*.d.ts",
       "default": "./components/*.js"
@@ -46,6 +54,7 @@
     "@fontsource-variable/noto-sans": "^5.3.0",
     "@fontsource-variable/playfair-display": "^5.3.0",
     "@shadcn/react": "^0.3.1",
+    "@tanstack/react-table": "^9.3.1",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
     "cn": "^0.4.0",

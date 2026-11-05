@@ -27,8 +27,21 @@ function useSidebar() {
     }
     return context;
 }
-function SidebarProvider({ defaultOpen = true, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }) {
-    const isMobile = useIsMobile();
+// A contained sidebar is "mobile" below the same width the window uses.
+const CONTAINED_MOBILE_WIDTH = 768;
+function SidebarProvider({ contained = false, containedBreakpoint = CONTAINED_MOBILE_WIDTH, defaultOpen = true, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }) {
+    const viewportMobile = useIsMobile();
+    const wrapperRef = React.useRef(null);
+    const [narrow, setNarrow] = React.useState(false);
+    React.useEffect(() => {
+        const wrapper = wrapperRef.current;
+        if (!contained || !wrapper)
+            return;
+        const observer = new ResizeObserver(([entry]) => setNarrow(entry.contentRect.width < containedBreakpoint));
+        observer.observe(wrapper);
+        return () => observer.disconnect();
+    }, [contained, containedBreakpoint]);
+    const isMobile = contained ? narrow : viewportMobile;
     const [openMobile, setOpenMobile] = React.useState(false);
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
@@ -69,29 +82,50 @@ function SidebarProvider({ defaultOpen = true, open: openProp, onOpenChange: set
         open,
         setOpen,
         isMobile,
+        contained,
         openMobile,
         setOpenMobile,
         toggleSidebar,
-    }), [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]);
-    return (_jsx(SidebarContext.Provider, { value: contextValue, children: _jsx("div", { "data-slot": "sidebar-wrapper", style: {
+    }), [
+        state,
+        open,
+        setOpen,
+        isMobile,
+        contained,
+        openMobile,
+        setOpenMobile,
+        toggleSidebar,
+    ]);
+    return (_jsx(SidebarContext.Provider, { value: contextValue, children: _jsx("div", { ref: wrapperRef, "data-slot": "sidebar-wrapper", style: {
                 "--sidebar-width": SIDEBAR_WIDTH,
                 "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
                 ...style,
-            }, className: cn("group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar", className), ...props, children: children }) }));
+            }, className: cn("group/sidebar-wrapper flex w-full has-data-[variant=inset]:bg-sidebar", contained ? "relative h-full min-h-0 overflow-hidden" : "min-h-svh", className), ...props, children: children }) }));
 }
 function Sidebar({ side = "left", variant = "sidebar", collapsible = "offcanvas", className, children, dir, ...props }) {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+    const { isMobile, contained, state, openMobile, setOpenMobile } = useSidebar();
     if (collapsible === "none") {
         return (_jsx("div", { "data-slot": "sidebar", className: cn("flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground", className), ...props, children: children }));
+    }
+    // Inside a frame a Sheet would escape to the window, so the drawer is drawn
+    // over the frame itself.
+    if (isMobile && contained) {
+        if (!openMobile)
+            return null;
+        return (_jsxs("div", { "data-slot": "sidebar", "data-mobile": "true", className: "absolute inset-0 z-30 flex", children: [_jsx("div", { role: "dialog", "aria-label": "Sidebar", "data-sidebar": "sidebar", className: cn("flex h-full w-(--sidebar-width-mobile) max-w-[85%] flex-col bg-sidebar text-sidebar-foreground shadow-modal", className), style: {
+                        "--sidebar-width-mobile": SIDEBAR_WIDTH_MOBILE,
+                    }, children: children }), _jsx("button", { type: "button", "aria-label": "Close sidebar", className: "flex-1 bg-foreground/30", onClick: () => setOpenMobile(false) })] }));
     }
     if (isMobile) {
         return (_jsx(Sheet, { open: openMobile, onOpenChange: setOpenMobile, ...props, children: _jsxs(SheetContent, { dir: dir, "data-sidebar": "sidebar", "data-slot": "sidebar", "data-mobile": "true", className: "w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden", style: {
                     "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
                 }, side: side, children: [_jsxs(SheetHeader, { className: "sr-only", children: [_jsx(SheetTitle, { children: "Sidebar" }), _jsx(SheetDescription, { children: "Displays the mobile sidebar." })] }), _jsx("div", { className: "flex h-full w-full flex-col", children: children })] }) }));
     }
-    return (_jsxs("div", { className: "group peer hidden text-sidebar-foreground md:block", "data-state": state, "data-collapsible": state === "collapsed" ? collapsible : "", "data-variant": variant, "data-side": side, "data-slot": "sidebar", children: [_jsx("div", { "data-slot": "sidebar-gap", className: cn("relative w-(--sidebar-width) bg-transparent transition-[width] duration-(--duration-moderate) ease-linear", "group-data-[collapsible=offcanvas]:w-0", "group-data-[side=right]:rotate-180", variant === "floating" || variant === "inset"
+    return (_jsxs("div", { className: cn("group peer text-sidebar-foreground", contained ? "block" : "hidden md:block"), "data-state": state, "data-collapsible": state === "collapsed" ? collapsible : "", "data-variant": variant, "data-side": side, "data-slot": "sidebar", children: [_jsx("div", { "data-slot": "sidebar-gap", className: cn("relative w-(--sidebar-width) bg-transparent transition-[width] duration-(--duration-moderate) ease-linear", "group-data-[collapsible=offcanvas]:w-0", "group-data-[side=right]:rotate-180", variant === "floating" || variant === "inset"
                     ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]"
-                    : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)") }), _jsx("div", { "data-slot": "sidebar-container", "data-side": side, className: cn("fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-(--duration-moderate) ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] md:flex", 
+                    : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)") }), _jsx("div", { "data-slot": "sidebar-container", "data-side": side, className: cn(contained
+                    ? "absolute inset-y-0 z-10 flex h-full"
+                    : "fixed inset-y-0 z-10 hidden h-svh md:flex", "w-(--sidebar-width) transition-[left,right,width] duration-(--duration-moderate) ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]", 
                 // Adjust the padding for floating and inset variants.
                 variant === "floating" || variant === "inset"
                     ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
@@ -133,7 +167,7 @@ function SidebarGroupLabel({ className, render, ...props }) {
     return useRender({
         defaultTagName: "div",
         props: mergeProps({
-            className: cn("flex h-8 shrink-0 items-center rounded-item px-2 text-caption font-medium text-sidebar-foreground/70 ring-sidebar-ring/25 outline-hidden transition-[margin,opacity] duration-(--duration-moderate) ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0", className),
+            className: cn("flex h-8 shrink-0 items-center rounded-item px-2 text-caption font-medium text-sidebar-foreground/70 outline-hidden focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-sidebar-ring transition-[margin,opacity] duration-(--duration-moderate) ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 [&>svg]:size-4 [&>svg]:shrink-0", className),
         }, props),
         render,
         state: {
@@ -146,7 +180,7 @@ function SidebarGroupAction({ className, render, ...props }) {
     return useRender({
         defaultTagName: "button",
         props: mergeProps({
-            className: cn("absolute top-3.5 inset-e-3 flex aspect-square w-5 items-center justify-center rounded-item p-0 text-sidebar-foreground ring-sidebar-ring/25 outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0", className),
+            className: cn("absolute inset-e-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-item p-0 text-sidebar-foreground outline-hidden focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-sidebar-ring transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0", className),
         }, props),
         render,
         state: {
@@ -164,10 +198,10 @@ function SidebarMenu({ className, ...props }) {
 function SidebarMenuItem({ className, ...props }) {
     return (_jsx("li", { "data-slot": "sidebar-menu-item", "data-sidebar": "menu-item", className: cn("group/menu-item relative", className), ...props }));
 }
-const sidebarMenuButtonVariants = cva("peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-item p-2 text-start text-body ring-sidebar-ring/25 outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-(--icon-size) [&_svg]:shrink-0 [&>span:last-child]:truncate", {
+const sidebarMenuButtonVariants = cva("peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-item p-2 text-start text-body outline-hidden focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-sidebar-ring transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-primary/6 hover:text-sidebar-accent-foreground active:bg-sidebar-primary/10 active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-primary/6 data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-primary/10 data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-(--icon-size) [&_svg]:shrink-0 [&>span:last-child]:truncate", {
     variants: {
         variant: {
-            default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+            default: "hover:bg-sidebar-primary/6 hover:text-sidebar-accent-foreground",
             outline: "bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]",
         },
         size: {
@@ -210,7 +244,7 @@ function SidebarMenuAction({ className, render, showOnHover = false, ...props })
     return useRender({
         defaultTagName: "button",
         props: mergeProps({
-            className: cn("absolute top-1.5 inset-e-1 flex aspect-square w-5 items-center justify-center rounded-item p-0 text-sidebar-foreground ring-sidebar-ring/25 outline-hidden transition-transform group-data-[collapsible=icon]:hidden peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0", showOnHover &&
+            className: cn("absolute inset-e-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-item p-0 text-sidebar-foreground outline-hidden focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-sidebar-ring transition-transform group-data-[collapsible=icon]:hidden peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0", showOnHover &&
                 "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-sidebar-accent-foreground aria-expanded:opacity-100 md:opacity-0", className),
         }, props),
         render,
@@ -233,7 +267,7 @@ function SidebarMenuSkeleton({ className, showIcon = false, ...props }) {
                 } })] }));
 }
 function SidebarMenuSub({ className, ...props }) {
-    return (_jsx("ul", { "data-slot": "sidebar-menu-sub", "data-sidebar": "menu-sub", className: cn("mx-3.5 flex min-w-0 flex-col gap-1 border-s ltr:translate-x-px rtl:-translate-x-px border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden", className), ...props }));
+    return (_jsx("ul", { "data-slot": "sidebar-menu-sub", "data-sidebar": "menu-sub", className: cn("mx-3.5 flex min-w-0 flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden ltr:translate-x-px rtl:-translate-x-px", className), ...props }));
 }
 function SidebarMenuSubItem({ className, ...props }) {
     return (_jsx("li", { "data-slot": "sidebar-menu-sub-item", "data-sidebar": "menu-sub-item", className: cn("group/menu-sub-item relative", className), ...props }));
@@ -242,7 +276,7 @@ function SidebarMenuSubButton({ render, size = "md", isActive = false, className
     return useRender({
         defaultTagName: "a",
         props: mergeProps({
-            className: cn("flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-item px-2 text-sidebar-foreground ring-sidebar-ring/25 outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-body data-[size=sm]:text-caption data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-(--icon-size) [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground", className),
+            className: cn("flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-item px-2 text-sidebar-foreground outline-hidden focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-sidebar-ring group-data-[collapsible=icon]:hidden hover:bg-sidebar-primary/6 hover:text-sidebar-accent-foreground active:bg-sidebar-primary/10 active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-body data-[size=sm]:text-caption data-active:bg-sidebar-primary/10 data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-(--icon-size) [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground", className),
         }, props),
         render,
         state: {

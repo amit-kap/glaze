@@ -3,6 +3,7 @@ import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
 import { cn } from "../lib/utils.js";
 import { Button } from "./button.js";
 import { XIcon } from "lucide-react";
+import { usePortalContainer } from "./portal-container.js";
 function Sheet({ ...props }) {
     return _jsx(SheetPrimitive.Root, { "data-slot": "sheet", ...props });
 }
@@ -13,7 +14,8 @@ function SheetClose({ ...props }) {
     return _jsx(SheetPrimitive.Close, { "data-slot": "sheet-close", ...props });
 }
 function SheetPortal({ ...props }) {
-    return _jsx(SheetPrimitive.Portal, { "data-slot": "sheet-portal", ...props });
+    const container = usePortalContainer();
+    return _jsx(SheetPrimitive.Portal, { container: container, "data-slot": "sheet-portal", ...props });
 }
 function SheetOverlay({ className, ...props }) {
     return (_jsx(SheetPrimitive.Backdrop, { "data-slot": "sheet-overlay", className: cn("fixed inset-0 z-50 bg-overlay transition-opacity duration-(--duration-fade-base) data-ending-style:duration-(--duration-exit-base) data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs", className), ...props }));

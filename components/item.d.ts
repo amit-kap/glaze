@@ -5,7 +5,7 @@ import { Separator } from "./separator.js";
 declare function ItemGroup({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element;
 declare function ItemSeparator({ className, ...props }: React.ComponentProps<typeof Separator>): React.JSX.Element;
 declare const itemVariants: (props?: ({
-    variant?: "default" | "outline" | "muted" | null | undefined;
+    variant?: "muted" | "default" | "outline" | null | undefined;
     size?: "default" | "xs" | "sm" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 declare function Item({ className, variant, size, render, ...props }: useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>): React.ReactElement<unknown, string | React.JSXElementConstructor<any>>;
