@@ -160,6 +160,11 @@ export function TopBar({
       </div>
 
       <div className="ms-auto flex min-w-0 flex-1 items-center justify-end gap-2">
+        {__GLAZE_VERSION__ && (
+          <span className="me-1 text-caption text-muted-foreground tabular-nums">
+            Glaze {__GLAZE_VERSION__}
+          </span>
+        )}
         <Button
           variant="outline"
           size="sm"
