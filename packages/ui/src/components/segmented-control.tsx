@@ -3,6 +3,7 @@
 import type { ReactNode } from "react"
 
 import { Tabs, TabsList, TabsTrigger } from "@amit-kap/glaze/components/tabs"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
 export type SegmentedControlOption<T extends string> = {
   value: T
@@ -33,7 +34,12 @@ function SegmentedControl<T extends string>({
 }) {
   return (
     <Tabs value={value} onValueChange={(next) => onValueChange(next as T)}>
-      <TabsList size={size} aria-label={label} className={className}>
+      <TabsList
+        size={size}
+        aria-label={label}
+        // The same hairline border as the inset slider's capsule.
+        className={cn("ring-1 ring-border ring-inset", className)}
+      >
         {options.map((option) => (
           <TabsTrigger
             key={option.value}

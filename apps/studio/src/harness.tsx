@@ -205,7 +205,7 @@ export function Harness() {
             />
           )}
           {!inline && open && (
-            <div className="absolute inset-y-0 end-0 z-20 w-full max-w-md bg-background shadow-modal">
+            <div className="absolute inset-y-0 inset-e-0 z-20 w-full max-w-md bg-background shadow-modal">
               <Pane onClose={() => setPaneOpen(false)} />
             </div>
           )}

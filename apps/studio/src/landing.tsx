@@ -339,7 +339,7 @@ function ProductShot() {
               <span className="truncate text-micro text-muted-foreground">
                 {label}
               </span>
-              <span className="truncate font-heading text-body leading-none font-medium tabular-nums @min-[700px]:text-title">
+              <span className="truncate font-heading text-body font-medium tabular-nums @min-[700px]:text-title">
                 {value}
               </span>
               <Badge variant="low" className="w-fit">
@@ -748,7 +748,7 @@ export function Landing() {
                 >
                   <CardHeader>
                     {plan.popular && (
-                      <Badge className="absolute start-5 -top-2.5">
+                      <Badge className="absolute inset-s-5 -top-2.5">
                         Most popular
                       </Badge>
                     )}
@@ -813,7 +813,7 @@ export function Landing() {
         </Band>
 
         {/* Closing call */}
-        <Band className="!py-10 @min-[700px]:!py-16">
+        <Band className="py-10 @min-[700px]:py-16">
           <div className="flex flex-col items-center gap-5 rounded-container bg-primary px-6 py-12 text-center text-primary-foreground @min-[700px]:py-16">
             <h2 className={cn(h2, "max-w-lg")}>
               Start your next morning with answers

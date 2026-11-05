@@ -12,7 +12,9 @@ import { PortalContainer } from "@amit-kap/glaze/components/portal-container"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Checkout } from "./checkout"
+import { ComponentsScreen } from "./components-screen"
 import { Dashboard } from "./dashboard"
+import { DataTableScreen } from "./data-table-screen"
 import { Harness } from "./harness"
 import { Landing } from "./landing"
 import { cssVars, type Mode, type Theme } from "./theme"
@@ -21,7 +23,8 @@ import { shapeVars, type Density, type ShapeValues } from "./shape"
 import { typeVars, type TypeValues } from "./typography"
 
 type Width = "fit" | "768" | "390"
-type Screen = "dashboard" | "table" | "checkout" | "harness" | "landing"
+type Screen =
+  "dashboard" | "table" | "checkout" | "harness" | "landing" | "components"
 
 const screens: { id: Screen; label: string }[] = [
   { id: "dashboard", label: "Dashboard" },
@@ -29,20 +32,21 @@ const screens: { id: Screen; label: string }[] = [
   { id: "checkout", label: "Checkout" },
   { id: "harness", label: "Harness" },
   { id: "landing", label: "Landing" },
+  { id: "components", label: "Components" },
+]
+
+const modes: { value: Mode; label: string }[] = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
 ]
 
 const preview: Record<Screen, React.ReactNode> = {
   dashboard: <Dashboard />,
-  table: (
-    <div className="flex h-full items-center justify-center p-6 text-center">
-      <p className="text-caption text-muted-foreground">
-        The Data table screen will live here.
-      </p>
-    </div>
-  ),
+  table: <DataTableScreen />,
   checkout: <Checkout />,
   harness: <Harness />,
   landing: <Landing />,
+  components: <ComponentsScreen />,
 }
 
 /** A preview width as an icon, named for the pointer and for assistive tech. */
@@ -65,19 +69,24 @@ function WidthIcon({
 
 export function Stage({
   mode,
+  onModeChange,
   theme,
   type,
   shape,
   density,
   motion,
+  extraVars,
   reduceMotion,
 }: {
   mode: Mode
+  onModeChange: (mode: Mode) => void
   theme: Theme
   type: TypeValues
   shape: ShapeValues
   density: Density
   motion: MotionValues
+  /** Component tokens a dial sets outright, as CSS custom properties. */
+  extraVars: Record<string, string>
   reduceMotion: boolean
 }) {
   const [screen, setScreen] = React.useState<Screen>("dashboard")
@@ -87,36 +96,15 @@ export function Stage({
   const [frame, setFrame] = React.useState<HTMLElement | null>(null)
 
   return (
-    <section
-      data-theme="nova"
-      className={cn(
-        "flex min-w-0 flex-1 flex-col overflow-hidden",
-        // Dark mode is scoped to the preview: the studio itself stays light.
-        mode === "dark" && "dark"
-      )}
-      // Every theme value sits on the themed section, not the wrapper below:
-      // the kit derives tokens at `[data-theme]` (card-foreground follows
-      // foreground, corners follow the radius), and a derived token reads its
-      // source where it is declared. Reduced motion zeroes the movement scale,
-      // as the system setting does.
-      style={
-        {
-          ...cssVars(theme[mode]),
-          ...typeVars(type),
-          ...shapeVars(shape),
-          ...motionVars(motion),
-          ...(reduceMotion && { "--motion-scale": "0" }),
-        } as React.CSSProperties
-      }
-    >
-      <div className="flex h-full min-h-0 flex-col bg-background p-4 font-sans font-normal text-foreground">
+    <section className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex h-full min-h-0 flex-col bg-background px-5 py-3 text-foreground">
         <Tabs
           value={screen}
           onValueChange={(value) => setScreen(value as Screen)}
           className="h-full gap-4"
         >
           <div className="flex min-h-10 shrink-0 flex-wrap items-center gap-x-3 gap-y-2">
-            <TabsList variant="line">
+            <TabsList variant="line" className="gap-5">
               {screens.map((item) => (
                 <TabsTrigger key={item.id} value={item.id}>
                   {item.label}
@@ -125,6 +113,13 @@ export function Stage({
             </TabsList>
 
             <div className="ms-auto flex items-center gap-3">
+              <SegmentedControl
+                size="sm"
+                label="Mode being previewed"
+                options={modes}
+                value={mode}
+                onValueChange={onModeChange}
+              />
               <SegmentedControl
                 label="Preview width"
                 className="**:data-[slot=tabs-trigger]:w-8 **:data-[slot=tabs-trigger]:flex-none **:data-[slot=tabs-trigger]:px-0"
@@ -160,9 +155,27 @@ export function Stage({
           <div className="flex min-h-0 flex-1 justify-center">
             <div
               ref={setFrame}
+              data-theme="nova"
               data-density={density}
+              // Only this frame wears the draft: the toolbar above stays the
+              // studio's own. Every theme value sits on the themed element,
+              // since the kit derives tokens at `[data-theme]` and a derived
+              // token reads its source where it is declared. Dark mode is
+              // scoped here too. Reduced motion zeroes the movement scale,
+              // as the system setting does.
+              style={
+                {
+                  ...cssVars(theme[mode]),
+                  ...typeVars(type),
+                  ...shapeVars(shape),
+                  ...motionVars(motion),
+                  ...extraVars,
+                  ...(reduceMotion && { "--motion-scale": "0" }),
+                } as React.CSSProperties
+              }
               className={cn(
-                "@container h-full [contain:layout]",
+                "@container h-full font-sans font-normal text-foreground [contain:layout]",
+                mode === "dark" && "dark",
                 width === "fit" && "w-full",
                 width === "768" && "w-[768px] max-w-full",
                 width === "390" && "w-[390px] max-w-full"
@@ -173,7 +186,7 @@ export function Stage({
                   <TabsContent
                     key={item.id}
                     value={item.id}
-                    className="h-full min-h-0 overflow-hidden rounded-lg border border-border bg-background"
+                    className="h-full min-h-0 overflow-hidden rounded-container border border-border bg-background"
                   >
                     {preview[item.id]}
                   </TabsContent>

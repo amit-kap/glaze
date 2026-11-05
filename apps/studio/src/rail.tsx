@@ -35,7 +35,7 @@ export function Rail({
             title={label}
             onClick={() => onChange(id)}
             className={cn(
-              "size-11 rounded-lg p-2",
+              "size-11 rounded-item p-2",
               !current && "bg-transparent text-muted-foreground hover:bg-muted"
             )}
           >
