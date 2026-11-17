@@ -3,6 +3,7 @@
 import type { ReactNode } from "react"
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 import { cn } from "@amit-kap/glaze/lib/utils"
+import { choiceState } from "@amit-kap/glaze/lib/control-styles"
 
 // A switch that toggles between two icons instead of on/off alone: both
 // icons stay visible in a pill track and a thumb slides behind the active
@@ -42,7 +43,8 @@ function IconSwitch({
     <SwitchPrimitive.Root
       data-slot="icon-switch"
       className={cn(
-        "group/icon-switch relative inline-flex shrink-0 items-center rounded-pill border bg-secondary transition-colors outline-none focus-visible:border-ring data-disabled:cursor-not-allowed data-disabled:opacity-50",
+        "group/icon-switch relative inline-flex shrink-0 items-center rounded-pill border bg-secondary transition-colors outline-none",
+        choiceState,
         sizes[size].root,
         className
       )}

@@ -18,7 +18,13 @@ function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
 
 function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
   const container = usePortalContainer()
-  return <DialogPrimitive.Portal container={container} data-slot="dialog-portal" {...props} />
+  return (
+    <DialogPrimitive.Portal
+      container={container}
+      data-slot="dialog-portal"
+      {...props}
+    />
+  )
 }
 
 function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
@@ -33,7 +39,7 @@ function DialogOverlay({
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 isolate z-50 bg-overlay duration-(--duration-fade-fast) data-closed:duration-(--duration-exit-fast) supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 isolate z-overlay bg-overlay duration-(--duration-fade-fast) supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:duration-(--duration-exit-fast) data-closed:fade-out-0",
         className
       )}
       {...props}
@@ -55,7 +61,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-(--spacing(8)))] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-container bg-popover p-4 text-body text-popover-foreground ring-1 ring-foreground/10 duration-(--duration-fade-fast) data-closed:duration-(--duration-exit-fast) outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-overlay grid w-full max-w-[calc(100%-(--spacing(8)))] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-container bg-popover p-4 text-body text-popover-foreground ring-1 ring-foreground/10 duration-(--duration-fade-fast) outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:duration-(--duration-exit-fast) data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
@@ -67,13 +73,12 @@ function DialogContent({
             render={
               <Button
                 variant="ghost"
-                className="absolute top-2 inset-e-2"
+                className="absolute inset-e-2 top-2"
                 size="icon-sm"
               />
             }
           >
-            <XIcon
-            />
+            <XIcon />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}

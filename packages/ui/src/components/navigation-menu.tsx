@@ -56,7 +56,7 @@ function NavigationMenuItem({
 }
 
 const navigationMenuTriggerStyle = cva(
-  "group/navigation-menu-trigger inline-flex h-control-lg w-max items-center justify-center rounded-control px-2.5 py-1.5 text-body font-medium transition outline-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring hover:bg-muted focus:bg-muted disabled:pointer-events-none disabled:opacity-50 data-popup-open:bg-muted/50 data-popup-open:hover:bg-muted data-open:bg-muted/50 data-open:hover:bg-muted data-open:focus:bg-muted"
+  "group/navigation-menu-trigger inline-flex h-control-lg w-max items-center justify-center rounded-control px-2.5 py-1.5 text-body font-medium transition outline-none hover:bg-accent focus:bg-accent focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring focus-visible:outline-solid disabled:pointer-events-none disabled:opacity-disabled data-popup-open:bg-accent/50 data-popup-open:hover:bg-accent data-open:bg-accent/50 data-open:hover:bg-accent data-open:focus:bg-accent"
 )
 
 function NavigationMenuTrigger({
@@ -71,7 +71,10 @@ function NavigationMenuTrigger({
       {...props}
     >
       {children}{" "}
-      <ChevronDownIcon className="relative top-px ms-1 size-3 transition duration-(--duration-slow) group-data-popup-open/navigation-menu-trigger:rotate-180 group-data-open/navigation-menu-trigger:rotate-180" aria-hidden="true" />
+      <ChevronDownIcon
+        className="relative top-px ms-1 size-3 transition duration-(--duration-slow) group-data-popup-open/navigation-menu-trigger:rotate-180 group-data-open/navigation-menu-trigger:rotate-180"
+        aria-hidden="true"
+      />
     </NavigationMenuPrimitive.Trigger>
   )
 }
@@ -109,7 +112,7 @@ function NavigationMenuPositioner({
         align={align}
         alignOffset={alignOffset}
         className={cn(
-          "isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-(--navigation-menu-duration) ease-enter data-instant:transition-none data-[side=bottom]:before:-top-2.5 data-[side=bottom]:before:inset-x-0",
+          "isolate z-overlay h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-(--navigation-menu-duration) ease-enter data-instant:transition-none data-[side=bottom]:before:inset-x-0 data-[side=bottom]:before:-top-2.5",
           className
         )}
         {...props}
@@ -130,7 +133,7 @@ function NavigationMenuLink({
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       className={cn(
-        "flex items-center gap-2 rounded-control p-2 text-body transition outline-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring hover:bg-muted focus:bg-muted in-data-[slot=navigation-menu-content]:rounded-item data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted [&_svg:not([class*='size-'])]:size-(--icon-size)",
+        "flex items-center gap-2 rounded-control p-2 text-body transition outline-none hover:bg-accent focus:bg-accent focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring focus-visible:outline-solid in-data-[slot=navigation-menu-content]:rounded-item data-active:bg-accent/50 data-active:hover:bg-accent data-active:focus:bg-accent [&_svg:not([class*='size-'])]:size-(--icon-size)",
         className
       )}
       {...props}
@@ -146,7 +149,7 @@ function NavigationMenuIndicator({
     <NavigationMenuPrimitive.Icon
       data-slot="navigation-menu-indicator"
       className={cn(
-        "top-full z-1 flex h-1.5 items-end justify-center overflow-hidden duration-(--duration-fade-base) data-[state=hidden]:duration-(--duration-exit-base) data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:animate-in data-[state=visible]:fade-in",
+        "top-full z-1 flex h-1.5 items-end justify-center overflow-hidden duration-(--duration-fade-base) data-[state=hidden]:animate-out data-[state=hidden]:duration-(--duration-exit-base) data-[state=hidden]:fade-out data-[state=visible]:animate-in data-[state=visible]:fade-in",
         className
       )}
       {...props}

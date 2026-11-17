@@ -41,7 +41,8 @@ function write(storageKey: string, settings: Settings) {
 function apply(root: HTMLElement, settings: Settings, dark: boolean) {
   root.setAttribute("data-theme", settings.theme)
   root.classList.toggle("dark", dark)
-  if (settings.density === "compact") root.setAttribute("data-density", "compact")
+  if (settings.density === "compact")
+    root.setAttribute("data-density", "compact")
   else root.removeAttribute("data-density")
 }
 
@@ -118,7 +119,11 @@ export function themeScript({
   defaultDensity = "comfortable",
   storageKey = "glaze",
 }: Omit<ThemeProviderProps, "children"> = {}) {
-  const defaults = JSON.stringify({ theme: defaultTheme, mode: defaultMode, density: defaultDensity })
+  const defaults = JSON.stringify({
+    theme: defaultTheme,
+    mode: defaultMode,
+    density: defaultDensity,
+  })
   const key = JSON.stringify(storageKey || "")
   return `(function(){try{var s=${defaults},k=${key};if(k){var v=JSON.parse(localStorage.getItem(k)||"{}");for(var p in v)s[p]=v[p]}var r=document.documentElement;r.setAttribute("data-theme",s.theme);var d=s.mode==="dark"||(s.mode==="system"&&matchMedia("${darkQuery}").matches);r.classList.toggle("dark",d);if(s.density==="compact")r.setAttribute("data-density","compact")}catch(e){}})()`
 }

@@ -270,7 +270,7 @@ function ColorPicker({
         aria-label="Saturation and brightness"
         tabIndex={0}
         className={cn(
-          "relative w-full cursor-crosshair touch-none rounded-control outline-none select-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring",
+          "relative w-full cursor-crosshair touch-none rounded-control outline-none select-none focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-ring focus-visible:outline-solid",
           compact ? "h-15" : "h-36"
         )}
         style={{
@@ -288,14 +288,11 @@ function ColorPicker({
       >
         <span
           data-slot="color-picker-thumb"
-          className="pointer-events-none absolute size-3.5 -translate-1/2 rounded-pill"
+          className="pointer-events-none absolute size-3.5 -translate-1/2 rounded-pill border-2 border-(--picker-thumb) shadow-(--picker-thumb-ring)"
           style={{
             left: `${hsva.s * 100}%`,
             top: `${(1 - hsva.v) * 100}%`,
             backgroundColor: solid,
-            // White with a dark hairline reads on any colour, in any theme.
-            border: "2px solid white",
-            boxShadow: "0 0 0 1px rgb(0 0 0 / 0.3)",
           }}
         />
       </div>
@@ -311,7 +308,7 @@ function ColorPicker({
             onValueChange={(v) =>
               commit({ ...hsva, h: Array.isArray(v) ? v[0] : v })
             }
-            className="**:data-[slot=slider-range]:bg-transparent! **:data-[slot=slider-track]:h-2.5! **:data-[slot=slider-track]:bg-[linear-gradient(to_right,red,#ff0,#0f0,#0ff,#00f,#f0f,red)]!"
+            className="**:data-[slot=slider-range]:bg-transparent! **:data-[slot=slider-track]:h-2.5! **:data-[slot=slider-track]:[background:var(--picker-hue-track)]!"
           />
           <Slider
             aria-label="Opacity"

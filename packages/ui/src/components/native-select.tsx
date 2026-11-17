@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "@amit-kap/glaze/lib/utils"
+import { fieldState } from "@amit-kap/glaze/lib/control-styles"
 import { ChevronDownIcon } from "lucide-react"
 
 type NativeSelectProps = Omit<React.ComponentProps<"select">, "size"> & {
@@ -14,7 +15,7 @@ function NativeSelect({
   return (
     <div
       className={cn(
-        "group/native-select relative w-fit has-[select:disabled]:opacity-50",
+        "group/native-select relative w-fit has-[select:disabled]:opacity-disabled",
         className
       )}
       data-slot="native-select-wrapper"
@@ -23,10 +24,19 @@ function NativeSelect({
       <select
         data-slot="native-select"
         data-size={size}
-        className="h-control-md w-full min-w-0 appearance-none rounded-control border border-input bg-(--input-fill) py-1 pe-8 ps-2.5 text-body transition-colors outline-none select-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive user-invalid:border-destructive aria-invalid:ring-3 user-invalid:ring-3 aria-invalid:ring-destructive/20 user-invalid:ring-destructive/20 data-[size=sm]:h-control-sm data-[size=sm]:rounded-(--button-radius-xs) data-[size=sm]:py-0.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:user-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 dark:user-invalid:ring-destructive/40"
+        className={cn(
+          "h-control-md w-full min-w-0 appearance-none rounded-control border border-input bg-(--input-fill) py-1 ps-2.5 pe-8 text-body transition-colors outline-none select-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground data-[size=sm]:h-control-sm data-[size=sm]:rounded-(--button-radius-xs) data-[size=sm]:py-0.5 dark:bg-input/30",
+          fieldState,
+          // the wrapper fades the select and its chevron together
+          "disabled:opacity-100"
+        )}
         {...props}
       />
-      <ChevronDownIcon className="pointer-events-none absolute top-1/2 inset-e-2.5 size-4 -translate-y-1/2 text-muted-foreground select-none" aria-hidden="true" data-slot="native-select-icon" />
+      <ChevronDownIcon
+        className="pointer-events-none absolute inset-e-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground select-none"
+        aria-hidden="true"
+        data-slot="native-select-icon"
+      />
     </div>
   )
 }
@@ -38,7 +48,7 @@ function NativeSelectOption({
   return (
     <option
       data-slot="native-select-option"
-      className={cn("bg-[Canvas] text-[CanvasText]", className)}
+      className={cn("bg-popover text-popover-foreground", className)}
       {...props}
     />
   )
@@ -51,7 +61,7 @@ function NativeSelectOptGroup({
   return (
     <optgroup
       data-slot="native-select-optgroup"
-      className={cn("bg-[Canvas] text-[CanvasText]", className)}
+      className={cn("bg-popover text-popover-foreground", className)}
       {...props}
     />
   )

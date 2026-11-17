@@ -8,7 +8,10 @@ export function trimText(children: React.ReactNode): React.ReactNode {
     typeof child === "string" || typeof child === "number"
       ? React.createElement(
           "span",
-          { "data-slot": "label", className: "[text-box:trim-both_cap_alphabetic]" },
+          {
+            "data-slot": "label",
+            className: "[text-box:trim-both_cap_alphabetic]",
+          },
           child
         )
       : child

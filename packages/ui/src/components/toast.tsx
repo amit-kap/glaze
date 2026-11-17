@@ -5,7 +5,14 @@ import { Toast as ToastPrimitive } from "@base-ui/react/toast"
 import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Button } from "@amit-kap/glaze/components/button"
-import { XIcon, CircleCheckIcon, InfoIcon, TriangleAlertIcon, OctagonXIcon, Loader2Icon } from "lucide-react"
+import {
+  XIcon,
+  CircleCheckIcon,
+  InfoIcon,
+  TriangleAlertIcon,
+  OctagonXIcon,
+  Loader2Icon,
+} from "lucide-react"
 import { usePortalContainer } from "@amit-kap/glaze/components/portal-container"
 
 const toast = ToastPrimitive.createToastManager()
@@ -16,7 +23,13 @@ function ToastProvider({ ...props }: ToastPrimitive.Provider.Props) {
 
 function ToastPortal({ ...props }: ToastPrimitive.Portal.Props) {
   const container = usePortalContainer()
-  return <ToastPrimitive.Portal container={container} data-slot="toast-portal" {...props} />
+  return (
+    <ToastPrimitive.Portal
+      container={container}
+      data-slot="toast-portal"
+      {...props}
+    />
+  )
 }
 
 function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
@@ -24,7 +37,7 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
     <ToastPrimitive.Viewport
       data-slot="toast-viewport"
       className={cn(
-        "pointer-events-none fixed inset-x-[calc(--spacing(4)+var(--safe-inline))] bottom-[calc(--spacing(4)+var(--safe-bottom))] z-50 mx-auto w-auto max-w-sm outline-none sm:inset-e-[calc(--spacing(4)+var(--safe-inline))] sm:inset-s-auto sm:mx-0 sm:w-full",
+        "pointer-events-none fixed inset-x-[calc(--spacing(4)+var(--safe-inline))] bottom-[calc(--spacing(4)+var(--safe-bottom))] z-overlay mx-auto w-auto max-w-sm outline-none sm:inset-s-auto sm:inset-e-[calc(--spacing(4)+var(--safe-inline))] sm:mx-0 sm:w-full",
         className
       )}
       {...props}
@@ -40,7 +53,7 @@ function Toast({ className, ...props }: ToastPrimitive.Root.Props) {
         "group/toast pointer-events-auto absolute inset-e-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom rounded-(--toast-radius) border bg-popover text-popover-foreground shadow-modal will-change-transform outline-none select-none focus-visible:border-ring",
         "[--gap:0.75rem] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))] [--peek:0.75rem] [--scale:calc(max(0,1-(var(--toast-index)*0.1)))] [--shrink:calc(1-var(--scale))]",
         "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] [transition:transform_var(--toast-stack-duration)_var(--motion-ease-enter),opacity_var(--toast-stack-duration),height_var(--duration-base)]",
-        "after:absolute after:top-full after:inset-s-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
+        "after:absolute after:inset-s-0 after:top-full after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
         "data-expanded:h-(--toast-height) data-expanded:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))]",
         "data-limited:opacity-0 data-starting-style:[transform:translateY(150%)]",
         "[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(150%)]",
@@ -127,9 +140,7 @@ function ToastClose({
       )}
       {...props}
     >
-      {children ?? (
-        <XIcon aria-hidden="true" />
-      )}
+      {children ?? <XIcon aria-hidden="true" />}
     </ToastPrimitive.Close>
   )
 }
@@ -138,33 +149,23 @@ function ToastIcon({ type }: { type: string | undefined }) {
   let icon: React.ReactNode = null
 
   if (type === "success") {
-    icon = (
-      <CircleCheckIcon aria-hidden="true" />
-    )
+    icon = <CircleCheckIcon aria-hidden="true" />
   }
 
   if (type === "info") {
-    icon = (
-      <InfoIcon aria-hidden="true" />
-    )
+    icon = <InfoIcon aria-hidden="true" />
   }
 
   if (type === "warning") {
-    icon = (
-      <TriangleAlertIcon aria-hidden="true" />
-    )
+    icon = <TriangleAlertIcon aria-hidden="true" />
   }
 
   if (type === "error") {
-    icon = (
-      <OctagonXIcon className="text-destructive" aria-hidden="true" />
-    )
+    icon = <OctagonXIcon className="text-destructive" aria-hidden="true" />
   }
 
   if (type === "loading") {
-    icon = (
-      <Loader2Icon className="animate-spin" aria-hidden="true" />
-    )
+    icon = <Loader2Icon className="animate-spin" aria-hidden="true" />
   }
 
   if (!icon) {
