@@ -60,12 +60,10 @@ function Row({
   ease: string
   end: boolean
 }) {
-  const [playing, setPlaying] = React.useState(true)
-  const [at, setAt] = React.useState(end)
-
-  React.useEffect(() => {
-    if (playing) setAt(end)
-  }, [end, playing])
+  // Null while playing; the end the dot was at when paused.
+  const [held, setHeld] = React.useState<boolean | null>(null)
+  const playing = held === null
+  const at = held ?? end
 
   return (
     <div className="flex items-center gap-3">
@@ -89,7 +87,7 @@ function Row({
         size="icon-sm"
         aria-label={`${playing ? "Pause" : "Play"} ${label}`}
         aria-pressed={!playing}
-        onClick={() => setPlaying((value) => !value)}
+        onClick={() => setHeld(playing ? end : null)}
       >
         {playing ? <PauseIcon /> : <PlayIcon />}
       </Button>
