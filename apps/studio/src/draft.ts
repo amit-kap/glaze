@@ -18,6 +18,7 @@ import {
   autoInk,
   canonical,
   changed,
+  chartFrom,
   countChanges,
   defaults,
   follows,
@@ -114,26 +115,54 @@ function migrateNeutrals(stored: Dials["neutrals"] | undefined) {
 /** A stored draft as the panel can use it: only tokens it still offers. */
 function sanitize(stored: Partial<Stored> | null | undefined): Stored {
   if (!stored?.theme) return fresh()
+  const dials: Dials = {
+    neutrals: migrateNeutrals(stored.dials?.neutrals),
+    tone: stored.dials?.tone ?? 0,
+    scale: stored.dials?.scale ?? 0,
+    motion: stored.dials?.motion ?? "none",
+    weights: stored.dials?.weights ?? null,
+  }
+  // Settle on load, so a draft saved before a follow rule existed (charts
+  // following Brand, for one) catches up with it.
+  const colors = (mode: Mode) => {
+    const theme = onlyTokens(stored.theme![mode], defaults[mode])
+    const unlinked = keepSetFollowers(
+      theme,
+      stored.unlinked?.[mode] ?? [],
+      mode
+    )
+    return { theme: settle(theme, unlinked, mode, dials), unlinked }
+  }
+  const light = colors("light")
+  const dark = colors("dark")
   return {
-    theme: {
-      light: onlyTokens(stored.theme.light, defaults.light),
-      dark: onlyTokens(stored.theme.dark, defaults.dark),
-    },
-    unlinked: {
-      light: stored.unlinked?.light ?? [],
-      dark: stored.unlinked?.dark ?? [],
-    },
+    theme: { light: light.theme, dark: dark.theme },
+    unlinked: { light: light.unlinked, dark: dark.unlinked },
     type: onlyTypeTokens(stored.type),
     shape: onlyShapeTokens(stored.shape),
     motion: onlyMotionTokens(stored.motion),
-    dials: {
-      neutrals: migrateNeutrals(stored.dials?.neutrals),
-      tone: stored.dials?.tone ?? 0,
-      scale: stored.dials?.scale ?? 0,
-      motion: stored.dials?.motion ?? "none",
-      weights: stored.dials?.weights ?? null,
-    },
+    dials,
   }
+}
+
+/**
+ * A row set by hand before it became a follower stays the user's: anything
+ * neither Nova's value nor the one it would follow counts as taken over.
+ */
+function keepSetFollowers(
+  theme: Record<string, Color>,
+  unlinked: string[],
+  mode: Mode
+) {
+  const kept = Object.entries(follows)
+    .filter(
+      ([child, parent]) =>
+        !unlinked.includes(child) &&
+        !sameColor(theme[child], defaults[mode][child]) &&
+        !sameColor(theme[child], followed(mode, child, theme[parent]))
+    )
+    .map(([child]) => child)
+  return kept.length ? [...unlinked, ...kept] : unlinked
 }
 
 function read(): Stored {
@@ -145,8 +174,10 @@ function read(): Stored {
 }
 
 /** The value a following row takes from its source: ink gets the readable end. */
-function followed(child: string, source: Color): Color {
-  return child === "brand-ink" ? autoInk(source) : source
+function followed(mode: Mode, child: string, source: Color): Color {
+  if (child === "brand-ink") return autoInk(source)
+  if (child.startsWith("chart-")) return chartFrom(mode, child, source)
+  return source
 }
 
 /** Apply the follow rules to one mode's colours, a pass per level of the chain. */
@@ -168,7 +199,7 @@ function settle(
     for (const [child, parent] of Object.entries(follows)) {
       // A row the user unlinked is theirs, not the rule's.
       if (unlinked.includes(child)) continue
-      const next = followed(child, colors[parent])
+      const next = followed(mode, child, colors[parent])
       if (sameColor(colors[child], next)) continue
       colors[child] = next
       moved = true
@@ -235,7 +266,7 @@ export function useThemeDraft() {
         const parent = follows[token]
         const staysLinked =
           parent !== undefined &&
-          sameColor(color, followed(token, current.theme[mode][parent]))
+          sameColor(color, followed(mode, token, current.theme[mode][parent]))
         // A colour a dial generates is taken over the same way, unless the
         // value lands on the one the dial would have made.
         const generated = generatedFor(
