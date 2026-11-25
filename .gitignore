@@ -41,3 +41,10 @@ storybook-static
 
 # Glaze Studio deploy build: the unpacked published package
 .glaze-published
+
+# The assembled site (scripts/site-build.mjs)
+_site/
+
+# Playwright
+test-results/
+playwright-report/

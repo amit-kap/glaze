@@ -2,10 +2,20 @@
 
 Glaze Studio edits a theme against Nova, previews it on the real Glaze
 components and exports it. It lives in `apps/studio` and is deployed at
-<https://glaze-studio.amitkap.com>.
+<https://glaze.amitkap.com/studio>.
 
 ## What it does
 
+- **Home.** Studio opens on Home (`#/`). Three template themes (Nova, Folio
+  and Volt) show as cards, each a live preview in light and dark. Clicking a
+  card opens the editor (`#/edit`) with that theme; a template is a copy, so
+  its first Save makes a new library entry. Signing in adds "Your themes": a
+  New theme card and a card per saved theme, with delete. If the open draft
+  has unsaved changes, opening another theme first asks Save, Discard or
+  Cancel. The logo in the editor goes back to Home.
+- **Sign in is a mock.** It takes a name and an email, stores them in the
+  browser and sends nothing anywhere; there is no password and no account.
+  "Your themes" are the ones the library already keeps in this browser.
 - **Side panel.** Brand color (a card of swatches), Primary action, Neutrals
   (greyscale or tinted by the brand), Typography (bundled or Google fonts),
   Scale (comfortable to compact), Tone (quiet to bold) and Motion (Default,
@@ -31,6 +41,7 @@ Everything is stored in the browser; there is no server.
 | `glaze-studio-draft-v1`   | The draft being edited                  |
 | `glaze-studio-library-v1` | Saved themes                            |
 | `glaze-studio-session-v1` | Which saved theme is open, and its name |
+| `glaze-studio-user-v1`    | The mock sign-in: name and email        |
 
 Themes belong to one browser and one address. Use the theme file to move them.
 
@@ -38,7 +49,13 @@ Themes belong to one browser and one address. Use the theme file to move them.
 
 | File                                              | Role                                                 |
 | ------------------------------------------------- | ---------------------------------------------------- |
-| `app.tsx`                                         | Layout, Save, library wiring, Reset all              |
+| `app.tsx`                                         | Home or editor by URL hash; draft, session, library  |
+| `route.ts`                                        | The hash route (`#/` Home, `#/edit` editor)          |
+| `home.tsx`, `theme-card.tsx`                      | Home and the theme cards                             |
+| `templates.ts`                                    | The three template themes                            |
+| `user.ts`, `user-control.tsx`                     | The mock sign-in, its dialog and the account menu    |
+| `editor.tsx`, `top-bar.tsx`                       | The editor layout, Save, Reset all                   |
+| `scope.ts`                                        | The CSS variables a preview frame wears              |
 | `draft.ts`, `dials.ts`                            | The draft state and the Scale, Tone and Motion dials |
 | `simple-panel.tsx`                                | The side panel                                       |
 | `stage.tsx`                                       | The preview frame and its tabs                       |
@@ -61,14 +78,22 @@ The deployed site is built against the published package, not the source, so
 it shows what people get from npm; the top bar shows which version
 (`Glaze 0.4.0`). `GLAZE_VERSION=0.4.0 npm run build:deploy -w studio` pins one.
 
-Hosting is a Cloudflare Workers project named `glaze-studio`, built from
-`main`:
+Studio is one folder of the Glaze site, <https://glaze.amitkap.com/studio>.
+The site (home page, `/showcase`, `/studio`, `/storybook`) is one Cloudflare
+Workers project named `glaze-studio`, built from `main` and described by
+`wrangler.jsonc`:
 
-| Setting        | Value                                                                                               |
-| -------------- | --------------------------------------------------------------------------------------------------- |
-| Build command  | `npm run build:deploy -w studio`                                                                    |
-| Deploy command | `npx wrangler deploy --assets=apps/studio/dist --name glaze-studio --compatibility-date=2026-11-05` |
-| Root directory | the repository root                                                                                 |
+| Setting        | Value                 |
+| -------------- | --------------------- |
+| Build command  | `npm run build:site`  |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | the repository root   |
+
+`build:site` (`scripts/site-build.mjs`) builds every app with relative paths
+into `_site/`; Studio's part is the same `build:deploy` as above. The old
+address, `glaze-studio.amitkap.com`, stays attached to the project: themes are
+stored per address, so the ones saved there are exported from
+`glaze-studio.amitkap.com/studio` and imported at the new one.
 
 A push to `main` rebuilds it. A package release rebuilds it too: the release
 workflow waits for npm to list the new version, then calls the project's deploy

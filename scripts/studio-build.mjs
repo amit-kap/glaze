@@ -37,7 +37,8 @@ run("tar", ["xzf", tarball], { cwd: dir })
 const published = JSON.parse(readFileSync(join(dir, "package/package.json"), "utf8"))
 console.log(`Building Studio against ${name}@${published.version}`)
 
-execFileSync("npx", ["vite", "build"], {
+// Extra arguments (such as --base=./) go to the build.
+execFileSync("npx", ["vite", "build", ...process.argv.slice(2)], {
   cwd: studio,
   stdio: "inherit",
   env: {

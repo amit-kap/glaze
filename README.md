@@ -8,9 +8,9 @@
 
 Glaze is a React component library built on [shadcn/ui](https://ui.shadcn.com) and [Base UI](https://base-ui.com), themed entirely through CSS custom properties. One set of shared settings applies across every component; a component only diverges through a named adjustment.
 
-[Glaze Studio](https://glaze-studio.amitkap.com) edits a theme against the default Nova look, previews it on the real components and exports it.
+[Glaze Studio](https://glaze.amitkap.com/studio) edits a theme against the default Nova look, previews it on the real components and exports it.
 
-**Live:** [Glaze Studio](https://glaze-studio.amitkap.com) · [Components](https://amit-kap.github.io/glaze/) · [Storybook](https://amit-kap.github.io/glaze/storybook/)
+**Live:** [Glaze Studio](https://glaze.amitkap.com/studio) · [Home](https://glaze.amitkap.com) · [Components](https://glaze.amitkap.com/showcase) · [Storybook](https://glaze.amitkap.com/storybook)
 
 ## Features
 
@@ -37,7 +37,7 @@ Setting it up by hand, switching modes at runtime, avoiding a flash on load and 
 
 ## Your own theme
 
-Make one in [Glaze Studio](https://glaze-studio.amitkap.com), then Export. Download the config and apply it:
+Make one in [Glaze Studio](https://glaze.amitkap.com/studio), then Export. Download the config and apply it:
 
 ```bash
 npx @amit-kap/glaze init --config glaze.config.json
@@ -55,7 +55,7 @@ A Vite monorepo:
 | `apps/studio`    | Glaze Studio, the theme editor                   |
 | `apps/showcase`  | One tile per component                           |
 | `apps/storybook` | Storybook with a story for every component       |
-| `apps/web`       | Web app (the target for `shadcn add`)            |
+| `apps/web`       | The Glaze home page                              |
 
 - [docs/development.md](docs/development.md): commands, adding components, motion, releasing
 - [docs/studio.md](docs/studio.md): what Studio does and how it is deployed

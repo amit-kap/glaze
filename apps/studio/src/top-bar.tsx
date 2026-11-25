@@ -7,7 +7,6 @@ import {
   UploadIcon,
 } from "lucide-react"
 
-import { Avatar, AvatarFallback } from "@amit-kap/glaze/components/avatar"
 import { Badge } from "@amit-kap/glaze/components/badge"
 import { Button } from "@amit-kap/glaze/components/button"
 import { Input } from "@amit-kap/glaze/components/input"
@@ -20,7 +19,8 @@ import {
 import { Separator } from "@amit-kap/glaze/components/separator"
 
 import { age, type SavedTheme } from "./library"
-import { Logo, logoPink } from "./logo"
+import { BrandMark } from "./brand-mark"
+import { UserControl } from "./user-control"
 
 export function TopBar({
   name,
@@ -57,21 +57,7 @@ export function TopBar({
   return (
     <header className="flex h-15 shrink-0 items-center gap-3.5 px-8">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <Logo />
-          <Badge
-            variant="outline"
-            className="h-auto px-1.5 py-0.5 text-[10px] leading-none uppercase"
-            style={{ color: logoPink, borderColor: logoPink }}
-          >
-            Alpha
-          </Badge>
-          {__GLAZE_VERSION__ && (
-            <span className="text-caption text-muted-foreground tabular-nums">
-              {__GLAZE_VERSION__}
-            </span>
-          )}
-        </div>
+        <BrandMark homeHref="#/" />
         <div className="flex items-center gap-1">
           <Input
             value={name}
@@ -200,9 +186,7 @@ export function TopBar({
         </div>
       </div>
 
-      <Avatar>
-        <AvatarFallback>AK</AvatarFallback>
-      </Avatar>
+      <UserControl />
     </header>
   )
 }

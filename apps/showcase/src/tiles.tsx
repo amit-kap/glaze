@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import { Card } from "@amit-kap/glaze/components/card"
+import { cn } from "@amit-kap/glaze/lib/utils"
 import {
   AccordionDemo,
   AlertDemo,
@@ -83,23 +84,41 @@ export const tiles: {
   { name: "Tooltip", demo: TooltipDemo },
 ]
 
-// One demo in a card, with the component's name in the footer strip.
+// One demo in a card, with the component's name in the footer strip. `bleed`
+// removes the padding, for content that fills the card.
 export function DemoTile({
   name,
   wide,
+  bleed,
+  className,
+  contentClassName,
   children,
+  ...props
 }: {
   name: string
   wide?: boolean
+  bleed?: boolean
+  contentClassName?: string
   children: React.ReactNode
-}) {
+} & Omit<React.ComponentProps<typeof Card>, "children" | "name">) {
   return (
     <Card
       role="region"
       aria-label={name}
-      className={`min-w-0 gap-0 overflow-hidden py-0 ${wide ? "sm:col-span-2" : ""}`}
+      {...props}
+      className={cn(
+        "min-w-0 gap-0 overflow-hidden py-0",
+        wide && "sm:col-span-2",
+        className
+      )}
     >
-      <div className="flex min-h-56 flex-1 items-center justify-center px-6 py-10">
+      <div
+        className={cn(
+          "flex min-h-56 min-w-0 flex-1",
+          bleed ? "items-stretch" : "items-center justify-center px-6 py-10",
+          contentClassName
+        )}
+      >
         {children}
       </div>
       <div className="shrink-0 border-t border-border/40 px-4 py-3 text-body text-muted-foreground">

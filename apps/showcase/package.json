@@ -12,14 +12,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ai-sdk/react": "^4.0.163",
     "@amit-kap/glaze": "*",
+    "ai": "^7.0.137",
+    "input-otp": "^1.5.0",
     "lucide-react": "^1.66.0",
+    "motion": "^14.9.0",
     "react": "^19.3.1",
+    "react-day-picker": "^10.0.2",
     "react-dom": "^19.3.1",
     "recharts": "^3.10.1"
   },
   "devDependencies": {
     "@eslint/js": "^10",
+    "@shadcn/helpers": "^0.3.0",
     "@tailwindcss/vite": "^4",
     "@types/node": "^25",
     "@types/react": "^19",
