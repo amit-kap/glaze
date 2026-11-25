@@ -1,6 +1,6 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/assets/glaze-banner-dark.png">
-  <img alt="Glaze — a glossy finish for every component" src=".github/assets/glaze-banner-light.png">
+  <img alt="Glaze — the style layer for your components" src=".github/assets/glaze-banner-light.png">
 </picture>
 
 <br />
