@@ -108,7 +108,7 @@ function InsetSlider({
         className={cn(
           "group/control relative flex min-w-0 flex-1 cursor-ew-resize touch-none items-center px-0.5 select-none",
           "before:absolute before:inset-x-0 before:top-1/2 before:-translate-y-1/2 before:rounded-pill before:bg-muted before:ring-1 before:ring-border before:transition-shadow before:ring-inset",
-          "hover:before:ring-muted-foreground has-focus-visible:before:ring-foreground data-disabled:cursor-default data-disabled:opacity-50",
+          "hover:before:ring-(--control-hover-border) has-focus-visible:before:ring-ring data-disabled:opacity-disabled",
           s.control
         )}
       >

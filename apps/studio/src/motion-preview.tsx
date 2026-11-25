@@ -1,5 +1,7 @@
 import * as React from "react"
+import { PauseIcon, PlayIcon } from "lucide-react"
 
+import { Button } from "@amit-kap/glaze/components/button"
 import { Card, CardContent } from "@amit-kap/glaze/components/card"
 
 import { motionVars, toMs, type MotionValues } from "./motion"
@@ -18,8 +20,9 @@ const slow = 4
 
 /**
  * A dot crossing a track once per curve, on the draft's own durations and
- * easing, slowed down so the difference shows. It loops, so a change to the Motion choice shows at once. The
- * panel sits outside the themed stage, so the values come in directly.
+ * easing, slowed down so the difference shows. It loops, so a change to the
+ * Motion choice shows at once. Each row has its own play/pause. The panel
+ * sits outside the themed stage, so the values come in directly.
  */
 export function MotionPreview({ motion }: { motion: MotionValues }) {
   const [end, setEnd] = React.useState(false)
@@ -40,25 +43,54 @@ export function MotionPreview({ motion }: { motion: MotionValues }) {
         style={motionVars(motion) as React.CSSProperties}
       >
         {rows.map((row) => (
-          <div key={row.label} className="flex items-center gap-3">
-            <span className="w-14 shrink-0 text-caption text-muted-foreground">
-              {row.label}
-            </span>
-            <div className="relative h-1 flex-1 rounded-pill bg-muted">
-              <span
-                aria-hidden
-                className="absolute top-1/2 size-3 -translate-y-1/2 rounded-pill bg-brand"
-                style={{
-                  left: end ? "calc(100% - 1.5rem)" : "0",
-                  transitionProperty: "left",
-                  transitionDuration: `calc(var(--motion-moderate) * ${slow})`,
-                  transitionTimingFunction: row.ease,
-                }}
-              />
-            </div>
-          </div>
+          <Row key={row.label} {...row} end={end} />
         ))}
       </CardContent>
     </Card>
+  )
+}
+
+// A paused row holds where it is and picks the shared loop up again on play.
+function Row({
+  label,
+  ease,
+  end,
+}: {
+  label: string
+  ease: string
+  end: boolean
+}) {
+  // Null while playing; the end the dot was at when paused.
+  const [held, setHeld] = React.useState<boolean | null>(null)
+  const playing = held === null
+  const at = held ?? end
+
+  return (
+    <div className="flex items-center gap-3">
+      <span className="w-14 shrink-0 text-caption text-muted-foreground">
+        {label}
+      </span>
+      <div className="relative h-1 flex-1 rounded-pill bg-muted">
+        <span
+          aria-hidden
+          className="absolute top-1/2 size-3 -translate-y-1/2 rounded-pill bg-brand"
+          style={{
+            left: at ? "calc(100% - 0.75rem)" : "0",
+            transitionProperty: "left",
+            transitionDuration: `calc(var(--motion-moderate) * ${slow})`,
+            transitionTimingFunction: ease,
+          }}
+        />
+      </div>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label={`${playing ? "Pause" : "Play"} ${label}`}
+        aria-pressed={!playing}
+        onClick={() => setHeld(playing ? end : null)}
+      >
+        {playing ? <PauseIcon /> : <PlayIcon />}
+      </Button>
+    </div>
   )
 }

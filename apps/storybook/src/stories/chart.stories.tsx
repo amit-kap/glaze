@@ -1,6 +1,21 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  PolarAngleAxis,
+  PolarGrid,
+  Radar,
+  RadarChart,
+  XAxis,
+} from "recharts"
 import {
   Card,
   CardContent,
@@ -260,4 +275,130 @@ export const FirstChartTooltip: Story = {
 export const FirstChartLegend: Story = {
   name: "First Chart: Legend",
   render: () => <FirstChart grid axis tooltip legend />,
+}
+
+// --- Other chart types ---------------------------------------------------
+// The same ChartContainer, tooltip and legend over each Recharts chart type,
+// so a theme change shows on all of them, not only on bars.
+
+export const Area_: Story = {
+  name: "Area",
+  render: () => (
+    <ChartContainer config={monthsConfig} className="min-h-[200px] w-full">
+      <AreaChart accessibilityLayer data={months}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          tickMargin={10}
+          axisLine={false}
+          tickFormatter={(value) => value.slice(0, 3)}
+        />
+        <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
+        <ChartLegend content={<ChartLegendContent />} />
+        <Area
+          dataKey="desktop"
+          type="natural"
+          fill="var(--color-desktop)"
+          fillOpacity={0.4}
+          stroke="var(--color-desktop)"
+        />
+        <Area
+          dataKey="mobile"
+          type="natural"
+          fill="var(--color-mobile)"
+          fillOpacity={0.4}
+          stroke="var(--color-mobile)"
+        />
+      </AreaChart>
+    </ChartContainer>
+  ),
+}
+
+export const Line_: Story = {
+  name: "Line",
+  render: () => (
+    <ChartContainer config={monthsConfig} className="min-h-[200px] w-full">
+      <LineChart accessibilityLayer data={months}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          tickMargin={10}
+          axisLine={false}
+          tickFormatter={(value) => value.slice(0, 3)}
+        />
+        <ChartTooltip content={<ChartTooltipContent />} />
+        <ChartLegend content={<ChartLegendContent />} />
+        <Line
+          dataKey="desktop"
+          type="monotone"
+          stroke="var(--color-desktop)"
+          strokeWidth={2}
+          dot={false}
+        />
+        <Line
+          dataKey="mobile"
+          type="monotone"
+          stroke="var(--color-mobile)"
+          strokeWidth={2}
+          dot={false}
+        />
+      </LineChart>
+    </ChartContainer>
+  ),
+}
+
+const channels = [
+  { channel: "online", orders: 275, fill: "var(--color-online)" },
+  { channel: "retail", orders: 200, fill: "var(--color-retail)" },
+  { channel: "wholesale", orders: 187, fill: "var(--color-wholesale)" },
+  { channel: "social", orders: 173, fill: "var(--color-social)" },
+]
+
+const channelsConfig = {
+  orders: { label: "Orders" },
+  online: { label: "Online", color: "var(--chart-1)" },
+  retail: { label: "Retail", color: "var(--chart-2)" },
+  wholesale: { label: "Wholesale", color: "var(--chart-3)" },
+  social: { label: "Social", color: "var(--chart-4)" },
+} satisfies ChartConfig
+
+export const Donut: Story = {
+  name: "Pie / Donut",
+  render: () => (
+    <ChartContainer config={channelsConfig} className="mx-auto min-h-[240px] w-full">
+      <PieChart>
+        <ChartTooltip content={<ChartTooltipContent hideLabel nameKey="channel" />} />
+        <ChartLegend content={<ChartLegendContent nameKey="channel" />} />
+        <Pie data={channels} dataKey="orders" nameKey="channel" innerRadius="55%" />
+      </PieChart>
+    </ChartContainer>
+  ),
+}
+
+export const Radar_: Story = {
+  name: "Radar",
+  render: () => (
+    <ChartContainer config={monthsConfig} className="mx-auto min-h-[240px] w-full">
+      <RadarChart data={months}>
+        <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
+        <ChartLegend content={<ChartLegendContent />} />
+        <PolarAngleAxis dataKey="month" />
+        <PolarGrid />
+        <Radar
+          dataKey="desktop"
+          fill="var(--color-desktop)"
+          fillOpacity={0.5}
+          stroke="var(--color-desktop)"
+        />
+        <Radar
+          dataKey="mobile"
+          fill="var(--color-mobile)"
+          fillOpacity={0.5}
+          stroke="var(--color-mobile)"
+        />
+      </RadarChart>
+    </ChartContainer>
+  ),
 }

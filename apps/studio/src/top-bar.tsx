@@ -20,7 +20,7 @@ import {
 import { Separator } from "@amit-kap/glaze/components/separator"
 
 import { age, type SavedTheme } from "./library"
-import { Logo } from "./logo"
+import { Logo, logoPink } from "./logo"
 
 export function TopBar({
   name,
@@ -57,7 +57,21 @@ export function TopBar({
   return (
     <header className="flex h-15 shrink-0 items-center gap-3.5 px-8">
       <div className="flex items-center gap-4">
-        <Logo />
+        <div className="flex items-center gap-2">
+          <Logo />
+          <Badge
+            variant="outline"
+            className="h-auto px-1.5 py-0.5 text-[10px] leading-none uppercase"
+            style={{ color: logoPink, borderColor: logoPink }}
+          >
+            Alpha
+          </Badge>
+          {__GLAZE_VERSION__ && (
+            <span className="text-caption text-muted-foreground tabular-nums">
+              {__GLAZE_VERSION__}
+            </span>
+          )}
+        </div>
         <div className="flex items-center gap-1">
           <Input
             value={name}
@@ -160,11 +174,6 @@ export function TopBar({
       </div>
 
       <div className="ms-auto flex min-w-0 flex-1 items-center justify-end gap-2">
-        {__GLAZE_VERSION__ && (
-          <span className="me-1 text-caption text-muted-foreground tabular-nums">
-            Glaze {__GLAZE_VERSION__}
-          </span>
-        )}
         <Button
           variant="outline"
           size="sm"

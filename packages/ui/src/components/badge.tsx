@@ -5,7 +5,7 @@ import { cn } from "@amit-kap/glaze/lib/utils"
 import { trimText } from "@amit-kap/glaze/lib/label"
 
 const badgeVariants = cva(
-  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center-safe gap-1 overflow-clip rounded-(--badge-radius) border border-transparent px-2 py-0.5 text-caption font-medium whitespace-nowrap transition focus-visible:border-ring has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-(--icon-size)!",
+  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center-safe gap-1 overflow-clip rounded-(--badge-radius) border border-transparent px-2 py-0.5 text-caption font-medium whitespace-nowrap transition focus-visible:border-ring has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 aria-invalid:border-(--control-invalid-border) aria-invalid:ring-(--control-invalid-ring) [&>svg]:pointer-events-none [&>svg]:size-(--icon-size)!",
   {
     variants: {
       variant: {
@@ -14,7 +14,7 @@ const badgeVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80",
         destructive:
-          "bg-destructive/10 text-destructive focus-visible:border-destructive/40 dark:bg-destructive/20 [a]:hover:bg-destructive/20",
+          "bg-destructive/10 text-destructive dark:bg-destructive/20 [a]:hover:bg-destructive/20",
         outline:
           "border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground",
         ghost:

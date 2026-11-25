@@ -73,6 +73,23 @@
   --secondary-foreground: var(--foreground);
   --accent-foreground: var(--foreground);
 
+  /* colour: control states, shared by every field and choice control */
+  --control-hover-border: color-mix(
+    in oklab,
+    var(--input),
+    var(--foreground) 20%
+  );
+  --control-invalid-border: var(--destructive);
+  --control-invalid-ring: color-mix(
+    in oklab,
+    var(--destructive) 20%,
+    transparent
+  );
+
+  /* colour: primary-tinted surface (bubble tinted variant) */
+  --tint: oklch(from var(--primary) 0.93 calc(c * 0.4) h);
+  --tint-hover: oklch(from var(--primary) 0.88 calc(c * 0.5) h);
+
   /* colour: lines and sidebar slices that always match their source */
   --input: var(--border);
   --ring: var(--primary);
@@ -162,4 +179,59 @@
   --switch-height-sm: calc(var(--space) * 3.5);
   --switch-thumb: calc(var(--space) * 4);
   --switch-thumb-sm: calc(var(--space) * 3);
+
+  /* checkbox and radio box, slider handle, textarea floor: scale with
+     --space like the switch, so they follow theme spacing and density */
+  --check-size: calc(var(--space) * 4);
+  --slider-thumb-size: calc(var(--space) * 3);
+  --textarea-min-height: calc(var(--control-md) * 2);
+}
+
+:where(.dark) {
+  --control-invalid-border: color-mix(
+    in oklab,
+    var(--destructive) 50%,
+    transparent
+  );
+  --control-invalid-ring: color-mix(
+    in oklab,
+    var(--destructive) 40%,
+    transparent
+  );
+  --tint: oklch(from var(--primary) 0.3 calc(c * 0.4) h);
+  --tint-hover: oklch(from var(--primary) 0.35 calc(c * 0.5) h);
+}
+
+/* structural constants: not theme inputs, so they stay out of the catalog */
+:where(:root) {
+  /* stacking layers, used as z-raised / z-sticky / z-fixed / z-overlay */
+  --z-raised: 10;
+  --z-sticky: 20;
+  --z-fixed: 30;
+  --z-overlay: 50;
+
+  --opacity-disabled: 0.5;
+  --tracking-shortcut: 0.1em;
+
+  --tab-indicator: calc(var(--space) * 0.5);
+  --chart-dashed-width: calc(var(--space) * 0.375);
+
+  /* colour picker thumb: white with a dark hairline reads on any colour, in
+     any theme; the hue ramp is the spectrum, not a theme decision */
+  --picker-thumb: white;
+  --picker-thumb-ring: 0 0 0 1px rgb(0 0 0 / 0.3);
+  --picker-hue-track: linear-gradient(
+    to right,
+    red,
+    #ff0,
+    #0f0,
+    #0ff,
+    #00f,
+    #f0f,
+    red
+  );
+}
+
+:where(:root) {
+  --tracking-heading: -0.025em;
 }

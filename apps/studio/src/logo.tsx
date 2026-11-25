@@ -184,6 +184,9 @@ const paths: [string, string][] = [
   ],
 ]
 
+/** The mark's icing pink, for text set beside it. */
+export const logoPink = "#FE6CCB"
+
 export function Logo({ className }: { className?: string }) {
   return (
     <svg

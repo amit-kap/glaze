@@ -11,7 +11,7 @@ function ScrollArea({
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
       className={cn(
-        "relative transition-[color,box-shadow] has-[>[data-slot=scroll-area-viewport]:focus-visible]:outline-solid has-[>[data-slot=scroll-area-viewport]:focus-visible]:outline-1 has-[>[data-slot=scroll-area-viewport]:focus-visible]:-outline-offset-1 has-[>[data-slot=scroll-area-viewport]:focus-visible]:outline-ring",
+        "relative transition-[color,box-shadow] has-[>[data-slot=scroll-area-viewport]:focus-visible]:outline-1 has-[>[data-slot=scroll-area-viewport]:focus-visible]:-outline-offset-1 has-[>[data-slot=scroll-area-viewport]:focus-visible]:outline-ring has-[>[data-slot=scroll-area-viewport]:focus-visible]:outline-solid",
         className
       )}
       {...props}

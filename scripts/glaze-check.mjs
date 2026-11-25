@@ -34,6 +34,20 @@ const forbidden = [
   [`(?:bg|text|border|ring|fill|stroke|outline|from|to|via)-(?:white|black|(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\\d+)`, "use colour system tokens"],
 ].map(([re, hint]) => [new RegExp(`${B}${re}${E}`, "g"), hint])
 
+// Library only: these utilities ship with the next release, and stories, the
+// showcase and Studio use fixture sizes that are not component decisions.
+const libraryOnly = [
+  [`z-(?:10|20|30|40|50)`, "use z-raised / -sticky / -fixed / -overlay"],
+  [`text-base`, "use text-body (textControl in lib/control-styles for text entry)"],
+  [`(?:[a-z-]+:)*cursor-not-allowed`, "the base layer sets the disabled cursor"],
+  [`(?:[a-z-]+:)*(?:aria-invalid|user-invalid):(?:border|ring)-destructive(?:/\\d+)?`, "use the control state tokens (lib/control-styles)"],
+  [`opacity-50`, "use opacity-disabled"],
+  [`tracking-(?:tighter|tight|wide|wider|widest)`, "use a tracking token (tracking-shortcut)"],
+  [`(?:[whpm][trblxyse]?|size|min-[wh]|max-[wh]|gap(?:-[xy])?|inset(?:-[xyse])?|top|bottom|translate-[xy]|border|ring|outline)-\\[-?[0-9.]+(?:px|rem|em)\\]`, "literal size: use the spacing scale or a size token"],
+  [`(?:bg|text|border|ring|fill|stroke|outline|from|to|via)-\\[(?:#|rgba?\\(|hsla?\\(|oklch\\()[^\\]]*\\]`, "literal colour: use a colour token"],
+  [`(?:bg|text)-\\[(?:Canvas|CanvasText)\\]`, "use colour system tokens"],
+].map(([re, hint]) => [new RegExp(`${B}${re}${E}`, "g"), hint])
+
 // Deliberate exceptions, each with its reason. Matched against the whole
 // class, variants included.
 const exceptions = [
@@ -57,7 +71,7 @@ for (const file of readdirSync(dir).filter((f) => f.endsWith(".tsx")).sort()) {
       console.log(`${file}:${i + 1}  import from "cn"  → import { cn } from "@amit-kap/glaze/lib/utils"`)
       problems++
     }
-    for (const [re, hint] of forbidden) {
+    for (const [re, hint] of [...forbidden, ...libraryOnly]) {
       for (const m of line.matchAll(re)) {
         const cls = line.slice(0, m.index).match(/[^\s"'`]*$/)[0] + m[0] + line.slice(m.index + m[0].length).match(/^[^\s"'`]*/)[0]
         if (exceptions.some(([ex]) => ex.test(cls))) continue

@@ -211,7 +211,25 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
       }
   }
 
-  const tint: Tint = dials.neutrals.strength > 0 ? "brand" : "grey"
+  // Surfaces (fills and text) and borders each take Greyscale or Brand color.
+  const groupTint = (group: "surfaces" | "borders"): Tint =>
+    dials.neutrals.strength > 0 && (dials.neutrals[group] ?? true)
+      ? "brand"
+      : "grey"
+  const setTint = (group: "surfaces" | "borders", value: Tint) => {
+    const next = {
+      surfaces: groupTint("surfaces") === "brand",
+      borders: groupTint("borders") === "brand",
+      [group]: value === "brand",
+    }
+    draft.setNeutrals({
+      ...dials.neutrals,
+      brand: true,
+      strength: next.surfaces || next.borders ? tintStrength : 0,
+      surfaces: next.surfaces,
+      borders: next.borders,
+    })
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -265,20 +283,25 @@ export function SimplePanel({ draft, mode }: { draft: Draft; mode: Mode }) {
         />
       </Section>
 
-      <Section title="Neutrals">
+      <Section title="Surfaces">
         <SegmentedControl
           size="sm"
           className="w-full"
-          label="Neutrals"
+          label="Surfaces"
           options={tintOptions}
-          value={tint}
-          onValueChange={(value) =>
-            draft.setNeutrals(
-              value === "grey"
-                ? { ...dials.neutrals, strength: 0 }
-                : { ...dials.neutrals, strength: tintStrength, brand: true }
-            )
-          }
+          value={groupTint("surfaces")}
+          onValueChange={(value) => setTint("surfaces", value)}
+        />
+      </Section>
+
+      <Section title="Borders">
+        <SegmentedControl
+          size="sm"
+          className="w-full"
+          label="Borders"
+          options={tintOptions}
+          value={groupTint("borders")}
+          onValueChange={(value) => setTint("borders", value)}
         />
       </Section>
 

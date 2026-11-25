@@ -13,6 +13,7 @@ then `docs/architecture.md` before changing components, tokens or themes.
 
 ## Rules
 
+- Releases happen by bumping `version` in `packages/ui/package.json` and merging to `main` (`docs/development.md`). Never publish by hand.
 - Components carry no visual decisions. Every colour, radius, size, type,
   shadow and motion value is a token. `npm run check:tokens` enforces this on
   the library, stories, showcase and Studio; run it before committing.
@@ -24,8 +25,6 @@ then `docs/architecture.md` before changing components, tokens or themes.
   not. Studio follows the published package when deployed, so it must not use
   anything that is not in the latest release.
 - Before opening a pull request: `npx turbo lint typecheck build`.
-- Releases happen by bumping `version` in `packages/ui/package.json` and
-  merging to `main` (`docs/development.md`). Never publish by hand.
 
 <!-- BEGIN:turborepo-agent-rules -->
 

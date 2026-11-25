@@ -6,8 +6,10 @@
 import novaCss from "@amit-kap/glaze/themes/nova.css?raw"
 import {
   formatColor,
+  oklabToRgba,
   parseColor,
   relativeLuminance,
+  rgbaToOklch,
   type Rgba,
 } from "@amit-kap/glaze/lib/color"
 import { dependentsOf, settings } from "@amit-kap/glaze/theme/catalog"
@@ -169,6 +171,57 @@ export const follows: Record<string, string> = {
   "brand-ink": "brand",
   primary: "brand",
   "primary-foreground": "brand-ink",
+  "chart-1": "brand",
+  "chart-2": "brand",
+  "chart-3": "brand",
+  "chart-4": "brand",
+  "chart-5": "brand",
+}
+
+// --- Charts --------------------------------------------------------------
+
+// How much brand each chart series keeps, mixed into the background in Oklab:
+// series 1 is the brand itself, the rest are quieter tints of it.
+const chartShare: Record<string, number> = {
+  "chart-1": 1,
+  "chart-2": 0.55,
+  "chart-3": 0.38,
+  "chart-4": 0.26,
+  "chart-5": 0.16,
+}
+
+const toOklab = (color: Rgba) => {
+  const { l, c, h } = rgbaToOklch(color)
+  const rad = (h * Math.PI) / 180
+  return { l, a: c * Math.cos(rad), b: c * Math.sin(rad), alpha: color.a }
+}
+
+/**
+ * A chart series as the brand makes it. Nova's own brand keeps Nova's chart
+ * colours, so an untouched theme stays Nova; any other brand recolours every
+ * chart from itself.
+ */
+export function chartFrom(mode: Mode, token: string, brand: Color): Color {
+  const nova = defaults[mode][token]
+  const source = parseColor(brand)
+  const background = parseColor(defaults[mode].background)
+  if (sameColor(brand, defaults[mode].brand) || !source || !background)
+    return nova
+  const share = chartShare[token] ?? 1
+  const from = toOklab(source)
+  const to = toOklab(background)
+  const mix = (x: number, y: number) => x * share + y * (1 - share)
+  return canonical(
+    formatColor(
+      oklabToRgba(
+        mix(from.l, to.l),
+        mix(from.a, to.a),
+        mix(from.b, to.b),
+        mix(from.alpha, to.alpha)
+      ),
+      "oklch"
+    )
+  )
 }
 
 // --- Ink -----------------------------------------------------------------

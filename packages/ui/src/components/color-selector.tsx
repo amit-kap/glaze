@@ -79,7 +79,7 @@ function Channels({
     return (
       <span
         aria-hidden="true"
-        className="w-[131px] shrink-0 text-center font-mono text-caption whitespace-nowrap text-muted-foreground"
+        className="w-33 shrink-0 text-center font-mono text-caption whitespace-nowrap text-muted-foreground"
       >
         {formatColor({ ...parsed, a: 1 }, "hex")}
       </span>
@@ -273,7 +273,7 @@ function EditableChannels({
               // Same width as the readout it replaces, so opening it moves
               // nothing: a channel cell is 36px, so its text is a size down.
               format === "hex"
-                ? "w-[131px]"
+                ? "w-33"
                 : "w-9 data-[size=mini]:px-0 data-[size=mini]:text-micro md:data-[size=mini]:text-micro"
             )}
             onFocus={(event) => event.currentTarget.select()}

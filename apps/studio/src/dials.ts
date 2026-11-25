@@ -19,6 +19,13 @@ export type NeutralsDial = {
   strength: number
   /** Tint toward the brand colour's hue instead of the fixed `hue`. */
   brand?: boolean
+  /**
+   * Which groups the tint reaches: the surfaces (fills and text) and the
+   * borders (lines and input edges). Unset, as in drafts saved before the two
+   * split, means both follow `strength`.
+   */
+  surfaces?: boolean
+  borders?: boolean
 }
 
 /** How much character the motion has: Nova's own, calmer, or springier. */
@@ -50,6 +57,11 @@ export const dialDefaults: Dials = {
   weights: null,
 }
 
+/** The lines a tint can reach on its own, apart from the surfaces. */
+export const borderTokens = ["border", "input"].filter((token) =>
+  tokens.includes(token)
+)
+
 /** The surfaces, fills, borders and text a tint reaches. */
 export const neutralTokens = [
   "background",
@@ -80,6 +92,13 @@ const reach = (lightness: number) =>
  */
 const surfaceReach = (lightness: number) =>
   lightness >= 85 || lightness <= 30 ? 1 : 0.5
+
+/** Whether the dial tints this neutral: its strength, and its group is on. */
+export function isTinted(dial: NeutralsDial, token: string) {
+  if (dial.strength <= 0 || !neutralTokens.includes(token)) return false
+  const group = borderTokens.includes(token) ? dial.borders : dial.surfaces
+  return group ?? true
+}
 
 /**
  * One neutral as the dial makes it: Nova's lightness and opacity kept, the hue
@@ -192,7 +211,7 @@ export function generatedFor(
     : dials.neutrals.hue
   // A grey brand still counts as tinted, with nothing to add: the greys must
   // go back to Nova's when the brand turns grey, not keep the old tint.
-  const tinted = dials.neutrals.strength > 0 && neutralTokens.includes(token)
+  const tinted = isTinted(dials.neutrals, token)
   // Without a tint of their own, bold surfaces borrow the brand's hue.
   const lent =
     !tinted && brand ? brandTint(mode, token, brand, dials.tone) : null
