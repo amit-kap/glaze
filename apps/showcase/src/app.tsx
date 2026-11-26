@@ -23,8 +23,14 @@ import { DemoTile, tiles } from "./tiles"
 import { ComponentView } from "./variants/component-view"
 import { components } from "./variants/registry"
 
-const HOME_URL = import.meta.env.VITE_HOME_URL ?? "../"
-const STUDIO_URL = import.meta.env.VITE_STUDIO_URL ?? "../studio/"
+// On the built site the apps are sibling folders; in development each runs on
+// its own dev server, on its default port.
+const dev = import.meta.env.DEV
+const HOME_URL =
+  import.meta.env.VITE_HOME_URL ?? (dev ? "http://localhost:5173/" : "../")
+const STUDIO_URL =
+  import.meta.env.VITE_STUDIO_URL ??
+  (dev ? "http://localhost:5186/" : "../studio/")
 
 // Hash routes, so the static site needs no server rules: #/ is the overview,
 // #/button is the Button page.

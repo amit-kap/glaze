@@ -24,8 +24,9 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@showcase/*": ["../showcase/src/*"],
       "@amit-kap/glaze/*": ["../../packages/ui/src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "../showcase/src/demos"]
 }

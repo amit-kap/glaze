@@ -19,6 +19,8 @@ How to work in this repository. For using the library, see the
 
 ```bash
 npm install
+npm run dev                 # every app at once; the home page's links need the others running
+npm run dev -w web          # http://localhost:5173, the home page
 npm run dev -w studio       # http://localhost:5186
 npm run dev -w showcase     # http://localhost:5180
 npm run dev -w storybook    # http://localhost:6006

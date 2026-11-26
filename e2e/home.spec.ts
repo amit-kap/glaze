@@ -44,6 +44,28 @@ test.describe("Glaze home page", () => {
     await expect(page.getByTestId("studio-home")).toBeVisible()
   })
 
+  test("picking a flavour re-themes the live preview", async ({ page }) => {
+    await page.goto(home)
+    const preview = page.getByTestId("flavour-preview")
+    await expect(preview).toHaveAttribute("data-theme", "glaze")
+    await page.getByTestId("flavour-volt").click()
+    await expect(preview).toHaveAttribute("data-theme", "volt")
+    await expect(page.getByTestId("flavour-volt")).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    )
+  })
+
+  test("each component name links to its showcase page", async ({ page }) => {
+    await page.goto(home)
+    await expect(
+      page.getByRole("link", { name: "Button", exact: true })
+    ).toHaveAttribute(
+      "href",
+      new RegExp(`localhost:${ports.showcase}/#/button$`)
+    )
+  })
+
   test("fits a phone without sideways scrolling", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 })
     await page.goto(home)
