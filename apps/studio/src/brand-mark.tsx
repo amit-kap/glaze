@@ -1,23 +1,36 @@
+import type * as React from "react"
+
 import { Badge } from "@amit-kap/glaze/components/badge"
+import { cn } from "@amit-kap/glaze/lib/utils"
 
 import { Logo, logoPink } from "./logo"
 
-/** The logo, the Alpha badge and the Glaze version, as both top bars show them. */
+/**
+ * The mark, the wordmark, the Alpha badge and the Glaze version, as the files
+ * pages' side panel and the editor's top bar both show them.
+ */
 export function BrandMark({ homeHref }: { homeHref?: string }) {
-  const logo = <Logo />
+  const lockup = (
+    <>
+      <Logo />
+      <span className="font-brand text-glaze-ink text-heading leading-none">
+        glaze
+      </span>
+    </>
+  )
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2.5">
       {homeHref ? (
         <a
           href={homeHref}
           data-testid="home-link"
           aria-label="Glaze Studio home"
-          className="rounded-control outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex items-center gap-1.5 rounded-control outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          {logo}
+          {lockup}
         </a>
       ) : (
-        logo
+        <span className="flex items-center gap-1.5">{lockup}</span>
       )}
       <Badge
         variant="outline"
@@ -32,5 +45,50 @@ export function BrandMark({ homeHref }: { homeHref?: string }) {
         </span>
       )}
     </div>
+  )
+}
+
+// The mark's own colours, in turn.
+const sprinkleColours = [
+  "bg-glaze-ink",
+  "bg-glaze-pink",
+  "bg-glaze-sprinkle",
+  "bg-glaze-dough",
+  "bg-glaze-berry",
+]
+
+/**
+ * Sprinkles scattered over a poster, landing a beat apart. `points` are
+ * [x%, y%, rotation]; the poster is the positioned parent.
+ */
+export function Sprinkles({
+  points,
+  className,
+}: {
+  points: [number, number, number][]
+  className?: string
+}) {
+  return (
+    <>
+      {points.map(([x, y, r], index) => (
+        <span
+          key={index}
+          aria-hidden="true"
+          className={cn(
+            "sprinkle",
+            sprinkleColours[index % sprinkleColours.length],
+            className
+          )}
+          style={
+            {
+              "--x": `${x}%`,
+              "--y": `${y}%`,
+              "--r": `${r}deg`,
+              "--d": `${300 + index * 70}ms`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </>
   )
 }

@@ -25,7 +25,7 @@ import { useRoute } from "./route"
 import type { Template } from "./templates"
 
 /**
- * Studio: Home and the editor. The draft, the open theme and the library live
+ * Studio: the files pages and the editor. The draft, the open theme and the library live
  * here, above both, so they survive moving between the two.
  */
 export function App() {
@@ -69,10 +69,19 @@ export function App() {
     setSession({ id: entry.id, name: entry.name })
   }
 
+  /** The open theme lives on as an unsaved draft; its next Save is a new entry. */
+  const detach = (id: string) => {
+    if (id === savedId) setSession((current) => ({ ...current, id: null }))
+  }
+
   const remove = (id: string) => {
     library.remove(id)
-    // The open theme lives on as an unsaved draft; its next Save is a new entry.
-    if (id === savedId) setSession((current) => ({ ...current, id: null }))
+    detach(id)
+  }
+
+  const archive = (id: string) => {
+    library.archive(id)
+    detach(id)
   }
 
   /** Run a move from Home; unsaved work is offered Save or Discard first. */
@@ -103,7 +112,9 @@ export function App() {
         />
       ) : (
         <Home
+          page={route}
           themes={library.themes}
+          archived={library.archived}
           // A template is a copy: its first Save makes a new library entry.
           onOpenTemplate={(template: Template) =>
             guarded(
@@ -115,6 +126,8 @@ export function App() {
           }
           onOpenTheme={(theme) => guarded(enter(() => open(theme)))}
           onCreate={() => guarded(enter(startNew))}
+          onArchive={archive}
+          onRestore={library.restore}
           onDelete={remove}
         />
       )}
