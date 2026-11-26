@@ -51,11 +51,10 @@ function StoryBody({
   const [value] = React.useState(() => {
     // A story that starts open (an alert dialog, say) would cover the whole
     // page here, so every card starts closed and opens from its trigger.
-    const args: Args = {
-      ...meta.args,
-      ...(isFn ? {} : story.args),
-      defaultOpen: undefined,
-    }
+    // The key is removed, not set to undefined: stories spread their args, and
+    // an undefined `defaultOpen` would still reach DOM elements as a prop.
+    const args: Args = { ...meta.args, ...(isFn ? {} : story.args) }
+    delete args.defaultOpen
     const render = isFn ? story : (story.render ?? meta.render)
     const Component = meta.component
     const context = {
