@@ -17,10 +17,11 @@ import { Dashboard } from "./dashboard"
 import { DataTableScreen } from "./data-table-screen"
 import { Harness } from "./harness"
 import { Landing } from "./landing"
-import { cssVars, type Mode, type Theme } from "./theme"
-import { motionVars, type MotionValues } from "./motion"
-import { shapeVars, type Density, type ShapeValues } from "./shape"
-import { typeVars, type TypeValues } from "./typography"
+import { previewVars } from "./scope"
+import { type Mode, type Theme } from "./theme"
+import { type MotionValues } from "./motion"
+import { type Density, type ShapeValues } from "./shape"
+import { type TypeValues } from "./typography"
 
 type Width = "fit" | "768" | "390"
 type Screen =
@@ -163,16 +164,15 @@ export function Stage({
               // token reads its source where it is declared. Dark mode is
               // scoped here too. Reduced motion zeroes the movement scale,
               // as the system setting does.
-              style={
-                {
-                  ...cssVars(theme[mode]),
-                  ...typeVars(type),
-                  ...shapeVars(shape),
-                  ...motionVars(motion),
-                  ...extraVars,
-                  ...(reduceMotion && { "--motion-scale": "0" }),
-                } as React.CSSProperties
-              }
+              style={previewVars({
+                theme,
+                mode,
+                type,
+                shape,
+                motion,
+                extraVars,
+                reduceMotion,
+              })}
               className={cn(
                 "@container h-full font-sans font-normal text-foreground [contain:layout]",
                 mode === "dark" && "dark",

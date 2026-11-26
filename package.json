@@ -12,9 +12,13 @@
     "check:catalog": "node scripts/glaze-catalog.mjs",
     "build:glaze": "node scripts/glaze-build.mjs",
     "release:glaze": "node scripts/glaze-release.mjs",
-    "theme": "node packages/ui/src/bin/glaze.ts theme"
+    "theme": "node packages/ui/src/bin/glaze.ts theme",
+    "test:e2e": "playwright test",
+    "build:site": "node scripts/site-build.mjs",
+    "test:site": "npm run build:site && SITE=1 playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "turbo": "^2.11.10",

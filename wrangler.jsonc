@@ -1,0 +1,17 @@
+// The Glaze site on Cloudflare Workers: static files only, built by
+// `npm run build:site`. One address, with the apps as folders:
+//   glaze.amitkap.com            the home page
+//   glaze.amitkap.com/showcase   the showcase
+//   glaze.amitkap.com/studio     Glaze Studio
+//   glaze.amitkap.com/storybook  Storybook
+{
+  "name": "glaze-studio",
+  "compatibility_date": "2026-11-05",
+  "assets": { "directory": "./_site" },
+  "routes": [
+    { "pattern": "glaze.amitkap.com", "custom_domain": true },
+    // The old Studio address stays attached, so themes saved in a browser
+    // there can still be exported from glaze-studio.amitkap.com/studio.
+    { "pattern": "glaze-studio.amitkap.com", "custom_domain": true }
+  ]
+}

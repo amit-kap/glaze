@@ -113,7 +113,7 @@ function migrateNeutrals(stored: Dials["neutrals"] | undefined) {
 }
 
 /** A stored draft as the panel can use it: only tokens it still offers. */
-function sanitize(stored: Partial<Stored> | null | undefined): Stored {
+export function sanitize(stored: Partial<Stored> | null | undefined): Stored {
   if (!stored?.theme) return fresh()
   const dials: Dials = {
     neutrals: migrateNeutrals(stored.dials?.neutrals),

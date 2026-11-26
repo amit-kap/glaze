@@ -1,9 +1,10 @@
 name: Pages
 
 # Publishes the docs site to GitHub Pages on every push to main:
-#   /            the showcase
+#   /            the Glaze home page
+#   /showcase/   the showcase
 #   /storybook/  Storybook
-# Both build with relative asset paths, so they work under /glaze/.
+# All build with relative asset paths, so they work under /glaze/.
 
 on:
   push:
@@ -33,12 +34,17 @@ jobs:
 
       - run: npm ci
 
-      - name: Build the showcase and Storybook
+      - name: Build the home page, showcase and Storybook
+        env:
+          # Studio is not on Pages; link to the main site's.
+          VITE_STUDIO_URL: https://glaze.amitkap.com/studio/
         run: |
+          npm run build -w web -- --base=./
           npm run build -w showcase -- --base=./
           npm run build -w storybook
           mkdir -p _site
-          cp -R apps/showcase/dist/. _site/
+          cp -R apps/web/dist/. _site/
+          cp -R apps/showcase/dist _site/showcase
           cp -R apps/storybook/dist _site/storybook
 
       - uses: actions/upload-pages-artifact@v5

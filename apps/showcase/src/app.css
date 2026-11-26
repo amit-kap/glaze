@@ -1,1 +1,4 @@
 @import "@amit-kap/glaze/globals.css";
+
+/* The component pages render the Storybook stories, so scan them for classes. */
+@source "../../storybook/src";

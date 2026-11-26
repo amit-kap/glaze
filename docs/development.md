@@ -10,19 +10,24 @@ How to work in this repository. For using the library, see the
 | ---------------- | ------------------------------------------------------------ |
 | `packages/ui`    | The Glaze library: components, tokens and themes             |
 | `apps/studio`    | Glaze Studio, the theme editor ([studio.md](studio.md))      |
-| `apps/showcase`  | One tile per component, with its variants                    |
+| `apps/showcase`  | Overview tiles, and a page per component from its stories    |
 | `apps/storybook` | Storybook with a story for every component                   |
-| `apps/web`       | Web app (the target for `shadcn add`)                        |
+| `apps/web`       | The Glaze home page (also the target for `shadcn add`)       |
 | `scripts`        | Checks, the package build, the release and the Studio deploy |
 
 ## Commands
 
 ```bash
 npm install
+npm run dev                 # every app at once; the home page's links need the others running
+npm run dev -w web          # http://localhost:5173, the home page
 npm run dev -w studio       # http://localhost:5186
 npm run dev -w showcase     # http://localhost:5180
 npm run dev -w storybook    # http://localhost:6006
 npm run check:tokens        # fail on any class the token contract forbids
+npm run test:e2e            # Playwright acceptance tests for home, showcase and Studio
+npm run build:site          # the whole site into _site/, as it is deployed
+npm run test:site           # build the site, then test its routes
 npm run check:catalog       # the settings catalog matches the CSS and the components
 npx turbo lint typecheck build
 ```
@@ -52,7 +57,7 @@ classes. Convert it to Glaze tokens by hand (radius, text size, shadow and
 motion each have a Glaze utility, and colours come from the system tokens),
 then run `npm run check:tokens`, which names every class the contract forbids.
 A value no token covers becomes a component token. Every new component also
-needs a `<component>.stories.tsx` and a tile in `apps/showcase/src/tiles.tsx`.
+needs a `<component>.stories.tsx` (the showcase renders each story as a card on the component's page) and a tile in `apps/showcase/src/tiles.tsx` for the overview.
 
 ## Motion
 
@@ -78,18 +83,22 @@ Rules:
 
 ## Showcase and Storybook
 
-`apps/showcase` is one page of tiles, one per component, built from the same
-demos as the Storybook stories (`apps/showcase/src/demos`). Studio's
-Components tab shows the same tiles, so a new demo appears in both.
+`apps/showcase` opens on an overview: one tile per component, built from
+`apps/showcase/src/demos`. Studio's Components tab shows the same tiles, so a
+new demo appears in both. A side panel lists every component; each page
+(`#/button`) renders that component's Storybook stories, one card per story, so
+a new story appears there without further work. The pages live in
+`apps/showcase/src/variants` and are not part of Studio.
 
 Every component in `packages/ui` has a story in `apps/storybook/src/stories`.
 The toolbar has the **Mode** and **Density** switches; link to a state with
 `&globals=mode:dark;density:compact`.
 
-Showcase and Storybook are published to GitHub Pages on every push to `main`
-(`.github/workflows/pages.yml`), at <https://amit-kap.github.io/glaze/> and
-<https://amit-kap.github.io/glaze/storybook/>. Studio is deployed separately
-(see [studio.md](studio.md)).
+The whole site is one deploy at <https://glaze.amitkap.com>: the home page at
+the root, then `/showcase`, `/studio` and `/storybook`. `npm run build:site`
+builds it into `_site/` (see [studio.md](studio.md) for the hosting).
+GitHub Pages (`.github/workflows/pages.yml`) still publishes the home page,
+showcase and Storybook at <https://amit-kap.github.io/glaze/> as a mirror.
 
 ## Dependencies
 

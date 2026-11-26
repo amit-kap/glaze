@@ -10,6 +10,8 @@ export type SavedTheme = {
   name: string
   savedAt: number
   data: Stored
+  /** Set while the theme sits in the archive; absent otherwise. */
+  archivedAt?: number
 }
 
 /** Which library entry the draft belongs to, and the name it carries. */
@@ -41,16 +43,20 @@ export function writeSession(session: Session) {
   }
 }
 
-/** The saved themes, newest first. Saving under an id updates it in place. */
+/**
+ * The saved themes, newest first, and the archived ones, most recently
+ * archived first. Saving under an id updates it in place. Archiving only marks
+ * a theme, so `themes` (what the editor lists) never includes it.
+ */
 export function useLibrary() {
-  const [themes, setThemes] = React.useState(readLibrary)
+  const [all, setAll] = React.useState(readLibrary)
   // Two saves in one event (save the open theme, then add a new one) must
   // build on each other, so the latest list lives in a ref.
-  const latest = React.useRef(themes)
+  const latest = React.useRef(all)
 
   const commit = React.useCallback((next: SavedTheme[]) => {
     latest.current = next
-    setThemes(next)
+    setAll(next)
     try {
       localStorage.setItem(libraryKey, JSON.stringify(next))
     } catch {
@@ -80,7 +86,89 @@ export function useLibrary() {
     [commit]
   )
 
-  return { themes, save, remove }
+  const archive = React.useCallback(
+    (id: string) =>
+      commit(
+        latest.current.map((theme) =>
+          theme.id === id ? { ...theme, archivedAt: Date.now() } : theme
+        )
+      ),
+    [commit]
+  )
+
+  const restore = React.useCallback(
+    (id: string) =>
+      commit(
+        // Undefined drops out of the stored JSON, so the theme is plain again.
+        latest.current.map((theme) =>
+          theme.id === id ? { ...theme, archivedAt: undefined } : theme
+        )
+      ),
+    [commit]
+  )
+
+  const themes = React.useMemo(
+    () => all.filter((theme) => theme.archivedAt === undefined),
+    [all]
+  )
+  const archived = React.useMemo(
+    () =>
+      all
+        .filter((theme) => theme.archivedAt !== undefined)
+        .sort((a, b) => (b.archivedAt ?? 0) - (a.archivedAt ?? 0)),
+    [all]
+  )
+
+  return { themes, archived, save, remove, archive, restore }
+}
+
+const templatesKey = "glaze-studio-archived-templates-v1"
+
+function readArchivedTemplates(): Record<string, number> {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(templatesKey) ?? "{}")
+    return typeof parsed === "object" && parsed !== null ? parsed : {}
+  } catch {
+    return {}
+  }
+}
+
+/**
+ * The built-in templates the user put away, by name, with when. A template is
+ * part of Studio, so archiving only hides it; restoring brings it back.
+ */
+export function useArchivedTemplates() {
+  const [archived, setArchived] = React.useState(readArchivedTemplates)
+
+  const commit = React.useCallback(
+    (change: (current: Record<string, number>) => Record<string, number>) =>
+      setArchived((current) => {
+        const next = change(current)
+        try {
+          localStorage.setItem(templatesKey, JSON.stringify(next))
+        } catch {
+          /* Storage can be unavailable; the change lasts for this visit. */
+        }
+        return next
+      }),
+    []
+  )
+
+  const archive = React.useCallback(
+    (name: string) => commit((current) => ({ ...current, [name]: Date.now() })),
+    [commit]
+  )
+  const restore = React.useCallback(
+    (name: string) =>
+      commit((current) =>
+        Object.fromEntries(
+          Object.entries(current).filter(([key]) => key !== name)
+        )
+      ),
+    [commit]
+  )
+
+  return { archived, archive, restore }
 }
 
 const minute = 60_000

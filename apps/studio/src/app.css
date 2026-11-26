@@ -14,3 +14,103 @@ body {
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
 }
+
+/*
+ * The Glaze brand (Paper: glaze / brand / Brand board), as the home page
+ * wears it: pink is the hero colour, indigo is always the ink, and the
+ * wordmark and big headlines are Figtree Black. Studio's chrome stays neutral
+ * so the previews are the only colour that changes; the brand shows at its
+ * own moments: the wordmark, the sign-in button and the sign-in poster.
+ */
+@theme {
+  --color-glaze-pink: #fe6ccb;
+  --color-glaze-ink: #370277;
+  --color-glaze-berry: #c44bb2;
+  --color-glaze-dough: #ec9f49;
+  --color-glaze-sprinkle: #f7de70;
+
+  /* Poster type, above the product scale. */
+  --text-poster: clamp(2rem, 3.6cqi, 3.25rem);
+  --text-poster--line-height: 1;
+}
+
+@utility font-brand {
+  font-family: "Figtree Variable", var(--typeface-sans);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+}
+
+/* Glaze: the brand as a Glaze theme, for what sits inside a brand moment. */
+[data-theme="glaze"] {
+  --background: #ffffff;
+  --card: #ffffff;
+  --popover: #ffffff;
+  --popover-foreground: #370277;
+  --foreground: #370277;
+  --primary: #370277;
+  --primary-foreground: #ffffff;
+  --secondary: #fbe9fa;
+  --muted: #fcf1fb;
+  --muted-foreground: #6d4a9c;
+  --accent: #fbe4f8;
+  --border: #eed6f0;
+  --input: #dcc3e6;
+  --ring: #c44bb2;
+  --brand: #fe6ccb;
+  --brand-ink: #370277;
+}
+
+/* A poster: a frosting block with ink on it, the same in light and dark. */
+[data-theme="glaze"].poster {
+  --background: #fea7f4;
+  --foreground: #370277;
+  --muted-foreground: #5b2c97;
+  --border: rgb(55 2 119 / 0.2);
+}
+
+/* The mark on a poster drops in, then bobs. */
+.donut {
+  animation:
+    donut-in 0.9s var(--motion-ease-spring) both,
+    donut-bob 6s ease-in-out 0.9s infinite;
+}
+
+@keyframes donut-in {
+  from {
+    transform: translateY(-40%) rotate(-28deg) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes donut-bob {
+  50% {
+    transform: translateY(-3.5%) rotate(5deg);
+  }
+}
+
+/* Sprinkles land once, a beat apart. */
+.sprinkle {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 0.5rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  rotate: var(--r);
+  animation: sprinkle-land 0.9s var(--motion-ease-spring) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes sprinkle-land {
+  from {
+    transform: translateY(-6rem) rotate(140deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donut,
+  .sprinkle {
+    animation: none;
+  }
+}

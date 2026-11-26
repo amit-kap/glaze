@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client"
 
 import "./app.css"
 import { ThemeProvider } from "@amit-kap/glaze/theme"
-import { Toaster } from "@amit-kap/glaze/components/toast"
 import { TooltipProvider } from "@amit-kap/glaze/components/tooltip"
 import { App } from "./app"
 
@@ -16,7 +15,6 @@ createRoot(document.getElementById("root")!).render(
     >
       <TooltipProvider>
         <App />
-        <Toaster />
       </TooltipProvider>
     </ThemeProvider>
   </StrictMode>

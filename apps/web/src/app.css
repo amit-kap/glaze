@@ -1,0 +1,388 @@
+@import "@amit-kap/glaze/globals.css";
+/* The live preview renders the showcase demos, whose classes live there. */
+@source "../../showcase/src/demos";
+
+/*
+ * The Glaze brand (Paper: glaze / brand / Brand board). Pink is the one hero
+ * colour, indigo is always the ink, and the wordmark and big headlines are
+ * Figtree Black. Everything else on the page is the library itself.
+ */
+@theme {
+  --color-glaze-pink: #fe6ccb;
+  --color-glaze-ink: #370277;
+  --color-glaze-frosting: #fea7f4;
+  --color-glaze-berry: #c44bb2;
+  --color-glaze-dough: #ec9f49;
+  --color-glaze-sprinkle: #f7de70;
+
+  /* Marketing type, above the product scale. */
+  --text-lede: 1.25rem;
+  --text-lede--line-height: 1.5;
+  --text-poster: clamp(2.25rem, 5.2vw, 4.25rem);
+  --text-poster--line-height: 1;
+  --text-wordmark: clamp(5.5rem, 23vw, 19rem);
+  --text-wordmark--line-height: 0.8;
+  --text-ribbon: clamp(1.75rem, 3.4vw, 2.75rem);
+  --text-ribbon--line-height: 1;
+}
+
+@utility font-brand {
+  font-family: "Figtree Variable", var(--typeface-sans);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------- themes */
+
+/* Glaze: the brand as a Glaze theme. The page wears it. */
+[data-theme="glaze"] {
+  --background: #ffffff;
+  --card: #ffffff;
+  --foreground: #370277;
+  --primary: #370277;
+  --primary-foreground: #ffffff;
+  --secondary: #fbe9fa;
+  --muted: #fcf1fb;
+  --muted-foreground: #6d4a9c;
+  --accent: #fbe4f8;
+  --border: #eed6f0;
+  --brand: #fe6ccb;
+  --brand-ink: #370277;
+  --chart-1: #fe6ccb;
+  --chart-2: #c44bb2;
+  --chart-3: #370277;
+  --chart-4: #ec9f49;
+  --chart-5: #f7de70;
+  --sidebar: #fcf1fb;
+  --sidebar-accent: #fbe4f8;
+  --radius: 0.875rem;
+}
+
+[data-theme="glaze"].dark {
+  --background: #1a0638;
+  --card: #250a50;
+  --foreground: #fdeefc;
+  --primary: #fe6ccb;
+  --primary-foreground: #370277;
+  --secondary: #32106a;
+  --muted: #2b0d5c;
+  --muted-foreground: #c8aae7;
+  --accent: #3a1479;
+  --border: rgb(254 167 244 / 0.16);
+  --brand: #fe6ccb;
+  --brand-ink: #370277;
+  --sidebar: #250a50;
+  --sidebar-accent: #3a1479;
+}
+
+/* Folio: editorial and warm. Studio's template of the same name. */
+[data-theme="folio"] {
+  --background: oklch(0.985 0.011 80);
+  --card: oklch(0.996 0.006 80);
+  --foreground: oklch(0.25 0.03 50);
+  --primary: oklch(0.56 0.15 38);
+  --primary-foreground: oklch(0.985 0.011 80);
+  --secondary: oklch(0.95 0.02 70);
+  --muted: oklch(0.955 0.016 75);
+  --muted-foreground: oklch(0.5 0.04 55);
+  --accent: oklch(0.94 0.025 60);
+  --border: oklch(0.89 0.025 70);
+  --brand: oklch(0.56 0.15 38);
+  --brand-ink: oklch(0.985 0.011 80);
+  --chart-1: oklch(0.56 0.15 38);
+  --chart-2: oklch(0.68 0.12 55);
+  --chart-3: oklch(0.45 0.09 30);
+  --chart-4: oklch(0.78 0.09 80);
+  --chart-5: oklch(0.35 0.05 40);
+  --radius: 0.375rem;
+  --typeface-sans: "Figtree Variable", sans-serif;
+  --typeface-heading: "Playfair Display Variable", serif;
+}
+
+[data-theme="folio"].dark {
+  --background: oklch(0.2 0.015 60);
+  --card: oklch(0.24 0.018 60);
+  --foreground: oklch(0.95 0.015 80);
+  --primary: oklch(0.72 0.13 42);
+  --primary-foreground: oklch(0.2 0.02 50);
+  --secondary: oklch(0.29 0.02 60);
+  --muted: oklch(0.28 0.018 60);
+  --muted-foreground: oklch(0.74 0.03 70);
+  --accent: oklch(0.32 0.025 55);
+  --border: oklch(1 0 0 / 0.12);
+  --brand: oklch(0.72 0.13 42);
+  --brand-ink: oklch(0.2 0.02 50);
+}
+
+/* Volt: technical and sharp. Studio's template of the same name. */
+[data-theme="volt"] {
+  --background: oklch(0.99 0.004 255);
+  --card: oklch(1 0 0);
+  --foreground: oklch(0.2 0.03 260);
+  --primary: oklch(0.55 0.22 258);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.955 0.012 255);
+  --muted: oklch(0.96 0.01 255);
+  --muted-foreground: oklch(0.5 0.03 258);
+  --accent: oklch(0.94 0.02 255);
+  --border: oklch(0.9 0.015 255);
+  --brand: oklch(0.55 0.22 258);
+  --brand-ink: oklch(1 0 0);
+  --chart-1: oklch(0.55 0.22 258);
+  --chart-2: oklch(0.7 0.16 240);
+  --chart-3: oklch(0.42 0.16 265);
+  --chart-4: oklch(0.82 0.1 220);
+  --chart-5: oklch(0.3 0.08 262);
+  --radius: 0.25rem;
+  --typeface-sans: "Inter Variable", sans-serif;
+  --typeface-heading: "JetBrains Mono Variable", monospace;
+  --typeface-mono: "JetBrains Mono Variable", monospace;
+}
+
+[data-theme="volt"].dark {
+  --background: oklch(0.17 0.025 260);
+  --card: oklch(0.21 0.03 260);
+  --foreground: oklch(0.96 0.008 255);
+  --primary: oklch(0.72 0.17 255);
+  --primary-foreground: oklch(0.17 0.03 260);
+  --secondary: oklch(0.27 0.035 260);
+  --muted: oklch(0.26 0.03 260);
+  --muted-foreground: oklch(0.72 0.03 255);
+  --accent: oklch(0.3 0.045 260);
+  --border: oklch(1 0 0 / 0.12);
+  --brand: oklch(0.72 0.17 255);
+  --brand-ink: oklch(0.17 0.03 260);
+}
+
+/*
+ * Posters: full-bleed brand blocks. They are sections of the page wearing
+ * their own values, the way any section can wear its own theme. Same in light
+ * and dark: frosting and ink do not change with the mode.
+ */
+[data-theme="glaze"].poster {
+  --background: #fea7f4;
+  --card: #ffffff;
+  --foreground: #370277;
+  --primary: #370277;
+  --primary-foreground: #ffffff;
+  --secondary: #ffffff;
+  --muted: rgb(255 255 255 / 0.55);
+  --muted-foreground: #5b2c97;
+  --accent: rgb(55 2 119 / 0.1);
+  --border: rgb(55 2 119 / 0.2);
+}
+
+[data-theme="glaze"].poster-ink {
+  --background: #370277;
+  --card: #45108a;
+  --foreground: #fdeefc;
+  --primary: #fe6ccb;
+  --primary-foreground: #370277;
+  --secondary: #4a1492;
+  --muted: #45108a;
+  --muted-foreground: #d3b6ee;
+  --accent: rgb(254 167 244 / 0.14);
+  --border: rgb(254 167 244 / 0.22);
+}
+
+/* ------------------------------------------------------------------ glaze */
+
+/*
+ * The dripping edge. Plain blocks (a bar, long drips, low swells) run through
+ * the #goo filter, which melts them into one poured shape. `color` sets the
+ * glaze colour.
+ */
+.drips {
+  position: absolute;
+  inset-inline: -2rem;
+  top: 100%;
+  height: 15rem;
+  margin-top: -1px;
+  pointer-events: none;
+  filter: url(#goo);
+}
+
+.drips::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: -3rem;
+  height: 3.75rem;
+  background: currentColor;
+}
+
+.drip,
+.swell {
+  position: absolute;
+  top: -0.5rem;
+  left: var(--x);
+  width: var(--w);
+  background: currentColor;
+  transform-origin: top;
+  animation: drip-grow 1.6s var(--motion-ease-spring) both;
+  animation-delay: var(--d, 0ms);
+}
+
+.drip {
+  height: var(--h);
+  border-radius: 0 0 999px 999px;
+}
+
+.swell {
+  height: var(--h);
+  border-radius: 50%;
+  top: -1.4rem;
+}
+
+/* A drop that lets go of the longest drip, falls, and is replaced. */
+.drop {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: currentColor;
+  animation: drop-fall 5.5s cubic-bezier(0.6, 0, 0.9, 0.5) 2.2s infinite both;
+}
+
+@keyframes drip-grow {
+  from {
+    transform: scaleY(0.12);
+  }
+}
+
+@keyframes drop-fall {
+  0%,
+  52% {
+    transform: translateY(-1.2rem) scale(0.9);
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(26rem) scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* The mark, idling. */
+.donut {
+  animation:
+    donut-in 1.1s var(--motion-ease-spring) both,
+    donut-bob 7s ease-in-out 1.1s infinite;
+  transform-origin: 50% 45%;
+}
+
+.donut:hover {
+  animation-duration: 1.1s, 1.6s;
+}
+
+@keyframes donut-in {
+  from {
+    transform: translateY(-40%) rotate(-28deg) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes donut-bob {
+  50% {
+    transform: translateY(-3.5%) rotate(5deg);
+  }
+}
+
+/* Sprinkles land once, after the glaze has poured. */
+.sprinkle {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 0.55rem;
+  height: 1.55rem;
+  border-radius: 999px;
+  rotate: var(--r);
+  animation: sprinkle-land 0.9s var(--motion-ease-spring) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes sprinkle-land {
+  from {
+    transform: translateY(-6rem) rotate(140deg);
+    opacity: 0;
+  }
+}
+
+/* A new flavour pours over the preview, then runs off. */
+.pour {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 100%;
+  background: currentColor;
+  pointer-events: none;
+  /* above anything a demo raises (the chart's tabs, the calendar) */
+  z-index: 50;
+  animation: pour 1.05s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+/* The pour arrives already dripping. */
+.pour .drip,
+.pour .swell {
+  animation: none;
+}
+
+@keyframes pour {
+  0% {
+    transform: translateY(-135%);
+  }
+  42%,
+  56% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(135%);
+  }
+}
+
+/* Component names, drifting past. Hovering a row holds it still. */
+.ribbon {
+  display: flex;
+  width: max-content;
+  animation: ribbon var(--ribbon-time, 60s) linear infinite;
+}
+
+.ribbon[data-reverse] {
+  animation-direction: reverse;
+}
+
+.ribbon-row:hover .ribbon,
+.ribbon-row:focus-within .ribbon {
+  animation-play-state: paused;
+}
+
+@keyframes ribbon {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drip,
+  .swell,
+  .drop,
+  .donut,
+  .sprinkle,
+  .pour,
+  .ribbon {
+    animation: none;
+  }
+
+  .drop,
+  .pour {
+    display: none;
+  }
+}
